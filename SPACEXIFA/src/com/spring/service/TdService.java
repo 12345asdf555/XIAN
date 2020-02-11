@@ -21,7 +21,7 @@ public interface TdService {
 	String findPosition(String equip);
 	List<Td> allWeldname();
 	List<Td> getAllMachine(String ins);
-	
+	List<Td> getAllPositions(BigInteger parent);
 	/**
 	 * 获取某天工作、焊接时长
 	 * @param time 日期格式年-月-日

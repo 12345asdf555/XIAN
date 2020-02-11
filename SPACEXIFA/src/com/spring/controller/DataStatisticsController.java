@@ -1448,6 +1448,126 @@ public class DataStatisticsController {
 		obj.put("rows", ary);
 		return obj.toString();
 	}
+	
+	/**
+	 * 设备利用率
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/getEquipmentUtilize")
+	@ResponseBody
+	public String getEquipmentUtilize(HttpServletRequest request){
+		JSONObject obj = new JSONObject();
+		WeldDto dto = new WeldDto();
+		SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String time1 = dateFormat.format(new Date()).substring(0, 11)+"00:00:00";
+		String onRatio = null,weldRatio = null;
+		try{
+			if(iutil.isNull(time1)){
+				dto.setDtoTime1(time1);
+			}
+			List<DataStatistics> list = dss.getEquipmentUtilize(im.getUserInsframework(),dto);
+			for(DataStatistics i:list){
+				if(!"".equals(i.getId().toString())&&!"0".equals(i.getId().toString())&&i.getId().toString()!=null) {
+					DecimalFormat df=new DecimalFormat("0.000");
+					onRatio = df.format(((float)i.getNum()/Integer.valueOf(i.getId().toString()))*100);
+					//weldRatio = df.format(((float)i.getTotal()/Integer.valueOf(i.getId().toString()))*100);
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		obj.put("onRatio", onRatio);
+		obj.put("weldRatio", weldRatio);
+		return obj.toString();
+	}
+	
+	/**
+	 * 开机时长和焊接时长
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/getOnAndWeldTime")
+	@ResponseBody
+	public String getOnAndWeldTime(HttpServletRequest request){
+		JSONObject obj = new JSONObject();
+		WeldDto dto = new WeldDto();
+		SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String time1 = dateFormat.format(new Date()).substring(0, 11)+"00:00:00";
+		JSONArray aryX = new JSONArray();
+		JSONArray aryS0 = new JSONArray();
+		JSONArray aryS1 = new JSONArray();
+		double temp0=0,temp1=0;
+		try{
+			if(iutil.isNull(time1)){
+				dto.setDtoTime1(time1);
+			}
+			List<DataStatistics> list = dss.getOnAndWeldTime(im.getUserInsframework(),dto);
+			for(DataStatistics i:list){
+				DecimalFormat df=new DecimalFormat("0.00");
+				aryX.add(i.getName());
+				aryS0.add(df.format(i.getInsid().doubleValue()/3600));
+				aryS1.add(df.format(i.getWorktime().doubleValue()/3600));
+				if(i.getInsid().doubleValue()>temp0) {
+					temp0 = Double.valueOf(df.format(i.getInsid().doubleValue()/3600));
+				}
+				if(i.getWorktime().doubleValue()>temp1) {
+					temp1 = Double.valueOf(df.format(i.getWorktime().doubleValue()/3600));
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		obj.put("aryX", aryX);
+		obj.put("aryS0", aryS0);
+		obj.put("aryS1", aryS1);
+		obj.put("temp0", temp0);
+		obj.put("temp1", temp1);
+		return obj.toString();
+	}
+	
+	/**
+	 * 焊丝和气体消耗量
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/getWireAndFlow")
+	@ResponseBody
+	public String getWireAndFlow(HttpServletRequest request){
+		JSONObject obj = new JSONObject();
+		WeldDto dto = new WeldDto();
+		SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String time1 = dateFormat.format(new Date()).substring(0, 11)+"00:00:00";
+		JSONArray aryX = new JSONArray();
+		JSONArray aryS0 = new JSONArray();
+		JSONArray aryS1 = new JSONArray();
+		double temp0=0,temp1=0;
+		try{
+			if(iutil.isNull(time1)){
+				dto.setDtoTime1(time1);
+			}
+			List<DataStatistics> list = dss.getWireAndFlow(im.getUserInsframework(),dto);
+			for(DataStatistics i:list){
+				aryX.add(i.getName());
+				aryS0.add(i.getTotal());
+				aryS1.add(i.getNum());
+				if(i.getTotal()>temp0) {
+					temp0 = i.getTotal();
+				}
+				if(i.getNum()>temp1) {
+					temp1 = i.getNum();
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		obj.put("aryX", aryX);
+		obj.put("aryS0", aryS0);
+		obj.put("aryS1", aryS1);
+		obj.put("temp0", temp0);
+		obj.put("temp1", temp1);
+		return obj.toString();
+	}
 }
 
 

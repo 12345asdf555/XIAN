@@ -21,7 +21,7 @@ public interface TdMapper {
 	String findPosition(String equip);
 	List<Td> allWeldname();
 	List<Td> findMachine(String fposition);
-	
+	List<Td> getAllPositions(@Param("parent")BigInteger parent);
 	Td getLiveTime(@Param("time")String time,@Param("totime")String totime,@Param("machineid")BigInteger machineid);
 	String getBootTime(@Param("time")String time,@Param("machineId")BigInteger machineId);
 }

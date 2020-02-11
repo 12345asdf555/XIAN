@@ -290,6 +290,24 @@ public class DataStatisticsServiceImpl implements DataStatisticsService {
 	}
 
 	@Override
+	public List<DataStatistics> getWireAndFlow(BigInteger itemid, WeldDto dto) {
+		// TODO Auto-generated method stub
+		return ds.getWireAndFlow(itemid, dto);
+	}
+	
+	@Override
+	public List<DataStatistics> getEquipmentUtilize(BigInteger itemid, WeldDto dto) {
+		// TODO Auto-generated method stub
+		return ds.getEquipmentUtilize(itemid, dto);
+	}
+	
+	@Override
+	public List<DataStatistics> getOnAndWeldTime(BigInteger itemid, WeldDto dto) {
+		// TODO Auto-generated method stub
+		return ds.getOnAndWeldTime(itemid, dto);
+	}
+	
+	@Override
 	public List<DataStatistics> getMachineTask(Page page, BigInteger parent, String sql, int type) {
 		PageHelper.startPage(page.getPageIndex(), page.getPageSize());
 		return ds.getMachineTask(parent, sql, type);

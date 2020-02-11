@@ -299,6 +299,30 @@ public interface DataStatisticsService {
 	List<DataStatistics> getWorkRank(BigInteger parent,String time);
 	
 	/**
+	 * 获取用户当前组织机构下的焊丝消耗量和气体消耗量
+	 * @param userInsframework
+	 * @param dto
+	 * @return
+	 */
+	List<DataStatistics> getWireAndFlow(BigInteger userInsframework, WeldDto dto);
+	
+	/**
+	 * 获取用户当前组织机构下的开机和焊接的焊机数以及总焊机数
+	 * @param userInsframework
+	 * @param dto
+	 * @return
+	 */
+	List<DataStatistics> getEquipmentUtilize(BigInteger userInsframework, WeldDto dto);
+	
+	/**
+	 * 获取用户当前组织机构下的开机时间和焊接时间
+	 * @param userInsframework
+	 * @param dto
+	 * @return
+	 */
+	List<DataStatistics> getOnAndWeldTime(BigInteger userInsframework, WeldDto dto);
+	
+	/**
 	 * 获取工作的焊机数
 	 * @param itemid
 	 * @param time

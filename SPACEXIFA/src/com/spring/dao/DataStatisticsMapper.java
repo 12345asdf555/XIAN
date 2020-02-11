@@ -77,7 +77,12 @@ public interface DataStatisticsMapper  extends Mapper<DataStatistics>{
 	
 	List<DataStatistics> getItemOverProofTime(@Param("dto")WeldDto dto);
 	
-
+	List<DataStatistics> getOnAndWeldTime(@Param("itemid") BigInteger itemid,@Param("dto") WeldDto dto);
+	
+	List<DataStatistics> getEquipmentUtilize(@Param("itemid") BigInteger itemid,@Param("dto") WeldDto dto);
+	
+	List<DataStatistics> getWireAndFlow(@Param("itemid") BigInteger itemid,@Param("dto") WeldDto dto);
+	
 	List<DataStatistics> getTaskDetail(@Param("parent")BigInteger parent,@Param("welderno")String welderno,@Param("taskno")String taskno,@Param("dtoTime1")String dtoTime1,@Param("dtoTime2")String dtoTime2);
 	
 	List<DataStatistics> getTask(@Param("parent")BigInteger parent,@Param("welderno")String welderno,@Param("taskno")String taskno,@Param("dtoTime1")String dtoTime1,@Param("dtoTime2")String dtoTime2);

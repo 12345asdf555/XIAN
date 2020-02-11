@@ -24,6 +24,7 @@ public class Td {
 	private double time;
 	private double worktime;
 	private int typeid;
+	private String model;
 	public Td(){
 		super();
 	}
@@ -165,6 +166,13 @@ public class Td {
 	}
 	public void setTypeid(int typeid) {
 		this.typeid = typeid;
+	}
+	
+	public String getModel() {
+		return model;
+	}
+	public void setModel(String model) {
+		this.model = model;
 	}
 	public Td(int id, double electricity, double voltage, String fposition, String fwelder_no, String fname,
 			String fstatus_id, String fequipment_no, String finsframework_id, int fpt, int fpi, int fpp, String fpn,

@@ -451,6 +451,112 @@ public class TdController {
 		return obj.toString();
 	}
 	
+	@RequestMapping("/getLiveMachines")
+	@ResponseBody
+	public String getLiveMachines(HttpServletRequest request){
+		String parentId = request.getParameter("parent");
+		BigInteger parent = null;
+		JSONObject obj = new JSONObject();
+		JSONObject json = new JSONObject();
+		JSONArray ary = new JSONArray();
+		if(iutil.isNull(parentId)){
+			parent = new BigInteger(parentId);
+			List<Td> getAP = tdService.getAllPositions(parent);
+			try{
+				for(Td td:getAP){
+					json.put("fid",td.getId());
+					json.put("fequipment_no", td.getFequipment_no());
+					json.put("fposition", td.getFposition());
+					json.put("finsid", td.getFci());
+					json.put("finsname", td.getFcn());
+					if(td.getModel().contains("NB")){
+						json.put("model", 1);
+					}else if(td.getModel().contains("CPVE")){
+						json.put("model", 2);
+					}else if(td.getModel().contains("EP")){
+						json.put("model", 3);
+					}else if(td.getModel().contains("WB")){
+						json.put("model", 4);
+					}else if(td.getModel().contains("SPC")){
+						json.put("model", 5);
+					}else if(td.getModel().contains("A350P")){
+			            json.put("model", 6);
+			        }else{
+						json.put("model", 0);
+					}
+					ary.add(json);
+				}
+			}catch(Exception e){
+				e.getMessage();
+			}
+		}else{
+			MyUser myuser = (MyUser) SecurityContextHolder.getContext()  
+				    .getAuthentication()  
+				    .getPrincipal();
+			long uid = myuser.getId();
+			List<Insframework> insframework = insm.getInsByUserid(BigInteger.valueOf(uid));
+			parent = insframework.get(0).getId();
+			if(insframework.get(0).getType()==20){
+				List<Td> getAP = tdService.getAllPositions(parent);
+				try{
+					for(Td td:getAP){
+						json.put("fid",td.getId());
+						json.put("fequipment_no", td.getFequipment_no());
+						json.put("fposition", td.getFposition());
+						json.put("finsid", td.getFci());
+						json.put("finsname", td.getFcn());
+						if(td.getModel().contains("NB")){
+							json.put("model", 1);
+						}else if(td.getModel().contains("CPVE")){
+							json.put("model", 2);
+						}else if(td.getModel().contains("EP")){
+							json.put("model", 3);
+						}else if(td.getModel().contains("WB")){
+							json.put("model", 4);
+						}else{
+							json.put("model", 0);
+						}
+						ary.add(json);
+					}
+				}catch(Exception e){
+					e.getMessage();
+				}
+			}else{
+				List<Insframework> in = insm.getInsIdByParent(insm.getInsByUserid(BigInteger.valueOf(uid)).get(0).getId(),24);
+				List<Td> getAP = tdService.getAllPositions(parent);
+				try{
+					for(Td td:getAP){
+						for(Insframework ins:in){
+							if(td.getFci()==Integer.valueOf(ins.getId().toString())){
+								json.put("fid",td.getId());
+								json.put("fequipment_no", td.getFequipment_no());
+								json.put("fposition", td.getFposition());
+								json.put("finsid", td.getFci());
+								json.put("finsname", td.getFcn());
+								if(td.getModel().contains("NB")){
+									json.put("model", 1);
+								}else if(td.getModel().contains("CPVE")){
+									json.put("model", 2);
+								}else if(td.getModel().contains("EP")){
+									json.put("model", 3);
+								}else if(td.getModel().contains("WB")){
+									json.put("model", 4);
+								}else{
+									json.put("model", 0);
+								}
+								ary.add(json);
+							}
+						}
+					}
+				}catch(Exception e){
+					e.getMessage();
+				}
+			}
+		}
+		obj.put("rows", ary);
+		return obj.toString();
+	}
+	
 	@RequestMapping("/getLiveMachine")
 	@ResponseBody
 	public String getLiveMachine(HttpServletRequest request){
