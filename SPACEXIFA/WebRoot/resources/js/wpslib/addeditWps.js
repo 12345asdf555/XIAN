@@ -652,6 +652,7 @@ function addWps() {
 		modal : true
 	});
 	$('#addOrUpdate').window('open');
+	$('#flag').combobox('select', 0);
 	employeeUrl = "/";
 //	$('#femployeeTable').datagrid("options").url=employeeUrl;
 //	$('#femployeeTable').datagrid('reload');
@@ -675,6 +676,10 @@ function editWps() {
 	$('#addOrUpdatefm').form('clear');
 	var row = $('#wpslibTable').datagrid('getSelected'); 
 	if (row) {
+		if(row.flag == 1){
+			alert("该参数从MES获取，无法进行修改删除操作！！！");
+			return;
+		}
 		$('#addOrUpdate').window({
 			title : "修改工艺",
 			modal : true

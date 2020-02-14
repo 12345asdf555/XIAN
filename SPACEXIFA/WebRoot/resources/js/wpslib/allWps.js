@@ -29,7 +29,7 @@ function wpslibDatagrid(){
 		columns : [ [ {
 			field : 'fid',
 			title : '序号',
-			width : 30,
+//			width : 30,
 			halign : "center",
 			align : "left",
 			hidden:true
@@ -66,7 +66,7 @@ function wpslibDatagrid(){
 		}, {
 			field : 'flag',
 			title : '工艺来源标志',
-			width : 100,
+//			width : 100,
 			halign : "center",
 			align : "left",
 			hidden : true
@@ -79,7 +79,7 @@ function wpslibDatagrid(){
 		}, {
 			field : 'fstatus',
 			title : '状态id',
-			width : 100,
+//			width : 100,
 			halign : "center",
 			align : "left",
 			hidden : true
@@ -120,7 +120,73 @@ function wpslibDatagrid(){
 }
 
 function searchWps(){
-	
+	var search = "";
+	var product_drawing_no = $("#product_drawing_no").textbox('getValue');
+	var product_name = $("#product_name").textbox('getValue');
+	var product_version = $("#product_version").textbox('getValue');
+	var wps_lib_name = $("#wps_lib_name").textbox('getValue');
+	var wps_lib_version = $("#wps_lib_version").textbox('getValue');
+	var wflag = $("#wflag").combobox("getValue");
+	var status = $("#status").combobox("getValue");
+	if(product_drawing_no != ""){
+		if(search == ""){
+			search += " fproduct_drawing_no LIKE "+"'%" + product_drawing_no + "%'";
+		}else{
+			search += " AND fproduct_drawing_no LIKE "+"'%" + product_drawing_no + "%'";
+		}
+	}
+	if(product_name != ""){
+		if(search == ""){
+			search += " fproduct_name LIKE "+"'%" + product_name + "%'";
+		}else {
+			search += " AND fproduct_name LIKE "+"'%" + product_name + "%'";
+		}
+	}
+	if(product_version != ""){
+		if(search == ""){
+			search += " fproduct_version LIKE "+"'%" + product_version + "%'";
+		}else{
+			search += " AND fproduct_version LIKE "+"'%" + product_version + "%'";
+		}
+	}
+	if(wps_lib_name != ""){
+		if(search == ""){
+			search += " fwps_lib_name LIKE "+"'%" + wps_lib_name + "%'";
+		}else{
+			search += " AND fwps_lib_name LIKE "+"'%" + wps_lib_name + "%'";
+		}
+	}
+	if(wps_lib_version != ""){
+		if(search == ""){
+			search += " fwps_lib_version LIKE "+"'%" + wps_lib_version + "%'";
+		}else{
+			search += " AND fwps_lib_version LIKE "+"'%" + wps_lib_version + "%'";
+		}
+	}
+	if(wflag != ""){
+		if(search == ""){
+			search += " flag=" + wflag;
+		}else{
+			search += " AND flag=" + wflag;
+		}
+	}
+	if(status != ""){
+		if(search == ""){
+			search += " fstatus=" + status;
+		}else{
+			search += " AND fstatus=" + status;
+		}
+	}
+	$('#wpslibTable').datagrid('load', {
+		"search" : search
+	});
+}
+
+function wpsDetails(){
+	var row = $('#wpslibTable').datagrid('getSelected'); 
+	if (row) {
+		window.location.href = encodeURI("wps/goWpsdetails"+"?fid="+row.fid+"&fproduct_name="+encodeURIComponent(row.fproduct_name)+"&status="+row.fstatus);
+	}
 }
 
 //监听窗口大小变化

@@ -2,9 +2,13 @@
  * 
  */
 function deleteWps(){
+	var deleteRows = $("#wpslibTable").datagrid('getSelections'); //获取删除的数据
+	if(deleteRows[0].flag == 1){
+		alert("该参数从MES获取，无法进行修改删除操作！！！");
+		return;
+	}
 	var c=confirm("该操作将删除所选数据及其关联数据，并且无法撤销，是否继续？")
 	if (c == true) {
-		var deleteRows = $("#wpslibTable").datagrid('getSelections'); //获取删除的数据
 		$.ajax({  
 	        type : "post",  
 	        async : false,

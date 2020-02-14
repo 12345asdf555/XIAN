@@ -492,4 +492,8 @@
 	<delete id="deleteDetail">
 		delete from tb_specification where fid=#{fid};
 	</delete>
+	
+	<update id="passReview">
+		update tb_wps_library set fstatus=1 where fid=#{fid};
+	</update>
 </mapper>

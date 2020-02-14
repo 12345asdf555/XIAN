@@ -84,4 +84,5 @@ public interface WpsMapper {
 	void addDetail(Wps wps);
 	void updateDetail(Wps wps);
 	void deleteDetail(String fid);
+	void passReview(String fid);
 }

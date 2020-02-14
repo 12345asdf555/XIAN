@@ -192,6 +192,7 @@ public interface WpsService {
 	 * @return
 	 */
 	List<Wps> getWpsList(Page page, String search);
+	List<Wps> getWpsList(String search);
 	
 	/**
 	 * 根据工艺台账id查询工序信息
@@ -368,4 +369,13 @@ public interface WpsService {
 	 * @param fid
 	 */
 	void deleteDetail(String fid);
+	
+	/**
+	 * 通过审核
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年2月11日下午5:58:33
+	 * @param fid
+	 */
+	void passReview(String fid);
 }

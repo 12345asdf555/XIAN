@@ -1,5 +1,6 @@
 package com.spring.controller;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.channels.SocketChannel;
 import java.text.SimpleDateFormat;
@@ -7,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.github.pagehelper.PageInfo;
 import com.spring.dto.WeldDto;
 import com.spring.model.Dictionarys;
+import com.spring.model.Insframework;
 import com.spring.model.MyUser;
 import com.spring.model.Td;
 import com.spring.model.WeldedJunction;
@@ -26,6 +29,7 @@ import com.spring.model.Wps;
 import com.spring.page.Page;
 import com.spring.service.DictionaryService;
 import com.spring.service.TdService;
+import com.spring.service.UserService;
 import com.spring.service.WpsService;
 import com.spring.util.IsnullUtil;
 
@@ -46,6 +50,8 @@ public class WpsController {
 	private WpsService wpsService;
 	@Autowired
 	private TdService tdService;
+	@Autowired
+	private UserService userService;
 	@Autowired
 	private DictionaryService dm;
 	
@@ -70,6 +76,29 @@ public class WpsController {
 	@RequestMapping("/goWpslib")
 	public String goWpslib(HttpServletRequest request){
 		return "wpslib/wps";
+	}
+	
+	@RequestMapping("/goWpsdetails")
+	public String goWpsdetails(HttpServletRequest request){
+		String fid = request.getParameter("fid");
+		String fproduct_name = request.getParameter("fproduct_name");
+		String status = request.getParameter("status");
+		request.setAttribute("fid", fid);
+		request.setAttribute("fproduct_name", fproduct_name);
+		request.setAttribute("status", status);
+		String symbol = "0";
+		MyUser myuser = (MyUser) SecurityContextHolder.getContext()  
+			    .getAuthentication()  
+			    .getPrincipal();
+		List<String> ls = userService.getAuthoritiesByUsername(myuser.getUsername());
+		for(int i=0;i<ls.size();i++) {
+			if(ls.get(i).equals("ROLE_审核员") || ls.get(i).equals("ROLE_admin")) {
+				symbol = "1";
+				break;
+			}
+		}
+		request.setAttribute("symbol", symbol);
+		return "wpslib/process";
 	}
 	
 	@RequestMapping("/AllSpe")
@@ -2098,6 +2127,104 @@ public class WpsController {
 					wpsService.deleteDetail(String.valueOf(obj.get("fid")));
 				}
 			}
+			obj.put("success", true);
+		}catch(Exception e){
+			e.printStackTrace();
+			obj.put("success", false);
+			obj.put("errorMsg", e.getMessage());
+		}
+		return obj.toString();
+	}
+	
+	/**
+	 * 工艺规程树形菜单
+	 * @param name
+	 * @return
+	 */
+	@RequestMapping("/getWpsTree")
+	@ResponseBody
+	public void getWpsTree(HttpServletResponse response,HttpServletRequest request){
+        String str ="";  
+        StringBuilder json = new StringBuilder();
+        String fid = request.getParameter("fid");
+        String search = "fid="+fid;
+        List<Wps> wpsList = wpsService.getWpsList(search);
+        for(Wps wps:wpsList){
+	        // 拼接根节点 
+	        json.append("[");  
+	        json.append("{\"id\":" + Integer.parseInt(fid));
+	        json.append(",\"text\":\"" +wps.getFproduct_drawing_no()+":"+wps.getFproduct_version()+ "\"");
+	        json.append(",\"state\":\"open\"");  
+	        // 获取根节点下的所有子节点  
+	        // 遍历子节点下的子节点  
+	        json.append(",\"children\":[");  
+	        json.append("{\"id\":" + Integer.parseInt(fid));   
+	        json.append(",\"text\":\"" +wps.getFwpsnum()+":"+wps.getFwps_lib_version() + "\"");  
+	        json.append(",\"state\":\"open\"");   
+	          
+	        // 该节点有子节点  
+	        // 设置为关闭状态,而从构造异步加载tree  
+	        List<Wps> tList = wpsService.getEmployee(fid);
+	        if(tList!=null && tList.size()!=0){// 存在子节点  
+	             json.append(",\"children\":[");  
+	             json.append(dealJsonFormat(tList));// 存在子节点的都放在一个工具类里面处理了
+	             json.append("]");  
+	        }  
+	        json.append("},");
+	        str = json.toString();  
+	        str = str.substring(0, str.length()-1);  
+	        str+="]}]";
+        }
+        try {
+            response.getWriter().print(str);  
+        } catch (IOException e) {  
+            e.printStackTrace();  
+        }  
+	}
+	
+	public String dealJsonFormat(List<Wps> tList){  
+        StringBuilder json = new StringBuilder();  
+        for (Wps tree : tList) {  
+            json.append("{\"id\":" +String.valueOf(tree.getFid()));   
+            json.append(",\"text\":\"" +tree.getFemployee_id() + ":"+tree.getFemployee_version() + "\"");   
+            json.append(",\"state\":\"open\"");
+            
+            // 获取根节点下的所有子节点  
+            List<Wps> treeLists = wpsService.getStep(String.valueOf(tree.getFid()));
+            // 遍历子节点下的子节点  
+            if(treeLists!=null && treeLists.size()!=0){  
+                json.append(",\"children\":["); 
+                json.append(dealJsonFormat2(treeLists));// 存在子节点的都放在一个工具类里面处理
+                json.append("]");  
+            }  
+            json.append("},");  
+        }  
+        String str = json.toString();  
+        str = str.substring(0, str.length()-1);
+        return str;  
+    } 
+	
+	public String dealJsonFormat2(List<Wps> treeLists){  
+        StringBuilder json = new StringBuilder();  
+        for (Wps tree : treeLists) {  
+            json.append("{\"id\":" +String.valueOf(tree.getFid()));   
+            json.append(",\"text\":\"" +tree.getFstep_number() + "\"");   
+            json.append(",\"state\":\"open\"");
+            json.append(",\"attributes\":\"1\"");
+            json.append("},");  
+        }  
+        String str = json.toString();  
+        str = str.substring(0, str.length()-1); 
+        return str;  
+    } 
+	
+	@RequestMapping("/passReview")
+	@ResponseBody
+	public String passReview(HttpServletRequest request,@ModelAttribute Wps wps){
+		JSONObject obj = new JSONObject();
+		try{
+			String fid = request.getParameter("fid");
+			wpsService.passReview(fid);
 			obj.put("success", true);
 		}catch(Exception e){
 			e.printStackTrace();

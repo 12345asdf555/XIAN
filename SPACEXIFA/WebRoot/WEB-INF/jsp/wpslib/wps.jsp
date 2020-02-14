@@ -53,15 +53,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </head>
   
   <body>
-  	<div id="body" >
-  		<div class="functiondiv">
+  	  	<div class="functiondiv">
 			<div>
 				<div style="float: left;">
 					<div>
 						<label>产品图号：</label>
 					</div>
 					<div>
-						<input class="easyui-textbox" name="product_drawing_no" id="product_drawing_no"  data-options="required:true"/>
+						<input class="easyui-textbox" name="product_drawing_no" id="product_drawing_no" />
 					</div>
 				</div>
 				<div  style="float: left;">
@@ -69,7 +68,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<label>产品名称：</label>
 					</div>
 					<div>
-						<input class="easyui-textbox" name="product_name" id="product_name"  data-options="required:true"/>
+						<input class="easyui-textbox" name="product_name" id="product_name" />
 					</div>
 				</div>
 				<div  style="float: left;">
@@ -77,7 +76,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<label>产品版本号：</label>
 					</div>
 					<div>
-						<input class="easyui-textbox" name="product_version" id="product_version"  data-options="required:true"/>
+						<input class="easyui-textbox" name="product_version" id="product_version" />
 					</div>
 				</div>
 				<div  style="float: left;">
@@ -85,7 +84,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<label>工艺规程编号：</label>
 					</div>
 					<div>
-						<input class="easyui-textbox" name="wps_lib_name" id="wps_lib_name"  data-options="required:true"/>
+						<input class="easyui-textbox" name="wps_lib_name" id="wps_lib_name" />
 					</div>
 				</div>
 				<div  style="float: left;">
@@ -93,7 +92,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<label>工艺规程版本号：</label>
 					</div>
 					<div>
-						<input class="easyui-textbox" name="wps_lib_version" id="wps_lib_version"  data-options="required:true"/>
+						<input class="easyui-textbox" name="wps_lib_version" id="wps_lib_version" />
 					</div>
 				</div>
 				<div  style="float: left;">
@@ -101,7 +100,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<label>工艺来源：</label>
 					</div>
 					<div>
-						<select class="easyui-combobox" name="wflag" id="wflag" data-options="required:true,editable:false"">
+						<select class="easyui-combobox" name="wflag" id="wflag" data-options="editable:false">
+							<option value="">无</option>
 							<option value="0">自建</option>
 							<option value="1">MES</option>
 						</select>
@@ -112,17 +112,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<label>工艺审核：</label>
 					</div>
 					<div>
-						<select class="easyui-combobox" name="status" id="status" data-options="required:true,editable:false"">
+						<select class="easyui-combobox" name="status" id="status" data-options="editable:false"">
+							<option value="">无</option>
 							<option value="0">待审核</option>
 							<option value="1">已通过</option>
 						</select>
 					</div>
 				</div>
-				<a href="javascript:searchWps();" class="easyui-linkbutton" iconCls="icon-select">查找</a>&nbsp;&nbsp;&nbsp;&nbsp;
+				<div  style="float: left;">
+					<a href="javascript:searchWps();" class="easyui-linkbutton" iconCls="icon-select">查找</a>&nbsp;&nbsp;&nbsp;&nbsp;
+				</div>
 			</div>
 		</div>
+  	<div id="body" style="height: 78%">
   		<!-- 工艺台账列表 -->
-	    <table id="wpslibTable" style="table-layout: fixed; width:100%;"></table>
+  		<div id="wpsTableDiv" style="height: auto;">
+	   		<table id="wpslibTable" style="table-layout: fixed; width:100%;"></table>
+  		</div>
 	     <!-- 添加修改工艺台账 -->
 		<div id="addOrUpdate" class="easyui-dialog" style="width: 1000px; height: 400px; padding:10px 20px" closed="true" >
 			<form id="addOrUpdatefm" class="easyui-form" method="post" data-options="novalidate:true">
@@ -150,7 +156,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					</div>
 					<div class="fitem">
 						<lable><span class="required">*</span>工艺来源</lable>
-						<select class="easyui-combobox" name="flag" id="flag" data-options="required:true,editable:false"">
+						<select class="easyui-combobox" name="flag" id="flag" data-options="required:true,editable:false,disabled:true">
 							<option value="0">自建</option>
 							<option value="1">MES</option>
 						</select>
@@ -195,15 +201,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<a href="javascript:saveWps();" class="easyui-linkbutton" iconCls="icon-ok">保存</a>
 			<a href="javascript:closeDialog('wltdlg');" class="easyui-linkbutton" iconCls="icon-cancel" >取消</a>
 		</div> -->
-	    
-		<div id="load" style="width:100%;height:100%;"></div>
-	</div>
-	<div class="functiondiv">
-		<div>
-			<a href="javascript:addWps();" class="easyui-linkbutton" iconCls="icon-newadd">自建工艺</a>&nbsp;&nbsp;&nbsp;&nbsp;
-			<a href="javascript:editWps();" class="easyui-linkbutton" iconCls="icon-update">修改工艺</a>&nbsp;&nbsp;&nbsp;&nbsp;
-			<a href="javascript:deleteWps();" class="easyui-linkbutton" iconCls="icon-delete">删除工艺</a>&nbsp;&nbsp;&nbsp;&nbsp;
+	    <div class="functiondiv">
+			<div>
+				<a href="javascript:addWps();" class="easyui-linkbutton" iconCls="icon-newadd">自建工艺</a>&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="javascript:editWps();" class="easyui-linkbutton" iconCls="icon-update">修改工艺</a>&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="javascript:deleteWps();" class="easyui-linkbutton" iconCls="icon-delete">删除工艺</a>&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="javascript:wpsDetails();" class="easyui-linkbutton" iconCls="icon-navigation">工艺规程详情</a>&nbsp;&nbsp;&nbsp;&nbsp;
+			</div>
 		</div>
+		<div id="load" style="width:100%;height:100%;"></div>
 	</div>
 	<style type="text/css">
 	    #load{ display: none; position: absolute; left:0; top:0;width: 100%; height: 40%; background-color: #555753; z-index:10001; -moz-opacity: 0.4; opacity:0.5; filter: alpha(opacity=70);}

@@ -322,6 +322,12 @@ public class WpsServiceImpl implements WpsService{
 		PageHelper.startPage(page.getPageIndex(), page.getPageSize());
 		return mapper.getWpsList(search);
 	}
+	
+	@Override
+	public List<Wps> getWpsList(String search) {
+		// TODO Auto-generated method stub
+		return mapper.getWpsList(search);
+	}
 
 	@Override
 	public List<Wps> getEmployee(String fid) {
@@ -435,5 +441,11 @@ public class WpsServiceImpl implements WpsService{
 	public void deleteDetail(String fid) {
 		// TODO Auto-generated method stub
 		mapper.deleteDetail(fid);
+	}
+
+	@Override
+	public void passReview(String fid) {
+		// TODO Auto-generated method stub
+		mapper.passReview(fid);
 	}
 }
