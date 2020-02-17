@@ -1273,7 +1273,7 @@
 	</select>
 	
 	<select id="getWireAndFlow" resultMap="dataMap">
-	SELECT fname,sum(total),sum(num) from (
+	SELECT fname,sum(total) total,sum(num) num from (
 	    select j.fname, 0 total, 0 num from tb_insframework j 
         LEFT JOIN tb_insframework ins on ins.fid = j.fparent 
         LEFT JOIN tb_insframework insf on insf.fid = ins.fparent WHERE j.ftype=23 

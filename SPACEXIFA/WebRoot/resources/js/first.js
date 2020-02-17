@@ -37,7 +37,7 @@ $(function(){
 			chartsDiv23.resize();
 	 });
 })
-$(function(){
+/*$(function(){
 	function teft(){
 		//alert(1);
 		showChart23();
@@ -46,7 +46,7 @@ $(function(){
 		//alert('开机率和焊接率')
 	}
 	setInterval(teft,30000);// 注意函数名没有引号和括弧！
-})
+})*/
 function showDiv12(){
 	var websocketURL=null,socket=null,tryTime = 0;
 	$.ajax({
@@ -584,7 +584,7 @@ var aryX = new Array(), aryS0 = new Array(), aryS1 = new Array();
 			data:aryS1,
 			itemStyle:{
                 normal:{
-                    color:'#5994f2'
+                    color:'#70ad47'
                 }
             }
 		}]
@@ -758,7 +758,7 @@ function showChart23(){
 			data:aryS1,
 			itemStyle:{
                 normal:{
-                    color:'#5994f2'
+                    color:'#70ad47'
                 }
             }
 		}]
