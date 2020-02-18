@@ -674,11 +674,24 @@ function editWps() {
 	flag = 2;
 	wpsId = "";
 	$('#addOrUpdatefm').form('clear');
+	$("#femployeeTable").datagrid("loadData", { total: 0, rows: [] });
+	$("#fstepTable").datagrid("loadData", { total: 0, rows: [] });
+	$("#fjunctionTable").datagrid("loadData", { total: 0, rows: [] });
+	$("#wpsDetailTable").datagrid("loadData", { total: 0, rows: [] });
 	var row = $('#wpslibTable').datagrid('getSelected'); 
 	if (row) {
 		if(row.flag == 1){
 			alert("该参数从MES获取，无法进行修改删除操作！！！");
 			return;
+		}
+		if(row.fstatus == 1){
+			alert("该参数已通过审核，无法进行修改操作！！！");
+			return;
+		}
+		if(row.fstatus == 2){
+			$("#tdd-buttons").show();
+		}else{
+			$("#tdd-buttons").hide();
 		}
 		$('#addOrUpdate').window({
 			title : "修改工艺",
@@ -728,6 +741,33 @@ function saveWps() {
 		},
 		error : function(errorMsg) {
 			alert("数据请求失败，请联系系统管理员!");
+		}
+	});
+}
+
+function saveReview(){
+	$.ajax({
+		type : "post",
+		async : false,
+		url : "wps/passReview?fid="+wpsId+"&value=0",
+		dataType : "json",
+		data : {},
+		success : function(result) {
+			if (result) {
+				if (!result.success) {
+					$.messager.show({
+						title : 'Error',
+						msg : result.errorMsg
+					});
+				} else {
+					alert("保存成功");
+					$('#addOrUpdate').window('close');
+					$('#wpslibTable').datagrid('reload');
+				}
+			}
+		},
+		error : function() {
+			alert('error');
 		}
 	});
 }

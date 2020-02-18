@@ -376,6 +376,16 @@ public interface WpsService {
 	 * @author Bruce
 	 * @date 2020年2月11日下午5:58:33
 	 * @param fid
+	 * @param value
 	 */
-	void passReview(String fid);
+	void passReview(String fid,String value);
+	
+	/**
+	 * 驳回保存
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年2月17日下午8:15:49
+	 * @param wps
+	 */
+	void turnDown(Wps wps);
 }

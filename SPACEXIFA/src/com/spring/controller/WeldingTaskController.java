@@ -73,28 +73,28 @@ public class WeldingTaskController {
 
 	@RequestMapping("/goWeldTask")
 	public String goWeldTask(HttpServletRequest request){
-		String serach="";
-		MyUser user = (MyUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		int instype = insm.getUserInsfType(new BigInteger(String.valueOf(user.getId())));
-		BigInteger userinsid = insm.getUserInsfId(new BigInteger(String.valueOf(user.getId())));
-		int bz=0;
-		if(instype==20){
-			
-		}else if(instype==23){
-			serach = "tb_welder.Fowner="+userinsid;
-		}else{
-			List<Insframework> ls = insm.getInsIdByParent(userinsid,24);
-			for(Insframework inns : ls ){
-				if(bz==0){
-					serach=serach+"(tb_welder.Fowner="+inns.getId();
-				}else{
-					serach=serach+" or tb_welder.Fowner="+inns.getId();
-				}
-				bz++;
-			}
-			serach=serach+" or tb_welder.Fowner="+userinsid+")";
-		}
-		request.setAttribute("userinsall",serach );
+//		String serach="";
+//		MyUser user = (MyUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//		int instype = insm.getUserInsfType(new BigInteger(String.valueOf(user.getId())));
+//		BigInteger userinsid = insm.getUserInsfId(new BigInteger(String.valueOf(user.getId())));
+//		int bz=0;
+//		if(instype==20){
+//			
+//		}else if(instype==23){
+//			serach = "tb_welder.Fowner="+userinsid;
+//		}else{
+//			List<Insframework> ls = insm.getInsIdByParent(userinsid,24);
+//			for(Insframework inns : ls ){
+//				if(bz==0){
+//					serach=serach+"(tb_welder.Fowner="+inns.getId();
+//				}else{
+//					serach=serach+" or tb_welder.Fowner="+inns.getId();
+//				}
+//				bz++;
+//			}
+//			serach=serach+" or tb_welder.Fowner="+userinsid+")";
+//		}
+//		request.setAttribute("userinsall",serach );
 		return "weldingtask/weldingtask";
 	}
 	

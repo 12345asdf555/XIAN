@@ -47,7 +47,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    	<input  name="symbol" id="symbol" type="hidden" value="${symbol}"/>
 			<!-- 工艺台账列表 -->
 		   	<table id="wpsDetailTable" style="table-layout: fixed; width:100%;"></table>
+		   	<div id="turnDownDialog" class="easyui-dialog" style="width: 1000px; height: 400px; padding:10px 20px" closed="true" buttons="#tdd-buttons">
+		   		<lable>驳回原因：</lable>
+          		<textarea name="downReason" id="downReason" style="height:90%;width:100%"></textarea>
+		   	</div>
+		   	<div id="tdd-buttons">
+				<a href="javascript:saveReason();" class="easyui-linkbutton" iconCls="icon-ok" id="otcsaveWpsBut">保存</a>
+				<a href="javascript:closeDlg();" class="easyui-linkbutton" iconCls="icon-cancel" >取消</a>
+			</div>
 		   	<div align="center">
+		   		<a id="down" href="javascript:openTurnDownDialog();" class="easyui-linkbutton" iconCls="icon-ok">驳回</a>
 			   	<a id="pass" href="javascript:passReview();" class="easyui-linkbutton" iconCls="icon-ok">通过审核</a>
 			   	<a href="wps/goWpslib" class="easyui-linkbutton" iconCls="icon-ok">返回</a>
 		   	</div>

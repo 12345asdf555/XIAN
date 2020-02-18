@@ -444,8 +444,14 @@ public class WpsServiceImpl implements WpsService{
 	}
 
 	@Override
-	public void passReview(String fid) {
+	public void passReview(String fid,String value) {
 		// TODO Auto-generated method stub
-		mapper.passReview(fid);
+		mapper.passReview(fid,value);
+	}
+
+	@Override
+	public void turnDown(Wps wps) {
+		// TODO Auto-generated method stub
+		mapper.turnDown(wps);
 	}
 }

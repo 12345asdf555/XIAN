@@ -130,7 +130,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	   		<table id="wpslibTable" style="table-layout: fixed; width:100%;"></table>
   		</div>
 	     <!-- 添加修改工艺台账 -->
-		<div id="addOrUpdate" class="easyui-dialog" style="width: 1000px; height: 400px; padding:10px 20px" closed="true" >
+		<div id="addOrUpdate" class="easyui-dialog" style="width: 1000px; height: 400px; padding:10px 20px" closed="true" buttons="#tdd-buttons">
 			<form id="addOrUpdatefm" class="easyui-form" method="post" data-options="novalidate:true">
 				<div style="float: left;width: 28%">
 					<div class="fitem">
@@ -197,10 +197,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</div>
 			</form>
 		</div>
-<!-- 		<div id="addOrUpdate-buttons">
-			<a href="javascript:saveWps();" class="easyui-linkbutton" iconCls="icon-ok">保存</a>
-			<a href="javascript:closeDialog('wltdlg');" class="easyui-linkbutton" iconCls="icon-cancel" >取消</a>
-		</div> -->
+	   	<div id="tdd-buttons">
+			<a href="javascript:saveReview();" class="easyui-linkbutton" iconCls="icon-ok" id="otcsaveWpsBut">重新提交审核</a>
+			<a href="javascript:closeDlg();" class="easyui-linkbutton" iconCls="icon-cancel" >取消</a>
+		</div>
 	    <div class="functiondiv">
 			<div>
 				<a href="javascript:addWps();" class="easyui-linkbutton" iconCls="icon-newadd">自建工艺</a>&nbsp;&nbsp;&nbsp;&nbsp;

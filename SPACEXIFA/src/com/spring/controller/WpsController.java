@@ -1807,6 +1807,7 @@ public class WpsController {
 				}
 				int fstatus = wps.getFstatus();
 				json.put("fstatus", fstatus);
+				json.put("fback", wps.getFback());
 				ary.add(json);
 			}
 		}catch(Exception e){
@@ -2224,7 +2225,27 @@ public class WpsController {
 		JSONObject obj = new JSONObject();
 		try{
 			String fid = request.getParameter("fid");
-			wpsService.passReview(fid);
+			String value = request.getParameter("value");
+			wpsService.passReview(fid,value);
+			obj.put("success", true);
+		}catch(Exception e){
+			e.printStackTrace();
+			obj.put("success", false);
+			obj.put("errorMsg", e.getMessage());
+		}
+		return obj.toString();
+	}
+	
+	@RequestMapping("/turnDown")
+	@ResponseBody
+	public String turnDown(HttpServletRequest request,@ModelAttribute Wps wps){
+		JSONObject obj = new JSONObject();
+		try{
+			String fid = request.getParameter("fid");
+			String downReason = request.getParameter("downReason");
+			wps.setFid(Long.parseLong(fid));
+			wps.setFback(downReason);
+			wpsService.turnDown(wps);
 			obj.put("success", true);
 		}catch(Exception e){
 			e.printStackTrace();

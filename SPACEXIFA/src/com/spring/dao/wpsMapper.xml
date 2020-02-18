@@ -371,7 +371,7 @@
 	</select>
 	
 	<select id="getWpsList" resultType="Wps">
-		SELECT fid,fproduct_drawing_no,fproduct_name,fproduct_version,fwps_lib_name fwpsnum,fwps_lib_version,flag,fstatus FROM tb_wps_library
+		SELECT fid,fproduct_drawing_no,fproduct_name,fproduct_version,fwps_lib_name fwpsnum,fwps_lib_version,flag,fstatus,fback FROM tb_wps_library
 		<if test="search!=null and search!=''">
 			where ${search}
 		</if>
@@ -494,6 +494,10 @@
 	</delete>
 	
 	<update id="passReview">
-		update tb_wps_library set fstatus=1 where fid=#{fid};
+		update tb_wps_library set fstatus=#{value} where fid=#{fid};
+	</update>
+	
+	<update id="turnDown" parameterType="Wps">
+		update tb_wps_library set fstatus=2,fback=#{fback} where fid=#{fid};
 	</update>
 </mapper>

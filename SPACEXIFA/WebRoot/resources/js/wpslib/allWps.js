@@ -94,12 +94,21 @@ function wpslibDatagrid(){
 				if(row.fstatus==0){
 					str += '<a id="wait" class="easyui-linkbutton"/>';
 				}
+				if(row.fstatus==2){
+					str += '<a id="down" class="easyui-linkbutton"/>';
+				}
 				if(row.fstatus==1){
 					str += '<a id="finish" class="easyui-linkbutton"/>';
 				}
 				return str;
 			}
-		}] ],
+		}, {
+			field : 'fback',
+			title : '驳回原因',
+			width : 100,
+			halign : "center",
+			align : "left"
+		},] ],
 		pagination : true,
 		rowStyler: function(index,row){
             if ((index % 2)!=0){
@@ -111,6 +120,9 @@ function wpslibDatagrid(){
 		onLoadSuccess: function(data){
 			if($("#wait").length!=0){
 				$("a[id='wait']").linkbutton({text:'待审核',plain:true,iconCls:'icon-newcancel'});
+			}
+			if($("#down").length!=0){
+				$("a[id='down']").linkbutton({text:'被驳回',plain:true,iconCls:'icon-next'});
 			}
 			if($("#finish").length!=0){
 				$("a[id='finish']").linkbutton({text:'已通过',plain:true,iconCls:'icon-over'});
@@ -186,6 +198,12 @@ function wpsDetails(){
 	var row = $('#wpslibTable').datagrid('getSelected'); 
 	if (row) {
 		window.location.href = encodeURI("wps/goWpsdetails"+"?fid="+row.fid+"&fproduct_name="+encodeURIComponent(row.fproduct_name)+"&status="+row.fstatus);
+	}
+}
+
+function closeDlg(){
+	if(!$("#addOrUpdate").parent().is(":hidden")){
+		$('#addOrUpdate').window('close');
 	}
 }
 

@@ -3,11 +3,17 @@ $(function(){
 	if($("#symbol").val() == "1"){
 		if($("#status").val() == "0"){
 			$("#pass").show();
+			$("#down").show();
+		}else if($("#status").val() == "2"){
+			$("#pass").show();
+			$("#down").show();
 		}else{
 			$("#pass").hide();
+			$("#down").hide();
 		}
 	}else{
 		$("#pass").hide();
+		$("#down").hide();
 	}
 });
 
@@ -81,12 +87,11 @@ function passReview(){
 	$.ajax({
 		type : "post",
 		async : false,
-		url : "wps/passReview?fid="+$("#flagId").val(),
+		url : "wps/passReview?fid="+$("#flagId").val()+"&value=1",
 		dataType : "json",
 		data : {},
 		success : function(result) {
 			if (result) {
-				var result = eval('(' + result + ')');
 				if (!result.success) {
 					$.messager.show({
 						title : 'Error',
@@ -95,6 +100,7 @@ function passReview(){
 				} else {
 					alert("保存成功");
 					$("#pass").hide();
+					$("#down").hide();
 				}
 			}
 		},
@@ -102,4 +108,44 @@ function passReview(){
 			alert('error');
 		}
 	});
+}
+
+function openTurnDownDialog(){
+	$('#turnDownDialog').window({
+		title : "备注",
+		modal : true
+	});
+	$('#turnDownDialog').window('open');
+}
+
+function saveReason(){
+	$.ajax({
+		type : "post",
+		async : false,
+		url : "wps/turnDown?fid="+$("#flagId").val()+"&downReason="+$("#downReason").val(),
+		dataType : "json",
+		data : {},
+		success : function(result) {
+			if (result) {
+				if (!result.success) {
+					$.messager.show({
+						title : 'Error',
+						msg : result.errorMsg
+					});
+				} else {
+					alert("保存成功");
+					$('#turnDownDialog').window('close');
+				}
+			}
+		},
+		error : function() {
+			alert('error');
+		}
+	});
+}
+
+function closeDlg(){
+	if(!$("#turnDownDialog").parent().is(":hidden")){
+		$('#turnDownDialog').window('close');
+	}
 }
