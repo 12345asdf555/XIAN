@@ -70,7 +70,7 @@ public class TdController {
 		String insname = tdService.findInsname(tdService.findIns(uid));
 		request.setAttribute("insname", insname);*/
 		lm.getUserId(request);
-		return "td/newCurve";
+		return "td/nextCurve";
 	}
 	
 	@RequestMapping("/goNextcurve")
@@ -92,7 +92,7 @@ public class TdController {
 	    }else{
 		    request.setAttribute("time", time.substring(11));
 	    }*/
-		return "td/nextCurve";
+		return "td/newCurve";
 	}
 	
 	@RequestMapping("/AllTdd")
@@ -767,6 +767,7 @@ public class TdController {
 			Td list = tdService.getLiveTime(time.substring(0,11)+"00:00:00", time.substring(0,14)+"00:00", new BigInteger(request.getParameter("machineid")));
 			WeldingMachine machinelist = wm.getWeldingMachineById(new BigInteger(request.getParameter("machineid")));
 			json.put("machineno", machinelist.getTypename());
+			json.put("mvaluename", machinelist.getMvaluename());
 			if(list!=null){
 				json.put("worktime",list.getWorktime());
 				json.put("time",list.getWorktime());
