@@ -1467,4 +1467,78 @@
 		</if>
 		)
 	</select>
+	
+	<select id="getWarnTimes" resultMap="dataMap">
+		SELECT * from (
+		select sum(w.fwarntime) total,i.fname,i.ftype from tb_warn w 
+		INNER JOIN tb_insframework i on i.fid  = w.fmachine_itemid left JOIN tb_insframework ins on ins.fid = i.fparent 
+		left JOIN tb_insframework insf on insf.fid = ins.fparent 
+		where 1=1 
+		<if test="itemid!=null and itemid!=''">
+			and (i.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid}) 
+		</if>
+		<if test="dto!=null and dto!=''">
+			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
+				and w.fstarttime &gt;= #{dto.dtoTime1}
+			</if>
+		</if>
+		GROUP BY w.fmachine_itemid 
+		union all 
+		SELECT 0 total,i.fname,i.ftype FROM tb_insframework i 
+		left JOIN tb_insframework ins on ins.fid = i.fparent 
+		left JOIN tb_insframework insf on insf.fid = ins.fparent 
+		where 1=1 
+		<if test="itemid!=null and itemid!=''">
+			and (i.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid}) 
+		</if>
+		and i.fid not in (SELECT DISTINCT fmachine_itemid from tb_warn w INNER JOIN tb_insframework i on i.fid  = w.fmachine_itemid left JOIN tb_insframework ins on ins.fid = i.fparent 
+		left JOIN tb_insframework insf on insf.fid = ins.fparent 
+		where 1=1 
+		<if test="itemid!=null and itemid!=''">
+			and (i.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid}) 
+		</if>
+		<if test="dto!=null and dto!=''">
+			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
+				and w.fstarttime &gt;= #{dto.dtoTime1}
+			</if>
+		</if>
+		)) t where t.ftype=23 ORDER BY t.total desc 
+	</select>
+	
+	<select id="getTaskDetails" resultMap="dataMap">
+		select fname,sum(insid) insid,sum(hour) worktime from(
+        SELECT i.fid,i.fname, 0 insid, 0 hour from tb_insframework i 
+		LEFT JOIN tb_insframework ins on ins.fid = i.fparent 
+		LEFT JOIN tb_insframework insf on insf.fid = ins.fparent WHERE i.ftype=23 
+		UNION ALL
+		SELECT i.fid,i.fname,COUNT(j.fid) insid,0 hour FROM tb_insframework i 
+		LEFT JOIN tb_insframework ins on ins.fid = i.fparent
+		LEFT JOIN tb_insframework insf on insf.fid = ins.fparent
+		LEFT JOIN tb_welded_junction j ON i.fid=j.fitemId
+		<if test="dto!=null and dto!=''">
+			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
+				WHERE fstart_time &gt;= #{dto.dtoTime1} 
+			</if>
+		</if>
+		<if test="itemid!=null and itemid!=''">
+			and (i.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid}) 
+		</if>
+		GROUP BY i.fname
+		UNION ALL
+		SELECT i.fid,i.fname,0 insid,COUNT(t.fid) hour FROM tb_insframework i 
+		LEFT JOIN tb_insframework ins on ins.fid = i.fparent
+		LEFT JOIN tb_insframework insf on insf.fid = ins.fparent
+		LEFT JOIN tb_welded_junction j ON i.fid=j.fitemId
+		LEFT JOIN tb_taskresult t ON (j.fid=t.ftaskid AND t.foperatetype=1)
+		<if test="dto!=null and dto!=''">
+			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
+				WHERE fstart_time &gt;= #{dto.dtoTime1} 
+			</if>
+		</if>
+		<if test="itemid!=null and itemid!=''">
+			and (i.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid}) 
+		</if> 
+		GROUP BY i.fname
+		)temp group by fid order by fid
+	</select>
 </mapper>

@@ -352,4 +352,16 @@ public class DataStatisticsServiceImpl implements DataStatisticsService {
 		// TODO Auto-generated method stub
 		return ds.getMachineNoTask(insid,time1,totime,time2);
 	}
+
+	@Override
+	public List<DataStatistics> getWarnTimes(BigInteger itemid, WeldDto dto) {
+		// TODO Auto-generated method stub
+		return ds.getWarnTimes(itemid, dto);
+	}
+
+	@Override
+	public List<DataStatistics> getTaskDetails(BigInteger userInsframework, WeldDto dto) {
+		// TODO Auto-generated method stub
+		return ds.getTaskDetails(userInsframework, dto);
+	}
 }

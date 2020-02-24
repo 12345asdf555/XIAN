@@ -388,4 +388,18 @@ public interface DataStatisticsService {
 	 * @return
 	 */
 	List<DataStatistics> getMachineNoTask(BigInteger insid, String time1, String totime, String time2);
+	
+	/**
+	 * 不同组织机构设备故障次数
+	 * @return
+	 */
+	List<DataStatistics> getWarnTimes(BigInteger itemid, WeldDto dto);
+	
+	/**
+	 * 获取用户当前组织机构下的开机时间和焊接时间
+	 * @param userInsframework
+	 * @param dto
+	 * @return
+	 */
+	List<DataStatistics> getTaskDetails(BigInteger userInsframework, WeldDto dto);
 }

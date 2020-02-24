@@ -1482,6 +1482,99 @@ public class DataStatisticsController {
 		return obj.toString();
 	}
 	
+	@RequestMapping("/getWarnTimes")
+	@ResponseBody
+	public String getWarnTimes(HttpServletRequest request){
+		JSONObject obj = new JSONObject();
+		JSONArray aryX = new JSONArray();
+		JSONArray aryS = new JSONArray();
+		WeldDto dto = new WeldDto();
+		SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String time1 = dateFormat.format(new Date()).substring(0, 11)+"00:00:00";
+		int temp=0;
+		DecimalFormat df=new DecimalFormat("0.0");
+		try{
+			if(iutil.isNull(time1)){
+				dto.setDtoTime1(time1);
+			}
+			List<DataStatistics> list = dss.getWarnTimes(im.getUserInsframework(),dto);
+			for(DataStatistics i:list){
+				aryX.add(i.getName());
+				aryS.add(df.format(i.getTotal()/60.0));
+				if(i.getTotal()>temp) {
+					temp = i.getTotal();
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		obj.put("aryX", aryX);
+		obj.put("aryS", aryS);
+		obj.put("temp", df.format(temp/60.0));
+		return obj.toString();
+	}
+	
+	/**
+	 * 任务总数和完成任务数
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/getTaskDetails")
+	@ResponseBody
+	public String getTaskDetails(HttpServletRequest request){
+		String flag = request.getParameter("flag");
+		JSONObject obj = new JSONObject();
+		WeldDto dto = new WeldDto();
+		JSONArray aryX = new JSONArray();
+		JSONArray aryS0 = new JSONArray();
+		JSONArray aryS1 = new JSONArray();
+		JSONArray ratio = new JSONArray();
+		int temp0=0,temp1=0;
+		try{
+			SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			if("0".equals(flag)) {
+				String time1 = dateFormat.format(new Date()).substring(0, 11)+"00:00:00";
+				if(iutil.isNull(time1)){
+					dto.setDtoTime1(time1);
+				}
+			}else {
+				Date date = new Date();
+				Calendar calendar = Calendar.getInstance();
+				calendar.setTime(date);
+				calendar.add(Calendar.DAY_OF_MONTH, -1);
+				date = (Date) calendar.getTime();
+				String time1 = dateFormat.format(date);
+				if(iutil.isNull(time1)){
+					dto.setDtoTime1(time1);
+				}
+			}
+			List<DataStatistics> list = dss.getTaskDetails(im.getUserInsframework(),dto);
+			DecimalFormat df=new DecimalFormat("0.0");
+			for(DataStatistics i:list){
+				aryX.add(i.getName());
+				aryS0.add(i.getInsid().intValue());
+				aryS1.add(i.getWorktime().intValue());
+				if(i.getInsid().intValue()>temp0) {
+					temp0 = i.getInsid().intValue();
+				}
+				if(i.getInsid().intValue()!=0) {
+					double ratioValue=Double.parseDouble(df.format((i.getWorktime().doubleValue()/(i.getInsid().doubleValue()))*100));
+					ratio.add(ratioValue);
+				}else{
+					ratio.add(0);
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		obj.put("aryX", aryX);
+		obj.put("aryS0", aryS0);
+		obj.put("aryS1", aryS1);
+		obj.put("temp0", temp0);
+		obj.put("ratio", ratio);
+		return obj.toString();
+	}
+	
 	/**
 	 * 开机时长和焊接时长
 	 * @param request
@@ -1523,6 +1616,44 @@ public class DataStatisticsController {
 		obj.put("aryS1", aryS1);
 		obj.put("temp0", temp0);
 		obj.put("temp1", temp1);
+		return obj.toString();
+	}
+	
+	/**
+	 * 设备利用率和设备焊接率
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年2月21日下午5:00:41
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/getOnAndWeldRatio")
+	@ResponseBody
+	public String getOnAndWeldRatio(HttpServletRequest request){
+		JSONObject obj = new JSONObject();
+		WeldDto dto = new WeldDto();
+		SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String time1 = dateFormat.format(new Date()).substring(0, 11)+"00:00:00";
+		String onRatio = null,weldRatio = null;
+		try{
+			if(iutil.isNull(time1)){
+				dto.setDtoTime1(time1);
+			}
+			List<DataStatistics> list = dss.getEquipmentUtilize(im.getUserInsframework(),dto);
+			for(DataStatistics i:list){
+				if(!"".equals(i.getId().toString())&&!"0".equals(i.getId().toString())&&i.getId().toString()!=null) {
+					DecimalFormat df=new DecimalFormat("0.0");
+					onRatio = df.format(((float)i.getNum()/Integer.valueOf(i.getId().toString()))*100);
+					weldRatio = df.format(((float)i.getTotal()/Integer.valueOf(i.getId().toString()))*100);
+//					onRatio = String.valueOf((i.getNum()/Integer.valueOf(i.getId().toString()))*100);
+//					weldRatio = String.valueOf((i.getTotal()/Integer.valueOf(i.getId().toString()))*100);
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		obj.put("onRatio", onRatio);
+		obj.put("weldRatio", weldRatio);
 		return obj.toString();
 	}
 	

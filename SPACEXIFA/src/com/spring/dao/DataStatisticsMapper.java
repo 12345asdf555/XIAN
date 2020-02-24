@@ -90,4 +90,8 @@ public interface DataStatisticsMapper  extends Mapper<DataStatistics>{
 	List<DataStatistics> getMachineTask(@Param("parent")BigInteger parent,@Param("sql")String sql,@Param("type")int type);
 	
 	List<DataStatistics> getMachineNoTask(@Param("itemid")BigInteger itemid,@Param("time1")String time1, @Param("totime")String totime, @Param("time2")String time2);
+	
+	List<DataStatistics> getWarnTimes(@Param("itemid") BigInteger itemid,@Param("dto") WeldDto dto);
+	
+	List<DataStatistics> getTaskDetails(@Param("itemid") BigInteger itemid,@Param("dto") WeldDto dto);
 }
