@@ -197,7 +197,7 @@ function searchWps(){
 function wpsDetails(){
 	var row = $('#wpslibTable').datagrid('getSelected'); 
 	if (row) {
-		window.location.href = encodeURI("wps/goWpsdetails"+"?fid="+row.fid+"&fproduct_name="+encodeURIComponent(row.fproduct_name)+"&status="+row.fstatus);
+		window.location.href = encodeURI("wps/goWpsdetails"+"?fid="+row.fid+"&fproduct_name="+row.fproduct_name+"&status="+row.fstatus);
 	}
 }
 

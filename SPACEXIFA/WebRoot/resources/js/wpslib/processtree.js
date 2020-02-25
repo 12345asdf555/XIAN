@@ -46,6 +46,7 @@ function insframeworkTree() {
 							alert('焊缝加载失败');
 						}
 						$("#fjunction").combobox();
+						$('#fjunction').combobox('select', result.rows[0].fid);
 					},
 					error : function() {
 						alert('error');
