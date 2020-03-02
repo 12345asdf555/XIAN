@@ -500,4 +500,9 @@
 	<update id="turnDown" parameterType="Wps">
 		update tb_wps_library set fstatus=2,fback=#{fback} where fid=#{fid};
 	</update>
+	
+	<select id="getWpsCombobox" resultType="Wps">
+		SELECT fid,fwps_lib_name fwpsnum,fwps_lib_version FROM tb_wps_library
+		WHERE fid NOT IN (SELECT DISTINCT fwpslib_id FROM tb_welded_junction WHERE fwpslib_id IS NOT NULL) AND fstatus=1
+	</select>
 </mapper>

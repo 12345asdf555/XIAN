@@ -2219,6 +2219,15 @@ public class WpsController {
         return str;  
     } 
 	
+	/**
+	 * 工艺通过
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年2月26日下午2:59:33
+	 * @param request
+	 * @param wps
+	 * @return
+	 */
 	@RequestMapping("/passReview")
 	@ResponseBody
 	public String passReview(HttpServletRequest request,@ModelAttribute Wps wps){
@@ -2236,6 +2245,15 @@ public class WpsController {
 		return obj.toString();
 	}
 	
+	/**
+	 * 工艺驳回
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年2月26日下午2:59:25
+	 * @param request
+	 * @param wps
+	 * @return
+	 */
 	@RequestMapping("/turnDown")
 	@ResponseBody
 	public String turnDown(HttpServletRequest request,@ModelAttribute Wps wps){
@@ -2252,6 +2270,30 @@ public class WpsController {
 			obj.put("success", false);
 			obj.put("errorMsg", e.getMessage());
 		}
+		return obj.toString();
+	}
+	
+	/**
+	 * 获取工艺规程字典信息
+	 * @return
+	 */
+	@RequestMapping("/getWpsCombobox")
+	@ResponseBody
+	public String getWpsCombobox(){
+		JSONObject json = new JSONObject();
+		JSONArray ary = new JSONArray();
+		JSONObject obj = new JSONObject();
+		try{
+			List<Wps> list = wpsService.getWpsCombobox();
+			for(Wps w:list){
+				json.put("id", w.getFid());
+				json.put("name", w.getFwpsnum()+":"+w.getFwps_lib_version());
+				ary.add(json);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		obj.put("ary", ary);
 		return obj.toString();
 	}
 }

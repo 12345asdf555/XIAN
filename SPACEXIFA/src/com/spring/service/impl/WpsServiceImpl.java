@@ -454,4 +454,10 @@ public class WpsServiceImpl implements WpsService{
 		// TODO Auto-generated method stub
 		mapper.turnDown(wps);
 	}
+
+	@Override
+	public List<Wps> getWpsCombobox() {
+		// TODO Auto-generated method stub
+		return mapper.getWpsCombobox();
+	}
 }

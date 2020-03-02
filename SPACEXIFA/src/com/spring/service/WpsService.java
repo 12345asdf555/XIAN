@@ -388,4 +388,13 @@ public interface WpsService {
 	 * @param wps
 	 */
 	void turnDown(Wps wps);
+	
+	/**
+	 * 获取工艺下拉框
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年2月26日下午3:04:55
+	 * @return
+	 */
+	List<Wps> getWpsCombobox();
 }

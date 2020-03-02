@@ -66,13 +66,16 @@ public class WeldedJunction {
 	private String fpost_heat_temperature;
 	private String fafter_hot_time;
 	private String fwps_lib_name;
+	private String fwps_lib_version;
 	private BigInteger fwpslib_id;
 	private String fwelder_name;
 	private BigInteger fwelder_id;
 	private String fstatus;
 	private String ftask_no;
+	private int flag;
+	private String fprefix_number;
 	private String fproduct_number;
-	private String flag;
+	private String fback;
 	
 	public BigInteger getInsfid() {
 		return insfid;
@@ -428,11 +431,29 @@ public class WeldedJunction {
 	public void setFproduct_number(String fproduct_number) {
 		this.fproduct_number = fproduct_number;
 	}
-	public String getFlag() {
+	public int getFlag() {
 		return flag;
 	}
-	public void setFlag(String flag) {
+	public void setFlag(int flag) {
 		this.flag = flag;
+	}
+	public String getFwps_lib_version() {
+		return fwps_lib_version;
+	}
+	public void setFwps_lib_version(String fwps_lib_version) {
+		this.fwps_lib_version = fwps_lib_version;
+	}
+	public String getFprefix_number() {
+		return fprefix_number;
+	}
+	public void setFprefix_number(String fprefix_number) {
+		this.fprefix_number = fprefix_number;
+	}
+	public String getFback() {
+		return fback;
+	}
+	public void setFback(String fback) {
+		this.fback = fback;
 	}
 	
 }

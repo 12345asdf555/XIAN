@@ -45,6 +45,11 @@
         <result property="insfid" column="insfid"></result>
 		<result property="iid" column="iid" />
 		<result property="iname" column="iname" />
+		<result property="ftask_no" column="ftask_no" />
+		<result property="flag" column="flag" />
+		<result property="fwps_lib_name" column="fwps_lib_name" />
+		<result property="fwps_lib_version" column="fwps_lib_version" />
+		<result property="fstatus" column="fstatus" />
 	</resultMap>
 	
 	<resultMap id="wmMap" type="com.spring.model.WeldedJunction">
@@ -264,5 +269,59 @@
 	    </if>
 	    ) t WHERE fserial_no!=0 group by fserial_no,froom_no
 		) te order by froom_no desc
+	</select>
+	
+	<select id="getCardList" resultMap="wjMap">
+		SELECT j.fid,fwelded_junction_no,ftask_no,fitemId iid,i.fname iname,j.flag,l.fwps_lib_name,l.fwps_lib_version,j.fstatus,j.fback FROM tb_welded_junction j
+		LEFT JOIN tb_insframework i ON j.fitemId=i.fid 
+		LEFT JOIN tb_insframework ins on ins.fid = i.fparent
+		LEFT JOIN tb_insframework insf on insf.fid = ins.fparent
+		LEFT JOIN tb_wps_library l ON j.fwpslib_id=l.fid
+		<if test="search!=null and search!=''">
+			WHERE ${search}
+		</if>
+	</select>
+	
+	<insert id="addCard" parameterType="com.spring.model.WeldedJunction" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO tb_welded_junction (fwelded_junction_no, ftask_no,fitemId,flag,fstatus) VALUES 
+		(#{weldedJunctionno}, #{ftask_no}, #{iid}, #{flag}, 0)
+	</insert>
+	
+	<update id="updateCard" parameterType="com.spring.model.WeldedJunction">
+		update tb_welded_junction set 
+		fwelded_junction_no=#{weldedJunctionno},ftask_no=#{ftask_no},fitemId=#{iid} 
+		where fid=#{id};
+	</update>
+	
+	<delete id="deleteCard">
+		DELETE j,p FROM tb_welded_junction j 
+		LEFT JOIN tb_product_number p ON j.fid=p.fcard_id
+		WHERE j.fid=#{id};
+	</delete>
+	
+	<delete id="deleteProduct">
+		DELETE FROM  tb_product_number WHERE fcard_id=#{id};
+	</delete>
+	
+	<insert id="addProductNum" parameterType="com.spring.model.WeldedJunction">
+		INSERT INTO tb_product_number (fprefix_number,fproduct_number,fcard_id,fwps_lib_id) VALUES 
+		(#{fprefix_number}, #{fproduct_number}, #{id}, #{fwpslib_id})
+	</insert>
+	
+	<select id="getProductList" resultMap="wjMap">
+		SELECT p.*,l.fwps_lib_name,l.fwps_lib_version,t.foperatetype fstatus FROM tb_product_number p 
+		LEFT JOIN tb_wps_library l ON p.fwps_lib_id=l.fid
+		LEFT JOIN tb_taskresult t ON p.fid=t.ftaskid 
+		WHERE (t.fid IN (SELECT MAX(fid) FROM tb_taskresult GROUP BY ftaskid) OR t.foperatetype IS null)
+		<if test="search!=null and search!=''">
+			${search}
+		</if>
+	</select>
+	
+	<select id="getProductByCardid" resultMap="wjMap">
+		SELECT p.fwps_lib_id fwpslib_id,fprefix_number,MIN(fproduct_number) fproduct_number,COUNT(p.fid) id 
+		FROM tb_product_number p 
+		WHERE p.fcard_id=#{fid}
+		GROUP BY fwps_lib_id,fprefix_number
 	</select>
 </mapper>

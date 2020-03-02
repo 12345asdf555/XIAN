@@ -95,7 +95,7 @@ public class WeldingTaskController {
 //			serach=serach+" or tb_welder.Fowner="+userinsid+")";
 //		}
 //		request.setAttribute("userinsall",serach );
-		return "weldingtask/weldingtask";
+		return "weldingtask/TrackingCard";
 	}
 	
 	@RequestMapping("/goTaskResult")
@@ -1213,6 +1213,218 @@ public class WeldingTaskController {
 			e.printStackTrace();
 		}
 		obj.put("ary", ary);
+		return obj.toString();
+	}
+	
+	/**
+	 * 获取工艺规程下拉框
+	 * @return
+	 */
+	@RequestMapping("/getWpsSelect")
+	@ResponseBody
+	public String getWpsSelect(){
+		JSONObject json = new JSONObject();
+		JSONArray ary = new JSONArray();
+		JSONObject obj = new JSONObject();
+		try{
+//			List<Insframework> list = im.getOperateArea(null,23);
+//			for(Insframework i:list){
+//				json.put("id", i.getId());
+//				json.put("name", i.getName());
+//				ary.add(json);
+//			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		obj.put("ary", ary);
+		return obj.toString();
+	}
+	
+	@RequestMapping("/getCardList")
+	@ResponseBody
+	public String getCardList(HttpServletRequest request){
+		pageIndex = Integer.parseInt(request.getParameter("page"));
+		pageSize = Integer.parseInt(request.getParameter("rows"));
+		page = new Page(pageIndex,pageSize,total);
+		String search = request.getParameter("search");
+		List<WeldedJunction> cardList = wjm.getCardList(page,search);
+		long total = 0;
+		if(cardList != null){
+			PageInfo<WeldedJunction> pageinfo = new PageInfo<WeldedJunction>(cardList);
+			total = pageinfo.getTotal();
+		}
+		JSONObject json = new JSONObject();
+		JSONArray ary = new JSONArray();
+		JSONObject obj = new JSONObject();
+		try{
+			for(WeldedJunction wjm:cardList){
+				json.put("fid", wjm.getId());
+				json.put("fwelded_junction_no", wjm.getWeldedJunctionno());
+				json.put("ftask_no", wjm.getFtask_no());
+				json.put("fitemId", wjm.getIid());
+				json.put("fitemName", wjm.getIname());
+				json.put("fwps_lib_name", wjm.getFwps_lib_name());
+				json.put("fwps_lib_version", wjm.getFwps_lib_version());
+				int flag = wjm.getFlag();
+				json.put("flag", flag);
+				if(flag == 0) {
+					json.put("flag_name", "自建");
+				}else {
+					json.put("flag_name", "MES");
+				}
+				json.put("fstatus", wjm.getFstatus());
+				json.put("fback", wjm.getFback());
+				ary.add(json);
+			}
+		}catch(Exception e){
+			e.getMessage();
+		}
+		obj.put("total", total);
+		obj.put("rows", ary);
+		return obj.toString();
+	}
+	
+	@RequestMapping("/addCard")
+	@ResponseBody
+	public String addCard(HttpServletRequest request,@ModelAttribute WeldedJunction wj){
+		JSONObject obj = new JSONObject();
+		try{
+			String fwelded_junction_no = request.getParameter("fwelded_junction_no");
+			String ftask_no = request.getParameter("ftask_no");
+			String fitemId = request.getParameter("fitemId");
+			String fwps_lib_id = request.getParameter("fwps_lib_id");
+			String cardFlag = request.getParameter("cardFlag");
+			int fproduct_number = Integer.parseInt(request.getParameter("fproduct_number"));
+			String prefix_number = request.getParameter("fprefix_number");
+			int init_number = Integer.parseInt(request.getParameter("init_number"));
+			wj.setWeldedJunctionno(fwelded_junction_no);
+			wj.setFtask_no(ftask_no);
+			wj.setIid(new BigInteger(fitemId));
+			wj.setFwpslib_id(new BigInteger(fwps_lib_id));
+			wj.setFlag(Integer.parseInt(cardFlag));
+			wjm.addCard(wj);
+//			BigInteger id = wj.getId();
+			for(int i=0;i<fproduct_number;i++) {
+				wj.setFprefix_number(prefix_number);
+				wj.setFproduct_number(String.valueOf(init_number+i));
+				wjm.addProductNum(wj);
+			}
+			obj.put("success", true);
+		}catch(Exception e){
+			e.printStackTrace();
+			obj.put("success", false);
+			obj.put("errorMsg", e.getMessage());
+		}
+		return obj.toString();
+	}
+	
+	@RequestMapping("/updateCard")
+	@ResponseBody
+	public String updateCard(HttpServletRequest request,@ModelAttribute WeldedJunction wj){
+		JSONObject obj = new JSONObject();
+		try{
+			String fid = request.getParameter("fid");
+			String fwelded_junction_no = request.getParameter("fwelded_junction_no");
+			String ftask_no = request.getParameter("ftask_no");
+			String fitemId = request.getParameter("fitemId");
+			String fwps_lib_id = request.getParameter("fwps_lib_id");
+			String cardFlag = request.getParameter("cardFlag");
+			int fproduct_number = Integer.parseInt(request.getParameter("fproduct_number"));
+			String prefix_number = request.getParameter("fprefix_number");
+			int init_number = Integer.parseInt(request.getParameter("init_number"));
+			wj.setId(new BigInteger(fid));
+			wj.setWeldedJunctionno(fwelded_junction_no);
+			wj.setFtask_no(ftask_no);
+			wj.setIid(new BigInteger(fitemId));
+			wj.setFwpslib_id(new BigInteger(fwps_lib_id));
+			wj.setFlag(Integer.parseInt(cardFlag));
+			wjm.updateCard(wj);
+			wjm.deleteProduct(fid);
+//			BigInteger id = wj.getId();
+			for(int i=0;i<fproduct_number;i++) {
+				wj.setFprefix_number(prefix_number);
+				wj.setFproduct_number(String.valueOf(init_number+i));
+				wjm.addProductNum(wj);
+			}
+			obj.put("success", true);
+		}catch(Exception e){
+			e.printStackTrace();
+			obj.put("success", false);
+			obj.put("errorMsg", e.getMessage());
+		}
+		return obj.toString();
+	}
+	
+	@RequestMapping("/deleteCard")
+	@ResponseBody
+	public String deleteCard(HttpServletRequest request){
+		JSONObject obj = new JSONObject();
+		try{
+			String fid = request.getParameter("fid");
+			wjm.deleteCard(fid);
+			obj.put("success", true);
+		}catch(Exception e){
+			e.printStackTrace();
+			obj.put("success", false);
+			obj.put("errorMsg", e.getMessage());
+		}
+		return obj.toString();
+	}
+	
+	@RequestMapping("/getProductList")
+	@ResponseBody
+	public String getProductList(HttpServletRequest request){
+		pageIndex = Integer.parseInt(request.getParameter("page"));
+		pageSize = Integer.parseInt(request.getParameter("rows"));
+		page = new Page(pageIndex,pageSize,total);
+		String search = request.getParameter("search");
+		List<WeldedJunction> productList = wjm.getProductList(page,search);
+		long total = 0;
+		if(productList != null){
+			PageInfo<WeldedJunction> pageinfo = new PageInfo<WeldedJunction>(productList);
+			total = pageinfo.getTotal();
+		}
+		JSONObject json = new JSONObject();
+		JSONArray ary = new JSONArray();
+		JSONObject obj = new JSONObject();
+		try{
+			for(WeldedJunction wjm:productList){
+				json.put("fid", wjm.getId());
+				json.put("fproduct_number", wjm.getFprefix_number()+"-"+wjm.getFproduct_number());
+				json.put("fwps_lib_name", wjm.getFwps_lib_name());
+				json.put("fwps_lib_version", wjm.getFwps_lib_version());
+				json.put("fstatus", wjm.getFstatus());
+				if(wjm.getFstatus()==null){
+					json.put("fstatus", "2");
+				}
+				ary.add(json);
+			}
+		}catch(Exception e){
+			e.getMessage();
+		}
+		obj.put("total", total);
+		obj.put("rows", ary);
+		return obj.toString();
+	}
+	
+	@RequestMapping("/getProductByCardid")
+	@ResponseBody
+	public String getProductByCardid(HttpServletRequest request){
+		String fid = request.getParameter("fid");
+		WeldedJunction product = wjm.getProductByCardid(fid);
+		JSONObject json = new JSONObject();
+		JSONArray ary = new JSONArray();
+		JSONObject obj = new JSONObject();
+		try{
+			json.put("fprefix_number", product.getFprefix_number());
+			json.put("fproduct_number", product.getId());
+			json.put("finit_number", product.getFproduct_number());
+			json.put("fwps_lib_id", product.getFwpslib_id());
+			ary.add(json);
+		}catch(Exception e){
+			e.getMessage();
+		}
+		obj.put("row", ary);
 		return obj.toString();
 	}
 }

@@ -108,7 +108,7 @@ function wpslibDatagrid(){
 			width : 100,
 			halign : "center",
 			align : "left"
-		},] ],
+		}] ],
 		pagination : true,
 		rowStyler: function(index,row){
             if ((index % 2)!=0){

@@ -138,4 +138,81 @@ public interface WeldedJunctionService {
 	 * @return
 	 */
 	List<WeldedJunction> getSwDetail(Page page,String taskno,String time,WeldDto dto);
+	
+	/**
+	 * 获取电子跟踪卡列表
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年2月24日下午6:25:34
+	 * @param page
+	 * @param search
+	 * @return
+	 */
+	List<WeldedJunction> getCardList(Page page, String search);
+	
+	/**
+	 * 新增电子跟踪卡
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年2月25日下午6:53:53
+	 * @param wj
+	 */
+	void addCard(WeldedJunction wj);
+	
+	/**
+	 * 更新电子跟踪卡
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年2月27日下午3:43:03
+	 * @param wj
+	 */
+	void updateCard(WeldedJunction wj);
+	
+	/**
+	 * 删除电子跟踪卡
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年2月27日下午3:45:22
+	 * @param fid
+	 */
+	void deleteCard(String fid);
+	
+	/**
+	 * 新增产品序号
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年2月25日下午6:54:38
+	 * @param wj
+	 */
+	void addProductNum(WeldedJunction wj);
+	
+	/**
+	 * 根据电子跟踪卡id删除对应产品
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年2月27日下午3:46:06
+	 * @param fid
+	 */
+	void deleteProduct(String fid);
+	
+	/**
+	 * 产品列表
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年2月26日下午5:43:32
+	 * @param page
+	 * @param search
+	 * @return
+	 */
+	List<WeldedJunction> getProductList(Page page, String search);
+	
+	/**
+	 * 根据卡号获取对应的产品信息
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年2月27日下午5:52:56
+	 * @param fid
+	 * @return
+	 */
+	WeldedJunction getProductByCardid(String fid);
 }

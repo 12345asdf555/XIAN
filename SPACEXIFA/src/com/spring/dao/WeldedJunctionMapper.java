@@ -47,4 +47,20 @@ public interface WeldedJunctionMapper extends Mapper<WeldedJunction>{
 	List<WeldedJunction> getRealWelder(@Param("taskid")BigInteger taskid);
 	
 	List<WeldedJunction> getSwDetail(@Param("taskno")String taskno,@Param("time")String time,@Param("dto") WeldDto dto);
+	
+	List<WeldedJunction> getCardList(@Param("search")String search);
+	
+	void addCard(WeldedJunction wj);
+	
+	void updateCard(WeldedJunction wj);
+	
+	void deleteCard(String fid);
+	
+	void addProductNum(WeldedJunction wj);
+	
+	List<WeldedJunction> getProductList(@Param("search")String search);
+	
+	void deleteProduct(String fid);
+	
+	WeldedJunction getProductByCardid(@Param("fid")String fid);
 }

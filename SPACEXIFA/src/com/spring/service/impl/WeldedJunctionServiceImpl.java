@@ -129,4 +129,53 @@ public class WeldedJunctionServiceImpl implements WeldedJunctionService{
 		// TODO Auto-generated method stub
 		return wjm.updateTaskByFid(wj);
 	}
+
+	@Override
+	public List<WeldedJunction> getCardList(Page page, String search) {
+		// TODO Auto-generated method stub
+		PageHelper.startPage(page.getPageIndex(), page.getPageSize());
+		return wjm.getCardList(search);
+	}
+
+	@Override
+	public void addCard(WeldedJunction wj) {
+		// TODO Auto-generated method stub
+		wjm.addCard(wj);
+	}
+
+	@Override
+	public void addProductNum(WeldedJunction wj) {
+		// TODO Auto-generated method stub
+		wjm.addProductNum(wj);
+	}
+
+	@Override
+	public List<WeldedJunction> getProductList(Page page, String search) {
+		// TODO Auto-generated method stub
+		return wjm.getProductList(search);
+	}
+
+	@Override
+	public void updateCard(WeldedJunction wj) {
+		// TODO Auto-generated method stub
+		wjm.updateCard(wj);
+	}
+
+	@Override
+	public void deleteCard(String fid) {
+		// TODO Auto-generated method stub
+		wjm.deleteCard(fid);
+	}
+
+	@Override
+	public void deleteProduct(String fid) {
+		// TODO Auto-generated method stub
+		wjm.deleteProduct(fid);
+	}
+
+	@Override
+	public WeldedJunction getProductByCardid(String fid) {
+		// TODO Auto-generated method stub
+		return wjm.getProductByCardid(fid);
+	}
 }
