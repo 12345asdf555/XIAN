@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.spring.dto.WeldDto;
 import com.spring.model.WeldedJunction;
+import com.spring.model.Wps;
 import com.spring.page.Page;
 
 import tk.mybatis.mapper.common.Mapper;
@@ -63,4 +64,8 @@ public interface WeldedJunctionMapper extends Mapper<WeldedJunction>{
 	void deleteProduct(String fid);
 	
 	WeldedJunction getProductByCardid(@Param("fid")String fid);
+	
+	void turnDown(WeldedJunction weldtask);
+	
+	void passReview(@Param("fid")String fid,@Param("value")String value);
 }

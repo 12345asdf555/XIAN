@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.spring.dto.WeldDto;
 import com.spring.model.WeldedJunction;
+import com.spring.model.Wps;
 import com.spring.page.Page;
 
 public interface WeldedJunctionService {
@@ -61,6 +62,25 @@ public interface WeldedJunctionService {
 	 * @param wj
 	 */
 	boolean deleteJunction(BigInteger id);
+	
+	/**
+	 * 驳回保存
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年2月17日下午8:15:49
+	 * @param wps
+	 */
+	void turnDown(WeldedJunction weldtask);
+	
+	/**
+	 * 通过审核
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年2月11日下午5:58:33
+	 * @param fid
+	 * @param value
+	 */
+	void passReview(String fid,String value);
 	
 	/**
 	 * 焊工对应的焊机任务信息

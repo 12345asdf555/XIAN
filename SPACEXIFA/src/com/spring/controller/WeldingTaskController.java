@@ -293,6 +293,31 @@ public class WeldingTaskController {
 		return obj.toString();
 	}
 	
+	@RequestMapping("/goTrackCard")
+	public String goTrackCard(HttpServletRequest request){
+		String fid = request.getParameter("fid");
+		String fwelded_junction_no = request.getParameter("fwelded_junction_no");
+		String status = request.getParameter("status");
+		String fitemName = request.getParameter("fitemName");
+		request.setAttribute("fid", fid);
+		request.setAttribute("fwelded_junction_no", fwelded_junction_no);
+		request.setAttribute("status", status);
+		request.setAttribute("fitemName", fitemName);
+		String symbol = "0";
+		MyUser myuser = (MyUser) SecurityContextHolder.getContext()  
+			    .getAuthentication()  
+			    .getPrincipal();
+		List<String> ls = fuser.getAuthoritiesByUsername(myuser.getUsername());
+		for(int i=0;i<ls.size();i++) {
+			if(ls.get(i).equals("ROLE_审核员") || ls.get(i).equals("ROLE_admin")) {
+				symbol = "1";
+				break;
+			}
+		}
+		request.setAttribute("symbol", symbol);
+		return "weldingtask/cardprocess";
+	}
+	
 	@RequestMapping("/getTaskResultList")
 	@ResponseBody
 	public String getTaskResultList(HttpServletRequest request){
@@ -1213,6 +1238,60 @@ public class WeldingTaskController {
 			e.printStackTrace();
 		}
 		obj.put("ary", ary);
+		return obj.toString();
+	}
+	
+	/**
+	 * 工艺通过
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年2月26日下午2:59:33
+	 * @param request
+	 * @param wps
+	 * @return
+	 */
+	@RequestMapping("/passReview")
+	@ResponseBody
+	public String passReview(HttpServletRequest request,@ModelAttribute WeldedJunction weldtask){
+		JSONObject obj = new JSONObject();
+		try{
+			String fid = request.getParameter("fid");
+			String value = request.getParameter("value");
+			wjm.passReview(fid,value);
+			obj.put("success", true);
+		}catch(Exception e){
+			e.printStackTrace();
+			obj.put("success", false);
+			obj.put("errorMsg", e.getMessage());
+		}
+		return obj.toString();
+	}
+	
+	/**
+	 * 工艺驳回
+	 * @Description
+	 * @author Chen
+	 * @date 2020年3月2日下午2:59:25
+	 * @param request
+	 * @param wps
+	 * @return
+	 */
+	@RequestMapping("/turnDown")
+	@ResponseBody
+	public String turnDown(HttpServletRequest request,@ModelAttribute WeldedJunction weldtask){
+		JSONObject obj = new JSONObject();
+		try{
+			String fid = request.getParameter("fid");
+			String downReason = request.getParameter("downReason");
+			weldtask.setInsfid(new BigInteger(fid));
+			weldtask.setFback(downReason);
+			wjm.turnDown(weldtask);
+			obj.put("success", true);
+		}catch(Exception e){
+			e.printStackTrace();
+			obj.put("success", false);
+			obj.put("errorMsg", e.getMessage());
+		}
 		return obj.toString();
 	}
 	

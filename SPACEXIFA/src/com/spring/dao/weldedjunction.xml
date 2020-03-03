@@ -293,6 +293,14 @@
 		where fid=#{id};
 	</update>
 	
+	<update id="turnDown" parameterType="com.spring.model.WeldedJunction">
+		update tb_welded_junction set fstatus=2,fback=#{fback} where fid=#{insfid};
+	</update>
+	
+	<update id="passReview">
+		update tb_welded_junction set fstatus=#{value} where fid=#{fid};
+	</update>
+	
 	<delete id="deleteCard">
 		DELETE j,p FROM tb_welded_junction j 
 		LEFT JOIN tb_product_number p ON j.fid=p.fcard_id

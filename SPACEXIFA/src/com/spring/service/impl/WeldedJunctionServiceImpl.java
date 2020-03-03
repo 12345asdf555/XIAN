@@ -11,6 +11,7 @@ import com.github.pagehelper.PageHelper;
 import com.spring.dao.WeldedJunctionMapper;
 import com.spring.dto.WeldDto;
 import com.spring.model.WeldedJunction;
+import com.spring.model.Wps;
 import com.spring.page.Page;
 import com.spring.service.WeldedJunctionService;
 
@@ -41,6 +42,18 @@ public class WeldedJunctionServiceImpl implements WeldedJunctionService{
 		return wjm.updateJunction(wj);
 	}
 
+	@Override
+	public void turnDown(WeldedJunction weldtask) {
+		// TODO Auto-generated method stub
+		wjm.turnDown(weldtask);
+	}
+	
+	@Override
+	public void passReview(String fid,String value) {
+		// TODO Auto-generated method stub
+		wjm.passReview(fid,value);
+	}
+	
 	@Override
 	public boolean deleteJunction(BigInteger id) {
 		return wjm.deleteJunction(id);

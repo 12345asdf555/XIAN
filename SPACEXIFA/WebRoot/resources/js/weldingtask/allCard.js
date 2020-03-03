@@ -282,9 +282,9 @@ function searchWps(){
 }
 
 function wpsDetails(){
-	var row = $('#wpslibTable').datagrid('getSelected'); 
+	var row = $('#cardTable').datagrid('getSelected'); 
 	if (row) {
-		window.location.href = encodeURI("wps/goWpsdetails"+"?fid="+row.fid+"&fproduct_name="+encodeURIComponent(row.fproduct_name)+"&status="+row.fstatus);
+		window.location.href = encodeURI("weldtask/goTrackCard"+"?fid="+row.fid+"&fwelded_junction_no="+row.fwelded_junction_no+"&status="+row.fstatus+"&fitemName="+row.fitemName);
 	}
 }
 

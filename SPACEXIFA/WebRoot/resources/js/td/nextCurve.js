@@ -141,6 +141,34 @@ $(function() {
 		}
 	});
 	
+	//获取电子跟踪卡号，产品图号，
+		$.ajax({
+			type : "post",
+			async : false,
+			url : "td/getTrackCard?machineid="+$("#machineid").val(),
+			data : {},
+			dataType : "json", //返回数据形式为json  
+			success : function(result) {
+				if (result) {
+					worktime = eval(result);
+					if(worktime.worktime!=null && worktime.worktime!=''){
+						time1 = worktime.worktime;
+					}
+					if(worktime.time!=null && worktime.time!=''){
+						time2 = worktime.time;
+					}
+					var t1 = secondToDate(time1);
+				    $("#r3").html(t1);
+				    var t2 = secondToDate(time2);
+				    $("#r4").html(t2);
+				}
+			},
+			error : function(errorMsg) {
+				alert("数据请求失败，请联系系统管理员!");
+			}
+		});
+		
+	
 //	function serach(){
 //		var timebuf = historytime;
 //		if(null != timebuf){
