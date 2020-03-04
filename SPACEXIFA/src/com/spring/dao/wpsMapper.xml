@@ -161,6 +161,18 @@
 		ORDER by fid
 	</select>
 	
+	<select id="gettrackcard" parameterType="BigInteger" resultType="Wps">
+	 SELECT max(t.fid),fcard_id insid, t.fwelderid welderid,w.fwelded_junction_no fwpsnum,w.fproduct_number arcname,d.fwelder_no fname,p.fwps_lib_id macid,l.fproduct_drawing_no materialname,e.femployee_id dianame,s.fstep_number gasname,j.fjunction  FROM tb_taskresult t
+	 LEFT JOIN tb_welded_junction w ON t.fcard_id = w.fid
+	 LEFT JOIN tb_welder d ON t.fwelderid = d.fid 
+	 LEFT JOIN tb_product_number p ON t.fcard_id = p.fcard_id
+	 LEFT JOIN tb_wps_library l ON p.fwps_lib_id = l.fid
+	 LEFT JOIN tb_employee e ON p.fwps_lib_id = e.fwps_lib_id
+	 LEFT JOIN tb_step s ON e.femployee_id = s.femployee_id
+	 LEFT JOIN tb_junction j ON s.fid = j.fstep_id
+	 where t.fmachineid = #{fid}
+	</select>
+	
 	<insert id="saveWpslib">
 		INSERT INTO `tb_wps_library`(`fwps_lib_name`,`fmachinemodel`, `fcreater`, `fcreatedate`, `fstatus`) VALUES (#{fwpsnum},#{fback},#{fcreater},now(),#{fstatus})
 	</insert>

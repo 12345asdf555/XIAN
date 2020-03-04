@@ -59,6 +59,11 @@ public class WpsServiceImpl implements WpsService{
 	}
 
 	@Override
+	public Wps gettrackcard(BigInteger fid){
+		return mapper.gettrackcard(fid);
+	}
+	
+	@Override
 	public BigInteger findByUid(long uid) {
 		// TODO Auto-generated method stub
 		return mapper.findByUid(uid);

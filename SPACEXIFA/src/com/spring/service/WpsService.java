@@ -39,7 +39,7 @@ public interface WpsService {
 	void deleteWpsBelongLib(BigInteger fid);
 	void deleteMainWps(BigInteger fid);
 	int getCountByWpslibidChanel(BigInteger wpslibid,int chanel);
-	
+	Wps gettrackcard(BigInteger wid);
 	/**
 	 * 获取松下wps
 	 * @param parent

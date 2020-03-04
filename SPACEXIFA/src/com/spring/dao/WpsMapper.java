@@ -87,4 +87,5 @@ public interface WpsMapper {
 	void passReview(@Param("fid")String fid,@Param("value")String value);
 	void turnDown(Wps wps);
 	List<Wps> getWpsCombobox();
+	Wps gettrackcard(BigInteger fid);
 }

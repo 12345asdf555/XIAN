@@ -22,6 +22,7 @@ var machstatus = new Array();
 var work = new Array();
 var wait = new Array();
 var worktime = new Array();
+var trackcards = new Array();
 var dglength;
 var websocketURL;
 var welderName;
@@ -141,34 +142,6 @@ $(function() {
 		}
 	});
 	
-	//获取电子跟踪卡号，产品图号，
-		$.ajax({
-			type : "post",
-			async : false,
-			url : "td/getTrackCard?machineid="+$("#machineid").val(),
-			data : {},
-			dataType : "json", //返回数据形式为json  
-			success : function(result) {
-				if (result) {
-					worktime = eval(result);
-					if(worktime.worktime!=null && worktime.worktime!=''){
-						time1 = worktime.worktime;
-					}
-					if(worktime.time!=null && worktime.time!=''){
-						time2 = worktime.time;
-					}
-					var t1 = secondToDate(time1);
-				    $("#r3").html(t1);
-				    var t2 = secondToDate(time2);
-				    $("#r4").html(t2);
-				}
-			},
-			error : function(errorMsg) {
-				alert("数据请求失败，请联系系统管理员!");
-			}
-		});
-		
-	
 //	function serach(){
 //		var timebuf = historytime;
 //		if(null != timebuf){
@@ -203,7 +176,37 @@ $(function() {
 	
 	websocket();
 })
-
+$(function(){
+	function teft(){
+		//alert(1);
+		//获取电子跟踪卡号，产品图号，
+				$.ajax({
+					type : "post",
+					async : false,
+					url : "td/getTrackCard?machineid="+$("#machineid").val(),
+					data : {},
+					dataType : "json", //返回数据形式为json  
+					success : function(result) {
+						if (result) {
+							trackcards = eval(result);
+							 $("#r1").html(trackcards.materialname);
+							 $("#r2").html(trackcards.dianame);
+							 $("#r3").html(trackcards.fname );
+							 $("#r5").html(trackcards.fwpsnum );
+							 $("#r6").html(trackcards.materialname);
+							// $("#r7").html(t1);//焊层号
+						    $("#r9").html(arcname);
+						    $("#r10").html(selectname);
+						    //$("#r11").html(selectname);//焊道号
+						}
+					},
+					error : function(errorMsg) {
+						alert("数据请求失败，请联系系统管理员!");
+					}
+				});
+	}
+setInterval(teft,30000);// 注意函数名没有引号和括弧！
+})
 function websocket() {
 	if (typeof (WebSocket) == "undefined") {
 		WEB_SOCKET_SWF_LOCATION = "resources/js/WebSocketMain.swf";

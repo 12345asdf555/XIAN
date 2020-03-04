@@ -19,12 +19,14 @@ import com.spring.model.MyUser;
 import com.spring.model.Person;
 import com.spring.model.Td;
 import com.spring.model.WeldingMachine;
+import com.spring.model.Wps;
 import com.spring.service.InsframeworkService;
 import com.spring.service.LiveDataService;
 import com.spring.service.PersonService;
 import com.spring.service.TdService;
 import com.spring.service.WeldingMachineService;
 import com.spring.util.IsnullUtil;
+import com.spring.service.WpsService;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -44,6 +46,10 @@ public class TdController {
 	
 	@Autowired
 	private WeldingMachineService wm;
+	
+	
+	@Autowired
+	private WpsService Wps;
 	
 	IsnullUtil iutil = new IsnullUtil();
 	/**
@@ -772,6 +778,25 @@ public class TdController {
 				json.put("worktime",list.getWorktime());
 				json.put("time",list.getWorktime());
 			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return json.toString();
+	}
+	
+	@RequestMapping("/getTrackCard")
+	@ResponseBody
+	public String getTrackCard(HttpServletRequest request){
+		JSONObject json = new JSONObject();
+		Wps wps = Wps.gettrackcard(new BigInteger(request.getParameter("machineid")));
+		try{
+			json.put("fwpsnum ", wps.getFwpsnum());
+			json.put("arcname", wps.getArcname());
+			json.put("fname ", wps.getFname());
+			json.put("materialname", wps.getMaterialname());
+			json.put("dianame", wps.getDianame());
+			json.put("gasname", wps.getGasname());
+			json.put("selectname", wps.getSelectname());
 		}catch(Exception e){
 			e.printStackTrace();
 		}
