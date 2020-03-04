@@ -161,16 +161,33 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<a href="javascript:saveCard();" class="easyui-linkbutton" iconCls="icon-ok" id="otcsaveWpsBut">保存</a>
 			<a href="javascript:closeDlg();" class="easyui-linkbutton" iconCls="icon-cancel" >取消</a>
 		</div>
+		
+		<!-- 临时切换工艺 -->
+		<div id="changeWpsDiv" class="easyui-dialog" style="width: 360px; height: 140px; padding:10px 20px" closed="true" buttons="#cw-buttons">
+			<div class="fitem">
+				<lable><span class="required">*</span>工艺规程编号</lable>
+				<select class="easyui-combobox" name="fwps_lib_id_ch" id="fwps_lib_id_ch"  data-options="required:true"></select>
+			</div>
+		</div>
+	   	<div id="cw-buttons">
+			<a href="javascript:saveChange();" class="easyui-linkbutton" iconCls="icon-ok" id="otcsaveWpsBut">保存</a>
+			<a href="javascript:closeDlg();" class="easyui-linkbutton" iconCls="icon-cancel" >取消</a>
+		</div>
+		
 	    <div class="functiondiv">
 			<div>
 				<a href="javascript:addWps();" class="easyui-linkbutton" iconCls="icon-newadd">自建卡号</a>&nbsp;&nbsp;&nbsp;&nbsp;
 				<a href="javascript:editWps();" class="easyui-linkbutton" iconCls="icon-update">修改卡号</a>&nbsp;&nbsp;&nbsp;&nbsp;
 				<a href="javascript:deleteWps();" class="easyui-linkbutton" iconCls="icon-delete">删除卡号</a>&nbsp;&nbsp;&nbsp;&nbsp;
 				<a href="javascript:wpsDetails();" class="easyui-linkbutton" iconCls="icon-navigation">产品详情</a>&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="javascript:historyDetails();" class="easyui-linkbutton" iconCls="icon-history">临时工艺切换历史</a>&nbsp;&nbsp;&nbsp;&nbsp;
 			</div>
 		</div>
 		<div id="productDetailsDlg" class="easyui-dialog" style="width: 600px; height: 400px; padding:10px 20px" closed="true">
 			<table id="productDetailsTable" style="table-layout: fixed; width:100%;"></table>
+		</div>
+		<div id="historyDetailsDlg" class="easyui-dialog" style="width: 600px; height: 400px; padding:10px 20px" closed="true">
+			<table id="historyDetailsTable" style="table-layout: fixed; width:100%;"></table>
 		</div>
 		<div id="load" style="width:100%;height:100%;"></div>
 	</div>

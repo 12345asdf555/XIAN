@@ -85,6 +85,28 @@ function cardDatagrid(){
 			halign : "center",
 			align : "left"
 		}, {
+			field : 'dyne',
+			title : '任务是否完成标志',
+//			width : 100,
+			halign : "center",
+			align : "left",
+			hidden : true
+		}, {
+			field : 'fchange_wps',
+			title : '临时切换工艺',
+			width : 150,
+			halign : "center",
+			align : "left",
+			formatter: function(value,row,index){
+				var str = "";
+				if(row.dyne==1){
+					str += '<a id="change_wps" class="easyui-linkbutton" href="javascript:changeWps()"/>';
+				}else{
+					str += '<a id="change_wps" class="easyui-linkbutton" href="javascript:changeWps()" disabled="true"/>';
+				}
+				return str;
+			}
+		}, {
 			field : 'fstatus',
 			title : '状态id',
 //			width : 100,
@@ -137,6 +159,9 @@ function cardDatagrid(){
 			}
 			if($("#prodetail").length!=0){
 				$("a[id='prodetail']").linkbutton({text:'详情',plain:true,iconCls:'icon-navigation'});
+			}
+			if($("#change_wps").length!=0){
+				$("a[id='change_wps']").linkbutton({text:'临时切换工艺',plain:true,iconCls:'icon-update'});
 			}
 		}
 	});
@@ -292,6 +317,128 @@ function closeDlg(){
 	if(!$("#addOrUpdate").parent().is(":hidden")){
 		$('#addOrUpdate').window('close');
 	}
+	if(!$("#changeWpsDiv").parent().is(":hidden")){
+		$('#changeWpsDiv').window('close');
+	}
+}
+
+function changeWps(){
+	var row = $('#cardTable').datagrid('getSelected'); 
+	if (row) {
+		$.ajax({
+			type : "post",
+			async : false,
+			url : "wps/getWpsCombobox",
+			data : {},
+			dataType : "json", //返回数据形式为json  
+			success : function(result) {
+				if (result) {
+					var optionStr = '';
+					for (var i = 0; i < result.ary.length; i++) {
+						optionStr += "<option value=\"" + result.ary[i].id + "\" >"
+							+ result.ary[i].name + "</option>";
+					}
+					$("#fwps_lib_id_ch").html(optionStr);
+				}
+			},
+			error : function(errorMsg) {
+				alert("数据请求失败，请联系系统管理员!");
+			}
+		});
+		$("#fwps_lib_id_ch").combobox();
+		$('#changeWpsDiv').window({
+			title : "临时切换工艺",
+			modal : true
+		});
+		$('#changeWpsDiv').window('open');
+		changeUrl = "weldtask/cardChangeWps?fid="+row.fid;
+	}
+}
+
+function saveChange(){
+	var fwps_lib_id_ch = $('#fwps_lib_id_ch').combobox('getValue');
+	$.ajax({
+		type : "post",
+		async : false,
+		url : changeUrl+"&wpsId="+fwps_lib_id_ch,
+		data : {},
+		dataType : "json", //返回数据形式为json  
+		success : function(result) {
+			if (result) {
+				if (!result.success) {
+					$.messager.show({
+						title : 'Error',
+						msg : result.errorMsg
+					});
+				} else {
+					alert("保存成功");
+				}
+			}
+		},
+		error : function(errorMsg) {
+			alert("数据请求失败，请联系系统管理员!");
+		}
+	});
+}
+
+function historyDetails(){
+	$("#historyDetailsTable").datagrid( {
+		fitColumns : true,
+		height : $("#historyDetailsDlg").height(),
+		width : $("#historyDetailsDlg").width(),
+		idField : 'fid',
+		pageSize : 10,
+		pageList : [ 10, 20, 30, 40, 50 ],
+		url : "weldtask/getProductWpsHistory",
+		singleSelect : true,
+		rownumbers : true,
+		showPageList : false,
+		columns : [ [ {
+			field : 'fid',
+			title : '序号',
+//			width : 30,
+			halign : "center",
+			align : "left",
+			hidden:true
+		},{
+			field : 'fwelded_junction_no',
+			title : '电子跟踪卡号',
+			width : 100,
+			halign : "center",
+			align : "left"
+		}, {
+			field : 'fproduct_number',
+			title : '产品序号',
+			width : 100,
+			halign : "center",
+			align : "left"
+		}, {
+			field : 'fwps_lib_name',
+			title : '工艺规程编号',
+			width : 100,
+			halign : "center",
+			align : "left"
+		}, {
+			field : 'fwps_lib_version',
+			title : '工艺规程版本号',
+			width : 100,
+			halign : "center",
+			align : "left"
+		}] ],
+		pagination : true,
+		rowStyler: function(index,row){
+            if ((index % 2)!=0){
+            	//处理行代背景色后无法选中
+            	var color=new Object();
+                return color;
+            }
+        }
+	});
+	$('#historyDetailsDlg').window({
+		title : "临时切换工艺历史记录",
+		modal : true
+	});
+	$('#historyDetailsDlg').window('open');
 }
 
 //监听窗口大小变化

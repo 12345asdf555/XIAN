@@ -191,4 +191,22 @@ public class WeldedJunctionServiceImpl implements WeldedJunctionService{
 		// TODO Auto-generated method stub
 		return wjm.getProductByCardid(fid);
 	}
+	
+	@Override
+	public void updateProductNum(WeldedJunction wj) {
+		// TODO Auto-generated method stub
+		wjm.updateProductNum(wj);
+	}
+
+	@Override
+	public void addProductWpsHistory(String fid,String wpsId, String userId, String time) {
+		// TODO Auto-generated method stub
+		wjm.addProductWpsHistory(fid,wpsId, userId, time);
+	}
+
+	@Override
+	public List<WeldedJunction> getProductWpsHistory(Page page, String search) {
+		PageHelper.startPage(page.getPageIndex(), page.getPageSize());
+		return wjm.getProductWpsHistory(search);
+	}
 }

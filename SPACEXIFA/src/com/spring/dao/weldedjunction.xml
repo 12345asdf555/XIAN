@@ -272,14 +272,19 @@
 	</select>
 	
 	<select id="getCardList" resultMap="wjMap">
-		SELECT j.fid,fwelded_junction_no,ftask_no,fitemId iid,i.fname iname,j.flag,l.fwps_lib_name,l.fwps_lib_version,j.fstatus,j.fback FROM tb_welded_junction j
+		SELECT j.fid,fwelded_junction_no,ftask_no,fitemId iid,i.fname iname,j.flag,l.fwps_lib_name,l.fwps_lib_version,j.fstatus,j.fback,
+		if(COUNT(DISTINCT p.fproduct_number)>COUNT(DISTINCT t.ftaskid),1,0) fdyne
+		FROM tb_welded_junction j
 		LEFT JOIN tb_insframework i ON j.fitemId=i.fid 
 		LEFT JOIN tb_insframework ins on ins.fid = i.fparent
 		LEFT JOIN tb_insframework insf on insf.fid = ins.fparent
 		LEFT JOIN tb_wps_library l ON j.fwpslib_id=l.fid
+		LEFT JOIN tb_product_number p ON j.fid=p.fcard_id
+		LEFT JOIN tb_taskresult t ON j.fid=t.fcard_id
 		<if test="search!=null and search!=''">
 			WHERE ${search}
 		</if>
+		GROUP BY j.fwelded_junction_no ORDER BY j.fid
 	</select>
 	
 	<insert id="addCard" parameterType="com.spring.model.WeldedJunction" useGeneratedKeys="true" keyProperty="id">
@@ -331,5 +336,27 @@
 		FROM tb_product_number p 
 		WHERE p.fcard_id=#{fid}
 		GROUP BY fwps_lib_id,fprefix_number
+	</select>
+	
+	<insert id="addProductWpsHistory">
+		INSERT INTO tb_product_wps(fcard_id,fproduct_id,fwps_id,fuser_id,foperate_time)
+		SELECT #{fid},fid,#{wpsId},#{userId},#{time} FROM tb_product_number 
+		WHERE fcard_id=#{fid} AND fid NOT IN (SELECT DISTINCT ftaskid FROM tb_taskresult WHERE fcard_id=#{fid})
+	</insert>
+	
+	<update id="updateProductNum" parameterType="com.spring.model.WeldedJunction">
+		update tb_product_number set 
+		fwps_lib_id=#{fwpslib_id}
+		where fcard_id=#{id} AND fid NOT IN (SELECT DISTINCT ftaskid FROM tb_taskresult WHERE fcard_id=#{id})
+	</update>
+	
+	<select id="getProductWpsHistory" resultMap="wjMap">
+		SELECT wj.fwelded_junction_no,wl.fwps_lib_name,wl.fwps_lib_version,pn.* FROM tb_product_wps pw
+		LEFT JOIN tb_welded_junction wj ON pw.fcard_id=wj.fid
+		LEFT JOIN tb_product_number pn ON pw.fproduct_id=pn.fid
+		LEFT JOIN tb_wps_library wl ON pw.fwps_id=wl.fid
+		<if test="search!=null and search!=''">
+			WHERE ${search}
+		</if>
 	</select>
 </mapper>

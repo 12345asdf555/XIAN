@@ -1353,6 +1353,7 @@ public class WeldingTaskController {
 				}
 				json.put("fstatus", wjm.getFstatus());
 				json.put("fback", wjm.getFback());
+				json.put("dyne", wjm.getDyne());
 				ary.add(json);
 			}
 		}catch(Exception e){
@@ -1504,6 +1505,62 @@ public class WeldingTaskController {
 			e.getMessage();
 		}
 		obj.put("row", ary);
+		return obj.toString();
+	}
+	
+	@RequestMapping("/cardChangeWps")
+	@ResponseBody
+	public String cardChangeWps(HttpServletRequest request,@ModelAttribute WeldedJunction wj){
+		JSONObject obj = new JSONObject();
+		try{
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String time = df.format(new Date());
+			MyUser user = (MyUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			String userId = String.valueOf(user.getId());
+			String fid = request.getParameter("fid");
+			String wpsId = request.getParameter("wpsId");
+			wj.setId(new BigInteger(fid));
+			wj.setFwpslib_id(new BigInteger(wpsId));
+			wjm.updateProductNum(wj);
+			wjm.addProductWpsHistory(fid,wpsId,userId,time);
+			obj.put("success", true);
+		}catch(Exception e){
+			e.printStackTrace();
+			obj.put("success", false);
+			obj.put("errorMsg", e.getMessage());
+		}
+		return obj.toString();
+	}
+		
+	@RequestMapping("/getProductWpsHistory")
+	@ResponseBody
+	public String getProductWpsHistory(HttpServletRequest request){
+		pageIndex = Integer.parseInt(request.getParameter("page"));
+		pageSize = Integer.parseInt(request.getParameter("rows"));
+		page = new Page(pageIndex,pageSize,total);
+		String search = request.getParameter("search");
+		List<WeldedJunction> list = wjm.getProductWpsHistory(page,search);
+		long total = 0;
+		if(list != null){
+			PageInfo<WeldedJunction> pageinfo = new PageInfo<WeldedJunction>(list);
+			total = pageinfo.getTotal();
+		}
+		JSONObject json = new JSONObject();
+		JSONArray ary = new JSONArray();
+		JSONObject obj = new JSONObject();
+		try{
+			for(WeldedJunction wjm:list){
+				json.put("fwelded_junction_no", wjm.getWeldedJunctionno());
+				json.put("fwps_lib_name", wjm.getFwps_lib_name());
+				json.put("fwps_lib_version", wjm.getFwps_lib_version());
+				json.put("fproduct_number", wjm.getFprefix_number()+"-"+wjm.getFproduct_number());
+				ary.add(json);
+			}
+		}catch(Exception e){
+			e.getMessage();
+		}
+		obj.put("total", total);
+		obj.put("rows", ary);
 		return obj.toString();
 	}
 }

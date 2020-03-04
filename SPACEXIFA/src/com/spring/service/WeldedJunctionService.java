@@ -235,4 +235,36 @@ public interface WeldedJunctionService {
 	 * @return
 	 */
 	WeldedJunction getProductByCardid(String fid);
+	
+	/**
+	 * 更换电子跟踪卡
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年3月2日下午8:26:36
+	 * @param wj
+	 */
+	void updateProductNum(WeldedJunction wj);
+	
+	/**
+	 * 新增工艺切换记录
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年3月3日下午6:16:38
+	 * @param fid
+	 * @param wpsId
+	 * @param userId
+	 * @param time
+	 */
+	void addProductWpsHistory(String fid,String wpsId, String userId, String time);
+	
+	/**
+	 * 获取临时工艺切换历史列表
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年3月3日下午7:56:23
+	 * @param page
+	 * @param search
+	 * @return
+	 */
+	List<WeldedJunction> getProductWpsHistory(Page page, String search);
 }

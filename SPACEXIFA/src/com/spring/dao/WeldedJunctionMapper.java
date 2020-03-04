@@ -68,4 +68,10 @@ public interface WeldedJunctionMapper extends Mapper<WeldedJunction>{
 	void turnDown(WeldedJunction weldtask);
 	
 	void passReview(@Param("fid")String fid,@Param("value")String value);
+	
+	void updateProductNum(WeldedJunction wj);
+
+	void addProductWpsHistory(@Param("fid")String fid,@Param("wpsId")String wpsId, @Param("userId")String userId, @Param("time")String time);
+	
+	List<WeldedJunction> getProductWpsHistory(@Param("search")String search);
 }
