@@ -18,6 +18,11 @@ public interface WeldingMachineService {
 	 */
 	List<WeldingMachine> getWeldingMachine(String str);
 	
+	
+	/**
+	 * 查询所有焊接方法
+	 */
+	List<WeldingMachine> getlibarary(Page page);
 	/**
 	 * 新增设备
 	 */
@@ -108,5 +113,21 @@ public interface WeldingMachineService {
 	 * 获取焊机及其对应的设备型号
 	 */
 	List<WeldingMachine> getMachineModel();
+	
+	/**
+	 * 焊接方法新增
+	 */
+	void addlibrary(WeldingMachine wm);
+	
+	/**
+	 * 焊接方法修改
+	 */
+	void editlibrary(WeldingMachine wm);
+	
+	/**
+	 * 删除设备
+	 * @param wid
+	 */
+	void deletelibrary(BigInteger id);
 	
 }

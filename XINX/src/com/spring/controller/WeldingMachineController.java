@@ -72,6 +72,16 @@ public class WeldingMachineController {
 	public String gomathine(){
 		return "Mathine/Mathine";
 	}
+	
+	/**
+	 * 资质库管理
+	 * @return
+	 */
+	@RequestMapping("/goLibrary")
+	public String goLibrary(){
+		return "Mathine/Library";
+	}
+	
 	/**
 	 * 维修记录
 	 * @param request
@@ -211,6 +221,41 @@ public class WeldingMachineController {
 		}
 		obj.put("total", total);
 		obj.put("rows", ary);
+		return obj.toString();
+	}
+	
+	/**
+	 * 获取资质库列表
+	 * @author
+	 */
+	/**
+	 * 显示资质库列表
+	 * @return
+	 */
+	@RequestMapping("/getlibararylist")
+	@ResponseBody
+	public String getlibararylist(HttpServletRequest request){
+		pageIndex=Integer.parseInt(request.getParameter("page"));
+		pageSize=Integer.parseInt(request.getParameter("rows"));
+		page=new Page(pageIndex,pageSize,total);
+		List<WeldingMachine> list=wmm.getlibarary(page);
+		
+		long total=0;
+		
+		JSONObject json = new JSONObject();
+		JSONArray ary = new JSONArray();
+		JSONObject obj = new JSONObject();
+		try{
+			for(WeldingMachine w:list){
+				json.put("id",w.getId());
+				json.put("mvaluename",w.getMvaluename());//焊接方法
+				json.put("model", w.getModel());//等级
+				ary.add(json);
+			}
+		}catch(Exception e){
+			e.getMessage();
+		}
+		obj.put("rows",ary);
 		return obj.toString();
 	}
 	
@@ -693,6 +738,66 @@ public class WeldingMachineController {
 			e.printStackTrace();
 		}
 		obj.put("ary", ary);
+		return obj.toString();
+	}
+	
+	/**
+	 * 新增资质库
+	 * @return
+	 */
+	@RequestMapping("/addlibrary")
+	@ResponseBody
+	public String addlibrary(HttpServletRequest request){
+		WeldingMachine wm = new WeldingMachine();
+		JSONObject obj = new JSONObject();
+		try{
+			wm.setModel(request.getParameter("model"));
+			wm.setMvaluename(request.getParameter("mvaluename"));
+			wmm.addlibrary(wm);
+			obj.put("success", true);
+		}catch(Exception e){
+			e.printStackTrace();
+			obj.put("success", false);
+			obj.put("errorMsg", e.getMessage());
+		}
+		return obj.toString();
+	}
+	
+	/**
+	 * 新增资质库
+	 * @return
+	 */
+	@RequestMapping("/editlibrary")
+	@ResponseBody
+	public String editlibrary(HttpServletRequest request){
+		WeldingMachine wm = new WeldingMachine();
+		JSONObject obj = new JSONObject();
+		try{
+			wm.setId(new BigInteger(request.getParameter("id")));
+			wm.setModel(request.getParameter("model"));
+			wm.setMvaluename(request.getParameter("mvaluename"));
+			wmm.editlibrary(wm);
+			obj.put("success", true);
+		}catch(Exception e){
+			e.printStackTrace();
+			obj.put("success", false);
+			obj.put("errorMsg", e.getMessage());
+		}
+		return obj.toString();
+	}
+	
+	@RequestMapping("/removelibrary")
+	@ResponseBody
+	public String removelibrary(@RequestParam String id){
+		JSONObject obj = new JSONObject();
+		try{
+			wmm.deletelibrary(new BigInteger(id));
+			obj.put("success", true);
+		}catch(Exception e){
+			e.printStackTrace();
+			obj.put("success", false);
+			obj.put("msg", e.getMessage());
+		}
 		return obj.toString();
 	}
 }
