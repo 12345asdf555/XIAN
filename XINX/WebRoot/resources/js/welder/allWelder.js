@@ -1,5 +1,6 @@
 $(function(){
 	weldDatagrid();
+	manuCombobox();
 });
 
 function weldDatagrid(){
@@ -85,6 +86,12 @@ function weldDatagrid(){
 			width : 150,
 			halign : "center",
 			align : "left"
+		}, {
+			field : 'method',
+			title : '焊接方法',
+			width : 150,
+			halign : "center",
+			align : "left"
 		},{
 			field : 'back',
 			title : '备注',
@@ -167,6 +174,32 @@ function importWeldingMachine(){
 		    } 
 		});
 	}
+}
+
+
+//焊接方法
+function manuCombobox(){
+	$.ajax({  
+	  type : "post",  
+	  async : false,
+	  url : "welders/getmethod",  
+	  data : {},  
+	  dataType : "json", //返回数据形式为json  
+	  success : function(result) {  
+	      if (result) {
+	          var optionStr = '';
+	          for (var i = 0; i < result.ary.length; i++) {  
+	              optionStr += "<option value=\"" + result.ary[i].id + "\" >"  
+	                      + result.ary[i].method + "</option>";
+	          }
+	          $("#method").html(optionStr);
+	      }  
+	  },  
+	  error : function(errorMsg) {  
+	      alert("数据请求失败，请联系系统管理员!");  
+	  }  
+	}); 
+	$("#method").combobox();
 }
 
 //监听窗口大小变化

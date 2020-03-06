@@ -19,7 +19,14 @@ public interface PersonService {
 	int getUsernameCount(String welderno);
 	void update(Person welder);
 	void delete(BigInteger fid);
-
+	
+	/**
+	 * 获取焊接方法
+	 * @param typeid 类型id
+	 * @return
+	 */
+	List<Person> getmethod();
+	
 	/**
 	 * 获取所有焊工
 	 * @return

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.PageInfo;
+import com.spring.model.Dictionarys;
 import com.spring.model.MyUser;
 import com.spring.model.Person;
 import com.spring.model.WeldingMachine;
@@ -103,6 +104,7 @@ public class PersonController {
 				json.put("leveid", welder.getLeveid());
 				json.put("quali", welder.getQuali());
 				json.put("owner", welder.getInsid());
+				json.put("method", welder.getMethod());
 				ary.add(json);
 			}
 		}catch(Exception e){
@@ -170,6 +172,7 @@ public class PersonController {
                 	sea="0"+sea;
                 }
               }*/
+			welder.setMethod(request.getParameter("method"));
 			welder.setWelderno(request.getParameter("welderno"));
 			welder.setName(request.getParameter("name"));
 			welder.setCellphone(request.getParameter("cellphone"));
@@ -219,6 +222,7 @@ public class PersonController {
 			welder.setCellphone(request.getParameter("cellphone"));
 			welder.setCardnum(request.getParameter("cardnum"));
 			welder.setBack(request.getParameter("back"));
+			welder.setMethod(request.getParameter("method"));
 			welder.setUpdater(new BigInteger(creat));
 //			welder.setUpdatedate(sdf.parse(sdf.format((new Date()).getTime())));
 //			welder.setCreatedate(sdf.parse(request.getParameter("createdate")));
@@ -266,6 +270,30 @@ public class PersonController {
 			data = false;
 		}
 		return data + "";
+	}
+	
+	/**
+	 * 获取焊接方法
+	 * @return
+	 */
+	@RequestMapping("/getmethod")
+	@ResponseBody
+	public String getmethod(){
+		JSONObject json = new JSONObject();
+		JSONArray ary = new JSONArray();
+		JSONObject obj = new JSONObject();
+		try{
+			List<Person> findAll = welderService.getmethod();
+			for(Person p:findAll){
+				json.put("id", p.getInsid());
+				json.put("method", p.getValuename());
+				ary.add(json);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		obj.put("ary", ary);
+		return obj.toString();
 	}
 	
 	/**

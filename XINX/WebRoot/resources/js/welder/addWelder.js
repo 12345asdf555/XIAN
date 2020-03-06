@@ -147,13 +147,14 @@ function save(){
     var insframework = $('#owner').combobox('getValue');
     var leve = $('#leveid').combobox('getValue');
     var qua = $('#quali').combobox('getValue');
+    var method = $('#method').combobox('getValue');
 	var url2 = "";
 	if(flag==1){
 		messager = "新增成功！";
-		url2 = url+"?ins="+insframework+"&leve="+leve+"&qua="+qua;;
+		url2 = url+"?ins="+insframework+"&leve="+leve+"&qua="+qua+"&method="+method;
 	}else{
 		messager = "修改成功！";
-		url2 = url+"&ins="+insframework+"&leve="+leve+"&qua="+qua;;
+		url2 = url+"&ins="+insframework+"&leve="+leve+"&qua="+qua+"&method="+method;
 	}
 	$('#fm').form('submit', {
 		url : url2,

@@ -92,6 +92,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<select class="easyui-combobox" name="leveid" id="leveid" data-options="required:true,editable:false"></select>
 	        	</div>
 	        	<div class="fitem">
+					<lable><span class="required">*</span>焊接方法</lable>
+					<select class="easyui-combobox" name="method" id="method" data-options="required:true,editable:false"></select>
+	        	</div>
+	        	<div class="fitem">
 					<lable><span class="required">*</span>资质</lable>
 					<select class="easyui-combobox" name="quali" id="quali" data-options="required:true,editable:false"></select>
 	        	</div>
@@ -134,8 +138,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            </div>
 	            <div class="fitem">
 					<lable>级别</lable>
-					<input name="leveid" id="leveid" type="hidden" >
+<!-- 					<input name="leveid" id="leveid" type="hidden" > -->
 					<input class="easyui-textbox" name="levename" id="levename" readonly="true" />
+	        	</div>
+	        	 <div class="fitem">
+					<lable>焊接方法</lable>
+					<input name="leveid" id="leveid" type="hidden" >
+					<input class="easyui-textbox" name="method" id="method" readonly="true" />
 	        	</div>
 	        	<div class="fitem">
 					<lable>资质</lable>

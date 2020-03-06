@@ -37,6 +37,13 @@ function wpsDetail(){
 			align : "left",
 			hidden:true
 		}, {
+			field : 'machineid',
+			title : '焊机id',
+//			width : 30,
+			halign : "center",
+			align : "left",
+			hidden:true
+		},{
 			field : 'fproduct_number',
 			title : '产品序号',
 			width : 100,
@@ -73,7 +80,7 @@ function wpsDetail(){
 					str += '<a id="wait" class="easyui-linkbutton"/>';
 				}
 				if(row.fstatus==0){
-					str += '<a id="doing" class="easyui-linkbutton"/>';
+					str += '<a id="doing" class="easyui-linkbutton" href="javascript:realtime()"/>';
 				}
 				if(row.fstatus==1){
 					str += '<a id="finish" class="easyui-linkbutton"/>';
@@ -101,6 +108,13 @@ function wpsDetail(){
 			}
 		}
 	});
+}
+
+function realtime(){
+	var row = $('#productDetailsTable').datagrid('getSelected'); 
+	if (row) {
+		window.open("td/AllTdcard?machineid="+row.machineid);
+	}
 }
 
 function passReview(){

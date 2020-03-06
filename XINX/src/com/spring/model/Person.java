@@ -25,6 +25,7 @@ public class Person {
 	private String valuenamex;
 	private String qualiname;
 	private String levename;
+	private String method;
 	
 	public Person(){
 		super();
@@ -181,6 +182,14 @@ public class Person {
 		this.insname = insname;
 		this.insid = insid;
 		this.valuenamex = valuenamex;
+	}
+
+	public String getMethod() {
+		return method;
+	}
+
+	public void setMethod(String method) {
+		this.method = method;
 	}
 
 }

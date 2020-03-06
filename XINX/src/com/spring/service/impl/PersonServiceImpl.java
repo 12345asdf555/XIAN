@@ -35,6 +35,12 @@ public class PersonServiceImpl implements PersonService{
 	public List<Person> findLeve(int type) {
 		return mapper.findLeve(type);
 	}
+	
+	
+	@Override
+	public List<Person> getmethod() {
+		return mapper.getmethod();
+	}
 
 	@Override
 	public void save(Person welder) {

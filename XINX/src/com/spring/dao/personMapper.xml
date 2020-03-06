@@ -9,7 +9,9 @@
 <mapper namespace="com.spring.dao.PersonMapper">
 	
 	<select id="findAll" resultType="Person">
-		select tb_welder.fid id,tb_welder.fwelder_no welderno,tb_welder.fname name,tb_welder.FCellPhone cellphone,tb_welder.FLeveID leveid,tb_welder.FCardNUm cardnum,tb_welder.Fqualification quali,tb_welder.FCReateDate createdate,tb_welder.FUpdateDate updatedate,tb_welder.Fowner owner,tb_welder.Fback back,i.fid insid,i.fname insname,d.fvaluename valuename,di.fvaluename valuenamex from tb_welder INNER JOIN tb_dictionary d on d.fvalue = tb_welder.FLeveID
+		select tb_welder.fid id,tb_welder.fwelder_no welderno,tb_welder.fname name,tb_welder.FCellPhone cellphone,tb_welder.FLeveID leveid,l.fweld_method method,tb_welder.FCardNUm cardnum,tb_welder.Fqualification quali,tb_welder.FCReateDate createdate,tb_welder.FUpdateDate updatedate,tb_welder.Fowner owner,tb_welder.Fback back,i.fid insid,i.fname insname,d.fvaluename valuename,di.fvaluename valuenamex from tb_welder
+		LEFT JOIN tb_level_library l on tb_welder.method_id = l.fid
+		INNER JOIN tb_dictionary d on d.fvalue = tb_welder.FLeveID
 		INNER JOIN tb_dictionary di on di.fvalue = tb_welder.Fqualification INNER JOIN tb_insframework i on tb_welder.Fowner=i.fid
 		INNER JOIN tb_insframework ins on ins.fid = i.fparent 
 		INNER JOIN tb_insframework insf on insf.fid = ins.fparent where (d.ftypeid=8 and di.ftypeid=7)
@@ -26,8 +28,12 @@
 		select fvalue val,fvaluename valuename from tb_dictionary where ftypeid =#{type}
 	</select>
 	
+	<select id="getmethod" resultType="Person">
+		select fid insid,fweld_method valuename from tb_level_library where 1=1
+	</select>
+	
 	<insert id="save" parameterType="Person">
-		insert into tb_welder(fwelder_no,fname,FCellPhone,FLeveID,FCardNUm,Fqualification,FCReateDate,FUpdateDate,Fcreater,Fupdater,Fowner,Fback) values(#{welderno},#{name},#{cellphone},#{leveid},#{cardnum},#{quali},now(),now(),#{creater},#{updater},#{owner},#{back});
+		insert into tb_welder(fwelder_no,fname,FCellPhone,FLeveID,FCardNUm,Fqualification,FCReateDate,FUpdateDate,Fcreater,Fupdater,Fowner,Fback,method_id) values(#{welderno},#{name},#{cellphone},#{leveid},#{cardnum},#{quali},now(),now(),#{creater},#{updater},#{owner},#{back},#{method});
 	</insert>
 	
 	<select id="findById" parameterType="BigInteger" resultType="Person">
@@ -40,7 +46,7 @@
 	</select>
 	
 	<update id="update" parameterType="Person">
-		update tb_welder set fwelder_no=#{welderno},fname=#{name},FCellPhone=#{cellphone},FLeveID=#{leveid},FCardNUm=#{cardnum},Fqualification=#{quali},FUpdateDate=now(),Fowner=#{owner},Fback=#{back},Fupdater=#{updater} where fid=#{id};
+		update tb_welder set fwelder_no=#{welderno},fname=#{name},FCellPhone=#{cellphone},FLeveID=#{leveid},FCardNUm=#{cardnum},Fqualification=#{quali},FUpdateDate=now(),Fowner=#{owner},Fback=#{back},method_id=#{method},Fupdater=#{updater} where fid=#{id};
 	</update>
 	
 	<delete id="delete" parameterType="BigInteger">

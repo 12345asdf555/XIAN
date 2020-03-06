@@ -78,6 +78,25 @@ public class TdController {
 		lm.getUserId(request);
 		return "td/nextCurve";
 	}
+	/**
+	 * 任务访问实时
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/AllTdcard")
+	public String AllTdcard(HttpServletRequest request){
+/*		MyUser myuser = (MyUser) SecurityContextHolder.getContext()  
+			    .getAuthentication()  
+			    .getPrincipal();
+		long uid = myuser.getId();
+		String insname = tdService.findInsname(tdService.findIns(uid));
+		request.setAttribute("insname", insname);*/
+		lm.getUserId(request);
+		String value = request.getParameter("machineid");
+		request.setAttribute("value", value);
+		return "td/nextCurve";
+	}
+	
 	
 	@RequestMapping("/goNextcurve")
 	public String goNextcurve(HttpServletRequest request){

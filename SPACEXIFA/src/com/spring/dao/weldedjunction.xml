@@ -322,7 +322,7 @@
 	</insert>
 	
 	<select id="getProductList" resultMap="wjMap">
-		SELECT p.*,l.fwps_lib_name,l.fwps_lib_version,t.foperatetype fstatus FROM tb_product_number p 
+		SELECT p.*,l.fwps_lib_name,l.fwps_lib_version,t.foperatetype fstatus,t.fmachineid machid FROM tb_product_number p 
 		LEFT JOIN tb_wps_library l ON p.fwps_lib_id=l.fid
 		LEFT JOIN tb_taskresult t ON p.fid=t.ftaskid 
 		WHERE (t.fid IN (SELECT MAX(fid) FROM tb_taskresult GROUP BY ftaskid) OR t.foperatetype IS null)

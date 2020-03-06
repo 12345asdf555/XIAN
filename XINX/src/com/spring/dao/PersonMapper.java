@@ -22,4 +22,5 @@ public interface PersonMapper {
 	
 	List<Person> getFreeWelder(@Param("str")String str);
 	String getInsidByFid(BigInteger fid);
+	List<Person> getmethod();
 }
