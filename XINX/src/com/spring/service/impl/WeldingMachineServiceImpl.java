@@ -30,6 +30,11 @@ public class WeldingMachineServiceImpl implements WeldingMachineService {
 		return wmm.getWeldingMachineAll(parent,str);
 	}
 	
+	public List<WeldingMachine> getlibarary(Page page) {
+		PageHelper.startPage(page.getPageIndex(), page.getPageSize());
+		return wmm.getlibarary();
+	}
+	
 	@Override
 	public List<WeldingMachine> findAllweldmachine() {
 		return wmm.findAllweldmachine();
@@ -126,5 +131,20 @@ public class WeldingMachineServiceImpl implements WeldingMachineService {
 	public List<WeldingMachine> getMachineModel() {
 		// TODO Auto-generated method stub
 		return wmm.getMachineModel();
+	}
+	
+	@Override
+	public void addlibrary(WeldingMachine wm) {
+		wmm.addlibrary(wm);
+	}
+	
+	@Override
+	public void editlibrary(WeldingMachine wm) {
+		wmm.editlibrary(wm);
+	}
+	
+	@Override
+	public void deletelibrary(BigInteger id) {
+		wmm.deletelibrary(id);
 	}
 }

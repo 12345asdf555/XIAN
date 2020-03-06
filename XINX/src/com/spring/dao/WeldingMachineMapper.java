@@ -60,4 +60,11 @@ public interface WeldingMachineMapper extends Mapper<WeldingMachine>{
 	
 	List<WeldingMachine> getMachineModel();
 	
+	List<WeldingMachine> getlibarary();
+	
+	void deletelibrary(@Param("id")BigInteger id);
+	
+	void addlibrary(WeldingMachine wm);
+	
+	void editlibrary(WeldingMachine wm);
 }

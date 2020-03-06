@@ -155,6 +155,22 @@
 		fisnetworking=#{isnetworking},fjoin_time=#{joinTime},fmodel=#{model},fupdater=#{updater},fupdatedate=now() where fid = #{id}
 	</update>
 	
+	<select id="getlibarary" resultMap="wmMap">
+		select fid fid,fweld_method mname,flevel model from tb_level_library where 1=1
+	</select>
+	
+	<update id="addlibrary"  parameterType="com.spring.model.WeldingMachine">
+		INSERT INTO tb_level_library(fweld_method,flevel) VALUES (#{mvaluename},#{model})
+	</update>
+	
+	<update id="editlibrary"  parameterType="com.spring.model.WeldingMachine">
+		UPDATE tb_level_library SET fweld_method=#{mvaluename},flevel=#{model}  where fid = #{id}
+	</update>
+	
+	<delete id="deletelibrary" parameterType="java.math.BigInteger">
+		DELETE FROM tb_level_library WHERE fid = #{id}
+	</delete>
+	
 	<update id="editstatus"  parameterType="com.spring.model.WeldingMachine">
 		UPDATE tb_welding_machine SET fstatus_id=#{status}  where fid = #{wid}
 	</update>
