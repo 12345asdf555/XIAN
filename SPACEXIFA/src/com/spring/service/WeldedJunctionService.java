@@ -267,4 +267,24 @@ public interface WeldedJunctionService {
 	 * @return
 	 */
 	List<WeldedJunction> getProductWpsHistory(Page page, String search);
+	
+	/**
+	 * 获取电子跟踪卡count数
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年3月5日下午4:57:44
+	 * @param cardName
+	 * @return
+	 */
+	int getCardCount(String cardName);
+	
+	/**
+	 * 获取任务编号count数
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年3月5日下午4:57:59
+	 * @param taskName
+	 * @return
+	 */
+	int getTaskCount(String taskName);
 }

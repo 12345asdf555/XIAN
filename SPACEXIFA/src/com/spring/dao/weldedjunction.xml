@@ -359,4 +359,12 @@
 			WHERE ${search}
 		</if>
 	</select>
+	
+	<select id="getCardCount" parameterType="String" resultType="java.lang.Integer">
+		select count(*) from tb_welded_junction where fwelded_junction_no=#{cardName}
+	</select>
+	
+	<select id="getTaskCount" parameterType="String" resultType="java.lang.Integer">
+		select count(*) from tb_welded_junction where ftask_no=#{taskName}
+	</select>
 </mapper>

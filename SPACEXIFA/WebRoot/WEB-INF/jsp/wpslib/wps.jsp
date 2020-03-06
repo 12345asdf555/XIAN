@@ -135,7 +135,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<div style="float: left;width: 28%">
 					<div class="fitem">
 						<lable><span class="required">*</span>产品图号</lable>
-						<!-- <input type="hidden" id="validwl"> -->
+						<input type="hidden" id="validPdo">
 						<input class="easyui-textbox" name="fproduct_drawing_no" id="fproduct_drawing_no"  data-options="required:true"/>
 					</div>
 					<div class="fitem">
@@ -144,15 +144,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					</div>
 					<div class="fitem">
 						<lable><span class="required">*</span>产品版本号</lable>
-						<input class="easyui-textbox" name="fproduct_version" id="fproduct_version"  data-options="required:true"/>
+						<input type="hidden" id="validProduct">
+						<input class="easyui-textbox" name="fproduct_version" id="fproduct_version"  data-options="validType:'productValidate',required:true"/>
 					</div>
 					<div class="fitem">
 						<lable><span class="required">*</span>工艺规程编号</lable>
+						<input type="hidden" id="validWpsname">
 						<input class="easyui-textbox" name="fwps_lib_name" id="fwps_lib_name"  data-options="required:true"/>
 					</div>
 					<div class="fitem">
 						<lable><span class="required">*</span>工艺规程版本号</lable>
-						<input class="easyui-textbox" name="fwps_lib_version" id="fwps_lib_version"  data-options="required:true"/>
+						<input type="hidden" id="validWpsversion">
+						<input class="easyui-textbox" name="fwps_lib_version" id="fwps_lib_version"  data-options="validType:'xifawpsValidate',required:true"/>
 					</div>
 					<div class="fitem">
 						<lable><span class="required">*</span>工艺来源</lable>
@@ -163,7 +166,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					</div>
 					<div align="center">
 						<a href="javascript:saveWps();" class="easyui-linkbutton" iconCls="icon-ok">保存</a>
-						<a href="javascript:closeDialog('wltdlg');" class="easyui-linkbutton" iconCls="icon-cancel" >取消</a>
+						<!-- <a href="javascript:closeDialog('wltdlg');" class="easyui-linkbutton" iconCls="icon-cancel" >取消</a> -->
 					</div>
 				</div>
 				<div style="float: left;width: 6%">

@@ -383,6 +383,124 @@ $(function(){
 
 					},
 					message : '焊机编码已经被占用'
+				},
+				
+				cardValidate : {
+					validator : function(value, param) {
+						if (flag) {
+							var validwl = $("#validCard").val();
+							if((validwl!=null || validwl!="") && validwl == value){
+								return true;
+							}
+							var result = "";
+							$.ajax( {
+								type : 'post',
+								async : false,
+								url : 'weldtask/cardvalidate',
+								data : {
+									"cardName" : value
+								},
+								success : function(data) {
+									result = data;
+								}
+							});
+							return result;
+						} else {
+							return true;
+						}
+
+					},
+					message : '电子跟踪卡号已存在'
+				},
+				
+				taskValidate : {
+					validator : function(value, param) {
+						if (flag) {
+							var validwl = $("#validTask").val();
+							if((validwl!=null || validwl!="") && validwl == value){
+								return true;
+							}
+							var result = "";
+							$.ajax( {
+								type : 'post',
+								async : false,
+								url : 'weldtask/taskvalidate',
+								data : {
+									"taskName" : value
+								},
+								success : function(data) {
+									result = data;
+								}
+							});
+							return result;
+						} else {
+							return true;
+						}
+
+					},
+					message : '任务编号已存在'
+				},
+				
+				productValidate : {
+					validator : function(value, param) {
+						if (flag) {
+							var validwl = $("#validProduct").val();
+							var validpdo = $("#validPdo").val();
+							var pdn = $("#fproduct_drawing_no").val();
+							if((validwl!=null || validwl!="") && validwl == value && (validpdo!=null || validpdo!="") && validpdo == pdn){
+								return true;
+							}
+							var result = "";
+							$.ajax( {
+								type : 'post',
+								async : false,
+								url : 'wps/productvalidate',
+								data : {
+									"procudt" : value,
+									"pdn" : pdn
+								},
+								success : function(data) {
+									result = data;
+								}
+							});
+							return result;
+						} else {
+							return true;
+						}
+
+					},
+					message : '该产品图号对应的版本已经存在'
+				},
+				
+				xifawpsValidate : {
+					validator : function(value, param) {
+						if (flag) {
+							var validwl = $("#validWpsversion").val();
+							var validwps = $("#validWpsname").val();
+							var wln = $("#fwps_lib_name").val();
+							if((validwl!=null || validwl!="") && validwl == value && (validwps!=null || validwps!="") && validwps == wln){
+								return true;
+							}
+							var result = "";
+							$.ajax( {
+								type : 'post',
+								async : false,
+								url : 'wps/wpsversionvalidate',
+								data : {
+									"wpsversion" : value,
+									"wln" : wln
+								},
+								success : function(data) {
+									result = data;
+								}
+							});
+							return result;
+						} else {
+							return true;
+						}
+
+					},
+					message : '该工艺规程对应的版本已经存在'
 				}
 			})
 })

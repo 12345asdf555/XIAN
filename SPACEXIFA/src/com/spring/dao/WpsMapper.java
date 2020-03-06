@@ -88,4 +88,6 @@ public interface WpsMapper {
 	void turnDown(Wps wps);
 	List<Wps> getWpsCombobox();
 	Wps gettrackcard(BigInteger fid);
+	int getProcudtCount(@Param("pdn")String pdn, @Param("procudt")String procudt);
+	int getWpsversionCount(@Param("wln")String wln, @Param("wpsversion")String wpsversion);
 }

@@ -74,4 +74,8 @@ public interface WeldedJunctionMapper extends Mapper<WeldedJunction>{
 	void addProductWpsHistory(@Param("fid")String fid,@Param("wpsId")String wpsId, @Param("userId")String userId, @Param("time")String time);
 	
 	List<WeldedJunction> getProductWpsHistory(@Param("search")String search);
+	
+	int getCardCount(@Param("cardName")String cardName);
+	
+	int getTaskCount(@Param("taskName")String taskName);
 }

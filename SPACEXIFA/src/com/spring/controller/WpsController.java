@@ -2296,4 +2296,26 @@ public class WpsController {
 		obj.put("ary", ary);
 		return obj.toString();
 	}
+	
+	@RequestMapping("/productvalidate")
+	@ResponseBody
+	private String enovalidate(@RequestParam String procudt,@RequestParam String pdn){
+		boolean data = true;
+		int count = wpsService.getProcudtCount(pdn,procudt);
+		if(count>0){
+			data = false;
+		}
+		return data + "";
+	}
+	
+	@RequestMapping("/wpsversionvalidate")
+	@ResponseBody
+	private String wpsversionvalidate(@RequestParam String wpsversion,@RequestParam String wln){
+		boolean data = true;
+		int count = wpsService.getWpsversionCount(wln,wpsversion);
+		if(count>0){
+			data = false;
+		}
+		return data + "";
+	}
 }

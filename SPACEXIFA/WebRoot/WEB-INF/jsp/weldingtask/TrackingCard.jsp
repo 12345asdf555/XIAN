@@ -119,12 +119,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<form id="addOrUpdatefm" class="easyui-form" method="post" data-options="novalidate:true">
 				<div class="fitem">
 					<lable><span class="required">*</span>电子跟踪卡号</lable>
-					<!-- <input type="hidden" id="validwl"> -->
-					<input class="easyui-textbox" name="fwelded_junction_no" id="fwelded_junction_no"  data-options="required:true"/>
+					<input type="hidden" id="validCard">
+					<input class="easyui-textbox" name="fwelded_junction_no" id="fwelded_junction_no"  data-options="validType:'cardValidate',required:true"/>
 				</div>
 				<div class="fitem">
 					<lable><span class="required">*</span>任务编号</lable>
-					<input class="easyui-textbox" name="ftask_no" id="ftask_no"  data-options="required:true"/>
+					<input type="hidden" id="validTask">
+					<input class="easyui-textbox" name="ftask_no" id="ftask_no"  data-options="validType:'taskValidate',required:true"/>
 				</div>
 				<div class="fitem">
 					<lable><span class="required">*</span>组织机构</lable>
@@ -179,7 +180,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<a href="javascript:addWps();" class="easyui-linkbutton" iconCls="icon-newadd">自建卡号</a>&nbsp;&nbsp;&nbsp;&nbsp;
 				<a href="javascript:editWps();" class="easyui-linkbutton" iconCls="icon-update">修改卡号</a>&nbsp;&nbsp;&nbsp;&nbsp;
 				<a href="javascript:deleteWps();" class="easyui-linkbutton" iconCls="icon-delete">删除卡号</a>&nbsp;&nbsp;&nbsp;&nbsp;
-				<a href="javascript:wpsDetails();" class="easyui-linkbutton" iconCls="icon-navigation">产品详情</a>&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="javascript:wpsDetails();" class="easyui-linkbutton" iconCls="icon-navigation">产品审核</a>&nbsp;&nbsp;&nbsp;&nbsp;
 				<a href="javascript:historyDetails();" class="easyui-linkbutton" iconCls="icon-history">临时工艺切换历史</a>&nbsp;&nbsp;&nbsp;&nbsp;
 			</div>
 		</div>

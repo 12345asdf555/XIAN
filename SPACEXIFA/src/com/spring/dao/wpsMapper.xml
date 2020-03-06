@@ -517,4 +517,12 @@
 		SELECT fid,fwps_lib_name fwpsnum,fwps_lib_version FROM tb_wps_library
 		WHERE fid NOT IN (SELECT DISTINCT fwpslib_id FROM tb_welded_junction WHERE fwpslib_id IS NOT NULL) AND fstatus=1
 	</select>
+	
+	<select id="getProcudtCount" parameterType="String" resultType="java.lang.Integer">
+		select count(*) from tb_wps_library where fproduct_drawing_no=#{pdn} and fproduct_version=#{procudt}
+	</select>
+	
+	<select id="getWpsversionCount" parameterType="String" resultType="java.lang.Integer">
+		select count(*) from tb_wps_library where fwps_lib_name=#{wln} and fwps_lib_version=#{wpsversion}
+	</select>
 </mapper>

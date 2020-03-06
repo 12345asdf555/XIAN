@@ -397,4 +397,26 @@ public interface WpsService {
 	 * @return
 	 */
 	List<Wps> getWpsCombobox();
+	
+	/**
+	 * 获取产品图号及其版本的count数
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年3月5日下午6:35:37
+	 * @param pdn
+	 * @param procudt
+	 * @return
+	 */
+	int getProcudtCount(String pdn, String procudt);
+	
+	/**
+	 * 获取工艺规程及其版本的count数
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年3月5日下午7:21:55
+	 * @param wln
+	 * @param wpsversion
+	 * @return
+	 */
+	int getWpsversionCount(String wln, String wpsversion);
 }

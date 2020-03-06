@@ -63,7 +63,7 @@
 	</select>
 	
 	<select id="LoadUser" parameterType="String" resultType="User">
-		select id id,users_password userPassword from tb_users where users_login_name=#{userName};
+		select id id,users_password userPassword,users_name userName from tb_users where users_login_name=#{userName};
 	</select>
 	
 	<select id="findRole" resultType="User">

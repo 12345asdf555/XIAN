@@ -35,7 +35,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	  	<div region="center"  hide="true"  split="true" >
 	  		    <div class="functiondiv">
 					<div  style="float: left;">
-						<label>产品名称：</label><input class="easyui-textbox" name="fproduct_name" id="fproduct_name" value="${fproduct_name}"/>
+						<label>产品名称：</label><input class="easyui-textbox" name="fproduct_name" id="fproduct_name" value="${fproduct_name}" disabled="disabled"/>
 					</div>
 					<div  style="float: left;">
 						<label>焊缝编号：</label><select class="easyui-combobox" name="fjunction" id="fjunction" data-options="editable:false"></select>

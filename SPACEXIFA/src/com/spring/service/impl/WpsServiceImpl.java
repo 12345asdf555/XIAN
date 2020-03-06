@@ -465,4 +465,16 @@ public class WpsServiceImpl implements WpsService{
 		// TODO Auto-generated method stub
 		return mapper.getWpsCombobox();
 	}
+
+	@Override
+	public int getProcudtCount(String pdn, String procudt) {
+		// TODO Auto-generated method stub
+		return mapper.getProcudtCount(pdn, procudt);
+	}
+
+	@Override
+	public int getWpsversionCount(String wln, String wpsversion) {
+		// TODO Auto-generated method stub
+		return mapper.getWpsversionCount(wln, wpsversion);
+	}
 }

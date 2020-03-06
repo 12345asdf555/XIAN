@@ -3,6 +3,12 @@
  */
 var oldchanel = 0,wpsId="",employeeId="",stepId="";
 $(function() {
+	$('#addOrUpdate').dialog( {
+		onClose : function() {
+			$("#addOrUpdatefm").form("disableValidation");
+		}
+	})
+	$("#addOrUpdatefm").form("disableValidation");
 	$.extend($.fn.datagrid.methods, {
 		editCell: function(jq,param){
 			return jq.each(function(){
@@ -30,13 +36,14 @@ $(function() {
 var flag = 1;
 function addWps() {
 	flag = 1;
+	$("#addOrUpdatefm").form("disableValidation");
 	wpsId = "";
-	$('#addOrUpdatefm').form('clear');
 	$('#addOrUpdate').window({
 		title : "自建电子跟踪卡",
 		modal : true
 	});
 	$('#addOrUpdate').window('open');
+	$('#addOrUpdatefm').form('clear');
 	$('#flag').combobox('select', 0);
 	url = "weldtask/addCard";
 }
@@ -79,7 +86,11 @@ function editWps() {
 		});
 		$('#addOrUpdate').window('open');
 		$('#addOrUpdatefm').form('load', row);
+		$('#validCard').val(row.fwelded_junction_no);
+		$('#validTask').val(row.ftask_no);
 		url = "weldtask/updateCard?fid=" + row.fid;
+	}else{
+		alert("请先选择一条数据。");
 	}
 }
 
@@ -111,6 +122,7 @@ function saveCard() {
 					});
 				} else {
 					alert("保存成功");
+					$('#addOrUpdate').window('close');
 					$('#cardTable').datagrid('reload');
 				}
 			}

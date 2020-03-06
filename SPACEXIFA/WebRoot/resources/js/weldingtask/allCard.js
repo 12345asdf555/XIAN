@@ -7,7 +7,7 @@ $(function(){
 
 function cardDatagrid(){
 	$("#cardTable").datagrid( {
-		fitColumns : true,
+		fitColumns : false,
 		height : $("#body").height(),
 		width : $("#body").width(),
 		idField : 'fid',
@@ -27,13 +27,13 @@ function cardDatagrid(){
 		},{
 			field : 'fwelded_junction_no',
 			title : '电子跟踪卡号',
-			width : 100,
+			width : 200,
 			halign : "center",
 			align : "left"
 		}, {
 			field : 'ftask_no',
 			title : '任务编号',
-			width : 100,
+			width : 200,
 			halign : "center",
 			align : "left"
 		}, {
@@ -48,13 +48,13 @@ function cardDatagrid(){
 			title : '组织机构',
 			width : 100,
 			halign : "center",
-			align : "left"
+			align : "center"
 		}, {
 			field : 'fproduct_details',
 			title : '产品详情',
 			width : 100,
 			halign : "center",
-			align : "left",
+			align : "center",
 			formatter: function(value,row,index){
 				var str = '<a id="prodetail" class="easyui-linkbutton" href="javascript:openProductDetails('+row.fid+')"/>';
 				return str;
@@ -81,9 +81,9 @@ function cardDatagrid(){
 		}, {
 			field : 'flag_name',
 			title : '卡号来源',
-			width : 100,
+			width : 80,
 			halign : "center",
-			align : "left"
+			align : "center"
 		}, {
 			field : 'dyne',
 			title : '任务是否完成标志',
@@ -94,7 +94,7 @@ function cardDatagrid(){
 		}, {
 			field : 'fchange_wps',
 			title : '临时切换工艺',
-			width : 150,
+			width : 120,
 			halign : "center",
 			align : "left",
 			formatter: function(value,row,index){
@@ -135,7 +135,7 @@ function cardDatagrid(){
 		}, {
 			field : 'fback',
 			title : '驳回原因',
-			width : 100,
+			width : 400,
 			halign : "center",
 			align : "left"
 		}] ],
@@ -168,95 +168,99 @@ function cardDatagrid(){
 }
 
 function openProductDetails(){
-//	$("#productDetailsTable").datagrid("loadData", { total: 0, rows: [] });
-	$('#productDetailsDlg').window({
-		title : "产品详情",
-		modal : true
-	});
-	$('#productDetailsDlg').window('open');
-	$("#productDetailsTable").datagrid( {
-		fitColumns : true,
-		height : $("#productDetailsDlg").height(),
-		width : $("#productDetailsDlg").width(),
-		idField : 'fid',
-		pageSize : 10,
-		pageList : [ 10, 20, 30, 40, 50 ],
-		url : "weldtask/getProductList",
-		singleSelect : true,
-		rownumbers : true,
-		showPageList : false,
-		columns : [ [ {
-			field : 'fid',
-			title : '序号',
+	var row = $('#cardTable').datagrid('getSelected'); 
+	if (row) {
+		var fid = row.fid;
+		var search = " AND p.fcard_id="+fid;
+		$('#productDetailsDlg').window({
+			title : "产品详情",
+			modal : true
+		});
+		$('#productDetailsDlg').window('open');
+		$("#productDetailsTable").datagrid( {
+			fitColumns : true,
+			height : $("#productDetailsDlg").height(),
+			width : $("#productDetailsDlg").width(),
+			idField : 'fid',
+			pageSize : 10,
+			pageList : [ 10, 20, 30, 40, 50 ],
+			url : "weldtask/getProductList?search="+search,
+			singleSelect : true,
+			rownumbers : true,
+			showPageList : false,
+			columns : [ [ {
+				field : 'fid',
+				title : '序号',
 //			width : 30,
-			halign : "center",
-			align : "left",
-			hidden:true
-		}, {
-			field : 'fproduct_number',
-			title : '产品序号',
-			width : 100,
-			halign : "center",
-			align : "left"
-		}, {
-			field : 'fwps_lib_name',
-			title : '工艺规程编号',
-			width : 100,
-			halign : "center",
-			align : "left"
-		}, {
-			field : 'fwps_lib_version',
-			title : '工艺规程版本号',
-			width : 100,
-			halign : "center",
-			align : "left"
-		}, {
-			field : 'fstatus',
-			title : '状态id',
+				halign : "center",
+				align : "left",
+				hidden:true
+			}, {
+				field : 'fproduct_number',
+				title : '产品序号',
+				width : 100,
+				halign : "center",
+				align : "left"
+			}, {
+				field : 'fwps_lib_name',
+				title : '工艺规程编号',
+				width : 100,
+				halign : "center",
+				align : "left"
+			}, {
+				field : 'fwps_lib_version',
+				title : '工艺规程版本号',
+				width : 100,
+				halign : "center",
+				align : "left"
+			}, {
+				field : 'fstatus',
+				title : '状态id',
 //			width : 100,
-			halign : "center",
-			align : "left",
-			hidden : true
-		}, {
-			field : 'fstatus_name',
-			title : '任务状态',
-			width : 100,
-			halign : "center",
-			align : "left",
-			formatter: function(value,row,index){
-				var str = "";
-				if(row.fstatus==2){
-					str += '<a id="wait" class="easyui-linkbutton"/>';
+				halign : "center",
+				align : "left",
+				hidden : true
+			}, {
+				field : 'fstatus_name',
+				title : '任务状态',
+				width : 100,
+				halign : "center",
+				align : "left",
+				formatter: function(value,row,index){
+					var str = "";
+					if(row.fstatus==2){
+						str += '<a id="wait" class="easyui-linkbutton"/>';
+					}
+					if(row.fstatus==0){
+						str += '<a id="doing" class="easyui-linkbutton"/>';
+					}
+					if(row.fstatus==1){
+						str += '<a id="finish" class="easyui-linkbutton"/>';
+					}
+					return str;
 				}
-				if(row.fstatus==0){
-					str += '<a id="doing" class="easyui-linkbutton"/>';
+			}] ],
+			pagination : true,
+			rowStyler: function(index,row){
+				if ((index % 2)!=0){
+					//处理行代背景色后无法选中
+					var color=new Object();
+					return color;
 				}
-				if(row.fstatus==1){
-					str += '<a id="finish" class="easyui-linkbutton"/>';
+			},
+			onLoadSuccess: function(data){
+				if($("#wait").length!=0){
+					$("a[id='wait']").linkbutton({text:'未领取',plain:true,iconCls:'icon-assign'});
 				}
-				return str;
+				if($("#doing").length!=0){
+					$("a[id='doing']").linkbutton({text:'进行中',plain:true,iconCls:'icon-unfinished'});
+				}
+				if($("#finish").length!=0){
+					$("a[id='finish']").linkbutton({text:'已完成',plain:true,iconCls:'icon-finish'});
+				}
 			}
-		}] ],
-		pagination : true,
-		rowStyler: function(index,row){
-            if ((index % 2)!=0){
-            	//处理行代背景色后无法选中
-            	var color=new Object();
-                return color;
-            }
-        },
-		onLoadSuccess: function(data){
-			if($("#wait").length!=0){
-				$("a[id='wait']").linkbutton({text:'未领取',plain:true,iconCls:'icon-assign'});
-			}
-			if($("#doing").length!=0){
-				$("a[id='doing']").linkbutton({text:'进行中',plain:true,iconCls:'icon-unfinished'});
-			}
-			if($("#finish").length!=0){
-				$("a[id='finish']").linkbutton({text:'已完成',plain:true,iconCls:'icon-finish'});
-			}
-		}
-	});
+		});
+	}
 }
 
 function searchWps(){
@@ -310,6 +314,8 @@ function wpsDetails(){
 	var row = $('#cardTable').datagrid('getSelected'); 
 	if (row) {
 		window.location.href = encodeURI("weldtask/goTrackCard"+"?fid="+row.fid+"&fwelded_junction_no="+row.fwelded_junction_no+"&status="+row.fstatus+"&fitemName="+row.fitemName);
+	}else{
+		alert("请先选择一条数据。");
 	}
 }
 
@@ -448,13 +454,8 @@ window.onresize = function() {
 
 //改变表格高宽
 function domresize() {
-	$("#wpslibTable").datagrid('resize', {
+	$("#cardTable").datagrid('resize', {
 		height : $("#body").height(),
 		width : $("#body").width()
-	});
-	
-	$("#femployeeTable").datagrid('resize', {
-		height : $("#addOrUpdate").height()*0.4,
-		width : $("#addOrUpdate").width()*0.64*0.33,
 	});
 }

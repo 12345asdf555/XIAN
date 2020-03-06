@@ -16,7 +16,7 @@ function setParam(){
 
 function wpslibDatagrid(){
 	$("#wpslibTable").datagrid( {
-		fitColumns : true,
+		fitColumns : false,
 		height : $("#body").height(),
 		width : $("#body").width(),
 		idField : 'fid',
@@ -36,31 +36,31 @@ function wpslibDatagrid(){
 		},{
 			field : 'fproduct_drawing_no',
 			title : '产品图号',
-			width : 100,
+			width : 200,
 			halign : "center",
 			align : "left"
 		}, {
 			field : 'fproduct_name',
 			title : '产品名称',
-			width : 100,
+			width : 200,
 			halign : "center",
 			align : "left"
 		}, {
 			field : 'fproduct_version',
 			title : '产品版本号',
-			width : 100,
+			width : 200,
 			halign : "center",
 			align : "left"
 		}, {
 			field : 'fwps_lib_name',
 			title : '工艺规程编号',
-			width : 100,
+			width : 200,
 			halign : "center",
 			align : "left"
 		}, {
 			field : 'fwps_lib_version',
 			title : '工艺规程版本号',
-			width : 100,
+			width : 200,
 			halign : "center",
 			align : "left"
 		}, {
@@ -73,9 +73,9 @@ function wpslibDatagrid(){
 		}, {
 			field : 'flag_name',
 			title : '工艺来源',
-			width : 100,
+			width : 80,
 			halign : "center",
-			align : "left"
+			align : "center"
 		}, {
 			field : 'fstatus',
 			title : '状态id',
@@ -88,7 +88,7 @@ function wpslibDatagrid(){
 			title : '审核状态',
 			width : 100,
 			halign : "center",
-			align : "left",
+			align : "center",
 			formatter: function(value,row,index){
 				var str = "";
 				if(row.fstatus==0){
@@ -105,7 +105,7 @@ function wpslibDatagrid(){
 		}, {
 			field : 'fback',
 			title : '驳回原因',
-			width : 100,
+			width : 400,
 			halign : "center",
 			align : "left"
 		}] ],
@@ -198,6 +198,8 @@ function wpsDetails(){
 	var row = $('#wpslibTable').datagrid('getSelected'); 
 	if (row) {
 		window.location.href = encodeURI("wps/goWpsdetails"+"?fid="+row.fid+"&fproduct_name="+row.fproduct_name+"&status="+row.fstatus);
+	}else{
+		alert("请先选择一条数据。");
 	}
 }
 
@@ -217,10 +219,5 @@ function domresize() {
 	$("#wpslibTable").datagrid('resize', {
 		height : $("#body").height(),
 		width : $("#body").width()
-	});
-	
-	$("#femployeeTable").datagrid('resize', {
-		height : $("#addOrUpdate").height()*0.4,
-		width : $("#addOrUpdate").width()*0.64*0.33,
 	});
 }

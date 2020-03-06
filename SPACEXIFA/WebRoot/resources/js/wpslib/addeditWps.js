@@ -3,6 +3,12 @@
  */
 var oldchanel = 0,wpsId="",employeeId="",stepId="";
 $(function() {
+	$('#addOrUpdate').dialog( {
+		onClose : function() {
+			$("#addOrUpdatefm").form("disableValidation");
+		}
+	})
+	$("#addOrUpdatefm").form("disableValidation");
 	$.extend($.fn.datagrid.methods, {
 		editCell: function(jq,param){
 			return jq.each(function(){
@@ -646,12 +652,13 @@ var flag = 1;
 function addWps() {
 	flag = 1;
 	wpsId = "";
-	$('#addOrUpdatefm').form('clear');
+	$("#addOrUpdatefm").form("disableValidation");
 	$('#addOrUpdate').window({
 		title : "自建工艺",
 		modal : true
 	});
 	$('#addOrUpdate').window('open');
+	$('#addOrUpdatefm').form('clear');
 	$('#flag').combobox('select', 0);
 	employeeUrl = "/";
 //	$('#femployeeTable').datagrid("options").url=employeeUrl;
@@ -702,8 +709,14 @@ function editWps() {
 		employeeUrl = "wps/getInfo?search=" + row.fid +"&valueFlag=0";
 		$('#femployeeTable').datagrid("options").url=employeeUrl;
 		$('#femployeeTable').datagrid('reload');
+		$('#validProduct').val(row.fproduct_version);
+		$('#validPdo').val(row.fproduct_drawing_no);
+		$('#validWpsname').val(row.fwps_lib_name);
+		$('#validWpsversion').val(row.fwps_lib_version);
 		url = "wps/updateWps?fid=" + row.fid;
 		wpsId = row.fid;
+	}else{
+		alert("请先选择一条数据。");
 	}
 }
 

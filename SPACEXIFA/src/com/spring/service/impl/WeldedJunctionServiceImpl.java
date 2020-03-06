@@ -209,4 +209,16 @@ public class WeldedJunctionServiceImpl implements WeldedJunctionService{
 		PageHelper.startPage(page.getPageIndex(), page.getPageSize());
 		return wjm.getProductWpsHistory(search);
 	}
+
+	@Override
+	public int getCardCount(String cardName) {
+		// TODO Auto-generated method stub
+		return wjm.getCardCount(cardName);
+	}
+
+	@Override
+	public int getTaskCount(String taskName) {
+		// TODO Auto-generated method stub
+		return wjm.getTaskCount(taskName);
+	}
 }

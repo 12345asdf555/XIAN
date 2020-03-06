@@ -1563,4 +1563,26 @@ public class WeldingTaskController {
 		obj.put("rows", ary);
 		return obj.toString();
 	}
+	
+	@RequestMapping("/cardvalidate")
+	@ResponseBody
+	private String enovalidate(@RequestParam String cardName){
+		boolean data = true;
+		int count = wjm.getCardCount(cardName);
+		if(count>0){
+			data = false;
+		}
+		return data + "";
+	}
+	
+	@RequestMapping("/taskvalidate")
+	@ResponseBody
+	private String taskvalidate(@RequestParam String taskName){
+		boolean data = true;
+		int count = wjm.getTaskCount(taskName);
+		if(count>0){
+			data = false;
+		}
+		return data + "";
+	}
 }
