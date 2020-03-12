@@ -17,14 +17,17 @@ import com.spring.model.Dictionarys;
 import com.spring.model.Gather;
 import com.spring.model.Insframework;
 import com.spring.model.MyUser;
+import com.spring.model.User;
 import com.spring.model.WeldingMachine;
 import com.spring.model.WeldingMaintenance;
+import com.spring.model.Person;
 import com.spring.page.Page;
 import com.spring.service.DictionaryService;
 import com.spring.service.GatherService;
 import com.spring.service.InsframeworkService;
 import com.spring.service.MaintainService;
 import com.spring.service.WeldingMachineService;
+import com.spring.service.PersonService;
 import com.spring.util.IsnullUtil;
 
 import net.sf.json.JSONArray;
@@ -53,6 +56,8 @@ public class WeldingMachineController {
 	@Autowired
 	private DictionaryService dm;
 	
+	@Autowired
+	private PersonService welder;
 	
 	IsnullUtil iutil = new IsnullUtil();
 	
@@ -225,10 +230,6 @@ public class WeldingMachineController {
 	}
 	
 	/**
-	 * 获取资质库列表
-	 * @author
-	 */
-	/**
 	 * 显示资质库列表
 	 * @return
 	 */
@@ -239,9 +240,11 @@ public class WeldingMachineController {
 		pageSize=Integer.parseInt(request.getParameter("rows"));
 		page=new Page(pageIndex,pageSize,total);
 		List<WeldingMachine> list=wmm.getlibarary(page);
-		
 		long total=0;
-		
+		if(list != null){
+			PageInfo<WeldingMachine> pageinfo = new PageInfo<WeldingMachine>(list);
+			total = pageinfo.getTotal();
+		}
 		JSONObject json = new JSONObject();
 		JSONArray ary = new JSONArray();
 		JSONObject obj = new JSONObject();
@@ -255,9 +258,51 @@ public class WeldingMachineController {
 		}catch(Exception e){
 			e.getMessage();
 		}
+		obj.put("total", total);
 		obj.put("rows",ary);
 		return obj.toString();
 	}
+	
+	@RequestMapping("/getlibararylist1")
+	@ResponseBody
+	public String getlibararylist1(@RequestParam Integer id,HttpServletRequest request){
+		pageIndex=Integer.parseInt(request.getParameter("page"));
+		pageSize=Integer.parseInt(request.getParameter("rows"));
+		page=new Page(pageIndex,pageSize,total);
+		long total=0;
+		List<WeldingMachine> list=wmm.getlibarary(page);
+		if(list != null){
+			PageInfo<WeldingMachine> pageinfo = new PageInfo<WeldingMachine>(list);
+			total = pageinfo.getTotal();
+		}
+		List<Person> person = welder.getlibarary1(new Integer(id));
+		JSONObject json = new JSONObject();
+		JSONArray ary = new JSONArray();
+		JSONObject obj = new JSONObject();
+		try{
+			for(WeldingMachine weld:list){
+				json.put("id", weld.getId());
+				json.put("mvaluename",weld.getMvaluename());//焊接方法
+				json.put("model", weld.getModel());//等级
+				json.put("symbol", 0);
+				for(Person p:person){
+					System.out.println(weld.getId());
+					System.out.println(p.getFid());
+					if(p.getFid()==weld.getId()){
+						json.put("symbol", 1);
+						break;
+					}
+				}
+				ary.add(json);
+			}
+		}catch(Exception e){
+			e.getMessage();
+		}
+		obj.put("total", total);
+		obj.put("rows", ary);
+		return obj.toString();
+	}
+
 	
 	/**
 	 * 获取焊机及其对应的采集模块

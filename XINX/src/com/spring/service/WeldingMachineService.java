@@ -23,6 +23,7 @@ public interface WeldingMachineService {
 	 * 查询所有焊接方法
 	 */
 	List<WeldingMachine> getlibarary(Page page);
+	
 	/**
 	 * 新增设备
 	 */

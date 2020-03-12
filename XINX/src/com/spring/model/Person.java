@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.util.Date;
 
 public class Person {
+	private BigInteger fid;
 	private BigInteger id;
 	private String welderno;
 	private String name;
@@ -190,6 +191,14 @@ public class Person {
 
 	public void setMethod(String method) {
 		this.method = method;
+	}
+
+	public BigInteger getFid() {
+		return fid;
+	}
+
+	public void setFid(BigInteger fid) {
+		this.fid = fid;
 	}
 
 }

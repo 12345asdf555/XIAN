@@ -28,6 +28,7 @@ public class WeldingMachine {
 	private BigInteger updater;
 	private int mvalueid;
 	private String mvaluename;
+	private BigInteger librarys_id;
 	@Transient
 	private Gather gatherId;
 	@Transient
@@ -151,6 +152,12 @@ public class WeldingMachine {
 	}
 	public void setModelname(String modelname) {
 		this.modelname = modelname;
+	}
+	public BigInteger getLibrarys_id() {
+		return librarys_id;
+	}
+	public void setLibrarys_id(BigInteger librarys_id) {
+		this.librarys_id = librarys_id;
 	}
 	
 }

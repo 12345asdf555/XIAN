@@ -1,5 +1,10 @@
+$(function(){
+	$("#rfm").form("disableValidation");
+})
 var url = "";
+var flag = "";
  function removeWelder(){
+	 	flag = 2;
 		$('#rfm').form('clear');
 		var row = $('#welderTable').datagrid('getSelected');
 		if (row) {
@@ -8,13 +13,80 @@ var url = "";
 				modal : true
 		});
 		$('#rdlg').window('open');
+		library();
 		$('#rfm').form('load', row);
 		url = "welders/destroyWelder?fid="+row.id;
 	}
 }
-
+ function library(){
+		var urls="";
+		var row = $('#welderTable').datagrid('getSelected');
+		if(flag==2){
+			urls="weldingMachine/getlibararylist1?id="+row.id;
+		}else{
+			urls="weldingMachine/getlibararylist";
+		}
+		$("#rdg").datagrid( {
+			fitColumns:true,
+			height : '250px',
+			width : '80%',
+			idField:'id',
+			pageSize:10,
+			pageList : [ 10, 20, 30, 40, 50 ],
+			url:urls,
+			rownumbers : false,
+			showPageList : false,
+			checkOnSelect:true,
+			selectOnCheck:true,
+			columns : [ [ {
+			    field:'ck',
+				checkbox:true
+			},{
+				field : 'id',
+				title : 'id',
+				width : 300,
+				halign : "center",
+				align : "left",
+				hidden: true
+			},{
+				field : 'mvaluename',
+				title : '焊接方法',
+				width : 300,
+				halign : "center",
+				align : "center"
+			},{
+				field : 'model',
+				title : '等级',
+				width : 300,
+				halign : "center",
+				align : "left"
+				//hidden:true
+			}]],
+			pagination : true,
+			nowrap : false,
+			rowStyler: function(index,row){
+	            if ((index % 2)!=0){
+	            	//处理行代背景色后无法选中
+	            	var color=new Object();
+	              //  color.class="rowColor";
+	                return color;
+	            }
+			},
+			onBeforeLoad:function(data){
+				 $('#rdg').datagrid('clearChecked');
+			},
+			onLoadSuccess:function(data){
+				 if(data){
+					 $.each(data.rows, function(index, item){
+						 if(item.symbol==1){
+					         $('#rdg').datagrid('checkRow', index);
+						 }
+					 })
+				 }
+			}
+		});
+	}
 	function remove(){
-
 	$.messager.confirm('提示', '此操作不可撤销，是否确认删除?', function(flag) {
 		if (flag) {
 		    $('#rfm').form('submit',{

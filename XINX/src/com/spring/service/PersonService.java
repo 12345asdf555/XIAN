@@ -12,6 +12,7 @@ public interface PersonService {
 	List<Person> findAll(BigInteger parent);
 	List<Person> findAll(BigInteger parent,String str);
 	List<Person> findLeve(int type);
+	List<Person> findMethods(int id);
 	List<Person> dic();
 	List<Person> ins();
 	void save(Person welder);
@@ -19,7 +20,10 @@ public interface PersonService {
 	int getUsernameCount(String welderno);
 	void update(Person welder);
 	void delete(BigInteger fid);
-	
+	void saveMethod(Person welder);
+	void updateMethod(Person welder);
+	void deleteMethod(BigInteger fid);
+	List<Person> getlibarary1(int id);
 	/**
 	 * 获取焊接方法
 	 * @param typeid 类型id

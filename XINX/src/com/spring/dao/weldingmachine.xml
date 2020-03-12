@@ -19,7 +19,8 @@
 		<result property="creater" column="fcreater" />
 		<result property="updater" column="fupdater" />
         <result property="mvalueid" column="mid"></result>  
-        <result property="mvaluename" column="mname"></result>  
+        <result property="mvaluename" column="mname"></result> 
+        <result property="librarys_id" column="librarys"></result>   
         <association property="insframeworkId" column="finsframework_id" javaType="com.spring.model.Insframework">  
             <id property="id" column="iid"></id> 
             <result property="name" column="iname"></result>  

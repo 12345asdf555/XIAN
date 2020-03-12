@@ -114,6 +114,7 @@ function saveWelder(){
 	});
 	$('#dlg').window('open');
 	$('#fm').form('clear');
+	library1();
 	url = "welders/addWelder";
 }
 
@@ -127,6 +128,7 @@ function editWelder(){
 			modal : true
 		});
 		$('#dlg').window('open');
+		library1();
 		$('#fm').form('load', row);
 		$('#validName').val(row.welderno);
 		url = "welders/updateWelder?FID="+ row.id;
@@ -144,17 +146,24 @@ function save(){
 		alert("焊工编号不能全为0!!!");
 		return;
 	}
+	var rows = $('#dg').datagrid('getSelections');
+	var str="";
+	for(var i=0; i<rows.length; i++){
+		str += rows[i].id+",";
+	}
     var insframework = $('#owner').combobox('getValue');
-    var leve = $('#leveid').combobox('getValue');
+    //var leve = $('#leveid').combobox('getValue');
+    var leve;
     var qua = $('#quali').combobox('getValue');
-    var method = $('#method').combobox('getValue');
+    //var method = $('#method').combobox('getValue');
+    var method;
 	var url2 = "";
 	if(flag==1){
 		messager = "新增成功！";
-		url2 = url+"?ins="+insframework+"&leve="+leve+"&qua="+qua+"&method="+method;
+		url2 = url+"?ins="+insframework+"&leve="+""+"&qua="+qua+"&method="+""+"&str="+str;
 	}else{
 		messager = "修改成功！";
-		url2 = url+"&ins="+insframework+"&leve="+leve+"&qua="+qua+"&method="+method;
+		url2 = url+"&ins="+insframework+"&leve="+""+"&qua="+qua+"&method="+""+"&str="+str;
 	}
 	$('#fm').form('submit', {
 		url : url2,

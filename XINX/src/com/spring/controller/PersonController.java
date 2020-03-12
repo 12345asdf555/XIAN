@@ -18,6 +18,7 @@ import com.github.pagehelper.PageInfo;
 import com.spring.model.Dictionarys;
 import com.spring.model.MyUser;
 import com.spring.model.Person;
+import com.spring.model.User;
 import com.spring.model.WeldingMachine;
 import com.spring.page.Page;
 import com.spring.service.PersonService;
@@ -163,7 +164,12 @@ public class PersonController {
 		JSONObject obj = new JSONObject();
 		try{
 			welder.setQuali(Integer.parseInt(request.getParameter("qua")));
-			welder.setLeveid(Integer.parseInt(request.getParameter("leve")));
+			String leved = request.getParameter("leve");
+			int leve;
+			if(iutil.isNull(leved)){
+				leve = Integer.parseInt(leved);
+				welder.setLeveid(leve);
+			}
 			welder.setOwner(new BigInteger(request.getParameter("ins")));
 /*			String sea = Integer.toHexString(Integer.valueOf(request.getParameter("welderno")));
 			if(sea.length()!=4){
@@ -172,7 +178,7 @@ public class PersonController {
                 	sea="0"+sea;
                 }
               }*/
-			welder.setMethod(request.getParameter("method"));
+			//welder.setMethod(request.getParameter("method"));
 			welder.setWelderno(request.getParameter("welderno"));
 			welder.setName(request.getParameter("name"));
 			welder.setCellphone(request.getParameter("cellphone"));
@@ -183,13 +189,42 @@ public class PersonController {
 //			welder.setCreatedate(sdf.parse(sdf.format((new Date()).getTime())));
 //			welder.setUpdatedate(sdf.parse(sdf.format((new Date()).getTime())));
 			welderService.save(welder);
+			BigInteger welderid = welder.getFid();
+			welder.setId(welderid);
+			String[] str = request.getParameter("str").split(",");
+			for(int i=0;i<str.length;i++){
+				welder.setInsid(new BigInteger(str[i]));
+				welderService.saveMethod(welder);
+			}
 			obj.put("success", true);
 		}catch(Exception e){
+			obj.put("welderid", "");
 			obj.put("success", false);
 			obj.put("errorMsg", e.getMessage());
 		}
 		return obj.toString();
 /*		return "redirect:/user/AllUser";*/
+	}
+	
+	@RequestMapping("/getMethods")
+	@ResponseBody
+	public String getMethods(@RequestParam Integer id,HttpServletRequest request){
+		
+		List<Person> findMethod = welderService.findMethods(new Integer(id));
+		JSONObject json = new JSONObject();
+		JSONArray ary = new JSONArray();
+		JSONObject obj = new JSONObject();
+		try{
+			for(Person p:findMethod){
+				json.put("method", p.getMethod());
+				json.put("level", p.getCardnum());
+				ary.add(json);
+			}
+		}catch(Exception e){
+			e.getMessage();
+		}
+		obj.put("rows", ary);
+		return obj.toString();
 	}
 	
 	@RequestMapping("/toUpdateWelder")
@@ -215,18 +250,26 @@ public class PersonController {
 		try{
 			welder.setId(new BigInteger(request.getParameter("FID")));
 			welder.setQuali(Integer.parseInt(request.getParameter("qua")));
-			welder.setLeveid(Integer.parseInt(request.getParameter("leve")));
+			//welder.setLeveid(Integer.parseInt(request.getParameter("leve")));
 			welder.setOwner(new BigInteger(request.getParameter("ins")));
 			welder.setWelderno(request.getParameter("welderno"));
 			welder.setName(request.getParameter("name"));
 			welder.setCellphone(request.getParameter("cellphone"));
 			welder.setCardnum(request.getParameter("cardnum"));
 			welder.setBack(request.getParameter("back"));
-			welder.setMethod(request.getParameter("method"));
+			//welder.setMethod(request.getParameter("method"));
 			welder.setUpdater(new BigInteger(creat));
 //			welder.setUpdatedate(sdf.parse(sdf.format((new Date()).getTime())));
 //			welder.setCreatedate(sdf.parse(request.getParameter("createdate")));
 		    welderService.update(welder);
+		    BigInteger fid = new BigInteger(request.getParameter("FID"));
+		    welderService.deleteMethod(fid);
+		    String[] str = request.getParameter("str").split(",");
+			for(int i=0;i<str.length;i++){
+				welder.setInsid(new BigInteger(str[i]));
+				//welderService.updateMethod(welder);
+				welderService.saveMethod(welder);
+			}
 			obj.put("success", true);
 			}catch(Exception e){
 				obj.put("success", false);
@@ -253,6 +296,7 @@ public class PersonController {
 			JSONObject obj = new JSONObject();
 			try{
 				welderService.delete(fid);
+				welderService.deleteMethod(fid);
 				 obj.put("success", true);
 			}catch(Exception e){
 				obj.put("success", false);
@@ -367,5 +411,5 @@ public class PersonController {
 			obj.put("ary", rows);
 			return obj.toString();
 		}
-
+	
 	}

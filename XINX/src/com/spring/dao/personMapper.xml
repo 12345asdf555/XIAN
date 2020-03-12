@@ -9,12 +9,10 @@
 <mapper namespace="com.spring.dao.PersonMapper">
 	
 	<select id="findAll" resultType="Person">
-		select tb_welder.fid id,tb_welder.fwelder_no welderno,tb_welder.fname name,tb_welder.FCellPhone cellphone,tb_welder.FLeveID leveid,l.fweld_method method,tb_welder.FCardNUm cardnum,tb_welder.Fqualification quali,tb_welder.FCReateDate createdate,tb_welder.FUpdateDate updatedate,tb_welder.Fowner owner,tb_welder.Fback back,i.fid insid,i.fname insname,d.fvaluename valuename,di.fvaluename valuenamex from tb_welder
-		LEFT JOIN tb_level_library l on tb_welder.method_id = l.fid
-		INNER JOIN tb_dictionary d on d.fvalue = tb_welder.FLeveID
+		select tb_welder.fid id,tb_welder.fwelder_no welderno,tb_welder.fname name,tb_welder.FCellPhone cellphone,tb_welder.FLeveID leveid,tb_welder.FCardNUm cardnum,tb_welder.Fqualification quali,tb_welder.FCReateDate createdate,tb_welder.FUpdateDate updatedate,tb_welder.Fowner owner,tb_welder.Fback back,i.fid insid,i.fname insname,di.fvaluename valuenamex from tb_welder
 		INNER JOIN tb_dictionary di on di.fvalue = tb_welder.Fqualification INNER JOIN tb_insframework i on tb_welder.Fowner=i.fid
 		INNER JOIN tb_insframework ins on ins.fid = i.fparent 
-		INNER JOIN tb_insframework insf on insf.fid = ins.fparent where (d.ftypeid=8 and di.ftypeid=7)
+		INNER JOIN tb_insframework insf on insf.fid = ins.fparent where (di.ftypeid=7)
 		<if test="parent!=null and parent!=''">
 			and (i.fid=#{parent} or ins.fid=#{parent} or insf.fid=#{parent} or insf.fparent=#{parent})
 		</if>
@@ -28,12 +26,22 @@
 		select fvalue val,fvaluename valuename from tb_dictionary where ftypeid =#{type}
 	</select>
 	
+	<select id="findMethods" resultType="Person">
+		select we.flevel_id leveid,l.fweld_method method,l.flevel cardnum from tb_welder_method  we 
+		LEFT JOIN tb_level_library l on we.flevel_id = l.fid
+		where we.welder_id =#{id}
+	</select>
+	
 	<select id="getmethod" resultType="Person">
 		select fid insid,fweld_method valuename from tb_level_library where 1=1
 	</select>
 	
-	<insert id="save" parameterType="Person">
+	<insert id="save" parameterType="Person" useGeneratedKeys="true" keyProperty="fid">
 		insert into tb_welder(fwelder_no,fname,FCellPhone,FLeveID,FCardNUm,Fqualification,FCReateDate,FUpdateDate,Fcreater,Fupdater,Fowner,Fback,method_id) values(#{welderno},#{name},#{cellphone},#{leveid},#{cardnum},#{quali},now(),now(),#{creater},#{updater},#{owner},#{back},#{method});
+	</insert>
+	
+	<insert id="saveMethod" parameterType="Person">
+		insert into tb_welder_method(welder_id,flevel_id) values(#{id},#{insid});
 	</insert>
 	
 	<select id="findById" parameterType="BigInteger" resultType="Person">
@@ -49,8 +57,16 @@
 		update tb_welder set fwelder_no=#{welderno},fname=#{name},FCellPhone=#{cellphone},FLeveID=#{leveid},FCardNUm=#{cardnum},Fqualification=#{quali},FUpdateDate=now(),Fowner=#{owner},Fback=#{back},method_id=#{method},Fupdater=#{updater} where fid=#{id};
 	</update>
 	
+	<update id="updateMethod" parameterType="Person">
+		update tb_welder_method set welder_id=#{id},flevel_id=#{insid} where welder_id=#{id}
+	</update>
+	
 	<delete id="delete" parameterType="BigInteger">
 		delete from tb_welder where fid=#{id};
+	</delete>
+	
+	<delete id="deleteMethod" parameterType="BigInteger">
+		delete from tb_welder_method where welder_id=#{id};
 	</delete>
 	
 	<select id="dic" resultType="Person">
@@ -67,6 +83,12 @@
 	
 	<select id="getIdByWelderno" parameterType="String" resultType="Person">
 		SELECT fid id,Fowner insid FROM tb_welder WHERE fname=#{welderno}
+	</select>
+	
+	<select id="getlibarary1" resultType="Person">
+		SELECT we.flevel_id insid,l.fid fid FROM tb_welder_method we 
+		LEFT JOIN tb_level_library l on we.flevel_id = l.fid
+		where welder_id=#{id}
 	</select>
 	
 	<select id="getFreeWelder" resultType="Person">

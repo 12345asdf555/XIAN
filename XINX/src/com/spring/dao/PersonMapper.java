@@ -11,6 +11,7 @@ public interface PersonMapper {
 
 	List<Person> findAll(@Param("parent")BigInteger parent,@Param("str")String str);
 	List<Person> findLeve(int type);
+	List<Person> findMethods(int id);
 	List<Person> dic();
 	List<Person> ins();
 	void save(Person welder);
@@ -23,4 +24,8 @@ public interface PersonMapper {
 	List<Person> getFreeWelder(@Param("str")String str);
 	String getInsidByFid(BigInteger fid);
 	List<Person> getmethod();
+	void saveMethod(Person welder);
+	void updateMethod(Person welder);
+	void deleteMethod(BigInteger fid);
+	List<Person> getlibarary1(int id);
 }

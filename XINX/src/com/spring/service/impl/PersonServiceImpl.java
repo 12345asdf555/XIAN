@@ -36,6 +36,14 @@ public class PersonServiceImpl implements PersonService{
 		return mapper.findLeve(type);
 	}
 	
+	@Override
+	public List<Person> findMethods(int id) {
+		return mapper.findMethods(id);
+	}
+	
+	public List<Person> getlibarary1(int id) {
+		return mapper.getlibarary1(id);
+	}
 	
 	@Override
 	public List<Person> getmethod() {
@@ -47,6 +55,16 @@ public class PersonServiceImpl implements PersonService{
 		mapper.save(welder);
 	}
 
+	@Override
+	public void saveMethod(Person welder) {
+		mapper.saveMethod(welder);
+	}
+	
+	@Override
+	public void updateMethod(Person welder) {
+		mapper.updateMethod(welder);
+	}
+	
 	@Override
 	public Person findById(BigInteger fid) {
 		return mapper.findById(fid);
@@ -62,6 +80,11 @@ public class PersonServiceImpl implements PersonService{
 		mapper.delete(fid);
 	}
 
+	@Override
+	public void deleteMethod(BigInteger fid) {
+		mapper.deleteMethod(fid);
+	}
+	
 	@Override
 	public List<Person> dic() {
 		return mapper.dic();

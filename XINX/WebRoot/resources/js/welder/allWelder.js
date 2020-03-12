@@ -1,6 +1,7 @@
 $(function(){
 	weldDatagrid();
 	manuCombobox();
+	//library();
 });
 
 function weldDatagrid(){
@@ -53,7 +54,8 @@ function weldDatagrid(){
 			title : '级别',
 			width : 100,
 			halign : "center",
-			align : "left"
+			align : "left",
+			hidden: true
 		},{
 			field : 'cardnum',
 			title : '卡号',
@@ -87,11 +89,15 @@ function weldDatagrid(){
 			halign : "center",
 			align : "left"
 		}, {
-			field : 'method',
-			title : '焊接方法',
+			field : 'methods',
+			title : '焊接方法和等级',
 			width : 150,
 			halign : "center",
-			align : "left"
+			align : "left",
+			formatter:function(value,row,index){
+				var str = "";
+				str += '<a id="methods" class="easyui-linkbutton" href="javascript:methods('+row.id+')"/>';
+				return str; }
 		},{
 			field : 'back',
 			title : '备注',
@@ -122,8 +128,119 @@ function weldDatagrid(){
 		onLoadSuccess:function(data){
 	        $("a[id='edit']").linkbutton({text:'修改',plain:true,iconCls:'icon-update'});
 	        $("a[id='remove']").linkbutton({text:'删除',plain:true,iconCls:'icon-delete'});
+	        $("a[id='methods']").linkbutton({text:'焊接方法列表',plain:true,iconCls:'icon-ok'});
 	        }
 	});
+}
+
+function library1(){
+	var urls="";
+	var row = $('#welderTable').datagrid('getSelected');
+	if(flag==2){
+		urls="weldingMachine/getlibararylist1?id="+row.id;
+	}else{
+		urls="weldingMachine/getlibararylist";
+	}
+	$("#dg").datagrid( {
+		fitColumns:true,
+		height : '250px',
+		width : '80%',
+		idField:'id',
+		pageSize:10,
+		pageList : [ 10, 20, 30, 40, 50 ],
+		url:urls,
+		rownumbers : false,
+		showPageList : false,
+		checkOnSelect:true,
+		selectOnCheck:true,
+		columns : [ [ {
+		    field:'ck',
+			checkbox:true
+		},{
+			field : 'id',
+			title : 'id',
+			width : 300,
+			halign : "center",
+			align : "left",
+			hidden: true
+		},{
+			field : 'mvaluename',
+			title : '焊接方法',
+			width : 300,
+			halign : "center",
+			align : "center"
+		},{
+			field : 'model',
+			title : '等级',
+			width : 300,
+			halign : "center",
+			align : "left"
+			//hidden:true
+		}]],
+		pagination : true,
+		nowrap : false,
+		rowStyler: function(index,row){
+            if ((index % 2)!=0){
+            	//处理行代背景色后无法选中
+            	var color=new Object();
+              //  color.class="rowColor";
+                return color;
+            }
+		},
+		onBeforeLoad:function(data){
+			 $('#dg').datagrid('clearChecked');
+		},
+		onLoadSuccess:function(data){
+			 if(data){
+				 $.each(data.rows, function(index, item){
+					 if(item.symbol==1){
+				         $('#dg').datagrid('checkRow', index);
+					 }
+				 })
+			 }
+		}
+	});
+}
+
+function methods(id){
+    $('#div1').dialog('open').dialog('center').dialog('setTitle','焊接方法列表');
+    $("#me").datagrid( {
+		fitColumns : true,
+		height : '100%',
+		width : '100%',
+		idField : 'id',
+		url : "welders/getMethods?id="+id,
+		rownumbers : false,
+		showPageList : false,
+		singleSelect : true,
+		columns : [ [ {
+			field : 'id',
+			title : 'id',
+			width : 100,
+			halign : "center",
+			align : "left",
+			hidden: true
+		},{
+			field : 'method',
+			title : '焊接方法',
+			width : 100,
+			halign : "center",
+			align : "left"
+		},{
+			field : 'level',
+			title : '等级',
+			width : 100,
+			halign : "center",
+			align : "left"
+		}]],
+		rowStyler: function(index,row){
+	        if ((index % 2)!=0){
+	        	//处理行代背景色后无法选中
+	        	var color=new Object();
+	            return color;
+	        }
+		}
+    })
 }
 
 //导出到excel
