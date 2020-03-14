@@ -1096,7 +1096,64 @@ public class WeldingTaskController {
 		obj.put("success", serach);
 		return obj.toString();
 	}
-	
+	@RequestMapping("/gettaskview")
+	@ResponseBody
+	public String gettaskview(HttpServletRequest request){
+		pageIndex = Integer.parseInt(request.getParameter("page"));
+		pageSize = Integer.parseInt(request.getParameter("rows"));
+		page = new Page(pageIndex,pageSize,total);
+		String search = request.getParameter("search");
+		List<Wps> wpsList = wps.gettaskview(page,search);
+		long total = 0;
+		if(wpsList != null){
+			PageInfo<Wps> pageinfo = new PageInfo<Wps>(wpsList);
+			total = pageinfo.getTotal();
+		}
+		JSONObject json = new JSONObject();
+		JSONArray ary = new JSONArray();
+		JSONObject obj = new JSONObject();
+		try{
+			for(Wps wps:wpsList){
+				json.put("fid", wps.getFid());
+				json.put("fproduct_drawing_no", wps.getFproduct_drawing_no());
+				json.put("fproduct_name", wps.getFproduct_name());
+				json.put("fproduct_version", wps.getFproduct_version());
+				json.put("fprocessname", wps.getFprocessname());
+				json.put("fstarttime", wps.getFstarttime());
+				json.put("endtime", wps.getEndtime());
+				json.put("fwpsnum", wps.getFwpsnum());
+				json.put("dianame", wps.getDianame());
+				json.put("fjunction", wps.getFjunction());
+				json.put("fstep_number", wps.getFstep_number());
+				json.put("weldernamer", wps.getWeldername());
+				json.put("conname", wps.getConname());
+				json.put("fitem", wps.getFitem());
+				int touch = wps.getFtorch();
+				json.put("touch", touch);
+				if(touch == 0) {
+					json.put("touch_name", "完成");
+				}else {
+					json.put("touch_name", "未完成");
+				}
+				int flag = wps.getFlag();
+				json.put("flag", flag);
+				if(flag == 0) {
+					json.put("flag_name", "自建");
+				}else {
+					json.put("flag_name", "MES");
+				}
+				int fstatus = wps.getFstatus();
+				json.put("fstatus", fstatus);
+				json.put("fback", wps.getFback());
+				ary.add(json);
+			}
+		}catch(Exception e){
+			e.getMessage();
+		}
+		obj.put("total", total);
+		obj.put("rows", ary);
+		return obj.toString();
+	}
 	@RequestMapping("/getOperateArea")
 	@ResponseBody
 	public String getOperateArea(HttpServletRequest request){

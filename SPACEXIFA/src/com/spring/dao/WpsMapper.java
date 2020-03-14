@@ -65,6 +65,7 @@ public interface WpsMapper {
 	
 	List<Wps> getAllWpslib();
 	List<Wps> getWpsList(@Param("search")String search);
+	List<Wps> gettaskview(@Param("search")String search);
 	List<Wps> getEmployee(@Param("fid")String fid);
 	List<Wps> getStep(@Param("employeeId")String employeeId);
 	List<Wps> getJunction(@Param("stepId")String stepId);

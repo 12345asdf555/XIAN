@@ -95,6 +95,7 @@ public class Wps {
 	private int fini;
 	private int ftorch;
 	private int fprocessid;
+	private String fitem;
 	private String fprocessname;
 	
 	private String fsolder_layer;
@@ -171,6 +172,8 @@ public class Wps {
 	private String fstep_number;
 	private String fstep_id;
 	private String fjunction;
+	private String fstarttime;
+	private String endtime;
 	
 	public int getFini() {
 		return fini;
@@ -1263,5 +1266,23 @@ public class Wps {
 	}
 	public void setFstep_id(String fstep_id) {
 		this.fstep_id = fstep_id;
+	}
+	public String getFstarttime() {
+		return fstarttime;
+	}
+	public void setFstarttime(String fstarttime) {
+		this.fstarttime = fstarttime;
+	}
+	public String getEndtime() {
+		return endtime;
+	}
+	public void setEndtime(String endtime) {
+		this.endtime = endtime;
+	}
+	public String getFitem() {
+		return fitem;
+	}
+	public void setFitem(String fitem) {
+		this.fitem = fitem;
 	}
 }

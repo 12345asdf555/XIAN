@@ -376,6 +376,26 @@
 		where fid=#{fid};
 	</update>
 	
+	<select id="gettaskview" resultType="Wps">
+		select t.fid fid,t.ftaskid,t.fstep_id,t.fjunction_id,t.fwelderid,t.fmachineid,t.frealstarttime fstarttime,
+		t.frealendtime endtime,t.foperatetype ftorch,j.fwelded_junction_no fproduct_drawing_no,j.ftask_no fwpsnum,
+		j.flag flag,j.fitemId,p.fproduct_number fproduct_version,p.fwps_lib_id,l.fwps_lib_name fwps_lib_version,
+		l.fproduct_drawing_no dianame,l.fproduct_name fproduct_name,l.fwps_lib_version fprocessname,u.fjunction fjunction,
+		s.fstep_number fstep_number,w.fname weldername,m.fequipment_no conname,i.fname fitem from tb_taskresult t
+		LEFT JOIN tb_welded_junction j ON t.ftaskid = j.fid
+		LEFT JOIN tb_product_number p ON t.ftaskid = p.fcard_id
+		LEFT JOIN tb_wps_library l ON p.fwps_lib_id = l.fid
+		LEFT JOIN tb_junction u ON t.fjunction_id = u.fid
+		LEFT JOIN tb_step s ON t.fstep_id = s.fid
+		LEFT JOIN tb_welder w ON t.fwelderid = w.fid
+		LEFT JOIN tb_welding_machine m ON t.fmachineid = m.fid
+		LEFT JOIN tb_insframework i ON j.fitemId = i.fid
+		<if test="search!=null and search!=''">
+			WHERE ${search}
+		</if>
+		GROUP BY j.fwelded_junction_no ORDER BY j.fid
+	</select>
+	
 	<select id="getAllWpslib" resultType="Wps">
 		SELECT fid insid,fwps_lib_name insname FROM tb_wps_library WHERE 1=1 AND fid not in (
 		SELECT DISTINCT fwpslib_id FROM tb_welded_junction WHERE 1=1 and fwpslib_id is not NULL 

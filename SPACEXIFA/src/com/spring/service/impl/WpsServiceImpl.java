@@ -154,6 +154,8 @@ public class WpsServiceImpl implements WpsService{
 		mapper.saveWpslib(wps);
 	}
 
+	
+	
 	@Override
 	public void updateWpslib(Wps wps) {
 		// TODO Auto-generated method stub
@@ -326,6 +328,13 @@ public class WpsServiceImpl implements WpsService{
 		// TODO Auto-generated method stub
 		PageHelper.startPage(page.getPageIndex(), page.getPageSize());
 		return mapper.getWpsList(search);
+	}
+	
+	@Override
+	public List<Wps> gettaskview(Page page, String search) {
+		// TODO Auto-generated method stub
+		PageHelper.startPage(page.getPageIndex(), page.getPageSize());
+		return mapper.gettaskview(search);
 	}
 	
 	@Override

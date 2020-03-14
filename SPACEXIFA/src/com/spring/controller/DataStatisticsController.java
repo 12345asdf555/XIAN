@@ -54,6 +54,11 @@ public class DataStatisticsController {
 		return "datastatistics/machinetask";
 	}
 	
+	@RequestMapping("opentaskview")
+	public String opentaskview(){
+		return "datastatistics/taskview";
+	}
+	
 	/**
 	 * 跳转班组生产数据页面
 	 * @param request

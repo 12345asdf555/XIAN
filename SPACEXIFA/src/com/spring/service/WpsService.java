@@ -181,6 +181,12 @@ public interface WpsService {
 	 * @return
 	 */
 	List<Wps> getAllWpslib();
+	/**
+	 * 获取任务信息
+	 * @param uid
+	 * @return
+	 */
+	List<Wps> gettaskview(Page page, String search);
 	
 	/**
 	 * 查找工艺台账
