@@ -403,7 +403,7 @@
 	</select>
 	
 	<select id="getWpsList" resultType="Wps">
-		SELECT fid,fproduct_drawing_no,fproduct_name,fproduct_version,fwps_lib_name fwpsnum,fwps_lib_version,flag,fstatus,fback FROM tb_wps_library
+		SELECT fid,fproduct_drawing_no,fproduct_name,fproduct_version,fwps_lib_name fwpsnum,fwps_lib_version,flag,fstatus,IF(fstatus=2,fback,NULL) fback FROM tb_wps_library
 		<if test="search!=null and search!=''">
 			where ${search}
 		</if>
@@ -535,7 +535,7 @@
 	
 	<select id="getWpsCombobox" resultType="Wps">
 		SELECT fid,fwps_lib_name fwpsnum,fwps_lib_version FROM tb_wps_library
-		WHERE fid NOT IN (SELECT DISTINCT fwpslib_id FROM tb_welded_junction WHERE fwpslib_id IS NOT NULL) AND fstatus=1
+		WHERE fid NOT IN (SELECT DISTINCT fwps_lib_id FROM tb_product_number WHERE fwps_lib_id IS NOT NULL) AND fstatus=1
 	</select>
 	
 	<select id="getProcudtCount" parameterType="String" resultType="java.lang.Integer">

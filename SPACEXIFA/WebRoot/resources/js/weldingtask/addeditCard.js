@@ -1,7 +1,7 @@
 /**
  * 
  */
-var oldchanel = 0,wpsId="",employeeId="",stepId="";
+var oldchanel = 0,wpsId="",employeeId="",stepId="",cardId="";
 $(function() {
 	$('#addOrUpdate').dialog( {
 		onClose : function() {
@@ -36,6 +36,8 @@ $(function() {
 var flag = 1;
 function addWps() {
 	flag = 1;
+	$("#saveCard").show();
+	$("#saveAndPassCard").hide();
 	$("#addOrUpdatefm").form("disableValidation");
 	wpsId = "";
 	$('#addOrUpdate').window({
@@ -62,6 +64,13 @@ function editWps() {
 			alert("该电子跟踪卡已通过审核，无法进行修改操作！！！");
 			return;
 		}
+		if(row.fstatus == 2){
+			$("#saveCard").hide();
+			$("#saveAndPassCard").show();
+		}else{
+			$("#saveCard").show();
+			$("#saveAndPassCard").hide();
+		}
 		$.ajax({
 			type : "post",
 			async : false,
@@ -69,7 +78,7 @@ function editWps() {
 			data : {},
 			dataType : "json", //返回数据形式为json  
 			success : function(result) {
-				if (result) {
+				if (result.row.length!=0) {
 					$("#fprefix_number").textbox('setValue', result.row[0].fprefix_number); 
 					$("#fproduct_number").numberbox('setValue', result.row[0].fproduct_number); 
 					$("#init_number").numberbox('setValue', result.row[0].finit_number); 
@@ -89,6 +98,7 @@ function editWps() {
 		$('#validCard').val(row.fwelded_junction_no);
 		$('#validTask').val(row.ftask_no);
 		url = "weldtask/updateCard?fid=" + row.fid;
+		cardId = row.fid;
 	}else{
 		alert("请先选择一条数据。");
 	}
@@ -190,7 +200,7 @@ function saveReview(){
 	$.ajax({
 		type : "post",
 		async : false,
-		url : "wps/passReview?fid="+wpsId+"&value=0",
+		url : "weldtask/passReview?fid="+cardId+"&value=0",
 		dataType : "json",
 		data : {},
 		success : function(result) {
@@ -200,15 +210,12 @@ function saveReview(){
 						title : 'Error',
 						msg : result.errorMsg
 					});
-				} else {
-					alert("保存成功");
-					$('#addOrUpdate').window('close');
-					$('#wpslibTable').datagrid('reload');
-				}
+				} 
 			}
 		},
 		error : function() {
 			alert('error');
 		}
 	});
+	saveCard();
 }

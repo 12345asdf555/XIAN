@@ -5,8 +5,8 @@ $(function(){
 			$("#pass").show();
 			$("#down").show();
 		}else if($("#status").val() == "2"){
-			$("#pass").show();
-			$("#down").show();
+			$("#pass").hide();
+			$("#down").hide();
 		}else{
 			$("#pass").hide();
 			$("#down").hide();

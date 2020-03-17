@@ -272,7 +272,7 @@
 	</select>
 	
 	<select id="getCardList" resultMap="wjMap">
-		SELECT j.fid,fwelded_junction_no,ftask_no,fitemId iid,i.fname iname,j.flag,l.fwps_lib_name,l.fwps_lib_version,j.fstatus,j.fback,
+		SELECT j.fid,fwelded_junction_no,ftask_no,fitemId iid,i.fname iname,j.flag,l.fwps_lib_name,l.fwps_lib_version,j.fstatus,IF(j.fstatus=2,j.fback,NULL) fback,
 		if(COUNT(DISTINCT p.fproduct_number)>COUNT(DISTINCT t.ftaskid),1,0) fdyne
 		FROM tb_welded_junction j
 		LEFT JOIN tb_insframework i ON j.fitemId=i.fid 

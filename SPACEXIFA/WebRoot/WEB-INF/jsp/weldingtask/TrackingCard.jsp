@@ -125,7 +125,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<div class="fitem">
 					<lable><span class="required">*</span>任务编号</lable>
 					<input type="hidden" id="validTask">
-					<input class="easyui-textbox" name="ftask_no" id="ftask_no"  data-options="validType:'taskValidate',required:true"/>
+					<input class="easyui-textbox" name="ftask_no" id="ftask_no"  data-options="required:true"/>
 				</div>
 				<div class="fitem">
 					<lable><span class="required">*</span>组织机构</lable>
@@ -159,7 +159,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</form>
 		</div>
 	   	<div id="tdd-buttons">
-			<a href="javascript:saveCard();" class="easyui-linkbutton" iconCls="icon-ok" id="otcsaveWpsBut">保存</a>
+			<a href="javascript:saveCard();" class="easyui-linkbutton" iconCls="icon-ok" id="saveCard">保存</a>
+			<a href="javascript:saveReview();" class="easyui-linkbutton" iconCls="icon-ok" id="saveAndPassCard">保存并重新提交审核</a>
 			<a href="javascript:closeDlg();" class="easyui-linkbutton" iconCls="icon-cancel" >取消</a>
 		</div>
 		

@@ -358,6 +358,7 @@ function saveEmployeeRow(){
 				}
 			});
 		}else{
+			alert("未检测到任何更改信息！！！");
 			return;
 		}
 	}
@@ -430,6 +431,7 @@ function saveStepRow(){
 				}
 			});
 		}else{
+			alert("未检测到任何更改信息！！！");
 			return;
 		}
 	}
@@ -502,6 +504,7 @@ function saveJunctionRow(){
 				}
 			});
 		}else{
+			alert("未检测到任何更改信息！！！");
 			return;
 		}
 	}
@@ -574,6 +577,7 @@ function saveDetailRow(){
 				}
 			});
 		}else{
+			alert("未检测到任何更改信息！！！");
 			return;
 		}
 	}
@@ -650,6 +654,7 @@ function onAfterEdit(index, row, changes) {  
 var employeeUrl = "/",stepUrl = "/",junctionUrl = "/",detailUrl = "/",url="";
 var flag = 1;
 function addWps() {
+	$("#tdd-buttons").hide();
 	flag = 1;
 	wpsId = "";
 	$("#addOrUpdatefm").form("disableValidation");

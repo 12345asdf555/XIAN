@@ -5,8 +5,8 @@ $(function(){
 			$("#pass").show();
 			$("#down").show();
 		}else if($("#status").val() == "2"){
-			$("#pass").show();
-			$("#down").show();
+			$("#pass").hide();
+			$("#down").hide();
 		}else{
 			$("#pass").hide();
 			$("#down").hide();
@@ -18,14 +18,18 @@ $(function(){
 });
 
 function wpsDetail(){
+	var search = "";
+	if($("#flagId").val()){
+		search = " AND p.fcard_id="+$("#flagId").val();
+	}
 	$("#productDetailsTable").datagrid( {
-		fitColumns : true,
+		fitColumns : false,
 		height : $("#body").height(),
 		width : $("#body").width(),
 		idField : 'fid',
 		pageSize : 10,
 		pageList : [ 10, 20, 30, 40, 50 ],
-		url : "weldtask/getProductList",
+		url : "weldtask/getProductList?search="+search,
 		singleSelect : true,
 		rownumbers : true,
 		showPageList : false,
@@ -46,19 +50,19 @@ function wpsDetail(){
 		},{
 			field : 'fproduct_number',
 			title : '产品序号',
-			width : 100,
+			width : 300,
 			halign : "center",
 			align : "left"
 		}, {
 			field : 'fwps_lib_name',
 			title : '工艺规程编号',
-			width : 100,
+			width : 300,
 			halign : "center",
 			align : "left"
 		}, {
 			field : 'fwps_lib_version',
 			title : '工艺规程版本号',
-			width : 100,
+			width : 300,
 			halign : "center",
 			align : "left"
 		}, {
@@ -71,9 +75,9 @@ function wpsDetail(){
 		}, {
 			field : 'fstatus_name',
 			title : '任务状态',
-			width : 100,
+			width : 150,
 			halign : "center",
-			align : "left",
+			align : "center",
 			formatter: function(value,row,index){
 				var str = "";
 				if(row.fstatus==2){
