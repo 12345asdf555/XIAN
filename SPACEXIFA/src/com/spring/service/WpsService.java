@@ -186,7 +186,7 @@ public interface WpsService {
 	 * @param uid
 	 * @return
 	 */
-	List<Wps> gettaskview(Page page, String search);
+	List<Wps> gettaskview(Page page, String search,String time1,String time2);
 	
 	/**
 	 * 查找工艺台账

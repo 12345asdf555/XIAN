@@ -5,37 +5,17 @@ $(function(){
 })
 
 var chartStr = "";
-function setParam(){
-	var dtoTime1 = $("#dtoTime1").datetimebox('getValue');
-	var dtoTime2 = $("#dtoTime2").datetimebox('getValue');
-	var zitem = $("#zitem").combobox('getValue');
-	var bitem = $("#bitem").combobox('getValue');
-	var product_drawing_no = $("#product_drawing_no").val();
-	var product_name = $("#product_name").val();
-	var taskno = $("#taskno").val();
-	var fwps_lib_num = $("#fwps_lib_num").val();
-	var fwelded_junction_no = $("#fwelded_junction_no").val();
-	var product_number = $("#product_number").val();
-	var junction_name = $("#junction_name").val();
-	//var welderno = $("#welderno").val();
-	var item = "";
-	if(zitem!=0){
-		item = zitem;
-	}
-	if(bitem!=0){
-		item = bitem;
-	}
-	chartStr += "?item="+item+"&dtoTime1="+dtoTime1+"&dtoTime2="+dtoTime2+"&product_drawing_no="+product_drawing_no+"&product_name="+product_name+"&taskno="+taskno+"&fwps_lib_num="+fwps_lib_num+"&fwelded_junction_no="+fwelded_junction_no+"&product_number="+product_number+"&junction_name="+junction_name;
-}
+var search = "";
 function wpslibDatagrid(){
+	parameterStr();
 	$("#taskviewtable").datagrid( {
 		fitColumns : false,
-		height : $("#body").height(),
-		width : $("#body").width(),
+		height : '95%',
+		width : '100%',
 		idField : 'fid',
 		pageSize : 10,
 		pageList : [ 10, 20, 30, 40, 50 ],
-		url : "weldtask/gettaskview",
+		url : "weldtask/gettaskview?search="+search,
 		singleSelect : true,
 		rownumbers : true,
 		showPageList : false,
@@ -89,13 +69,13 @@ function wpslibDatagrid(){
 			halign : "center",
 			align : "left"
 		}, {
-			field : 'fwps_lib_version',
+			field : 'fprocessname',
 			title : '工艺规程编号',
 			width : 100,
 			halign : "center",
 			align : "left"
 		}, {
-			field : 'fprocessname',
+			field : 'fwps_lib_version',
 			title : '工艺规程版本号',
 			width : 100,
 			halign : "center",
@@ -167,8 +147,13 @@ function wpslibDatagrid(){
         }
 	});
 }
+
 function serach(){
-	var search = "";
+	wpslibDatagrid();
+}
+
+function parameterStr(){
+	search = "";
 	var dtoTime1 = $("#dtoTime1").datetimebox('getValue');
 	var dtoTime2 = $("#dtoTime2").datetimebox('getValue');
 	var item = $("#item").combobox('getValue');
@@ -236,11 +221,20 @@ function serach(){
 			search += " AND u.fjunction=" + junction_name;
 		}
 	}
-	$('#taskviewtable').datagrid('load', {
-		"search" : search
-	});
-	//chartStr += "?item="+item+"&dtoTime1="+dtoTime1+"&dtoTime2="+dtoTime2+"&product_drawing_no="+product_drawing_no+"&product_name="+product_name+"&taskno="+taskno+"&fwps_lib_num="+fwps_lib_num+"&fwelded_junction_no="+fwelded_junction_no+"&product_number="+product_number+"&junction_name="+junction_name;
-
+	if(dtoTime1 != ""){
+		if(search == ""){
+			search += " t.frealstarttime>'" +dtoTime1+"'";
+		}else{
+			search += " AND t.frealstarttime >'"+dtoTime1+"'";
+		}
+	}
+	if(dtoTime2 != ""){
+		if(search == ""){
+			search += " t.frealendtime < '"+dtoTime2+"'";
+		}else{
+			search += " AND t.frealendtime <'"+dtoTime2+"'";
+		}
+	}
 }
 
 //导出到Excel

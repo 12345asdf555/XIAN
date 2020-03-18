@@ -48,7 +48,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<label>组织机构：</label>
 					</div>
 					<div>
-						<select class="easyui-combobox" style="width:120px;" name="item" id="item" data-options="editable:false"></select>&nbsp;&nbsp;&emsp;
+						<select class="easyui-combobox" style="width:120px;" name="item" id="item" data-options="editable:false"></select>
 					</div>
 				</div>
 				<div  style="float: left;">
@@ -56,7 +56,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<label>产品图号：</label>
 					</div>
 					<div>
-						<input class="easyui-textbox" style="width:120px;" name="product_drawing_no" id="product_drawing_no"/>&nbsp;&nbsp;&emsp;
+						<input class="easyui-textbox" style="width:120px;" name="product_drawing_no" id="product_drawing_no"/>
 					</div>
 				</div>
 				<div  style="float: left;">
@@ -64,7 +64,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<label>产品名称：</label>
 					</div>
 					<div>
-						<input class="easyui-textbox" style="width:120px;" name="product_name" id="product_name"/>&nbsp;&nbsp;&emsp;
+						<input class="easyui-textbox" style="width:120px;" name="product_name" id="product_name"/>
 					</div>
 				</div>
 				<div  style="float: left;">
@@ -72,7 +72,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<label>任务编号：</label>
 					</div>
 					<div>
-						<input class="easyui-textbox" style="width:120px;" name="taskno" id="taskno"/>&nbsp;&nbsp;&emsp;
+						<input class="easyui-textbox" style="width:120px;" name="taskno" id="taskno"/>
 					</div>
 				</div>
 				<div  style="float: left;">
@@ -80,7 +80,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<label>工艺规程编号：</label>
 					</div>
 					<div>
-						<input class="easyui-textbox" style="width:120px;" name="fwps_lib_num" id="fwps_lib_num"/>&nbsp;&nbsp;&emsp;
+						<input class="easyui-textbox" style="width:120px;" name="fwps_lib_num" id="fwps_lib_num"/>
 					</div>
 				</div>
 				<div  style="float: left;">
@@ -88,7 +88,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<label>电子跟踪卡号：</label>
 					</div>
 					<div>
-						<input class="easyui-textbox" style="width:120px;" name="fwelded_junction_no" id="fwelded_junction_no"/>&nbsp;&nbsp;&nbsp;&nbsp;&emsp;
+						<input class="easyui-textbox" style="width:120px;" name="fwelded_junction_no" id="fwelded_junction_no"/>
 					</div>
 				</div>
 				<div  style="float: left;">
@@ -96,7 +96,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<label>产品序号：</label>
 					</div>
 					<div>
-						<input class="easyui-textbox" style="width:120px;" name="product_number" id="product_number"/>&nbsp;&nbsp;
+						<input class="easyui-textbox" style="width:120px;" name="product_number" id="product_number"/>
 					</div>
 				</div>
 				<div  style="float: left;">
@@ -104,14 +104,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<label>焊缝编号：</label>
 					</div>
 					<div>
-						<input class="easyui-textbox" style="width:120px;" name="junction_name" id="junction_name"/>&nbsp;&nbsp;
+						<input class="easyui-textbox" style="width:120px;" name="junction_name" id="junction_name"/>
 					</div>
 				</div>
 				<div  style="float: left;">
 					<div>
-						&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;<label>时间：</label>
-					</div>
-					<div>
+						<label>时间：</label>
 						<input class="easyui-datetimebox" style="width:120px;" name="dtoTime1" id="dtoTime1">--
 						<input class="easyui-datetimebox" style="width:120px;" name="dtoTime2" id="dtoTime2">&emsp;
 					</div>
@@ -124,7 +122,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</div>
 			</div>
 		</div>
-		<div id="wpsTableDiv" style="height: auto;">
+		<div id="wpsTableDiv" style="height:70%;">
 	   		<table id="taskviewtable" style="table-layout: fixed; width:100%;"></table>
   		</div>
     </div>

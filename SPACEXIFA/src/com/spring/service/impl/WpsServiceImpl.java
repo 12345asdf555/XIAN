@@ -331,10 +331,10 @@ public class WpsServiceImpl implements WpsService{
 	}
 	
 	@Override
-	public List<Wps> gettaskview(Page page, String search) {
+	public List<Wps> gettaskview(Page page, String search,String time1,String time2) {
 		// TODO Auto-generated method stub
 		PageHelper.startPage(page.getPageIndex(), page.getPageSize());
-		return mapper.gettaskview(search);
+		return mapper.gettaskview(search,time1,time2);
 	}
 	
 	@Override

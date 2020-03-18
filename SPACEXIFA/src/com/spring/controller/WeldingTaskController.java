@@ -1103,7 +1103,9 @@ public class WeldingTaskController {
 		pageSize = Integer.parseInt(request.getParameter("rows"));
 		page = new Page(pageIndex,pageSize,total);
 		String search = request.getParameter("search");
-		List<Wps> wpsList = wps.gettaskview(page,search);
+		String time1 = request.getParameter("dtoTime1");
+		String time2 = request.getParameter("dtoTime2");
+		List<Wps> wpsList = wps.gettaskview(page,search,time1,time2);
 		long total = 0;
 		if(wpsList != null){
 			PageInfo<Wps> pageinfo = new PageInfo<Wps>(wpsList);
@@ -1119,13 +1121,14 @@ public class WeldingTaskController {
 				json.put("fproduct_name", wps.getFproduct_name());
 				json.put("fproduct_version", wps.getFproduct_version());
 				json.put("fprocessname", wps.getFprocessname());
+				json.put("fwps_lib_version", wps.getFwps_lib_version());
 				json.put("fstarttime", wps.getFstarttime());
 				json.put("endtime", wps.getEndtime());
 				json.put("fwpsnum", wps.getFwpsnum());
 				json.put("dianame", wps.getDianame());
 				json.put("fjunction", wps.getFjunction());
 				json.put("fstep_number", wps.getFstep_number());
-				json.put("weldernamer", wps.getWeldername());
+				json.put("weldername", wps.getWeldername());
 				json.put("conname", wps.getConname());
 				json.put("fitem", wps.getFitem());
 				int touch = wps.getFtorch();
