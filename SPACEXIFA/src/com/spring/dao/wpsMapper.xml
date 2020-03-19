@@ -550,7 +550,7 @@
 	</select>
 	
 	<select id="getWpsversionCount" parameterType="String" resultType="java.lang.Integer">
-		select count(*) from tb_wps_library where fwps_lib_name=#{wln} and fwps_lib_version=#{wpsversion}
+		select count(*) from tb_wps_library where fwps_lib_name=#{wln} and fwps_lib_version=#{wpsversion} and fproduct_drawing_no=#{pdn} and fproduct_version=#{pv}
 	</select>
 	
 	<insert id="addWps1" parameterType="Wps" useGeneratedKeys="true" keyProperty="fid">

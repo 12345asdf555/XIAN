@@ -478,6 +478,8 @@ $(function(){
 							var validwl = $("#validWpsversion").val();
 							var validwps = $("#validWpsname").val();
 							var wln = $("#fwps_lib_name").val();
+							var pdn = $("#fproduct_drawing_no").val();
+							var pv = $("#fproduct_version").val();
 							if((validwl!=null || validwl!="") && validwl == value && (validwps!=null || validwps!="") && validwps == wln){
 								return true;
 							}
@@ -488,7 +490,9 @@ $(function(){
 								url : 'wps/wpsversionvalidate',
 								data : {
 									"wpsversion" : value,
-									"wln" : wln
+									"wln" : wln,
+									"pdn" : pdn,
+									"pv" : pv
 								},
 								success : function(data) {
 									result = data;
@@ -500,7 +504,7 @@ $(function(){
 						}
 
 					},
-					message : '该工艺规程对应的版本已经存在'
+					message : '该图号版本下工艺规程的版本已经存在'
 				}
 			})
 })

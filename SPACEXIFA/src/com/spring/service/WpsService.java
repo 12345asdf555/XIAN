@@ -422,9 +422,11 @@ public interface WpsService {
 	 * @date 2020年3月5日下午7:21:55
 	 * @param wln
 	 * @param wpsversion
+	 * @param pdn
+	 * @param pv
 	 * @return
 	 */
-	int getWpsversionCount(String wln, String wpsversion);
+	int getWpsversionCount(String wln, String wpsversion, String pdn, String pv);
 	
 	/**
 	 * 导入工序判断

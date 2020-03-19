@@ -145,7 +145,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<div class="fitem">
 						<lable><span class="required">*</span>产品版本号</lable>
 						<input type="hidden" id="validProduct">
-						<input class="easyui-textbox" name="fproduct_version" id="fproduct_version"  data-options="validType:'productValidate',required:true"/>
+						<input class="easyui-textbox" name="fproduct_version" id="fproduct_version"  data-options="required:true"/>
 					</div>
 					<div class="fitem">
 						<lable><span class="required">*</span>工艺规程编号</lable>

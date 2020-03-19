@@ -482,9 +482,9 @@ public class WpsServiceImpl implements WpsService{
 	}
 
 	@Override
-	public int getWpsversionCount(String wln, String wpsversion) {
+	public int getWpsversionCount(String wln, String wpsversion, String pdn, String pv) {
 		// TODO Auto-generated method stub
-		return mapper.getWpsversionCount(wln, wpsversion);
+		return mapper.getWpsversionCount(wln, wpsversion, pdn, pv);
 	}
 	
 	@Override

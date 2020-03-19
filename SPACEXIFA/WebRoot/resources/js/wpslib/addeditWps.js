@@ -811,28 +811,47 @@ function addVersion() {
 }
 
 function saveVersion(){
-	var messager = "";
-	$('#addVersionfm').form('submit', {
-		url : url,
-		onSubmit : function() {
-			return $(this).form('enableValidation').form('validate');
-		},
+	$.ajax({
+		type : "post",
+		async : false,
+		url : "wps/wpsversionvalidate?wpsversion="+$("#fwps_lib_version_v").textbox('getValue')+"&wln="+$("#fwps_lib_name_v").textbox('getValue')+"&pdn="+$("#fproduct_drawing_no_v").textbox('getValue')+"&pv="+$("#fproduct_name_v").textbox('getValue'),
+		dataType : "json",
+		data : {},
 		success : function(result) {
 			if (result) {
-				var result = eval('(' + result + ')');
 				if (!result.success) {
-					$.messager.show({
-						title : 'Error',
-						msg : result.errorMsg
-					});
+					alert("该图号版本下工艺规程的版本已经存在");
+					return;
 				} else {
-					alert("保存成功");
+					var messager = "";
+					$('#addVersionfm').form('submit', {
+						url : url,
+						onSubmit : function() {
+							return $(this).form('enableValidation').form('validate');
+						},
+						success : function(result) {
+							if (result) {
+								var result = eval('(' + result + ')');
+								if (!result.success) {
+									$.messager.show({
+										title : 'Error',
+										msg : result.errorMsg
+									});
+								} else {
+									alert("保存成功");
+								}
+							}
+
+						},
+						error : function(errorMsg) {
+							alert("数据请求失败，请联系系统管理员!");
+						}
+					});
 				}
 			}
-
 		},
-		error : function(errorMsg) {
-			alert("数据请求失败，请联系系统管理员!");
+		error : function() {
+			alert('error');
 		}
 	});
 }

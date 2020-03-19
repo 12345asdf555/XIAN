@@ -2310,9 +2310,9 @@ public class WpsController {
 	
 	@RequestMapping("/wpsversionvalidate")
 	@ResponseBody
-	private String wpsversionvalidate(@RequestParam String wpsversion,@RequestParam String wln){
+	private String wpsversionvalidate(@RequestParam String wpsversion,@RequestParam String wln,@RequestParam String pdn,@RequestParam String pv){
 		boolean data = true;
-		int count = wpsService.getWpsversionCount(wln,wpsversion);
+		int count = wpsService.getWpsversionCount(wln,wpsversion,pdn,pv);
 		if(count>0){
 			data = false;
 		}
