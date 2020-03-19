@@ -789,3 +789,50 @@ function saveReview(){
 		}
 	});
 }
+
+function addVersion() {
+	flag = 1;
+	wpsId = "";
+	$('#addVersionfm').form('clear');
+	var row = $('#wpslibTable').datagrid('getSelected'); 
+	if (row) {
+		$("#addVersionfm").form("disableValidation");
+		$('#addVersionDiv').window({
+			title : "新建版本",
+			modal : true
+		});
+		$('#addVersionDiv').window('open');
+		$("#hide_id").val(row.fid);
+		$("#fproduct_drawing_no_v").textbox('setValue', row.fproduct_drawing_no);
+		$("#fproduct_name_v").textbox('setValue', row.fproduct_name);
+		$("#fproduct_version_v").textbox('setValue', row.fproduct_version);
+		url = "wps/addVersion?fid=" + row.fid;
+	}
+}
+
+function saveVersion(){
+	var messager = "";
+	$('#addVersionfm').form('submit', {
+		url : url,
+		onSubmit : function() {
+			return $(this).form('enableValidation').form('validate');
+		},
+		success : function(result) {
+			if (result) {
+				var result = eval('(' + result + ')');
+				if (!result.success) {
+					$.messager.show({
+						title : 'Error',
+						msg : result.errorMsg
+					});
+				} else {
+					alert("保存成功");
+				}
+			}
+
+		},
+		error : function(errorMsg) {
+			alert("数据请求失败，请联系系统管理员!");
+		}
+	});
+}

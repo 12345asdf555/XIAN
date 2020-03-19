@@ -485,7 +485,40 @@ var aryX = new Array(), aryS0 = new Array(), aryS1 = new Array();
 	            	backgroundColor: '#6495ED',
 	    	        textColor: '#fff',
 	    	        textareaBorderColor: '#fff',
-	    	        textareaColor: '#6495ED'},
+	    	        textareaColor: '#6495ED',
+    	        	lang : ['数据视图', '关闭', '导出excel'],
+    	        	contentToOption: function (opt) {
+    	        		var obj = new Date();
+    	        		var time_name = obj.getFullYear()+"-"+obj.getMonth()+"-"+(obj.getDate()+1)+" "+obj.getHours()+"-"+obj.getMinutes()+"-"+obj.getSeconds();
+    	        		 $("#tableExcelBS").table2excel({
+    	        			exclude: ".noExl",
+ 							name: "数据表格",
+ 							filename: "数据表格" + time_name + ".xls",
+ 							fileext: ".xls",
+ 							exclude_img: true,
+ 							exclude_links: true,
+ 							exclude_inputs: true
+    	                 });
+		            },
+		            optionToContent: function(opt) {
+		            	var axisData = opt.xAxis[0].data;
+		                var series = opt.series;
+		                var table = '<table id="tableExcelBS" style="width:90%;text-align:center"><tbody><tr>' + '<td></td>';
+                        for(s = 0;s < series.length;s++){
+	                    	table += '<td>' + series[0].name + '</td>';
+                        }
+                        table += '</tr>';
+		                for (var i = 0, l = axisData.length; i < l; i++) {
+		                    table += '<tr>' + '<td>' + axisData[i] + '</td>'
+                            for(s = 0;s < series.length;s++){
+                            	table += '<td>' + series[s].data[i] + '</td>';
+                            }
+                    		table += '</tr>';
+		                }
+		                table += '</tbody></table>';
+		                return table;
+		            }	
+	            },
 	            magicType: {show: true, type: ['line', 'bar']},
 	            restore: {show: true},
 	            saveAsImage: {show: true}
@@ -655,14 +688,48 @@ function showChart23(){
 	                	 window.open("hansi.jsp");
 	                 }  
 	             },  */
-	            dataView: {show: true, readOnly: false,
+	            dataView: {
+	            	show: true, readOnly: false,
 	            	backgroundColor: '#6495ED',
 	    	        textColor: '#fff',
 	    	        textareaBorderColor: '#fff',
-	    	        textareaColor: '#6495ED'},
-	            magicType: {show: true, type: ['line', 'bar']},
-	            restore: {show: true},
-	            saveAsImage: {show: true}
+	    	        textareaColor: '#6495ED',
+	    	        lang : ['数据视图', '关闭', '导出excel'],
+    	        	contentToOption: function (opt) {
+    	        		var obj = new Date();
+    	        		var time_name = obj.getFullYear()+"-"+obj.getMonth()+"-"+(obj.getDate()+1)+" "+obj.getHours()+"-"+obj.getMinutes()+"-"+obj.getSeconds();
+    	        		 $("#tableExcelBS").table2excel({
+    	        			exclude: ".noExl",
+ 							name: "数据表格",
+ 							filename: "数据表格" + time_name + ".xls",
+ 							fileext: ".xls",
+ 							exclude_img: true,
+ 							exclude_links: true,
+ 							exclude_inputs: true
+    	                 });
+		            },
+		            optionToContent: function(opt) {
+		            	var axisData = opt.xAxis[0].data;
+		                var series = opt.series;
+		                var table = '<table id="tableExcelBS" style="width:90%;text-align:center"><tbody><tr>' + '<td></td>';
+                        for(s = 0;s < series.length;s++){
+	                    	table += '<td>' + series[0].name + '</td>';
+                        }
+                        table += '</tr>';
+		                for (var i = 0, l = axisData.length; i < l; i++) {
+		                    table += '<tr>' + '<td>' + axisData[i] + '</td>'
+                            for(s = 0;s < series.length;s++){
+                            	table += '<td>' + series[s].data[i] + '</td>';
+                            }
+                    		table += '</tr>';
+		                }
+		                table += '</tbody></table>';
+		                return table;
+		            }
+			        },
+		            magicType: {show: true, type: ['line', 'bar']},
+		            restore: {show: true},
+		            saveAsImage: {show: true}
 	        }
 	    },
 	    legend: {

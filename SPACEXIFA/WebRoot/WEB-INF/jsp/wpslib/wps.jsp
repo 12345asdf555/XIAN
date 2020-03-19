@@ -204,12 +204,45 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<a href="javascript:saveReview();" class="easyui-linkbutton" iconCls="icon-ok" id="otcsaveWpsBut">重新提交审核</a>
 			<a href="javascript:closeDlg();" class="easyui-linkbutton" iconCls="icon-cancel" >取消</a>
 		</div>
+		<!-- 新建工艺版本 -->
+		<div id="addVersionDiv" class="easyui-dialog" style="width: 400px; height: 350px; padding:10px 20px" closed="true" buttons="#addVersion-buttons">
+			<form id="addVersionfm" class="easyui-form" method="post" data-options="novalidate:true">
+				<div class="fitem">
+					<input type="hidden" id="hide_id" name="hide_id">
+				</div>
+				<div class="fitem">
+					<lable><span class="required">*</span>产品图号</lable>
+					<input class="easyui-textbox" name="fproduct_drawing_no_v" id="fproduct_drawing_no_v"  data-options="required:true,disabled:true"/>
+				</div>
+				<div class="fitem">
+					<lable><span class="required">*</span>产品名称</lable>
+					<input class="easyui-textbox" name="fproduct_name_v" id="fproduct_name_v"  data-options="required:true,disabled:true"/>
+				</div>
+				<div class="fitem">
+					<lable><span class="required">*</span>产品版本号</lable>
+					<input class="easyui-textbox" name="fproduct_version_v" id="fproduct_version_v"  data-options="required:true,disabled:true"/>
+				</div>
+				<div class="fitem">
+					<lable><span class="required">*</span>工艺规程编号</lable>
+					<input class="easyui-textbox" name="fwps_lib_name_v" id="fwps_lib_name_v"  data-options="required:true"/>
+				</div>
+				<div class="fitem">
+					<lable><span class="required">*</span>工艺规程版本号</lable>
+					<input class="easyui-textbox" name="fwps_lib_version_v" id="fwps_lib_version_v"  data-options="required:true"/>
+				</div>
+			</form>
+		</div>
+		<div id="addVersion-buttons">
+			<a href="javascript:saveVersion();" class="easyui-linkbutton" iconCls="icon-ok">保存</a>
+			<a href="javascript:closeDialog('addVersionDiv');" class="easyui-linkbutton" iconCls="icon-cancel" >取消</a>
+		</div>
 	    <div class="functiondiv">
 			<div>
 				<a href="javascript:addWps();" class="easyui-linkbutton" iconCls="icon-newadd">自建工艺</a>&nbsp;&nbsp;&nbsp;&nbsp;
 				<a href="javascript:editWps();" class="easyui-linkbutton" iconCls="icon-update">修改工艺</a>&nbsp;&nbsp;&nbsp;&nbsp;
 				<a href="javascript:deleteWps();" class="easyui-linkbutton" iconCls="icon-delete">删除工艺</a>&nbsp;&nbsp;&nbsp;&nbsp;
 				<a href="javascript:wpsDetails();" class="easyui-linkbutton" iconCls="icon-navigation">工艺规程详情</a>&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="javascript:addVersion();" class="easyui-linkbutton" iconCls="icon-navigation">新建版本</a>&nbsp;&nbsp;&nbsp;&nbsp;
 			</div>
 		</div>
 		<div id="load" style="width:100%;height:100%;"></div>

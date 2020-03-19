@@ -2318,4 +2318,54 @@ public class WpsController {
 		}
 		return data + "";
 	}
+	
+	@RequestMapping("/addVersion")
+	@ResponseBody
+	public String addVersion(HttpServletRequest request){
+		JSONObject obj = new JSONObject();
+		try{
+			String hide_id = request.getParameter("hide_id");
+			String fproduct_drawing_no_v = request.getParameter("fproduct_drawing_no_v");
+			String fproduct_name_v = request.getParameter("fproduct_name_v");
+			String fproduct_version_v = request.getParameter("fproduct_version_v");
+			String fwps_lib_version_v = request.getParameter("fwps_lib_version");
+			String fwps_lib_name_v = request.getParameter("fwps_lib_name_v");
+			Wps wps = new Wps();
+			wps.setFproduct_drawing_no(fproduct_drawing_no_v);
+			wps.setFproduct_name(fproduct_name_v);
+			wps.setFproduct_version(fproduct_version_v);
+			wps.setFwpsnum(fwps_lib_name_v);
+			wps.setFwps_lib_version(fwps_lib_version_v);
+			wpsService.addWps(wps);
+			List<Wps> employeeList = wpsService.getEmployee(hide_id);
+			for(Wps ewl:employeeList) {
+				String eid = String.valueOf(ewl.getFid());//eid为原先版本的工序id
+				ewl.setFwpslib_id(new BigInteger(String.valueOf(wps.getFid())));
+				wpsService.addEmployee(ewl);//ewl的id为新增后返回的id
+				List<Wps> stepList = wpsService.getStep(eid);
+				for(Wps spl:stepList) {
+					String sid = String.valueOf(spl.getFid());//sid为原先版本的工步id
+					spl.setFemployee_id(String.valueOf(ewl.getFid()));
+					wpsService.addStep(spl);
+					List<Wps> junctionList = wpsService.getJunction(sid);
+					for(Wps jtl:junctionList) {
+						jtl.setFstep_id(String.valueOf(spl.getFid()));
+						wpsService.addJunction(jtl);
+					}
+					List<Wps> detailList = wpsService.getDetail(sid);
+					for(Wps dil:detailList) {
+						dil.setFstep_id(String.valueOf(spl.getFid()));
+						wpsService.addJunction(dil);
+					}
+				}
+			}
+			obj.put("wpsId", wps.getFid());
+			obj.put("success", true);
+		}catch(Exception e){
+			e.printStackTrace();
+			obj.put("success", false);
+			obj.put("errorMsg", e.getMessage());
+		}
+		return obj.toString();
+	}
 }

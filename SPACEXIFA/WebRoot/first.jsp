@@ -28,6 +28,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script type="text/javascript" src="resources/js/swfobject.js"></script>
 	<script type="text/javascript" src="resources/js/web_socket.js"></script>
 	<script type="text/javascript" src="resources/js/first.js"></script>
+	<script type="text/javascript" src="resources/js/tableExcel.js"></script>
 	<style type="text/css">
 	.WSP{
 	width:48%;
