@@ -489,7 +489,7 @@
 		WHERE e.fid=#{fid};
 	</delete>
 	
-	<insert id="addStep" parameterType="Wps">
+	<insert id="addStep" parameterType="Wps" useGeneratedKeys="true" keyProperty="fid">
 		INSERT INTO tb_step (femployee_id, fstep_number) VALUES 
 		(#{femployee_id}, #{fstep_number})
 	</insert>
@@ -552,4 +552,16 @@
 	<select id="getWpsversionCount" parameterType="String" resultType="java.lang.Integer">
 		select count(*) from tb_wps_library where fwps_lib_name=#{wln} and fwps_lib_version=#{wpsversion}
 	</select>
+	
+	<insert id="addWps1" parameterType="Wps" useGeneratedKeys="true" keyProperty="fid">
+		INSERT INTO tb_wps_library (fproduct_drawing_no, fproduct_name,fproduct_version,fwps_lib_name,fwps_lib_version,flag,fstatus) SELECT #{fproduct_drawing_no},#{fproduct_name},#{fproduct_version},#{fwpsnum},#{fwps_lib_version},#{flag},0 from DUAL where not exists(select fproduct_drawing_no from tb_wps_library where fproduct_drawing_no=#{fproduct_drawing_no} and fwps_lib_version=#{fwps_lib_version})
+	</insert>
+	
+	<insert id="addStep1" parameterType="Wps" useGeneratedKeys="true" keyProperty="macid">
+		INSERT INTO tb_step (femployee_id, fstep_number) SELECT #{femployee_id},#{fstep_number} from DUAL where not exists(select fstep_number from tb_step where femployee_id=#{femployee_id} and fstep_number=#{fstep_number})
+	</insert>
+	
+	<insert id="addEmployee1" parameterType="Wps" useGeneratedKeys="true" keyProperty="insid">
+		INSERT INTO tb_employee (femployee_id, femployee_version,fwps_lib_id) SELECT #{femployee_id}, #{femployee_version}, #{fwpslib_id} from DUAL where not exists(select femployee_id from tb_employee where femployee_version=#{femployee_version} and femployee_id=#{femployee_id})
+	</insert>
 </mapper>

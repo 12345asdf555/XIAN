@@ -91,4 +91,7 @@ public interface WpsMapper {
 	Wps gettrackcard(BigInteger fid);
 	int getProcudtCount(@Param("pdn")String pdn, @Param("procudt")String procudt);
 	int getWpsversionCount(@Param("wln")String wln, @Param("wpsversion")String wpsversion);
+	void addEmployee1(Wps wps);
+	void addStep1(Wps wps);
+	void addWps1(Wps wps);
 }

@@ -622,6 +622,81 @@ public class ImportExcelController {
 	}
 	
 	/**
+	 * 导入焊接工艺
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping("/importweldWps")
+	@ResponseBody
+	public String importweldWps(HttpServletRequest request,
+		HttpServletResponse response){
+		UploadUtil u = new UploadUtil();
+		JSONObject obj = new JSONObject();
+		try{
+			String path = u.uploadFile(request, response);
+			List<Wps> we = xlsxwdmsWps(path);
+			//删除已保存的excel文件
+			File file  = new File(path);
+			file.delete();
+			String wpsId = "";
+			String femployee_id = "";
+			String fstep_id = "";
+			String mm = "";
+			String nn = "";
+			for(Wps w:we){
+				wpss.addWps1(w);
+				if(w.getFid()!= 0) {
+					wpsId = String.valueOf(w.getFid());
+					w.setFwpslib_id(new BigInteger(wpsId));
+					wpss.addEmployee1(w);
+					femployee_id =String.valueOf(w.getInsid());
+					if(femployee_id.equals("0")) {
+						obj.put("success",false);
+						obj.put("msg","导入失败，请检查您的文件格式以及数据是否符合要求！");
+					}else {
+						w.setFemployee_id(femployee_id);
+						wpss.addStep1(w);
+						fstep_id =String.valueOf(w.getMacid());
+						if(fstep_id.equals("0")) {
+						obj.put("success",false);
+						}else {
+							w.setFstep_id(fstep_id);
+							wpss.addJunction(w);
+							wpss.addDetail(w);
+						}
+					}
+				}else {
+					w.setFwpslib_id(new BigInteger(wpsId));
+					wpss.addEmployee1(w);
+					mm = String.valueOf(w.getInsid());
+					if(mm.equals("0") || mm.equals("null")) {
+						w.setFemployee_id(femployee_id);
+					}else {
+						w.setFemployee_id(mm);
+					}
+					wpss.addStep1(w);
+					nn = String.valueOf(w.getMacid());
+					if(nn.equals("0") || nn.equals("null")) {
+						w.setFstep_id(fstep_id);
+					}else {
+						w.setFstep_id(nn);
+					}
+					wpss.addJunction(w);
+					wpss.addDetail(w);
+				}
+			};
+			obj.put("success",true);
+			obj.put("msg","导入成功！");
+		}catch(Exception e){
+			e.printStackTrace();
+			obj.put("success",false);
+			obj.put("msg","导入失败，请检查您的文件格式以及数据是否符合要求！");
+		}
+		return obj.toString();
+	}
+	
+	/**
 	 * 导入WeldingMaintenance表数据
 	 * @param path
 	 * @return
@@ -1183,6 +1258,151 @@ public class ImportExcelController {
 		return wps;
 	}
 	
+	/**
+	 * 导入WDMSwps表数据
+	 * @param path
+	 * @return
+	 * @throws IOException
+	 * @throws InvalidFormatException
+	 */
+	public static List<Wps> xlsxwdmsWps(String path) throws IOException, InvalidFormatException{
+		List<Wps> wps = new ArrayList<Wps>();
+		InputStream stream = new FileInputStream(path);
+		Workbook workbook = create(stream);
+		Sheet sheet = workbook.getSheetAt(0);
+		
+		int rowstart = sheet.getFirstRowNum()+1;
+		int rowEnd = sheet.getLastRowNum();
+	    
+		for(int i=rowstart;i<=rowEnd;i++){
+			Row row = sheet.getRow(i);
+			if(null == row){
+				continue;
+			}
+			int cellStart = row.getFirstCellNum();
+			int cellEnd = row.getLastCellNum();
+			Wps p = new Wps();
+			for(int k = cellStart; k<= cellEnd;k++){
+				Cell cell = row.getCell(k);
+				if(null == cell){
+					continue;
+				}
+				
+				String cellValue = "";
+				
+				switch (cell.getCellType()){
+				case HSSFCell.CELL_TYPE_NUMERIC://数字
+					if (HSSFDateUtil.isCellDateFormatted(cell)) {// 处理日期格式、时间格式  
+		                SimpleDateFormat sdf = null;  
+		                if (cell.getCellStyle().getDataFormat() == HSSFDataFormat  
+		                        .getBuiltinFormat("h:mm")) {  
+		                    sdf = new SimpleDateFormat("HH:mm");  
+		                } else {// 日期  
+		                    sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+		                }  
+		                Date date = cell.getDateCellValue();  
+		                cellValue = sdf.format(date);  
+		            } else if (cell.getCellStyle().getDataFormat() == 58) {  
+		                // 处理自定义日期格式：m月d日(通过判断单元格的格式id解决，id的值是58)  
+		                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+		                double value = cell.getNumericCellValue();  
+		                Date date = org.apache.poi.ss.usermodel.DateUtil  
+		                        .getJavaDate(value);  
+		                cellValue = sdf.format(date);  
+		            } else {
+		            	 //处理数字过长时出现x.xxxE9
+		            	 BigDecimal big=new BigDecimal(cell.getNumericCellValue());  
+		            	 cellValue = big.toString();
+                   }if(k == 7){
+						p.setFemployee_id(cellValue);//工序号
+						break;
+					}
+                   else if(k == 10){
+						p.setFstep_number(cellValue);//工步号
+						break;
+					}
+					break;
+				case HSSFCell.CELL_TYPE_STRING://字符串
+					cellValue = cell.getStringCellValue();
+					if(k == 0){
+						p.setFproduct_drawing_no(cellValue);//产品图号
+						break;
+					}else if(k == 1){
+						p.setFproduct_name(cellValue);//产品名称
+						break;
+					}
+					else if(k == 2){
+						p.setFproduct_version(cellValue);//产品版本号
+						break;
+ 					}else if(k == 3){
+						p.setFwpsnum(cellValue);//工艺规程编号
+						break;
+ 					}else if(k == 4){
+						p.setFwps_lib_version(cellValue);//工艺规程版本号
+						break;
+ 					}else if(k == 5){
+						p.setFlag(0);//工艺来源
+						break;
+ 					}else if(k == 6){
+						p.setFstatus(1);//审核状态
+						break;
+ 					}else if(k == 7){
+						p.setFemployee_id(cellValue);//工序号
+						break;
+ 					}else if(k == 8){
+						p.setFemployee_version(cellValue);//工序版本
+						break;
+ 					}else if(k == 9){
+						p.setF001(cellValue);//工序名称
+						break;
+ 					}else if(k == 11){
+						p.setF002(cellValue);//工步名称
+						break;
+ 					}else if(k == 12){
+						p.setFjunction(cellValue);//焊缝编号
+						break;
+ 					}else if(k == 13){
+						p.setF003(cellValue);//焊接部位
+						break;
+ 					}else if(k == 14){
+						p.setFquantitative_project(cellValue);//量化项目
+						break;
+ 					}else if(k == 15){
+						p.setFrequired_value(cellValue);//要求值
+						break;
+ 					}else if(k == 16){
+						p.setFupper_deviation(cellValue);//上偏差
+						break;
+ 					}else if(k == 17){
+						p.setFlower_deviation(cellValue);//下偏差
+						break;
+ 					}else if(k == 18){
+						p.setFunit_of_measurement(cellValue);//计量单位
+						break;
+ 					}
+					break;
+				case HSSFCell.CELL_TYPE_BOOLEAN: // Boolean
+					cellValue = String.valueOf(cell.getBooleanCellValue());
+					break;
+				case HSSFCell.CELL_TYPE_FORMULA: // 公式
+					cellValue = String.valueOf(cell.getCellFormula());
+					break;
+				case HSSFCell.CELL_TYPE_BLANK: // 空值
+					cellValue = "";
+					break;
+				case HSSFCell.CELL_TYPE_ERROR: // 故障
+					cellValue = "";
+					break;
+				default:
+					cellValue = cell.toString().trim();
+					break;
+				}
+			}
+			wps.add(p);
+		}
+		
+		return wps;
+	}
 	
 	/**
 	 * 导入Weldedjunction表数据

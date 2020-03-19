@@ -209,6 +209,49 @@ function closeDlg(){
 	}
 }
 
+//打开文件导入dialog
+function importclick(){
+	$("#importdiv").dialog("open").dialog("setTitle","从excel导入数据");
+}
+
+//确认导入
+function importWpsExcel(){
+	var file = $("#file").val();
+	if(file == null || file == ""){
+		$.messager.alert("提示", "请选择要上传的文件！");
+		return false;
+	}else{
+		document.getElementById("load").style.display="block";
+		var sh = '<div id="show" style="align="center""><img src="resources/images/load.gif"/>正在加载，请稍等...</div>';
+		$("#body").append(sh);
+		document.getElementById("show").style.display="block";
+		$('#importfm').form('submit', {
+			url : "import/importweldWps",
+			success : function(result) {
+				if(result){
+					var result = eval('(' + result + ')');
+		    		document.getElementById("load").style.display ='none';
+		    		document.getElementById("show").style.display ='none';
+					if (!result.success) {
+						$.messager.show( {
+							title : 'Error',
+							msg : result.msg
+						});
+					} else {
+						$('#importdiv').dialog('close');
+						alert("导入成功");
+					}
+				}
+				
+			},  
+		    error : function(errorMsg) {  
+		        alert("数据请求失败，请联系系统管理员!");  
+		    } 
+		});
+		
+	}
+}
+
 //监听窗口大小变化
 window.onresize = function() {
 	setTimeout(domresize(), 500);

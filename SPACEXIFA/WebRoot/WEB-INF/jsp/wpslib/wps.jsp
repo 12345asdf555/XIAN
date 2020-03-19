@@ -243,7 +243,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<a href="javascript:deleteWps();" class="easyui-linkbutton" iconCls="icon-delete">删除工艺</a>&nbsp;&nbsp;&nbsp;&nbsp;
 				<a href="javascript:wpsDetails();" class="easyui-linkbutton" iconCls="icon-navigation">工艺规程详情</a>&nbsp;&nbsp;&nbsp;&nbsp;
 				<a href="javascript:addVersion();" class="easyui-linkbutton" iconCls="icon-navigation">新建版本</a>&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="javascript:importclick();" class="easyui-linkbutton" iconCls="icon-newadd"> 工艺导入</a>&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="javascript:exportclick();" class="easyui-linkbutton" iconCls="icon-newadd"> 工艺导出</a>&nbsp;&nbsp;&nbsp;&nbsp;
 			</div>
+		</div>
+		<div id="importdiv" class="easyui-dialog" style="width:300px; height:200px;" closed="true">
+			<form id="importfm" method="post" class="easyui-form" data-options="novalidate:true" enctype="multipart/form-data"> 
+				<div>
+					<span><input type="file" name="file" id="file"></span>
+					<input type="button" value="上传" onclick="importWpsExcel()" class="upButton"/>
+				</div>
+			</form>
 		</div>
 		<div id="load" style="width:100%;height:100%;"></div>
 	</div>

@@ -425,4 +425,31 @@ public interface WpsService {
 	 * @return
 	 */
 	int getWpsversionCount(String wln, String wpsversion);
+	
+	/**
+	 * 导入工序判断
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年2月6日下午5:10:00
+	 * @param wps
+	 */
+	void addEmployee1(Wps wps);
+	
+	/**
+	 * 导入工步判断
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年2月6日下午5:10:00
+	 * @param wps
+	 */
+	void addStep1(Wps wps);
+	
+	/**
+	 * 导入工艺台账
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年2月5日下午7:38:04
+	 * @param wps
+	 */
+	void addWps1(Wps wps);
 }

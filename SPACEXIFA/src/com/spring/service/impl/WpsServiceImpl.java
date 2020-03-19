@@ -486,4 +486,22 @@ public class WpsServiceImpl implements WpsService{
 		// TODO Auto-generated method stub
 		return mapper.getWpsversionCount(wln, wpsversion);
 	}
+	
+	@Override
+	public void addWps1(Wps wps) {
+		// TODO Auto-generated method stub
+		mapper.addWps1(wps);
+	}
+	
+	@Override
+	public void addStep1(Wps wps) {
+		// TODO Auto-generated method stub
+		mapper.addStep1(wps);
+	}
+	
+	@Override
+	public void addEmployee1(Wps wps) {
+		// TODO Auto-generated method stub
+		mapper.addEmployee1(wps);
+	}
 }
