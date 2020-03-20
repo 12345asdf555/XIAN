@@ -682,7 +682,7 @@ function addWps() {
 //	}]);
 }
 
-function editWps() {
+function editWps(addVersionRow) {
 	flag = 2;
 	wpsId = "";
 	$('#addOrUpdatefm').form('clear');
@@ -691,6 +691,9 @@ function editWps() {
 	$("#fjunctionTable").datagrid("loadData", { total: 0, rows: [] });
 	$("#wpsDetailTable").datagrid("loadData", { total: 0, rows: [] });
 	var row = $('#wpslibTable').datagrid('getSelected'); 
+	if(addVersionRow!=""){
+		row = addVersionRow;
+	}
 	if (row) {
 		if(row.flag == 1){
 			alert("该参数从MES获取，无法进行修改删除操作！！！");
@@ -811,21 +814,26 @@ function addVersion() {
 }
 
 function saveVersion(){
+	var fwps_lib_version_v = $("#fwps_lib_version_v").textbox('getValue');
+	var fwps_lib_name_v = $("#fwps_lib_name_v").textbox('getValue');
+	var fproduct_drawing_no_v = $("#fproduct_drawing_no_v").textbox('getValue');
+	var fproduct_name_v = $("#fproduct_name_v").textbox('getValue');
+	var fproduct_version_v = $("#fproduct_version_v").textbox('getValue');
 	$.ajax({
 		type : "post",
 		async : false,
-		url : "wps/wpsversionvalidate?wpsversion="+$("#fwps_lib_version_v").textbox('getValue')+"&wln="+$("#fwps_lib_name_v").textbox('getValue')+"&pdn="+$("#fproduct_drawing_no_v").textbox('getValue')+"&pv="+$("#fproduct_name_v").textbox('getValue'),
+		url : "wps/wpsversionvalidate?wpsversion="+fwps_lib_version_v+"&wln="+fwps_lib_name_v+"&pdn="+fproduct_drawing_no_v+"&pv="+fproduct_name_v,
 		dataType : "json",
 		data : {},
 		success : function(result) {
 			if (result) {
-				if (!result.success) {
+				if (result.success) {
 					alert("该图号版本下工艺规程的版本已经存在");
 					return;
 				} else {
 					var messager = "";
 					$('#addVersionfm').form('submit', {
-						url : url,
+						url : url+"&fwps_lib_version_v="+fwps_lib_version_v+"&fwps_lib_name_v="+fwps_lib_name_v+"&fproduct_drawing_no_v="+fproduct_drawing_no_v+"&fproduct_name_v="+fproduct_name_v+"&fproduct_version_v="+fproduct_version_v,
 						onSubmit : function() {
 							return $(this).form('enableValidation').form('validate');
 						},
@@ -838,7 +846,16 @@ function saveVersion(){
 										msg : result.errorMsg
 									});
 								} else {
-									alert("保存成功");
+									if(result.wpsId!=""){
+										wpsId = result.wpsId;
+									}
+									$('#wpslibTable').datagrid('reload');
+									$('#addVersionDiv').window('close');
+									var addVersionRow = result.objRow;
+									var con=confirm("保存成功,是否前往修改相关参数？")
+									if (con == true) {
+										editWps(addVersionRow);
+									}
 								}
 							}
 

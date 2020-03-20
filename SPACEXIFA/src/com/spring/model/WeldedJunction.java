@@ -76,6 +76,9 @@ public class WeldedJunction {
 	private String fprefix_number;
 	private String fproduct_number;
 	private String fback;
+	private String fproduct_drawing_no;
+	private String fproduct_name;
+	private String fproduct_version;
 	
 	public BigInteger getInsfid() {
 		return insfid;
@@ -454,6 +457,24 @@ public class WeldedJunction {
 	}
 	public void setFback(String fback) {
 		this.fback = fback;
+	}
+	public String getFproduct_drawing_no() {
+		return fproduct_drawing_no;
+	}
+	public void setFproduct_drawing_no(String fproduct_drawing_no) {
+		this.fproduct_drawing_no = fproduct_drawing_no;
+	}
+	public String getFproduct_name() {
+		return fproduct_name;
+	}
+	public void setFproduct_name(String fproduct_name) {
+		this.fproduct_name = fproduct_name;
+	}
+	public String getFproduct_version() {
+		return fproduct_version;
+	}
+	public void setFproduct_version(String fproduct_version) {
+		this.fproduct_version = fproduct_version;
 	}
 	
 }

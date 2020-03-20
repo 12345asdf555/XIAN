@@ -239,7 +239,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    <div class="functiondiv">
 			<div>
 				<a href="javascript:addWps();" class="easyui-linkbutton" iconCls="icon-newadd">自建工艺</a>&nbsp;&nbsp;&nbsp;&nbsp;
-				<a href="javascript:editWps();" class="easyui-linkbutton" iconCls="icon-update">修改工艺</a>&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="javascript:editWps('');" class="easyui-linkbutton" iconCls="icon-update">修改工艺</a>&nbsp;&nbsp;&nbsp;&nbsp;
 				<a href="javascript:deleteWps();" class="easyui-linkbutton" iconCls="icon-delete">删除工艺</a>&nbsp;&nbsp;&nbsp;&nbsp;
 				<a href="javascript:wpsDetails();" class="easyui-linkbutton" iconCls="icon-navigation">工艺规程详情</a>&nbsp;&nbsp;&nbsp;&nbsp;
 				<a href="javascript:addVersion();" class="easyui-linkbutton" iconCls="icon-navigation">新建版本</a>&nbsp;&nbsp;&nbsp;&nbsp;

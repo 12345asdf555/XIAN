@@ -2324,11 +2324,12 @@ public class WpsController {
 	public String addVersion(HttpServletRequest request){
 		JSONObject obj = new JSONObject();
 		try{
-			String hide_id = request.getParameter("hide_id");
+			JSONObject json = new JSONObject();
+			String hide_id = request.getParameter("fid");
 			String fproduct_drawing_no_v = request.getParameter("fproduct_drawing_no_v");
 			String fproduct_name_v = request.getParameter("fproduct_name_v");
 			String fproduct_version_v = request.getParameter("fproduct_version_v");
-			String fwps_lib_version_v = request.getParameter("fwps_lib_version");
+			String fwps_lib_version_v = request.getParameter("fwps_lib_version_v");
 			String fwps_lib_name_v = request.getParameter("fwps_lib_name_v");
 			Wps wps = new Wps();
 			wps.setFproduct_drawing_no(fproduct_drawing_no_v);
@@ -2337,6 +2338,18 @@ public class WpsController {
 			wps.setFwpsnum(fwps_lib_name_v);
 			wps.setFwps_lib_version(fwps_lib_version_v);
 			wpsService.addWps(wps);
+			{
+				json.put("fid", wps.getFid());
+				json.put("fproduct_drawing_no", wps.getFproduct_drawing_no());
+				json.put("fproduct_name", wps.getFproduct_name());
+				json.put("fproduct_version", wps.getFproduct_version());
+				json.put("fwps_lib_name", wps.getFwpsnum());
+				json.put("fwps_lib_version", wps.getFwps_lib_version());
+				json.put("flag", 0);
+				json.put("flag_name", "自建");
+				json.put("fstatus", 0);
+				json.put("fback", wps.getFback());
+			}
 			List<Wps> employeeList = wpsService.getEmployee(hide_id);
 			for(Wps ewl:employeeList) {
 				String eid = String.valueOf(ewl.getFid());//eid为原先版本的工序id
@@ -2355,13 +2368,15 @@ public class WpsController {
 					List<Wps> detailList = wpsService.getDetail(sid);
 					for(Wps dil:detailList) {
 						dil.setFstep_id(String.valueOf(spl.getFid()));
-						wpsService.addJunction(dil);
+						wpsService.addDetail(dil);
 					}
 				}
 			}
 			obj.put("wpsId", wps.getFid());
+			obj.put("objRow", json);
 			obj.put("success", true);
 		}catch(Exception e){
+			obj.put("wpsId", "");
 			e.printStackTrace();
 			obj.put("success", false);
 			obj.put("errorMsg", e.getMessage());

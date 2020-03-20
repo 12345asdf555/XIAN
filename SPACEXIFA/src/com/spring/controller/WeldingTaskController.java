@@ -1535,6 +1535,11 @@ public class WeldingTaskController {
 				json.put("fwps_lib_version", wjm.getFwps_lib_version());
 				json.put("fstatus", wjm.getFstatus());
 				json.put("machineid",wjm.getMachid());
+				json.put("fwps_lib_id", wjm.getFwpslib_id());
+				json.put("fproduct_drawing_no", wjm.getFproduct_drawing_no());
+				json.put("fproduct_name", wjm.getFproduct_name());
+				json.put("fproduct_version", wjm.getFproduct_version());
+				json.put("flag", wjm.getFlag());
 				if(wjm.getFstatus()==null){
 					json.put("fstatus", "2");
 				}

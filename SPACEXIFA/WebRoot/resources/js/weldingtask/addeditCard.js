@@ -82,7 +82,7 @@ function editWps() {
 					$("#fprefix_number").textbox('setValue', result.row[0].fprefix_number); 
 					$("#fproduct_number").numberbox('setValue', result.row[0].fproduct_number); 
 					$("#init_number").numberbox('setValue', result.row[0].finit_number); 
-					$('#fwps_lib_id').combobox('select', result.row[0].fwps_lib_id);
+					$('#fwps_lib_id').combogrid('setValue', result.row[0].fwps_lib_id);
 				}
 			},
 			error : function(errorMsg) {
@@ -107,7 +107,7 @@ function editWps() {
 function saveCard() {
 	var cardFlag = $('#flag').combobox('getValue');
 	var fitemId = $('#fitemId').combobox('getValue');
-	var fwps_lib_id = $('#fwps_lib_id').combobox('getValue');
+	var fwps_lib_id = $('#fwps_lib_id').combogrid('getValue');
 	var messager = "";
 	var url2 = "";
 	if (flag == 1) {
@@ -173,27 +173,101 @@ function InsframeworkCombobox(){
 
 //工艺规程
 function getWpsCombobox() {
-	$.ajax({
-		type : "post",
-		async : false,
-		url : "wps/getWpsCombobox",
-		data : {},
-		dataType : "json", //返回数据形式为json  
-		success : function(result) {
-			if (result) {
-				var optionStr = '';
-				for (var i = 0; i < result.ary.length; i++) {
-					optionStr += "<option value=\"" + result.ary[i].id + "\" >"
-						+ result.ary[i].name + "</option>";
-				}
-				$("#fwps_lib_id").html(optionStr);
-			}
-		},
-		error : function(errorMsg) {
-			alert("数据请求失败，请联系系统管理员!");
-		}
+	$("#fwps_lib_id").combogrid( {
+//		height : $("#body").height(),
+//		width : $("#body").width(),
+		panelWidth:1000,
+		idField : 'fid',
+		textField:'fwps_lib_name',
+		pagination: true,
+		pageSize : 10,
+		pageList : [ 10, 20, 30, 40, 50 ],
+		url : "wps/getWpsList?search=fid NOT IN (SELECT DISTINCT fwps_lib_id FROM tb_product_number WHERE fwps_lib_id IS NOT NULL) AND fstatus=1",
+//		singleSelect : true,
+		rownumbers : true,
+		showPageList : false,
+		fitColumns : true,
+		columns : [ [ {
+			field : 'fid',
+			title : '序号',
+//			width : 30,
+			halign : "center",
+			align : "left",
+			hidden:true
+		},{
+			field : 'fproduct_drawing_no',
+			title : '产品图号',
+			width : 200,
+			halign : "center",
+			align : "left"
+		}, {
+			field : 'fproduct_name',
+			title : '产品名称',
+			width : 200,
+			halign : "center",
+			align : "left"
+		}, {
+			field : 'fproduct_version',
+			title : '产品版本号',
+			width : 200,
+			halign : "center",
+			align : "left"
+		}, {
+			field : 'fwps_lib_name',
+			title : '工艺规程编号',
+			width : 200,
+			halign : "center",
+			align : "left"
+		}, {
+			field : 'fwps_lib_version',
+			title : '工艺规程版本号',
+			width : 200,
+			halign : "center",
+			align : "left"
+		}, {
+			field : 'flag',
+			title : '工艺来源标志',
+//			width : 100,
+			halign : "center",
+			align : "left",
+			hidden : true
+		}, {
+			field : 'flag_name',
+			title : '工艺来源',
+			width : 80,
+			halign : "center",
+			align : "center"
+		}] ],
+		rowStyler: function(index,row){
+            if ((index % 2)!=0){
+            	//处理行代背景色后无法选中
+            	var color=new Object();
+                return color;
+            }
+        },
 	});
-	$("#fwps_lib_id").combobox();
+	return;
+//	$.ajax({
+//		type : "post",
+//		async : false,
+//		url : "wps/getWpsCombobox",
+//		data : {},
+//		dataType : "json", //返回数据形式为json  
+//		success : function(result) {
+//			if (result) {
+//				var optionStr = '';
+//				for (var i = 0; i < result.ary.length; i++) {
+//					optionStr += "<option value=\"" + result.ary[i].id + "\" >"
+//						+ result.ary[i].name + "</option>";
+//				}
+//				$("#fwps_lib_id").html(optionStr);
+//			}
+//		},
+//		error : function(errorMsg) {
+//			alert("数据请求失败，请联系系统管理员!");
+//		}
+//	});
+//	$("#fwps_lib_id").combobox();
 }
 
 function saveReview(){

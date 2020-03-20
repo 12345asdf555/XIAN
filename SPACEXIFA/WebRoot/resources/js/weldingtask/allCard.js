@@ -2,6 +2,7 @@
  * 
  */
 $(function(){
+	initTables();
 	cardDatagrid();
 })
 
@@ -202,6 +203,24 @@ function openProductDetails(){
 				halign : "center",
 				align : "left"
 			}, {
+				field : 'fproduct_drawing_no',
+				title : '产品图号',
+				width : 100,
+				halign : "center",
+				align : "left"
+			}, {
+				field : 'fproduct_name',
+				title : '产品名称',
+				width : 100,
+				halign : "center",
+				align : "left"
+			}, {
+				field : 'fproduct_version',
+				title : '产品版本号',
+				width : 100,
+				halign : "center",
+				align : "left"
+			}, {
 				field : 'fwps_lib_name',
 				title : '工艺规程编号',
 				width : 100,
@@ -213,6 +232,20 @@ function openProductDetails(){
 				width : 100,
 				halign : "center",
 				align : "left"
+			}, {
+				field : 'fwps_lib_id',
+				title : '工艺id',
+//			width : 30,
+				halign : "center",
+				align : "left",
+				hidden:true
+			}, {
+				field : 'flag',
+				title : '自建id',
+//			width : 30,
+				halign : "center",
+				align : "left",
+				hidden:true
 			}, {
 				field : 'fstatus',
 				title : '状态id',
@@ -258,6 +291,23 @@ function openProductDetails(){
 				if($("#finish").length!=0){
 					$("a[id='finish']").linkbutton({text:'已完成',plain:true,iconCls:'icon-finish'});
 				}
+			},
+			onDblClickRow: function(rowIndex, rowData){
+				$('#wpsDetailsForm').form('clear');
+				$("#femployeeTable").datagrid("loadData", { total: 0, rows: [] });
+				$("#fstepTable").datagrid("loadData", { total: 0, rows: [] });
+				$("#fjunctionTable").datagrid("loadData", { total: 0, rows: [] });
+				$("#wpsDetailTable").datagrid("loadData", { total: 0, rows: [] });
+				$('#wpsDetailsDialog').window({
+					title : "工艺详情",
+					modal : true
+				});
+				$('#wpsDetailsForm').form('load', rowData);
+				$('#wps_flag').combobox('select', rowData.flag);
+				$('#wpsDetailsDialog').window('open');
+				employeeUrl = "wps/getInfo?search=" + rowData.fwps_lib_id +"&valueFlag=0";
+				$('#femployeeTable').datagrid("options").url=employeeUrl;
+				$('#femployeeTable').datagrid('reload');
 			}
 		});
 	}
@@ -331,27 +381,100 @@ function closeDlg(){
 function changeWps(){
 	var row = $('#cardTable').datagrid('getSelected'); 
 	if (row) {
-		$.ajax({
-			type : "post",
-			async : false,
-			url : "wps/getWpsCombobox",
-			data : {},
-			dataType : "json", //返回数据形式为json  
-			success : function(result) {
-				if (result) {
-					var optionStr = '';
-					for (var i = 0; i < result.ary.length; i++) {
-						optionStr += "<option value=\"" + result.ary[i].id + "\" >"
-							+ result.ary[i].name + "</option>";
-					}
-					$("#fwps_lib_id_ch").html(optionStr);
-				}
-			},
-			error : function(errorMsg) {
-				alert("数据请求失败，请联系系统管理员!");
-			}
+		$("#fwps_lib_id_ch").combogrid( {
+//			height : $("#body").height(),
+//			width : $("#body").width(),
+			panelWidth:1000,
+			idField : 'fid',
+			textField:'fwps_lib_name',
+			pagination: true,
+			pageSize : 10,
+			pageList : [ 10, 20, 30, 40, 50 ],
+			url : "wps/getWpsList?search=fid NOT IN (SELECT DISTINCT fwps_lib_id FROM tb_product_number WHERE fwps_lib_id IS NOT NULL) AND fstatus=1",
+//			singleSelect : true,
+			rownumbers : true,
+			showPageList : false,
+			fitColumns : true,
+			columns : [ [ {
+				field : 'fid',
+				title : '序号',
+//				width : 30,
+				halign : "center",
+				align : "left",
+				hidden:true
+			},{
+				field : 'fproduct_drawing_no',
+				title : '产品图号',
+				width : 200,
+				halign : "center",
+				align : "left"
+			}, {
+				field : 'fproduct_name',
+				title : '产品名称',
+				width : 200,
+				halign : "center",
+				align : "left"
+			}, {
+				field : 'fproduct_version',
+				title : '产品版本号',
+				width : 200,
+				halign : "center",
+				align : "left"
+			}, {
+				field : 'fwps_lib_name',
+				title : '工艺规程编号',
+				width : 200,
+				halign : "center",
+				align : "left"
+			}, {
+				field : 'fwps_lib_version',
+				title : '工艺规程版本号',
+				width : 200,
+				halign : "center",
+				align : "left"
+			}, {
+				field : 'flag',
+				title : '工艺来源标志',
+//				width : 100,
+				halign : "center",
+				align : "left",
+				hidden : true
+			}, {
+				field : 'flag_name',
+				title : '工艺来源',
+				width : 80,
+				halign : "center",
+				align : "center"
+			}] ],
+			rowStyler: function(index,row){
+	            if ((index % 2)!=0){
+	            	//处理行代背景色后无法选中
+	            	var color=new Object();
+	                return color;
+	            }
+	        },
 		});
-		$("#fwps_lib_id_ch").combobox();
+//		$.ajax({
+//			type : "post",
+//			async : false,
+//			url : "wps/getWpsCombobox",
+//			data : {},
+//			dataType : "json", //返回数据形式为json  
+//			success : function(result) {
+//				if (result) {
+//					var optionStr = '';
+//					for (var i = 0; i < result.ary.length; i++) {
+//						optionStr += "<option value=\"" + result.ary[i].id + "\" >"
+//							+ result.ary[i].name + "</option>";
+//					}
+//					$("#fwps_lib_id_ch").html(optionStr);
+//				}
+//			},
+//			error : function(errorMsg) {
+//				alert("数据请求失败，请联系系统管理员!");
+//			}
+//		});
+//		$("#fwps_lib_id_ch").combobox();
 		$('#changeWpsDiv').window({
 			title : "临时切换工艺",
 			modal : true
@@ -362,7 +485,7 @@ function changeWps(){
 }
 
 function saveChange(){
-	var fwps_lib_id_ch = $('#fwps_lib_id_ch').combobox('getValue');
+	var fwps_lib_id_ch = $('#fwps_lib_id_ch').combogrid('getValue');
 	$.ajax({
 		type : "post",
 		async : false,
@@ -445,6 +568,263 @@ function historyDetails(){
 		modal : true
 	});
 	$('#historyDetailsDlg').window('open');
+}
+
+var employeeUrl = "/",stepUrl = "/",junctionUrl = "/",detailUrl = "/";
+function initTables(){
+	$("#femployeeTable").datagrid( {
+		fitColumns : true,
+		height : $("#wpsDetailsDialog").height()*0.48,
+		width : $("#wpsDetailsDialog").width()*0.64*0.33,
+		idField : 'fid',
+//		pageSize : 10,
+//		pageList : [ 10, 20, 30, 40, 50 ],
+		url : employeeUrl,
+		singleSelect : true,
+		rownumbers : true,
+//		showPageList : false,
+		nowrap : false,
+		columns : [ [ {
+			field : 'fid',
+			title : '序号',
+//			width : 30,
+			halign : "center",
+			align : "left",
+			hidden:true
+		}, {
+			field : 'femployee_id',
+			title : '工序号',
+			width : 100,
+//			halign : "center",
+			align : "center",
+			editor:'text'
+		}, {
+			field : 'femployee_version',
+			title : '工序版本',
+			width : 100,
+//			halign : "center",
+			align : "center",
+			editor:'text'
+		}] ],
+//		pagination : true,
+		rowStyler: function(index,row){
+            if ((index % 2)!=0){
+            	//处理行代背景色后无法选中
+            	var color=new Object();
+                return color;
+            }
+        },
+		onLoadSuccess: function(data){
+			if(data.rows.length!=0){
+				$('#femployeeTable').datagrid('selectRow', 0);
+			}
+		},
+		onSelect: function(rowIndex, rowData){
+			if(rowData.fid){
+				employeeId = rowData.fid;
+			}else{
+				employeeId = "";
+			}
+			stepUrl = "wps/getInfo?search=" + rowData.fid +"&valueFlag=1";
+			$('#fstepTable').datagrid("options").url=stepUrl;
+			$('#fstepTable').datagrid('reload');
+		},
+		onDblClickCell: function(index,field,value){
+			if (endEditing(0)){
+//				$('#femployeeTable').datagrid('selectRow', index)
+//						.datagrid('editCell', {index:index,field:field});
+				$(this).datagrid('beginEdit', index);
+				var ed = $(this).datagrid('getEditor', {index:index,field:field});
+				$(ed.target).focus();
+				editIndex = index;
+			}
+		}
+//	    onAfterEdit: onAfterEdit
+	});
+	
+	$("#fstepTable").datagrid( {
+		height : $("#wpsDetailsDialog").height()*0.48,
+		width : $("#wpsDetailsDialog").width()*0.64*0.33,
+		idField : 'fid',
+//		pageSize : 10,
+//		pageList : [ 10, 20, 30, 40, 50 ],
+		url : stepUrl,
+		singleSelect : true,
+		rownumbers : true,
+//		showPageList : false,
+		fitColumns : true,
+		columns : [ [ {
+			field : 'fid',
+			title : '序号',
+//			width : 30,
+			halign : "center",
+			align : "left",
+			hidden:true
+		}, {
+			field : 'fstep_number',
+			title : '工步号',
+			width : 100,
+			halign : "center",
+			align : "left",
+			editor:'text'
+		}] ],
+//		pagination : true,
+		rowStyler: function(index,row){
+            if ((index % 2)!=0){
+            	//处理行代背景色后无法选中
+            	var color=new Object();
+                return color;
+            }
+        },
+		onLoadSuccess: function(data){
+			if(data.rows.length!=0){
+				$('#fstepTable').datagrid('selectRow', 0);
+			}
+		},
+		onSelect: function(rowIndex, rowData){
+			if(rowData.fid){
+				stepId = rowData.fid;
+			}else{
+				stepId = "";
+			}
+			junctionUrl = "wps/getInfo?search=" + rowData.fid +"&valueFlag=2";
+			$('#fjunctionTable').datagrid("options").url=junctionUrl;
+			$('#fjunctionTable').datagrid('reload');
+			detailUrl = "wps/getInfo?search=" + rowData.fid +"&valueFlag=3";
+			$('#wpsDetailTable').datagrid("options").url=detailUrl;
+			$('#wpsDetailTable').datagrid('reload');
+		},
+		onDblClickCell: function(index,field,value){
+			if (endEditing(1)){
+//				$('#femployeeTable').datagrid('selectRow', index)
+//						.datagrid('editCell', {index:index,field:field});
+				$(this).datagrid('beginEdit', index);
+				var ed = $(this).datagrid('getEditor', {index:index,field:field});
+				$(ed.target).focus();
+				editIndex = index;
+			}
+		}
+	});
+	
+	$("#fjunctionTable").datagrid( {
+		height : $("#wpsDetailsDialog").height()*0.48,
+		width : $("#wpsDetailsDialog").width()*0.64*0.33,
+		idField : 'fid',
+//		pageSize : 10,
+//		pageList : [ 10, 20, 30, 40, 50 ],
+		url : "/",
+		singleSelect : true,
+		rownumbers : true,
+//		showPageList : false,
+		fitColumns : true,
+		columns : [ [ {
+			field : 'fid',
+			title : '序号',
+//			width : 30,
+			halign : "center",
+			align : "left",
+			hidden:true
+		}, {
+			field : 'fjunction',
+			title : '焊缝编号',
+			width : 100,
+			halign : "center",
+			align : "left",
+			editor:'text'
+		}] ],
+//		pagination : true,
+		rowStyler: function(index,row){
+            if ((index % 2)!=0){
+            	//处理行代背景色后无法选中
+            	var color=new Object();
+                return color;
+            }
+        },
+		onDblClickCell: function(index,field,value){
+			if (endEditing(2)){
+//				$('#femployeeTable').datagrid('selectRow', index)
+//						.datagrid('editCell', {index:index,field:field});
+				$(this).datagrid('beginEdit', index);
+				var ed = $(this).datagrid('getEditor', {index:index,field:field});
+				$(ed.target).focus();
+				editIndex = index;
+			}
+		}
+	});
+	
+	$("#wpsDetailTable").datagrid( {
+		height : $("#wpsDetailsDialog").height()*0.48,
+		width : $("#wpsDetailsDialog").width()*0.64,
+		idField : 'fid',
+//		pageSize : 10,
+//		pageList : [ 10, 20, 30, 40, 50 ],
+		url : "/",
+		singleSelect : true,
+		rownumbers : true,
+//		showPageList : false,
+		fitColumns : true,
+		columns : [ [ {
+			field : 'fid',
+			title : '序号',
+//			width : 30,
+			halign : "center",
+			align : "left",
+			hidden:true
+		}, {
+			field : 'fquantitative_project',
+			title : '量化项目',
+			width : 100,
+			halign : "center",
+			align : "left",
+			editor:'text'
+		}, {
+			field : 'frequired_value',
+			title : '要求值',
+			width : 100,
+			halign : "center",
+			align : "left",
+			editor:'text'
+		}, {
+			field : 'fupper_deviation',
+			title : '上偏差',
+			width : 100,
+			halign : "center",
+			align : "left",
+			editor:'text'
+		}, {
+			field : 'flower_deviation',
+			title : '下偏差',
+			width : 100,
+			halign : "center",
+			align : "left",
+			editor:'text'
+		}, {
+			field : 'funit_of_measurement',
+			title : '计量单位',
+			width : 100,
+			halign : "center",
+			align : "left",
+			editor:'text'
+		}] ],
+//		pagination : true,
+		rowStyler: function(index,row){
+            if ((index % 2)!=0){
+            	//处理行代背景色后无法选中
+            	var color=new Object();
+                return color;
+            }
+        },
+		onDblClickCell: function(index,field,value){
+			if (endEditing(3)){
+//				$('#femployeeTable').datagrid('selectRow', index)
+//						.datagrid('editCell', {index:index,field:field});
+				$(this).datagrid('beginEdit', index);
+				var ed = $(this).datagrid('getEditor', {index:index,field:field});
+				$(ed.target).focus();
+				editIndex = index;
+			}
+		}
+	});
 }
 
 //监听窗口大小变化
