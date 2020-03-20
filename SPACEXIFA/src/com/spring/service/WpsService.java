@@ -40,6 +40,8 @@ public interface WpsService {
 	void deleteMainWps(BigInteger fid);
 	int getCountByWpslibidChanel(BigInteger wpslibid,int chanel);
 	Wps gettrackcard(BigInteger wid);
+	List<Wps> getstepall();
+	List<Wps> getEmployee1(String employ_id);
 	/**
 	 * 获取松下wps
 	 * @param parent
@@ -200,6 +202,7 @@ public interface WpsService {
 	List<Wps> getWpsList(Page page, String search);
 	List<Wps> getWpsList(String search);
 	
+	
 	/**
 	 * 根据工艺台账id查询工序信息
 	 * @Description
@@ -249,6 +252,15 @@ public interface WpsService {
 	 * @param wps
 	 */
 	void addWps(Wps wps);
+	
+	/**
+	 * 焊接工艺导出
+	 * @Description
+	 * @author BLACK
+	 * @date 2020年2月5日下午7:38:04
+	 * @param wps
+	 */
+	List<Wps> getWeldwps(String wps_lib_id);
 	
 	/**
 	 * 更新工艺台账

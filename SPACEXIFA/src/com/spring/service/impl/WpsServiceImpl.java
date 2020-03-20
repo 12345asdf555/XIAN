@@ -350,6 +350,24 @@ public class WpsServiceImpl implements WpsService{
 	}
 
 	@Override
+	public List<Wps> getWeldwps(String wps_lib_id) {
+		// TODO Auto-generated method stub
+		return mapper.getWeldwps(wps_lib_id);
+	}
+	
+	@Override
+	public List<Wps> getstepall() {
+		// TODO Auto-generated method stub
+		return mapper.getstepall();
+	}
+	
+	@Override
+	public List<Wps> getEmployee1(String employ_id) {
+		// TODO Auto-generated method stub
+		return mapper.getEmployee1(employ_id);
+	}
+	
+	@Override
 	public List<Wps> getStep(String employeeId) {
 		// TODO Auto-generated method stub
 		return mapper.getStep(employeeId);

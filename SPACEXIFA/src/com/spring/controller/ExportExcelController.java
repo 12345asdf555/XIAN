@@ -34,6 +34,7 @@ import com.spring.model.Report;
 import com.spring.model.WeldedJunction;
 import com.spring.model.WeldingMachine;
 import com.spring.model.WeldingMaintenance;
+import com.spring.model.Wps;
 import com.spring.page.Page;
 import com.spring.service.DataStatisticsService;
 import com.spring.service.InsframeworkService;
@@ -44,15 +45,16 @@ import com.spring.service.WeldedJunctionService;
 import com.spring.service.WelderService;
 import com.spring.service.WeldingMachineService;
 import com.spring.service.GatherService;
+import com.spring.service.WpsService;
 import com.spring.util.CommonExcelUtil;
 import com.spring.util.IsnullUtil;
 
 @Controller
 @RequestMapping(value = "/export", produces = { "text/json;charset=UTF-8" })
 public class ExportExcelController {
-	
+
 	private static final long serialVersionUID = -4171187629012625142L;
-	
+
 	@Autowired
 	private WeldingMachineService wmm;
 	@Autowired
@@ -69,11 +71,13 @@ public class ExportExcelController {
 	private WeldedJunctionService wjm;
 	@Autowired
 	private ReportService reportService;
-	
+	@Autowired
+	private WpsService wps;
+
 	private String filename;
 	private SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmSS");
 	IsnullUtil iutil = new IsnullUtil();
-	
+
 	public String getFilename() {
 		return filename;
 	}
@@ -81,33 +85,34 @@ public class ExportExcelController {
 	public void setFilename(String filename) {
 		this.filename = filename;
 	}
-	
+
 	@RequestMapping("/exporWeldingMachine")
 	@ResponseBody
-	public ResponseEntity<byte[]> exporWeldingMachine(HttpServletRequest request,HttpServletResponse response){
+	public ResponseEntity<byte[]> exporWeldingMachine(HttpServletRequest request, HttpServletResponse response) {
 		File file = null;
 		try {
-			String str=(String) request.getSession().getAttribute("searchStr");
+			String str = (String) request.getSession().getAttribute("searchStr");
 			List<WeldingMachine> list = wmm.getWeldingMachine(str);
 			String dtime = null;
-			String[] titles = new String[]{"设备编码","设备类型","入厂时间","所属项目","状态","厂家","是否在网","采集序号","位置","ip地址","设备型号"};
+			String[] titles = new String[] { "设备编码", "设备类型", "入厂时间", "所属项目", "状态", "厂家", "是否在网", "采集序号", "位置", "ip地址",
+					"设备型号" };
 			Object[][] data = new Object[list.size()][11];
-			for(int i =0; i<list.size();i++){
+			for (int i = 0; i < list.size(); i++) {
 				data[i][0] = list.get(i).getEquipmentNo();
 				data[i][1] = list.get(i).getTypename();
 				data[i][2] = list.get(i).getJoinTime();
 				data[i][3] = list.get(i).getInsframeworkId().getName();
 				data[i][4] = list.get(i).getStatusname();
 				data[i][5] = list.get(i).getMvaluename();
-				if(list.get(i).getIsnetworking()==0){
+				if (list.get(i).getIsnetworking() == 0) {
 					data[i][6] = "是";
-				}else{
+				} else {
 					data[i][6] = "否";
 				}
 				Gather gather = list.get(i).getGatherId();
-				if(gather!=null){
+				if (gather != null) {
 					data[i][7] = gather.getGatherNo();
-				}else{
+				} else {
 					data[i][7] = null;
 				}
 				data[i][8] = list.get(i).getPosition();
@@ -116,49 +121,144 @@ public class ExportExcelController {
 			}
 			filename = "焊机设备" + sdf.format(new Date()) + ".xls";
 
-			ServletContext scontext=request.getSession().getServletContext();
-			//获取绝对路径
-			String abpath=scontext.getRealPath("");
-			//String contextpath=scontext. getContextPath() ; 获取虚拟路径
-			
-			String path = abpath+"excelfiles/" + filename;
+			ServletContext scontext = request.getSession().getServletContext();
+			// 获取绝对路径
+			String abpath = scontext.getRealPath("");
+			// String contextpath=scontext. getContextPath() ; 获取虚拟路径
+
+			String path = abpath + "excelfiles/" + filename;
 			new CommonExcelUtil(dtime, titles, data, path, "焊机设备数据");
-			
+
 			file = new File(path);
 			HttpHeaders headers = new HttpHeaders();
 			String fileName = "";
-			
-			fileName = new String(filename.getBytes("gb2312"),"iso-8859-1");
-			
+
+			fileName = new String(filename.getBytes("gb2312"), "iso-8859-1");
+
 			headers.setContentDispositionFormData("attachment", fileName);
 			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-			
-			//处理ie无法下载的问题
+
+			// 处理ie无法下载的问题
 			response.setContentType("application/octet-stream;charset=utf-8");
-			response.setHeader( "Content-Disposition", 
-					"attachment;filename=\""+ fileName); 
+			response.setHeader("Content-Disposition", "attachment;filename=\"" + fileName);
 			ServletOutputStream o = response.getOutputStream();
 			o.flush();
-			
+
 			return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file), headers, HttpStatus.CREATED);
-		}catch (Exception e) {
-	    	return null;
-		}  finally {
+		} catch (Exception e) {
+			return null;
+		} finally {
 			file.delete();
 		}
 	}
-	
+
+	@RequestMapping("/exporWeldwps")
+	@ResponseBody
+	public ResponseEntity<byte[]> exporWeldwps(HttpServletRequest request, HttpServletResponse response) {
+		File file = null;
+		try {
+			// String str=(String) request.getSession().getAttribute("searchStr");
+			List<Wps> list = wps.getstepall();
+			String dtime = null;
+			String wps_lib_id = "";
+			String employ_id = "";
+			String step_id = "";
+			int c = 0;
+			String[] titles = new String[] { "产品图号", "产品名称", "产品版本号", "工艺规程编号", "工艺规程版本号", "工艺来源", "驳回原因", "审核状态",
+					"工序号", "工序版本号", "工序名称", "工步号", "工步名称", "焊缝编号", "焊接部位", "量化项目", "要求值", "上偏差", "下偏差", "计量单位" };
+			Object[][] data = new Object[500][20];
+			for (int k = 0; k < list.size(); k++) {
+				// data[k][11] = list.get(k).getFstep_number();
+				step_id = String.valueOf(list.get(k).getFid());
+				employ_id = String.valueOf(list.get(k).getFemployee_id());
+				List<Wps> detial = wps.getDetail(step_id);
+				List<Wps> junction = wps.getJunction(step_id);
+				System.out.println(c);
+				if (junction.size() > 0 && detial.size() > 0) {
+					for (int m = 0; m < junction.size(); m++) {
+						for (int n = 0; n < (detial.size()); n++) {
+							if (junction.get(m).getFjunction() != null) {
+								data[c][13] = junction.get(m).getFjunction();
+							}
+							data[c][11] = list.get(k).getFstep_number();
+							data[c][15] = detial.get(n).getFquantitative_project();
+							System.out.println(data[n][15]);
+							data[c][16] = detial.get(n).getFrequired_value();
+							data[c][17] = detial.get(n).getFupper_deviation();
+							data[c][18] = detial.get(n).getFlower_deviation();
+							data[c][19] = detial.get(n).getFunit_of_measurement();
+							List<Wps> employ = wps.getEmployee1(employ_id);
+							if (employ != null && employ.size() > 0) {
+								for (int j = 0; j < employ.size(); j++) {
+									data[c][8] = employ.get(j).getFemployee_id();
+									data[c][9] = employ.get(j).getFemployee_version();
+									wps_lib_id = String.valueOf(employ.get(j).getFwpslib_id());
+									List<Wps> fpro = wps.getWeldwps(wps_lib_id);
+									if (fpro != null && fpro.size() > 0) {
+										for (int i = 0; i < fpro.size(); i++) {
+											data[c][0] = fpro.get(i).getFproduct_drawing_no();
+											data[c][1] = fpro.get(i).getFproduct_name();
+											data[c][2] = fpro.get(i).getFproduct_version();
+											data[c][3] = fpro.get(i).getFwpsnum();// 工艺规程编号
+											data[c][4] = fpro.get(i).getFwps_lib_version();
+											if (fpro.get(i).getFlag() == 0) {
+												data[c][5] = "自建";
+											} else {
+												data[c][5] = "MES";
+											}
+											data[c][6] = fpro.get(i).getFback();// 驳回原因
+											data[c][7] = fpro.get(i).getFstatus();// 审核状态
+										}
+									}
+								}
+							}
+							c++;
+						}
+					}
+				}
+			}
+			filename = "焊接工艺参数" + sdf.format(new Date()) + ".xls";
+			ServletContext scontext = request.getSession().getServletContext();
+			// 获取绝对路径
+			String abpath = scontext.getRealPath("");
+			// String contextpath=scontext. getContextPath() ; 获取虚拟路径
+
+			String path = abpath + "excelfiles/" + filename;
+			new CommonExcelUtil(dtime, titles, data, path, "焊接工艺数据");
+
+			file = new File(path);
+			HttpHeaders headers = new HttpHeaders();
+			String fileName = "";
+
+			fileName = new String(filename.getBytes("gb2312"), "iso-8859-1");
+
+			headers.setContentDispositionFormData("attachment", fileName);
+			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+
+			// 处理ie无法下载的问题
+			response.setContentType("application/octet-stream;charset=utf-8");
+			response.setHeader("Content-Disposition", "attachment;filename=\"" + fileName);
+			ServletOutputStream o = response.getOutputStream();
+			o.flush();
+			return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file), headers, HttpStatus.CREATED);
+		} catch (Exception e) {
+			return null;
+		} finally {
+			file.delete();
+		}
+	}
+
 	@RequestMapping("/exporMaintain")
 	@ResponseBody
-	public ResponseEntity<byte[]> exporMaintain(HttpServletRequest request,HttpServletResponse response){
+	public ResponseEntity<byte[]> exporMaintain(HttpServletRequest request, HttpServletResponse response) {
 		File file = null;
-		try{
-			String str=(String) request.getSession().getAttribute("searchStr");
-			List<WeldingMaintenance> list = mm.getWeldingMaintenanceAll(im.getUserInsframework(),str);
+		try {
+			String str = (String) request.getSession().getAttribute("searchStr");
+			List<WeldingMaintenance> list = mm.getWeldingMaintenanceAll(im.getUserInsframework(), str);
 			String dtime = null;
-			String[] titles = new String[]{"设备编码","维修人员","维修起始时间","维修结束时间","维修类型","维修说明"};
+			String[] titles = new String[] { "设备编码", "维修人员", "维修起始时间", "维修结束时间", "维修类型", "维修说明" };
 			Object[][] data = new Object[list.size()][6];
-			for(int i =0; i<list.size();i++){
+			for (int i = 0; i < list.size(); i++) {
 				data[i][0] = list.get(i).getWelding().getEquipmentNo();
 				data[i][1] = list.get(i).getMaintenance().getViceman();
 				data[i][2] = list.get(i).getMaintenance().getStartTime();
@@ -166,31 +266,30 @@ public class ExportExcelController {
 				data[i][4] = list.get(i).getMaintenance().getTypename();
 				data[i][5] = list.get(i).getMaintenance().getDesc();
 			}
-			filename = "焊机维修" + sdf.format(new Date())+".xls";
+			filename = "焊机维修" + sdf.format(new Date()) + ".xls";
 
-			ServletContext scontext=request.getSession().getServletContext();
-			//获取绝对路径
-			String abpath=scontext.getRealPath("");
-			//String contextpath=scontext. getContextPath() ; 获取虚拟路径
-			
-			String path = abpath+"excelfiles/" + filename;
-			
+			ServletContext scontext = request.getSession().getServletContext();
+			// 获取绝对路径
+			String abpath = scontext.getRealPath("");
+			// String contextpath=scontext. getContextPath() ; 获取虚拟路径
+
+			String path = abpath + "excelfiles/" + filename;
+
 			new CommonExcelUtil(dtime, titles, data, path, "焊机维修数据");
 			file = new File(path);
 			HttpHeaders headers = new HttpHeaders();
 			String fileName = "";
-			fileName = new String(filename.getBytes("gb2312"),"iso-8859-1");
-		
+			fileName = new String(filename.getBytes("gb2312"), "iso-8859-1");
+
 			headers.setContentDispositionFormData("attachment", fileName);
 			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-			
-			//处理ie无法下载的问题
+
+			// 处理ie无法下载的问题
 			response.setContentType("application/octet-stream;charset=utf-8");
-			response.setHeader( "Content-Disposition", 
-					"attachment;filename=\""+ fileName); 
+			response.setHeader("Content-Disposition", "attachment;filename=\"" + fileName);
 			ServletOutputStream o = response.getOutputStream();
 			o.flush();
-			
+
 			return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file), headers, HttpStatus.CREATED);
 		} catch (Exception e) {
 			return null;
@@ -198,153 +297,161 @@ public class ExportExcelController {
 			file.delete();
 		}
 	}
-	
+
 	/**
 	 * 班组生产数据报表导出
+	 * 
 	 * @param request
 	 * @param response
 	 * @return
 	 */
 	@RequestMapping("/exportItemdata")
 	@ResponseBody
-	public ResponseEntity<byte[]> exporItemdata(HttpServletRequest request,HttpServletResponse response){
+	public ResponseEntity<byte[]> exporItemdata(HttpServletRequest request, HttpServletResponse response) {
 		File file = null;
 		String time1 = request.getParameter("dtoTime1");
 		String time2 = request.getParameter("dtoTime2");
 		WeldDto dto = new WeldDto();
-		String dtime = "统计日期："+time1+"--"+time2;
-		try{
-			if(iutil.isNull(time1)){
+		String dtime = "统计日期：" + time1 + "--" + time2;
+		try {
+			if (iutil.isNull(time1)) {
 				dto.setDtoTime1(time1);
 			}
-			if(iutil.isNull(time2)){
+			if (iutil.isNull(time2)) {
 				dto.setDtoTime2(time2);
 			}
 			List<DataStatistics> list = dss.getAllItemData();
-			String[] titles = new String[]{"所属班组","设备总数","开机设备数","实焊设备数","设备利用率(%)","焊接焊缝数","焊接时间","工作时间","焊接效率(%)","焊丝消耗(KG)","电能消耗(KWH)","气体消耗(L)"};
+			String[] titles = new String[] { "所属班组", "设备总数", "开机设备数", "实焊设备数", "设备利用率(%)", "焊接焊缝数", "焊接时间", "工作时间",
+					"焊接效率(%)", "焊丝消耗(KG)", "电能消耗(KWH)", "气体消耗(L)" };
 			Object[][] data = new Object[list.size()][12];
-			int ii=0;
-			for(DataStatistics i:list){
-				if(ii<list.size()){
-				data[ii][0]=i.getName();//所属班组
-				data[ii][1]=i.getTotal();//设备总数
-				int machinenum = 0;
-				BigInteger starttime = null;
-				DataStatistics weldtime = null;
-				DataStatistics junction = dss.getWorkJunctionNum(i.getId(), dto);//获取工作(焊接)的焊口数
-				DataStatistics parameter = dss.getParameter();//获取参数
-				BigInteger standytime = null;
-				if(junction.getJunctionnum()!=0){
-					machinenum = dss.getStartingUpMachineNum(i.getId(),dto);//获取开机焊机总数
-					starttime = dss.getStaringUpTime(i.getId(), dto);//获取开机总时长
-					data[ii][2]=machinenum;//开机设备数
-					data[ii][5]=junction.getJunctionnum();//焊接焊缝数
-					data[ii][7]=getTimeStrBySecond(starttime);//工作时间
-					standytime = dss.getStandytime(i.getId(), dto);//获取待机总时长
-					weldtime = dss.getWorkTimeAndEleVol(i.getId(),dto);//获取焊接时长，平均电流电压
-					double standytimes = 0,time=0,electric=0;
-					if(standytime!=null){
-						standytimes = standytime.doubleValue()/60/60;
+			int ii = 0;
+			for (DataStatistics i : list) {
+				if (ii < list.size()) {
+					data[ii][0] = i.getName();// 所属班组
+					data[ii][1] = i.getTotal();// 设备总数
+					int machinenum = 0;
+					BigInteger starttime = null;
+					DataStatistics weldtime = null;
+					DataStatistics junction = dss.getWorkJunctionNum(i.getId(), dto);// 获取工作(焊接)的焊口数
+					DataStatistics parameter = dss.getParameter();// 获取参数
+					BigInteger standytime = null;
+					if (junction.getJunctionnum() != 0) {
+						machinenum = dss.getStartingUpMachineNum(i.getId(), dto);// 获取开机焊机总数
+						starttime = dss.getStaringUpTime(i.getId(), dto);// 获取开机总时长
+						data[ii][2] = machinenum;// 开机设备数
+						data[ii][5] = junction.getJunctionnum();// 焊接焊缝数
+						data[ii][7] = getTimeStrBySecond(starttime);// 工作时间
+						standytime = dss.getStandytime(i.getId(), dto);// 获取待机总时长
+						weldtime = dss.getWorkTimeAndEleVol(i.getId(), dto);// 获取焊接时长，平均电流电压
+						double standytimes = 0, time = 0, electric = 0;
+						if (standytime != null) {
+							standytimes = standytime.doubleValue() / 60 / 60;
+						}
+						if (weldtime != null) {
+							electric = (double) Math.round((weldtime.getWorktime().doubleValue() / 60 / 60
+									* (weldtime.getElectricity() * weldtime.getVoltage()) / 1000
+									+ standytimes * parameter.getStandbypower() / 1000) * 100) / 100;// 电能消耗量=焊接时间*焊接平均电流*焊接平均电压+待机时间*待机功率
+						} else {
+							electric = (double) Math
+									.round((time + standytimes * parameter.getStandbypower() / 1000) * 100) / 100;// 电能消耗量=焊接时间*焊接平均电流*焊接平均电压+待机时间*待机功率
+						}
+						data[ii][10] = electric;// 电能消耗
+					} else {
+						data[ii][2] = 0;
+						data[ii][5] = 0;
+						data[ii][7] = "00:00:00";
+						data[ii][10] = 0;
 					}
-					if(weldtime!=null){
-						electric = (double)Math.round((weldtime.getWorktime().doubleValue()/60/60*(weldtime.getElectricity()*weldtime.getVoltage())/1000+standytimes*parameter.getStandbypower()/1000)*100)/100;//电能消耗量=焊接时间*焊接平均电流*焊接平均电压+待机时间*待机功率
-					}else{
-						electric = (double)Math.round((time+standytimes*parameter.getStandbypower()/1000)*100)/100;//电能消耗量=焊接时间*焊接平均电流*焊接平均电压+待机时间*待机功率
+					if (i.getTotal() != 0 && weldtime != null) {
+						DataStatistics machine = dss.getWorkMachineNum(i.getId(), dto);// 获取工作(焊接)的焊机数
+						if (machine != null && junction != null) {
+							data[ii][3] = machine.getMachinenum();// 实焊设备数
+							data[ii][6] = getTimeStrBySecond(weldtime.getWorktime());// 焊接时间
+							double useratio = (double) Math
+									.round(Double.valueOf(machinenum) / Double.valueOf(i.getTotal()) * 100 * 100) / 100;
+							double weldingproductivity = (double) Math
+									.round(weldtime.getWorktime().doubleValue() / starttime.doubleValue() * 100 * 100)
+									/ 100;
+							data[ii][4] = useratio;// 设备利用率
+							data[ii][8] = weldingproductivity;// 焊接效率
+						}
+						if (parameter != null) {
+							double time = weldtime.getWorktime().doubleValue() / 60;
+							String[] str = parameter.getWireweight().split(",");
+							double wireweight = Double.valueOf(str[0]);
+							double wire = (double) Math.round(wireweight * parameter.getSpeed() * time * 100) / 100;// 焊丝消耗量=焊丝|焊丝重量*送丝速度*焊接时间
+							double air = (double) Math.round(parameter.getAirflow() * time * 100) / 100;// 气体消耗量=气体流量*焊接时间
+							data[ii][9] = wire;// 焊丝消耗
+							data[ii][11] = air;// 气体消耗
+						}
+					} else {
+						data[ii][3] = 0;// 实焊设备数
+						data[ii][6] = "00:00:00";// 焊接时间
+						data[ii][4] = 0;// 设备利用率
+						data[ii][8] = 0;// 焊接效率
+						data[ii][2] = 0;// 开机设备数
+						data[ii][9] = 0;// 焊丝消耗
+						data[ii][11] = 0;// 气体消耗
 					}
-					data[ii][10]=electric;//电能消耗
-				}else{
-					data[ii][2]=0;
-					data[ii][5]=0;
-					data[ii][7]="00:00:00";
-					data[ii][10]=0;
-				}
-				if(i.getTotal()!=0 && weldtime!=null){
-					DataStatistics machine = dss.getWorkMachineNum(i.getId(), dto);//获取工作(焊接)的焊机数
-					if(machine!=null && junction!=null){
-						data[ii][3]=machine.getMachinenum();//实焊设备数
-						data[ii][6]=getTimeStrBySecond(weldtime.getWorktime());//焊接时间
-						double useratio =(double)Math.round(Double.valueOf(machinenum)/Double.valueOf(i.getTotal())*100*100)/100;
-						double weldingproductivity = (double)Math.round(weldtime.getWorktime().doubleValue()/starttime.doubleValue()*100*100)/100;
-						data[ii][4]=useratio;//设备利用率
-						data[ii][8]=weldingproductivity;//焊接效率
-					}
-					if(parameter!=null){
-						double  time = weldtime.getWorktime().doubleValue()/60;
-						String[] str = parameter.getWireweight().split(",");
-						double wireweight =Double.valueOf(str[0]);
-						double wire = (double)Math.round(wireweight*parameter.getSpeed()*time*100)/100;//焊丝消耗量=焊丝|焊丝重量*送丝速度*焊接时间
-						double air = (double)Math.round(parameter.getAirflow()*time*100)/100;//气体消耗量=气体流量*焊接时间
-						data[ii][9]=wire;//焊丝消耗
-						data[ii][11]=air;//气体消耗
-					}
-				}else{
-					data[ii][3]=0;//实焊设备数
-					data[ii][6]="00:00:00";//焊接时间
-					data[ii][4]=0;//设备利用率
-					data[ii][8]=0;//焊接效率
-					data[ii][2]=0;//开机设备数
-					data[ii][9]=0;//焊丝消耗
-					data[ii][11]=0;//气体消耗
-				}
 				}
 				ii++;
 			}
-			filename = "班组生产数据" + sdf.format(new Date())+".xls";
+			filename = "班组生产数据" + sdf.format(new Date()) + ".xls";
 
-			ServletContext scontext=request.getSession().getServletContext();
-			//获取绝对路径
-			String abpath=scontext.getRealPath("");
-			//String contextpath=scontext. getContextPath() ; 获取虚拟路径
-			
-			String path = abpath+"excelfiles/" + filename;
-			
+			ServletContext scontext = request.getSession().getServletContext();
+			// 获取绝对路径
+			String abpath = scontext.getRealPath("");
+			// String contextpath=scontext. getContextPath() ; 获取虚拟路径
+
+			String path = abpath + "excelfiles/" + filename;
+
 			new CommonExcelUtil(dtime, titles, data, path, "班组生产数据");
 			file = new File(path);
 			HttpHeaders headers = new HttpHeaders();
 			String fileName = "";
-			fileName = new String(filename.getBytes("gb2312"),"iso-8859-1");
-		
+			fileName = new String(filename.getBytes("gb2312"), "iso-8859-1");
+
 			headers.setContentDispositionFormData("attachment", fileName);
 			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-			
-			//处理ie无法下载的问题
+
+			// 处理ie无法下载的问题
 			response.setContentType("application/octet-stream;charset=utf-8");
-			response.setHeader( "Content-Disposition", 
-					"attachment;filename=\""+ fileName); 
+			response.setHeader("Content-Disposition", "attachment;filename=\"" + fileName);
 			ServletOutputStream o = response.getOutputStream();
 			o.flush();
-			
+
 			return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file), headers, HttpStatus.CREATED);
 		} catch (Exception e) {
 			return null;
 		} finally {
 			file.delete();
 		}
-	}	
-	
+	}
+
 	/**
 	 * 班组焊接数据报表导出
+	 * 
 	 * @param request
 	 * @param response
 	 * @return
 	 */
 	@RequestMapping("/exportItemWelddata")
 	@ResponseBody
-	public ResponseEntity<byte[]> exportItemWelddata(HttpServletRequest request,HttpServletResponse response){
+	public ResponseEntity<byte[]> exportItemWelddata(HttpServletRequest request, HttpServletResponse response) {
 		File file = null;
 		String time1 = request.getParameter("dtoTime1");
 		String time2 = request.getParameter("dtoTime2");
 		WeldDto dto = new WeldDto();
-		String dtime = "统计日期："+time1+"--"+time2;
-		try{
-			if(iutil.isNull(time1)){
+		String dtime = "统计日期：" + time1 + "--" + time2;
+		try {
+			if (iutil.isNull(time1)) {
 				dto.setDtoTime1(time1);
 			}
-			if(iutil.isNull(time2)){
+			if (iutil.isNull(time2)) {
 				dto.setDtoTime2(time2);
 			}
 			List<DataStatistics> ilist = dss.getWeldItemInCountData(dto);
-			String[] titles = new String[]{"所属班组","累计焊接时间","正常段时长","超规范时长","规范符合率(%)"};
+			String[] titles = new String[] { "所属班组", "累计焊接时间", "正常段时长", "超规范时长", "规范符合率(%)" };
 			Object[][] data = new Object[ilist.size()][5];
 			int ii = 0;
 			for (DataStatistics i : ilist) {
@@ -363,182 +470,187 @@ public class ExportExcelController {
 				}
 				ii++;
 			}
-			filename = "班组焊接数据" + sdf.format(new Date())+".xls";
+			filename = "班组焊接数据" + sdf.format(new Date()) + ".xls";
 
-			ServletContext scontext=request.getSession().getServletContext();
-			//获取绝对路径
-			String abpath=scontext.getRealPath("");
-			//String contextpath=scontext. getContextPath() ; 获取虚拟路径
-			
-			String path = abpath+"excelfiles/" + filename;
-			
+			ServletContext scontext = request.getSession().getServletContext();
+			// 获取绝对路径
+			String abpath = scontext.getRealPath("");
+			// String contextpath=scontext. getContextPath() ; 获取虚拟路径
+
+			String path = abpath + "excelfiles/" + filename;
+
 			new CommonExcelUtil(dtime, titles, data, path, "班组焊接数据");
 			file = new File(path);
 			HttpHeaders headers = new HttpHeaders();
 			String fileName = "";
-			fileName = new String(filename.getBytes("gb2312"),"iso-8859-1");
-		
+			fileName = new String(filename.getBytes("gb2312"), "iso-8859-1");
+
 			headers.setContentDispositionFormData("attachment", fileName);
 			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-			
-			//处理ie无法下载的问题
+
+			// 处理ie无法下载的问题
 			response.setContentType("application/octet-stream;charset=utf-8");
-			response.setHeader( "Content-Disposition", 
-					"attachment;filename=\""+ fileName); 
+			response.setHeader("Content-Disposition", "attachment;filename=\"" + fileName);
 			ServletOutputStream o = response.getOutputStream();
 			o.flush();
-			
+
 			return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file), headers, HttpStatus.CREATED);
 		} catch (Exception e) {
 			return null;
 		} finally {
 			file.delete();
 		}
-	}	
-	
+	}
+
 	/**
 	 * 设备生产数据报表导出
+	 * 
 	 * @param request
 	 * @return
 	 */
 	@RequestMapping("/exportMachineData")
 	@ResponseBody
-	public ResponseEntity<byte[]> exportMachineData(HttpServletRequest request,HttpServletResponse response){
+	public ResponseEntity<byte[]> exportMachineData(HttpServletRequest request, HttpServletResponse response) {
 		File file = null;
 		String time1 = request.getParameter("dtoTime1");
 		String time2 = request.getParameter("dtoTime2");
 		String item = request.getParameter("item");
 		WeldDto dto = new WeldDto();
 		BigInteger itemid = null;
-		String dtime = "统计日期："+time1+"--"+time2;
-		try{
-			if(iutil.isNull(time1)){
+		String dtime = "统计日期：" + time1 + "--" + time2;
+		try {
+			if (iutil.isNull(time1)) {
 				dto.setDtoTime1(time1);
 			}
-			if(iutil.isNull(time2)){
+			if (iutil.isNull(time2)) {
 				dto.setDtoTime2(time2);
 			}
-			if(iutil.isNull(item)){
+			if (iutil.isNull(item)) {
 				itemid = new BigInteger(item);
 			}
 			List<DataStatistics> list = dss.getAllMachineData(itemid);
-			String[] titles = new String []{"所属班组","设备编号","焊接焊缝数","焊接时间","工作时间","焊接效率(%)","焊丝消耗(KG)","电能消耗(KWH)","气体消耗(L)"};
+			String[] titles = new String[] { "所属班组", "设备编号", "焊接焊缝数", "焊接时间", "工作时间", "焊接效率(%)", "焊丝消耗(KG)",
+					"电能消耗(KWH)", "气体消耗(L)" };
 			Object[][] data = new Object[list.size()][9];
-			int ii=0;
-			for(DataStatistics i:list){
-				if(ii<list.size()){
-				dto.setMachineid(i.getId());
-				data[ii][0]=i.getInsname();
-				data[ii][1]=i.getName();
-				DataStatistics junctionnum = dss.getWorkJunctionNum(null, dto);
-				DataStatistics parameter = dss.getParameter();
-				BigInteger worktime = null,standytime=null;
-				DataStatistics weld = null;
-				if(junctionnum.getJunctionnum()!=0){
-					data[ii][2]=junctionnum.getJunctionnum();//焊接焊缝数
-					worktime = dss.getStaringUpTime(i.getInsid(), dto);
-					data[ii][4]=getTimeStrBySecond(worktime);//工作时间
-					standytime = dss.getStandytime(i.getInsid(), dto);//获取待机总时长
-					weld = dss.getWorkTimeAndEleVol(i.getInsid(), dto);
-					double standytimes = 0,time=0,electric=0;
-					if(standytime!=null){
-						standytimes = standytime.doubleValue()/60/60;
+			int ii = 0;
+			for (DataStatistics i : list) {
+				if (ii < list.size()) {
+					dto.setMachineid(i.getId());
+					data[ii][0] = i.getInsname();
+					data[ii][1] = i.getName();
+					DataStatistics junctionnum = dss.getWorkJunctionNum(null, dto);
+					DataStatistics parameter = dss.getParameter();
+					BigInteger worktime = null, standytime = null;
+					DataStatistics weld = null;
+					if (junctionnum.getJunctionnum() != 0) {
+						data[ii][2] = junctionnum.getJunctionnum();// 焊接焊缝数
+						worktime = dss.getStaringUpTime(i.getInsid(), dto);
+						data[ii][4] = getTimeStrBySecond(worktime);// 工作时间
+						standytime = dss.getStandytime(i.getInsid(), dto);// 获取待机总时长
+						weld = dss.getWorkTimeAndEleVol(i.getInsid(), dto);
+						double standytimes = 0, time = 0, electric = 0;
+						if (standytime != null) {
+							standytimes = standytime.doubleValue() / 60 / 60;
+						}
+						if (weld != null) {
+							electric = (double) Math.round((weld.getWorktime().doubleValue() / 60 / 60
+									* (weld.getElectricity() * weld.getVoltage()) / 1000
+									+ standytimes * parameter.getStandbypower() / 1000) * 100) / 100;// 电能消耗量=焊接时间*焊接平均电流*焊接平均电压+待机时间*待机功率
+						} else {
+							electric = (double) Math
+									.round((time + standytimes * parameter.getStandbypower() / 1000) * 100) / 100;// 电能消耗量=焊接时间*焊接平均电流*焊接平均电压+待机时间*待机功率
+						}
+						data[ii][7] = electric;// 电能消耗
+					} else {
+						data[ii][2] = 0;
+						data[ii][4] = "00:00:00";
+						data[ii][7] = 0;
 					}
-					if(weld!=null){
-						electric = (double)Math.round((weld.getWorktime().doubleValue()/60/60*(weld.getElectricity()*weld.getVoltage())/1000+standytimes*parameter.getStandbypower()/1000)*100)/100;//电能消耗量=焊接时间*焊接平均电流*焊接平均电压+待机时间*待机功率
-					}else{
-						electric = (double)Math.round((time+standytimes*parameter.getStandbypower()/1000)*100)/100;//电能消耗量=焊接时间*焊接平均电流*焊接平均电压+待机时间*待机功率
+					if (weld != null) {
+						data[ii][3] = getTimeStrBySecond(weld.getWorktime());// 焊接时间
+						data[ii][4] = getTimeStrBySecond(worktime);// 工作时间
+						double weldingproductivity = (double) Math
+								.round(weld.getWorktime().doubleValue() / worktime.doubleValue() * 100 * 100) / 100;
+						data[ii][5] = weldingproductivity;// 焊接效率
+						if (parameter != null) {
+							double time = weld.getWorktime().doubleValue() / 60;
+							String[] str = parameter.getWireweight().split(",");
+							double wireweight = Double.valueOf(str[0]);
+							double wire = (double) Math.round(wireweight * parameter.getSpeed() * time * 100) / 100;// 焊丝消耗量=焊丝|焊丝重量*送丝速度*焊接时间
+							double air = (double) Math.round(parameter.getAirflow() * time * 100) / 100;// 气体消耗量=气体流量*焊接时间
+							data[ii][6] = wire;// 焊丝消耗
+							data[ii][8] = air;// 气体消耗
+						}
+					} else {
+						data[ii][3] = "00:00:00";
+						data[ii][5] = 0;
+						data[ii][6] = 0;
+						data[ii][8] = 0;
 					}
-					data[ii][7]=electric;//电能消耗
-				}else{
-					data[ii][2]=0;
-					data[ii][4]="00:00:00";
-					data[ii][7]=0;
-				}
-				if(weld!=null){
-					data[ii][3]=getTimeStrBySecond(weld.getWorktime());//焊接时间
-					data[ii][4]=getTimeStrBySecond(worktime);//工作时间
-					double weldingproductivity = (double)Math.round(weld.getWorktime().doubleValue()/worktime.doubleValue()*100*100)/100;
-					data[ii][5]=weldingproductivity;//焊接效率
-					if(parameter!=null){
-						double  time = weld.getWorktime().doubleValue()/60;
-						String[] str = parameter.getWireweight().split(",");
-						double wireweight =Double.valueOf(str[0]);
-						double wire = (double)Math.round(wireweight*parameter.getSpeed()*time*100)/100;//焊丝消耗量=焊丝|焊丝重量*送丝速度*焊接时间
-						double air = (double)Math.round(parameter.getAirflow()*time*100)/100;//气体消耗量=气体流量*焊接时间
-						data[ii][6]=wire;//焊丝消耗
-						data[ii][8]=air;//气体消耗
-					}
-				}else{
-					data[ii][3]="00:00:00";
-					data[ii][5]=0;
-					data[ii][6]=0;
-					data[ii][8]=0;
-				}
 				}
 				ii++;
 			}
-			filename = "设备生产数据" + sdf.format(new Date())+".xls";
+			filename = "设备生产数据" + sdf.format(new Date()) + ".xls";
 
-			ServletContext scontext=request.getSession().getServletContext();
-			//获取绝对路径
-			String abpath=scontext.getRealPath("");
-			//String contextpath=scontext. getContextPath() ; 获取虚拟路径
-			
-			String path = abpath+"excelfiles/" + filename;
-			
+			ServletContext scontext = request.getSession().getServletContext();
+			// 获取绝对路径
+			String abpath = scontext.getRealPath("");
+			// String contextpath=scontext. getContextPath() ; 获取虚拟路径
+
+			String path = abpath + "excelfiles/" + filename;
+
 			new CommonExcelUtil(dtime, titles, data, path, "设备生产数据");
 			file = new File(path);
 			HttpHeaders headers = new HttpHeaders();
 			String fileName = "";
-			fileName = new String(filename.getBytes("gb2312"),"iso-8859-1");
-		
+			fileName = new String(filename.getBytes("gb2312"), "iso-8859-1");
+
 			headers.setContentDispositionFormData("attachment", fileName);
 			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-			
-			//处理ie无法下载的问题
+
+			// 处理ie无法下载的问题
 			response.setContentType("application/octet-stream;charset=utf-8");
-			response.setHeader( "Content-Disposition", 
-					"attachment;filename=\""+ fileName); 
+			response.setHeader("Content-Disposition", "attachment;filename=\"" + fileName);
 			ServletOutputStream o = response.getOutputStream();
 			o.flush();
-			
+
 			return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file), headers, HttpStatus.CREATED);
 		} catch (Exception e) {
 			return null;
 		} finally {
 			file.delete();
 		}
-	}	
-	
+	}
+
 	/**
 	 * 设备焊接数据报表导出
+	 * 
 	 * @param request
 	 * @param response
 	 * @return
 	 */
 	@RequestMapping("/exportMachineWelddata")
 	@ResponseBody
-	public ResponseEntity<byte[]> exportMachineWelddata(HttpServletRequest request,HttpServletResponse response){
+	public ResponseEntity<byte[]> exportMachineWelddata(HttpServletRequest request, HttpServletResponse response) {
 		File file = null;
 		String time1 = request.getParameter("dtoTime1");
 		String time2 = request.getParameter("dtoTime2");
 		String item = request.getParameter("item");
 		WeldDto dto = new WeldDto();
 		BigInteger itemid = null;
-		String dtime = "统计日期："+time1+"--"+time2;
-		try{
-			if(iutil.isNull(time1)){
+		String dtime = "统计日期：" + time1 + "--" + time2;
+		try {
+			if (iutil.isNull(time1)) {
 				dto.setDtoTime1(time1);
 			}
-			if(iutil.isNull(time2)){
+			if (iutil.isNull(time2)) {
 				dto.setDtoTime2(time2);
 			}
-			if(iutil.isNull(item)){
+			if (iutil.isNull(item)) {
 				itemid = new BigInteger(item);
 			}
-			List<DataStatistics> ilist = dss.getWeldMachineInCountData(dto,itemid);
-			String[] titles = new String[]{"设备编码","所属班组","累计焊接时间","正常段时长","超规范时长","规范符合率(%)"};
+			List<DataStatistics> ilist = dss.getWeldMachineInCountData(dto, itemid);
+			String[] titles = new String[] { "设备编码", "所属班组", "累计焊接时间", "正常段时长", "超规范时长", "规范符合率(%)" };
 			Object[][] data = new Object[ilist.size()][6];
 			int ii = 0;
 			for (DataStatistics i : ilist) {
@@ -558,182 +670,188 @@ public class ExportExcelController {
 				}
 				ii++;
 			}
-			filename = "设备焊接数据" + sdf.format(new Date())+".xls";
+			filename = "设备焊接数据" + sdf.format(new Date()) + ".xls";
 
-			ServletContext scontext=request.getSession().getServletContext();
-			//获取绝对路径
-			String abpath=scontext.getRealPath("");
-			//String contextpath=scontext. getContextPath() ; 获取虚拟路径
-			
-			String path = abpath+"excelfiles/" + filename;
-			
+			ServletContext scontext = request.getSession().getServletContext();
+			// 获取绝对路径
+			String abpath = scontext.getRealPath("");
+			// String contextpath=scontext. getContextPath() ; 获取虚拟路径
+
+			String path = abpath + "excelfiles/" + filename;
+
 			new CommonExcelUtil(dtime, titles, data, path, "设备焊接数据");
 			file = new File(path);
 			HttpHeaders headers = new HttpHeaders();
 			String fileName = "";
-			fileName = new String(filename.getBytes("gb2312"),"iso-8859-1");
-		
+			fileName = new String(filename.getBytes("gb2312"), "iso-8859-1");
+
 			headers.setContentDispositionFormData("attachment", fileName);
 			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-			
-			//处理ie无法下载的问题
+
+			// 处理ie无法下载的问题
 			response.setContentType("application/octet-stream;charset=utf-8");
-			response.setHeader( "Content-Disposition", 
-					"attachment;filename=\""+ fileName); 
+			response.setHeader("Content-Disposition", "attachment;filename=\"" + fileName);
 			ServletOutputStream o = response.getOutputStream();
 			o.flush();
-			
+
 			return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file), headers, HttpStatus.CREATED);
 		} catch (Exception e) {
 			return null;
 		} finally {
 			file.delete();
 		}
-	}	
-	
+	}
+
 	/**
 	 * 人员生产数据报表导出
+	 * 
 	 * @param request
 	 * @return
 	 */
 	@RequestMapping("/exportPersonData")
 	@ResponseBody
-	public ResponseEntity<byte[]> exportPersonData(HttpServletRequest request,HttpServletResponse response){
+	public ResponseEntity<byte[]> exportPersonData(HttpServletRequest request, HttpServletResponse response) {
 		File file = null;
 		String time1 = request.getParameter("dtoTime1");
 		String time2 = request.getParameter("dtoTime2");
 		WeldDto dto = new WeldDto();
-		String dtime = "统计日期："+time1+"--"+time2;
-		try{
-			if(iutil.isNull(time1)){
+		String dtime = "统计日期：" + time1 + "--" + time2;
+		try {
+			if (iutil.isNull(time1)) {
 				dto.setDtoTime1(time1);
 			}
-			if(iutil.isNull(time2)){
+			if (iutil.isNull(time2)) {
 				dto.setDtoTime2(time2);
 			}
 			List<DataStatistics> list = dss.getAllPersonData(im.getUserInsframework());
-			String[] titles = new String []{"焊工编号","焊工名称","焊接焊缝数","焊接时间","工作时间","焊接效率(%)","焊丝消耗(KG)","电能消耗(KWH)","气体消耗(L)","规范符合率(%)"};
+			String[] titles = new String[] { "焊工编号", "焊工名称", "焊接焊缝数", "焊接时间", "工作时间", "焊接效率(%)", "焊丝消耗(KG)",
+					"电能消耗(KWH)", "气体消耗(L)", "规范符合率(%)" };
 			Object[][] data = new Object[list.size()][10];
-			int ii=0;
-			for(DataStatistics i:list){
-				if(ii<list.size()){
+			int ii = 0;
+			for (DataStatistics i : list) {
+				if (ii < list.size()) {
 					dto.setWelderno(i.getSerialnumber());
-					data[ii][0]=i.getSerialnumber();
-					data[ii][1]=i.getName();
+					data[ii][0] = i.getSerialnumber();
+					data[ii][1] = i.getName();
 					DataStatistics weld = null;
-					BigInteger worktime = null,standytime=null;
+					BigInteger worktime = null, standytime = null;
 					DataStatistics junctionnum = dss.getWorkJunctionNumByWelder(null, dto);
 					DataStatistics parameter = dss.getParameter();
-					if(junctionnum.getJunctionnum()!=0){
-						data[ii][2]=junctionnum.getJunctionnum();//焊接焊缝数
+					if (junctionnum.getJunctionnum() != 0) {
+						data[ii][2] = junctionnum.getJunctionnum();// 焊接焊缝数
 						worktime = dss.getStaringUpTimeByWelder(null, dto);
-						data[ii][4]=getTimeStrBySecond(worktime);//工作时间
+						data[ii][4] = getTimeStrBySecond(worktime);// 工作时间
 						standytime = dss.getStandytimeByWelder(null, dto);
 						weld = dss.getWorkTimeAndEleVolByWelder(null, dto);
-						double standytimes = 0,time=0,electric=0;
-						if(standytime!=null){
-							standytimes = standytime.doubleValue()/60/60;
+						double standytimes = 0, time = 0, electric = 0;
+						if (standytime != null) {
+							standytimes = standytime.doubleValue() / 60 / 60;
 						}
-						if(weld!=null){
-							time = weld.getWorktime().doubleValue()/60/60;
-							electric = (double)Math.round((time*(weld.getElectricity()*weld.getVoltage())/1000+standytimes*parameter.getStandbypower()/1000)*100)/100;//电能消耗量=焊接时间*焊接平均电流*焊接平均电压+待机时间*待机功率
-						}else{
-							electric = (double)Math.round((time+standytimes*parameter.getStandbypower()/1000)*100)/100;
+						if (weld != null) {
+							time = weld.getWorktime().doubleValue() / 60 / 60;
+							electric = (double) Math.round((time * (weld.getElectricity() * weld.getVoltage()) / 1000
+									+ standytimes * parameter.getStandbypower() / 1000) * 100) / 100;// 电能消耗量=焊接时间*焊接平均电流*焊接平均电压+待机时间*待机功率
+						} else {
+							electric = (double) Math
+									.round((time + standytimes * parameter.getStandbypower() / 1000) * 100) / 100;
 						}
-						data[ii][7]=electric;//电能消耗
-					}else{
-						data[ii][2]=0;
-						data[ii][4]="00:00:00";//工作时间
-						data[ii][7]=0;
+						data[ii][7] = electric;// 电能消耗
+					} else {
+						data[ii][2] = 0;
+						data[ii][4] = "00:00:00";// 工作时间
+						data[ii][7] = 0;
 					}
-					if(weld!=null){
-						data[ii][3]=getTimeStrBySecond(weld.getWorktime());//焊接时间
-						double weldingproductivity = (double)Math.round(weld.getWorktime().doubleValue()/worktime.doubleValue()*100*100)/100;
-						data[ii][5]=weldingproductivity;//焊接效率
-						if(parameter!=null){
-							double  time = weld.getWorktime().doubleValue()/60;
+					if (weld != null) {
+						data[ii][3] = getTimeStrBySecond(weld.getWorktime());// 焊接时间
+						double weldingproductivity = (double) Math
+								.round(weld.getWorktime().doubleValue() / worktime.doubleValue() * 100 * 100) / 100;
+						data[ii][5] = weldingproductivity;// 焊接效率
+						if (parameter != null) {
+							double time = weld.getWorktime().doubleValue() / 60;
 							String[] str = parameter.getWireweight().split(",");
-							double wireweight =Double.valueOf(str[0]);
-							double wire = (double)Math.round(wireweight*parameter.getSpeed()*time*100)/100;//焊丝消耗量=焊丝|焊丝重量*送丝速度*焊接时间
-							double air = (double)Math.round(parameter.getAirflow()*time*100)/100;//气体消耗量=气体流量*焊接时间
+							double wireweight = Double.valueOf(str[0]);
+							double wire = (double) Math.round(wireweight * parameter.getSpeed() * time * 100) / 100;// 焊丝消耗量=焊丝|焊丝重量*送丝速度*焊接时间
+							double air = (double) Math.round(parameter.getAirflow() * time * 100) / 100;// 气体消耗量=气体流量*焊接时间
 //							String sperate = new DecimalFormat("0.00").format((float)Integer.valueOf(weld.getWorktime().subtract(new BigInteger(weld.getTime())).toString())/(Integer.valueOf(weld.getWorktime().toString()))*100);
-							if(String.valueOf(weld.getWorktime()).equals("0")){
-								data[ii][9]=0;//规范符合率
-							}else{
-								String sperate = new DecimalFormat("0.00").format((float)Integer.valueOf(weld.getWorktime().subtract(new BigInteger(weld.getTime())).toString())/(Integer.valueOf(weld.getWorktime().toString()))*100);
-								data[ii][9]=sperate;//规范符合率
+							if (String.valueOf(weld.getWorktime()).equals("0")) {
+								data[ii][9] = 0;// 规范符合率
+							} else {
+								String sperate = new DecimalFormat("0.00").format((float) Integer
+										.valueOf(weld.getWorktime().subtract(new BigInteger(weld.getTime())).toString())
+										/ (Integer.valueOf(weld.getWorktime().toString())) * 100);
+								data[ii][9] = sperate;// 规范符合率
 							}
-							data[ii][6]=wire;//焊丝消耗
-							data[ii][8]=air;//气体消耗
-							
+							data[ii][6] = wire;// 焊丝消耗
+							data[ii][8] = air;// 气体消耗
+
 						}
-					}else{
-						data[ii][3]="00:00:00";
-						data[ii][5]=0;
-						data[ii][6]=0;
-						data[ii][8]=0;
-						data[ii][9]=0;//规范符合率
+					} else {
+						data[ii][3] = "00:00:00";
+						data[ii][5] = 0;
+						data[ii][6] = 0;
+						data[ii][8] = 0;
+						data[ii][9] = 0;// 规范符合率
 					}
 				}
 				ii++;
 			}
-			filename = "人员生产数据" + sdf.format(new Date())+".xls";
+			filename = "人员生产数据" + sdf.format(new Date()) + ".xls";
 
-			ServletContext scontext=request.getSession().getServletContext();
-			//获取绝对路径
-			String abpath=scontext.getRealPath("");
-			//String contextpath=scontext. getContextPath() ; 获取虚拟路径
-			
-			String path = abpath+"excelfiles/" + filename;
-			
+			ServletContext scontext = request.getSession().getServletContext();
+			// 获取绝对路径
+			String abpath = scontext.getRealPath("");
+			// String contextpath=scontext. getContextPath() ; 获取虚拟路径
+
+			String path = abpath + "excelfiles/" + filename;
+
 			new CommonExcelUtil(dtime, titles, data, path, "人员生产数据");
 			file = new File(path);
 			HttpHeaders headers = new HttpHeaders();
 			String fileName = "";
-			fileName = new String(filename.getBytes("gb2312"),"iso-8859-1");
-		
+			fileName = new String(filename.getBytes("gb2312"), "iso-8859-1");
+
 			headers.setContentDispositionFormData("attachment", fileName);
 			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-			
-			//处理ie无法下载的问题
+
+			// 处理ie无法下载的问题
 			response.setContentType("application/octet-stream;charset=utf-8");
-			response.setHeader( "Content-Disposition", 
-					"attachment;filename=\""+ fileName); 
+			response.setHeader("Content-Disposition", "attachment;filename=\"" + fileName);
 			ServletOutputStream o = response.getOutputStream();
 			o.flush();
-			
+
 			return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file), headers, HttpStatus.CREATED);
 		} catch (Exception e) {
 			return null;
 		} finally {
 			file.delete();
 		}
-	}	
-	
+	}
+
 	/**
 	 * 人员焊接数据报表导出
+	 * 
 	 * @param request
 	 * @param response
 	 * @return
 	 */
 	@RequestMapping("/exportPersonWelddata")
 	@ResponseBody
-	public ResponseEntity<byte[]> exportPersonWelddata(HttpServletRequest request,HttpServletResponse response){
+	public ResponseEntity<byte[]> exportPersonWelddata(HttpServletRequest request, HttpServletResponse response) {
 		File file = null;
 		String time1 = request.getParameter("dtoTime1");
 		String time2 = request.getParameter("dtoTime2");
 		WeldDto dto = new WeldDto();
-		String dtime = "统计日期："+time1+"--"+time2;
-		try{
-			if(iutil.isNull(time1)){
+		String dtime = "统计日期：" + time1 + "--" + time2;
+		try {
+			if (iutil.isNull(time1)) {
 				dto.setDtoTime1(time1);
 			}
-			if(iutil.isNull(time2)){
+			if (iutil.isNull(time2)) {
 				dto.setDtoTime2(time2);
 			}
 			dto.setParent(im.getUserInsframework());
 			List<DataStatistics> ilist = dss.getWeldPersonInCountData(dto);
-			String[] titles = new String[]{"焊工编号","焊工姓名","累计焊接时间","正常段时长","超规范时长","规范符合率(%)"};
+			String[] titles = new String[] { "焊工编号", "焊工姓名", "累计焊接时间", "正常段时长", "超规范时长", "规范符合率(%)" };
 			Object[][] data = new Object[ilist.size()][6];
 			int ii = 0;
 			for (DataStatistics i : ilist) {
@@ -753,180 +871,186 @@ public class ExportExcelController {
 				}
 				ii++;
 			}
-			filename = "人员焊接数据" + sdf.format(new Date())+".xls";
+			filename = "人员焊接数据" + sdf.format(new Date()) + ".xls";
 
-			ServletContext scontext=request.getSession().getServletContext();
-			//获取绝对路径
-			String abpath=scontext.getRealPath("");
-			//String contextpath=scontext. getContextPath() ; 获取虚拟路径
-			
-			String path = abpath+"excelfiles/" + filename;
-			
+			ServletContext scontext = request.getSession().getServletContext();
+			// 获取绝对路径
+			String abpath = scontext.getRealPath("");
+			// String contextpath=scontext. getContextPath() ; 获取虚拟路径
+
+			String path = abpath + "excelfiles/" + filename;
+
 			new CommonExcelUtil(dtime, titles, data, path, "人员焊接数据");
 			file = new File(path);
 			HttpHeaders headers = new HttpHeaders();
 			String fileName = "";
-			fileName = new String(filename.getBytes("gb2312"),"iso-8859-1");
-		
+			fileName = new String(filename.getBytes("gb2312"), "iso-8859-1");
+
 			headers.setContentDispositionFormData("attachment", fileName);
 			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-			
-			//处理ie无法下载的问题
+
+			// 处理ie无法下载的问题
 			response.setContentType("application/octet-stream;charset=utf-8");
-			response.setHeader( "Content-Disposition", 
-					"attachment;filename=\""+ fileName); 
+			response.setHeader("Content-Disposition", "attachment;filename=\"" + fileName);
 			ServletOutputStream o = response.getOutputStream();
 			o.flush();
-			
+
 			return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file), headers, HttpStatus.CREATED);
 		} catch (Exception e) {
 			return null;
 		} finally {
 			file.delete();
 		}
-	}	
-	
+	}
+
 	/**
 	 * 工件生产数据报表导出
+	 * 
 	 * @param request
 	 * @return
 	 */
 	@RequestMapping("/exportWorkpieceData")
 	@ResponseBody
-	public ResponseEntity<byte[]> exportWorkpieceData(HttpServletRequest request,HttpServletResponse response){
+	public ResponseEntity<byte[]> exportWorkpieceData(HttpServletRequest request, HttpServletResponse response) {
 		File file = null;
 		String time1 = request.getParameter("dtoTime1");
 		String time2 = request.getParameter("dtoTime2");
 		String junctionno = request.getParameter("junctionno");
 		WeldDto dto = new WeldDto();
-		String dtime = "统计日期："+time1+"--"+time2;
-		try{
-			if(iutil.isNull(time1)){
+		String dtime = "统计日期：" + time1 + "--" + time2;
+		try {
+			if (iutil.isNull(time1)) {
 				dto.setDtoTime1(time1);
 			}
-			if(iutil.isNull(time2)){
+			if (iutil.isNull(time2)) {
 				dto.setDtoTime2(time2);
 			}
-			List<DataStatistics> list = dss.getAllJunctionData("%"+ junctionno+"%");
-			String[] titles = new String []{"焊缝编号","焊接时间","工作时间","焊接效率(%)","焊丝消耗(KG)","电能消耗(KWH)","气体消耗(L)","规范符合率(%)"};
+			List<DataStatistics> list = dss.getAllJunctionData("%" + junctionno + "%");
+			String[] titles = new String[] { "焊缝编号", "焊接时间", "工作时间", "焊接效率(%)", "焊丝消耗(KG)", "电能消耗(KWH)", "气体消耗(L)",
+					"规范符合率(%)" };
 			Object[][] data = new Object[list.size()][8];
-			int ii=0;
-			for(DataStatistics i:list){
-				if(ii<list.size()){
+			int ii = 0;
+			for (DataStatistics i : list) {
+				if (ii < list.size()) {
 					dto.setJunctionno(i.getSerialnumber());
-					data[ii][0]=i.getSerialnumber();
+					data[ii][0] = i.getSerialnumber();
 					BigInteger worktime = dss.getStaringUpTimeByJunction(null, dto);
 					DataStatistics parameter = dss.getParameter();
 					BigInteger standytime = null;
 					DataStatistics weld = null;
-					if(worktime!=null){
-						data[ii][2]=getTimeStrBySecond(worktime);//工作时间
+					if (worktime != null) {
+						data[ii][2] = getTimeStrBySecond(worktime);// 工作时间
 						weld = dss.getWorkTimeAndEleVolByJunction(null, dto);
 						standytime = dss.getStandytimeByJunction(null, dto);
 
-						double standytimes = 0,time=0,electric=0;
-						if(standytime!=null){
-							standytimes = standytime.doubleValue()/60/60;
+						double standytimes = 0, time = 0, electric = 0;
+						if (standytime != null) {
+							standytimes = standytime.doubleValue() / 60 / 60;
 						}
-						if(weld!=null){
-							time = weld.getWorktime().doubleValue()/60/60;
-							electric = (double)Math.round((time*(weld.getElectricity()*weld.getVoltage())/1000+standytimes*parameter.getStandbypower()/1000)*100)/100;//电能消耗量=焊接时间*焊接平均电流*焊接平均电压+待机时间*待机功率
-						}else{
-							electric = (double)Math.round((time+standytimes*parameter.getStandbypower()/1000)*100)/100;
+						if (weld != null) {
+							time = weld.getWorktime().doubleValue() / 60 / 60;
+							electric = (double) Math.round((time * (weld.getElectricity() * weld.getVoltage()) / 1000
+									+ standytimes * parameter.getStandbypower() / 1000) * 100) / 100;// 电能消耗量=焊接时间*焊接平均电流*焊接平均电压+待机时间*待机功率
+						} else {
+							electric = (double) Math
+									.round((time + standytimes * parameter.getStandbypower() / 1000) * 100) / 100;
 						}
-						data[ii][5]=electric;//电能消耗
-					}else{
-						data[ii][2]="00:00:00";
-						data[ii][5]=0;
+						data[ii][5] = electric;// 电能消耗
+					} else {
+						data[ii][2] = "00:00:00";
+						data[ii][5] = 0;
 					}
-					if(worktime!=null && weld!=null){
-						data[ii][1]=getTimeStrBySecond(weld.getWorktime());//焊接时间
-						double weldingproductivity = (double)Math.round(weld.getWorktime().doubleValue()/worktime.doubleValue()*100*100)/100;
-						data[ii][3]=weldingproductivity;//焊接效率
-						if(parameter!=null){
-							double  time = weld.getWorktime().doubleValue()/60;
+					if (worktime != null && weld != null) {
+						data[ii][1] = getTimeStrBySecond(weld.getWorktime());// 焊接时间
+						double weldingproductivity = (double) Math
+								.round(weld.getWorktime().doubleValue() / worktime.doubleValue() * 100 * 100) / 100;
+						data[ii][3] = weldingproductivity;// 焊接效率
+						if (parameter != null) {
+							double time = weld.getWorktime().doubleValue() / 60;
 							String[] str = parameter.getWireweight().split(",");
-							double wireweight =Double.valueOf(str[0]);
-							double wire = (double)Math.round(wireweight*parameter.getSpeed()*time*100)/100;//焊丝消耗量=焊丝|焊丝重量*送丝速度*焊接时间
-							double air = (double)Math.round(parameter.getAirflow()*time*100)/100;//气体消耗量=气体流量*焊接时间
-							if(String.valueOf(weld.getWorktime()).equals("0")){
-								data[ii][7]=0;
-							}else{
-								String sperate = new DecimalFormat("0.00").format((float)Integer.valueOf(weld.getWorktime().subtract(new BigInteger(weld.getTime())).toString())/(Integer.valueOf(weld.getWorktime().toString()))*100);
-								data[ii][7]=sperate;
+							double wireweight = Double.valueOf(str[0]);
+							double wire = (double) Math.round(wireweight * parameter.getSpeed() * time * 100) / 100;// 焊丝消耗量=焊丝|焊丝重量*送丝速度*焊接时间
+							double air = (double) Math.round(parameter.getAirflow() * time * 100) / 100;// 气体消耗量=气体流量*焊接时间
+							if (String.valueOf(weld.getWorktime()).equals("0")) {
+								data[ii][7] = 0;
+							} else {
+								String sperate = new DecimalFormat("0.00").format((float) Integer
+										.valueOf(weld.getWorktime().subtract(new BigInteger(weld.getTime())).toString())
+										/ (Integer.valueOf(weld.getWorktime().toString())) * 100);
+								data[ii][7] = sperate;
 							}
 //							String sperate = new DecimalFormat("0.00").format((float)Integer.valueOf(weld.getWorktime().subtract(new BigInteger(weld.getTime())).toString())/(Integer.valueOf(weld.getWorktime().toString()))*100);
-							data[ii][4]=wire;//焊丝消耗
-							data[ii][6]=air;//气体消耗
-							
+							data[ii][4] = wire;// 焊丝消耗
+							data[ii][6] = air;// 气体消耗
+
 						}
-					}else{
-						data[ii][1]="00:00:00";
-						data[ii][3]=0;
-						data[ii][4]=0;
-						data[ii][6]=0;
-						data[ii][7]=0;
+					} else {
+						data[ii][1] = "00:00:00";
+						data[ii][3] = 0;
+						data[ii][4] = 0;
+						data[ii][6] = 0;
+						data[ii][7] = 0;
 					}
 				}
 				ii++;
 			}
-			filename = "工件生产数据" + sdf.format(new Date())+".xls";
+			filename = "工件生产数据" + sdf.format(new Date()) + ".xls";
 
-			ServletContext scontext=request.getSession().getServletContext();
-			//获取绝对路径
-			String abpath=scontext.getRealPath("");
-			//String contextpath=scontext. getContextPath() ; 获取虚拟路径
-			
-			String path = abpath+"excelfiles/" + filename;
-			
+			ServletContext scontext = request.getSession().getServletContext();
+			// 获取绝对路径
+			String abpath = scontext.getRealPath("");
+			// String contextpath=scontext. getContextPath() ; 获取虚拟路径
+
+			String path = abpath + "excelfiles/" + filename;
+
 			new CommonExcelUtil(dtime, titles, data, path, "工件生产数据");
 			file = new File(path);
 			HttpHeaders headers = new HttpHeaders();
 			String fileName = "";
-			fileName = new String(filename.getBytes("gb2312"),"iso-8859-1");
-		
+			fileName = new String(filename.getBytes("gb2312"), "iso-8859-1");
+
 			headers.setContentDispositionFormData("attachment", fileName);
 			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-			
-			//处理ie无法下载的问题
+
+			// 处理ie无法下载的问题
 			response.setContentType("application/octet-stream;charset=utf-8");
-			response.setHeader( "Content-Disposition", 
-					"attachment;filename=\""+ fileName); 
+			response.setHeader("Content-Disposition", "attachment;filename=\"" + fileName);
 			ServletOutputStream o = response.getOutputStream();
 			o.flush();
-			
+
 			return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file), headers, HttpStatus.CREATED);
 		} catch (Exception e) {
 			return null;
 		} finally {
 			file.delete();
 		}
-	}	
-	
+	}
+
 	/**
 	 * 工件焊接数据报表导出
+	 * 
 	 * @param request
 	 * @param response
 	 * @return
 	 */
 	@RequestMapping("/exportWorkpieceWelddata")
 	@ResponseBody
-	public ResponseEntity<byte[]> exportWorkpieceWelddata(HttpServletRequest request,HttpServletResponse response){
+	public ResponseEntity<byte[]> exportWorkpieceWelddata(HttpServletRequest request, HttpServletResponse response) {
 		File file = null;
 		String time1 = request.getParameter("dtoTime1");
 		String time2 = request.getParameter("dtoTime2");
 		String junctionno = request.getParameter("junctionno");
 		WeldDto dto = new WeldDto();
-		String dtime = "统计日期："+time1+"--"+time2;
-		try{
-			if(iutil.isNull(time1)){
+		String dtime = "统计日期：" + time1 + "--" + time2;
+		try {
+			if (iutil.isNull(time1)) {
 				dto.setDtoTime1(time1);
 			}
-			if(iutil.isNull(time2)){
+			if (iutil.isNull(time2)) {
 				dto.setDtoTime2(time2);
 			}
-			List<DataStatistics> ilist = dss.getWeldWorkpieceInCountData(dto,"%"+ junctionno+"%");
-			String[] titles = new String[]{"焊缝编号","累计焊接时间","正常段时长","超规范时长","规范符合率(%)"};
+			List<DataStatistics> ilist = dss.getWeldWorkpieceInCountData(dto, "%" + junctionno + "%");
+			String[] titles = new String[] { "焊缝编号", "累计焊接时间", "正常段时长", "超规范时长", "规范符合率(%)" };
 			Object[][] data = new Object[ilist.size()][5];
 			int ii = 0;
 			for (DataStatistics i : ilist) {
@@ -945,31 +1069,30 @@ public class ExportExcelController {
 				}
 				ii++;
 			}
-			filename = "工件焊接数据" + sdf.format(new Date())+".xls";
+			filename = "工件焊接数据" + sdf.format(new Date()) + ".xls";
 
-			ServletContext scontext=request.getSession().getServletContext();
-			//获取绝对路径
-			String abpath=scontext.getRealPath("");
-			//String contextpath=scontext. getContextPath() ; 获取虚拟路径
-			
-			String path = abpath+"excelfiles/" + filename;
-			
+			ServletContext scontext = request.getSession().getServletContext();
+			// 获取绝对路径
+			String abpath = scontext.getRealPath("");
+			// String contextpath=scontext. getContextPath() ; 获取虚拟路径
+
+			String path = abpath + "excelfiles/" + filename;
+
 			new CommonExcelUtil(dtime, titles, data, path, "工件焊接数据");
 			file = new File(path);
 			HttpHeaders headers = new HttpHeaders();
 			String fileName = "";
-			fileName = new String(filename.getBytes("gb2312"),"iso-8859-1");
-		
+			fileName = new String(filename.getBytes("gb2312"), "iso-8859-1");
+
 			headers.setContentDispositionFormData("attachment", fileName);
 			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-			
-			//处理ie无法下载的问题
+
+			// 处理ie无法下载的问题
 			response.setContentType("application/octet-stream;charset=utf-8");
-			response.setHeader( "Content-Disposition", 
-					"attachment;filename=\""+ fileName); 
+			response.setHeader("Content-Disposition", "attachment;filename=\"" + fileName);
 			ServletOutputStream o = response.getOutputStream();
 			o.flush();
-			
+
 			return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file), headers, HttpStatus.CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -977,83 +1100,89 @@ public class ExportExcelController {
 		} finally {
 			file.delete();
 		}
-	}	
-	
-	public String getTimeStrBySecond(BigInteger timeParam ) {
-		if(timeParam == null){
+	}
+
+	public String getTimeStrBySecond(BigInteger timeParam) {
+		if (timeParam == null) {
 			return "00:00:00";
 		}
-		BigInteger[] str = timeParam.divideAndRemainder(new BigInteger("60"));//divideAndRemainder返回数组。第一个是商第二个时取模
+		BigInteger[] str = timeParam.divideAndRemainder(new BigInteger("60"));// divideAndRemainder返回数组。第一个是商第二个时取模
 		BigInteger second = str[1];
-		BigInteger minuteTemp = timeParam.divide(new BigInteger("60"));//subtract：BigInteger相减，multiply：BigInteger相乘，divide : BigInteger相除
-        if (minuteTemp.compareTo(new BigInteger("0"))>0) {//compareTo：比较BigInteger类型的大小，大则返回1，小则返回-1 ，等于则返回0
-        	BigInteger[] minstr = minuteTemp.divideAndRemainder(new BigInteger("60"));
-    		BigInteger minute = minstr[1];
-    		BigInteger hour = minuteTemp.divide(new BigInteger("60"));
-            if (hour.compareTo(new BigInteger("0"))>0) {
-                return (hour.compareTo(new BigInteger("9"))>0 ? (hour + "") : ("0" + hour)) + ":" + (minute.compareTo(new BigInteger("9"))>0 ? (minute + "") : ("0" + minute))
-                        + ":" + (second .compareTo(new BigInteger("9"))>0 ? (second + "") : ("0" + second));
-            } else {
-                return "00:" + (minute.compareTo(new BigInteger("9"))>0 ? (minute + "") : ("0" + minute)) + ":"
-                        + (second .compareTo(new BigInteger("9"))>0 ? (second + "") : ("0" + second));
-            }
-        } else {
-            return "00:00:" + (second .compareTo(new BigInteger("9"))>0 ? (second + "") : ("0" + second));
-        }
+		BigInteger minuteTemp = timeParam.divide(new BigInteger("60"));// subtract：BigInteger相减，multiply：BigInteger相乘，divide
+																		// : BigInteger相除
+		if (minuteTemp.compareTo(new BigInteger("0")) > 0) {// compareTo：比较BigInteger类型的大小，大则返回1，小则返回-1 ，等于则返回0
+			BigInteger[] minstr = minuteTemp.divideAndRemainder(new BigInteger("60"));
+			BigInteger minute = minstr[1];
+			BigInteger hour = minuteTemp.divide(new BigInteger("60"));
+			if (hour.compareTo(new BigInteger("0")) > 0) {
+				return (hour.compareTo(new BigInteger("9")) > 0 ? (hour + "") : ("0" + hour)) + ":"
+						+ (minute.compareTo(new BigInteger("9")) > 0 ? (minute + "") : ("0" + minute)) + ":"
+						+ (second.compareTo(new BigInteger("9")) > 0 ? (second + "") : ("0" + second));
+			} else {
+				return "00:" + (minute.compareTo(new BigInteger("9")) > 0 ? (minute + "") : ("0" + minute)) + ":"
+						+ (second.compareTo(new BigInteger("9")) > 0 ? (second + "") : ("0" + second));
+			}
+		} else {
+			return "00:00:" + (second.compareTo(new BigInteger("9")) > 0 ? (second + "") : ("0" + second));
+		}
 	}
-	
+
 	/**
 	 * 设备生产数据报表导出
+	 * 
 	 * @param request
 	 * @return
 	 */
 	@RequestMapping("/exportTaskDetail")
 	@ResponseBody
-	public ResponseEntity<byte[]> exportTaskDetail(HttpServletRequest request,HttpServletResponse response){
+	public ResponseEntity<byte[]> exportTaskDetail(HttpServletRequest request, HttpServletResponse response) {
 		File file = null;
 		BigInteger itemid = null;
-		String welderno = "",taskno = "",dtoTime1 = "",dtoTime2 = "";
-		if(iutil.isNull(request.getParameter("dtoTime1"))){
+		String welderno = "", taskno = "", dtoTime1 = "", dtoTime2 = "";
+		if (iutil.isNull(request.getParameter("dtoTime1"))) {
 			dtoTime1 = request.getParameter("dtoTime1");
 		}
-		if(iutil.isNull(request.getParameter("dtoTime2"))){
+		if (iutil.isNull(request.getParameter("dtoTime2"))) {
 			dtoTime2 = request.getParameter("dtoTime2");
 		}
-		if(iutil.isNull(request.getParameter("welderno"))){
+		if (iutil.isNull(request.getParameter("welderno"))) {
 			welderno = "'%" + request.getParameter("welderno") + "%'";
 		}
-		if(iutil.isNull(request.getParameter("taskno"))){
+		if (iutil.isNull(request.getParameter("taskno"))) {
 			taskno = "'%" + request.getParameter("taskno") + "%'";
 		}
-		if(iutil.isNull(request.getParameter("item"))){
+		if (iutil.isNull(request.getParameter("item"))) {
 			itemid = new BigInteger(request.getParameter("item"));
-		}else{
+		} else {
 			itemid = im.getUserInsframework();
 		}
 		WeldDto dto = new WeldDto();
-		String dtime = "统计日期："+dtoTime1+"--"+dtoTime2;
-		try{
+		String dtime = "统计日期：" + dtoTime1 + "--" + dtoTime2;
+		try {
 			List<DataStatistics> list = dss.getTask(itemid, welderno, taskno, dtoTime1, dtoTime2);
-		
+
 			List<DataStatistics> task = dss.getTaskDetail(itemid, welderno, taskno, dtoTime1, dtoTime2);
-			String[] titles = new String []{"焊工班组","焊工编号","焊工姓名","焊机编号","任务编号","开始时间","结束时间","使用通道","良好段","报警段","平均焊接电流","平均焊接电压","规范符合率(%)"};
+			String[] titles = new String[] { "焊工班组", "焊工编号", "焊工姓名", "焊机编号", "任务编号", "开始时间", "结束时间", "使用通道", "良好段",
+					"报警段", "平均焊接电流", "平均焊接电压", "规范符合率(%)" };
 			Object[][] data = new Object[list.size()][13];
-			int ii=0;
-			for(int i=0;i<list.size();i++){
-				if(i!=list.size()-1){
-					if(list.get(i).getTaskid().equals(list.get(i+1).getTaskid())){
-						if(list.get(i).getType()!=1){
-							if(list.get(i+1).getType()==1){
-								list.get(i).setEndtime(list.get(i+1).getEndtime());
-							}else{
-								list.get(i).setEndtime(list.get(i+1).getStarttime());
+			int ii = 0;
+			for (int i = 0; i < list.size(); i++) {
+				if (i != list.size() - 1) {
+					if (list.get(i).getTaskid().equals(list.get(i + 1).getTaskid())) {
+						if (list.get(i).getType() != 1) {
+							if (list.get(i + 1).getType() == 1) {
+								list.get(i).setEndtime(list.get(i + 1).getEndtime());
+							} else {
+								list.get(i).setEndtime(list.get(i + 1).getStarttime());
 							}
 						}
 					}
 				}
-				for(int j=0;j<task.size();j++){
-					if(list.get(i).getType()!=1){
-						if(list.get(i).getTaskid().equals(task.get(j).getTaskid()) && list.get(i).getWelderid().equals(task.get(j).getWelderid()) && list.get(i).getMachineid().equals(task.get(j).getMachineid())){
+				for (int j = 0; j < task.size(); j++) {
+					if (list.get(i).getType() != 1) {
+						if (list.get(i).getTaskid().equals(task.get(j).getTaskid())
+								&& list.get(i).getWelderid().equals(task.get(j).getWelderid())
+								&& list.get(i).getMachineid().equals(task.get(j).getMachineid())) {
 							data[ii][0] = task.get(j).getName();
 							data[ii][1] = task.get(j).getWelderno();
 							data[ii][2] = task.get(j).getWeldername();
@@ -1062,154 +1191,158 @@ public class ExportExcelController {
 							data[ii][5] = task.get(j).getStarttime();
 							data[ii][6] = list.get(i).getEndtime();
 							data[ii][7] = task.get(j).getChannel();
-							if(task.get(j).getWorktime()!=null && !"".equals(task.get(j).getWorktime())){
+							if (task.get(j).getWorktime() != null && !"".equals(task.get(j).getWorktime())) {
 								data[ii][8] = getTimeStrBySecond(task.get(j).getWorktime());
-							}else{
+							} else {
 								data[ii][8] = "00:00:00";
 							}
-							if(task.get(j).getWarntime()!=null && !"".equals(task.get(j).getWarntime())){
+							if (task.get(j).getWarntime() != null && !"".equals(task.get(j).getWarntime())) {
 								data[ii][9] = getTimeStrBySecond(task.get(j).getWarntime());
-							}else{
+							} else {
 								data[ii][9] = "00:00:00";
 							}
-							data[ii][10] = (double)Math.round(task.get(j).getElectricity()*100)/100;
-							data[ii][11] = (double)Math.round(task.get(j).getVoltage()*100)/100;
+							data[ii][10] = (double) Math.round(task.get(j).getElectricity() * 100) / 100;
+							data[ii][11] = (double) Math.round(task.get(j).getVoltage() * 100) / 100;
 							double ratio = 0;
-							if(task.get(j).getWarntime()!=null && !"".equals(task.get(j).getWarntime())){
-								ratio = (double)Math.round(task.get(j).getWorktime().doubleValue()/(task.get(j).getWorktime().doubleValue()+task.get(j).getWarntime().doubleValue())*10000)/100;
+							if (task.get(j).getWarntime() != null && !"".equals(task.get(j).getWarntime())) {
+								ratio = (double) Math.round(task.get(j).getWorktime().doubleValue()
+										/ (task.get(j).getWorktime().doubleValue()
+												+ task.get(j).getWarntime().doubleValue())
+										* 10000) / 100;
 							}
-							data[ii][12] = ratio;//规范符合率
+							data[ii][12] = ratio;// 规范符合率
 						}
 					}
 				}
 				ii++;
 			}
-			filename = "生产任务详情" + sdf.format(new Date())+".xls";
+			filename = "生产任务详情" + sdf.format(new Date()) + ".xls";
 
-			ServletContext scontext=request.getSession().getServletContext();
-			//获取绝对路径
-			String abpath=scontext.getRealPath("");
-			//String contextpath=scontext. getContextPath() ; 获取虚拟路径
-			
-			String path = abpath+"excelfiles/" + filename;
-			
+			ServletContext scontext = request.getSession().getServletContext();
+			// 获取绝对路径
+			String abpath = scontext.getRealPath("");
+			// String contextpath=scontext. getContextPath() ; 获取虚拟路径
+
+			String path = abpath + "excelfiles/" + filename;
+
 			new CommonExcelUtil(dtime, titles, data, path, "生产任务详情");
 			file = new File(path);
 			HttpHeaders headers = new HttpHeaders();
 			String fileName = "";
-			fileName = new String(filename.getBytes("gb2312"),"iso-8859-1");
-		
+			fileName = new String(filename.getBytes("gb2312"), "iso-8859-1");
+
 			headers.setContentDispositionFormData("attachment", fileName);
 			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-			
-			//处理ie无法下载的问题
+
+			// 处理ie无法下载的问题
 			response.setContentType("application/octet-stream;charset=utf-8");
-			response.setHeader( "Content-Disposition", 
-					"attachment;filename=\""+ fileName); 
+			response.setHeader("Content-Disposition", "attachment;filename=\"" + fileName);
 			ServletOutputStream o = response.getOutputStream();
 			o.flush();
-			
+
 			return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file), headers, HttpStatus.CREATED);
 		} catch (Exception e) {
 			return null;
 		} finally {
 			file.delete();
 		}
-	}	
-	
+	}
+
 	/**
 	 * 故障报表导出
+	 * 
 	 * @param request
 	 * @param response
 	 * @return
 	 */
 	@RequestMapping("/exportFauit")
 	@ResponseBody
-	public ResponseEntity<byte[]> exportFauit(HttpServletRequest request,HttpServletResponse response){
+	public ResponseEntity<byte[]> exportFauit(HttpServletRequest request, HttpServletResponse response) {
 		File file = null;
 		String time1 = request.getParameter("dtoTime1");
 		String time2 = request.getParameter("dtoTime2");
 		WeldDto dto = new WeldDto();
-		String dtime = "统计日期："+time1+"--"+time2;
-		try{
-			if(iutil.isNull(time1)){
+		String dtime = "统计日期：" + time1 + "--" + time2;
+		try {
+			if (iutil.isNull(time1)) {
 				dto.setDtoTime1(time1);
 			}
-			if(iutil.isNull(time2)){
+			if (iutil.isNull(time2)) {
 				dto.setDtoTime2(time2);
 			}
-			int fauit = 0 ;
-			if(iutil.isNull(request.getParameter("fauit"))){
-				fauit  = Integer.parseInt(request.getParameter("fauit"));
+			int fauit = 0;
+			if (iutil.isNull(request.getParameter("fauit"))) {
+				fauit = Integer.parseInt(request.getParameter("fauit"));
 			}
 			List<DataStatistics> list = dss.getFauit(dto, fauit);
-			String[] titles = new String[]{"焊机编号","焊机归属","故障类型","故障次数"};
+			String[] titles = new String[] { "焊机编号", "焊机归属", "故障类型", "故障次数" };
 			Object[][] data = new Object[list.size()][4];
-			int ii=0;
-			for(DataStatistics i:list){
-				if(ii<list.size()){
-					data[ii][0]=i.getName();//焊机编号
-					data[ii][1]=i.getInsname();//焊机归属
-					data[ii][2]=i.getValuename();//故障类型
-					data[ii][3]=i.getNum();//故障次数
+			int ii = 0;
+			for (DataStatistics i : list) {
+				if (ii < list.size()) {
+					data[ii][0] = i.getName();// 焊机编号
+					data[ii][1] = i.getInsname();// 焊机归属
+					data[ii][2] = i.getValuename();// 故障类型
+					data[ii][3] = i.getNum();// 故障次数
 				}
 				ii++;
 			}
-			filename = "故障报表" + sdf.format(new Date())+".xls";
+			filename = "故障报表" + sdf.format(new Date()) + ".xls";
 
-			ServletContext scontext=request.getSession().getServletContext();
-			//获取绝对路径
-			String abpath=scontext.getRealPath("");
-			//String contextpath=scontext. getContextPath() ; 获取虚拟路径
-			
-			String path = abpath+"excelfiles/" + filename;
-			
+			ServletContext scontext = request.getSession().getServletContext();
+			// 获取绝对路径
+			String abpath = scontext.getRealPath("");
+			// String contextpath=scontext. getContextPath() ; 获取虚拟路径
+
+			String path = abpath + "excelfiles/" + filename;
+
 			new CommonExcelUtil(dtime, titles, data, path, "故障报表");
 			file = new File(path);
 			HttpHeaders headers = new HttpHeaders();
 			String fileName = "";
-			fileName = new String(filename.getBytes("gb2312"),"iso-8859-1");
-		
+			fileName = new String(filename.getBytes("gb2312"), "iso-8859-1");
+
 			headers.setContentDispositionFormData("attachment", fileName);
 			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-			
-			//处理ie无法下载的问题
+
+			// 处理ie无法下载的问题
 			response.setContentType("application/octet-stream;charset=utf-8");
-			response.setHeader( "Content-Disposition", 
-					"attachment;filename=\""+ fileName); 
+			response.setHeader("Content-Disposition", "attachment;filename=\"" + fileName);
 			ServletOutputStream o = response.getOutputStream();
 			o.flush();
-			
+
 			return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file), headers, HttpStatus.CREATED);
 		} catch (Exception e) {
 			return null;
 		} finally {
 			file.delete();
 		}
-	}	
-	
+	}
+
 	/**
 	 * 导出采集模块
+	 * 
 	 * @param request
 	 * @param response
 	 * @return
 	 */
 	@RequestMapping("/exporGather")
 	@ResponseBody
-	public ResponseEntity<byte[]> exporGather(HttpServletRequest request,HttpServletResponse response){
+	public ResponseEntity<byte[]> exporGather(HttpServletRequest request, HttpServletResponse response) {
 		File file = null;
 		try {
-			String str=(String) request.getSession().getAttribute("searchStr");
+			String str = (String) request.getSession().getAttribute("searchStr");
 			String parentid = request.getParameter("parent");
 			BigInteger parent = null;
-			if(iutil.isNull(parentid)){
+			if (iutil.isNull(parentid)) {
 				parent = new BigInteger(parentid);
 			}
 			List<Gather> list = gs.getGatherAll(str, parent);
 			String dtime = null;
-			String[] titles = new String[]{"采集模块编号","所属项目","采集模块状态","采集模块通讯协议","采集模块IP地址","采集模块MAC地址","采集模块出厂时间"};
+			String[] titles = new String[] { "采集模块编号", "所属项目", "采集模块状态", "采集模块通讯协议", "采集模块IP地址", "采集模块MAC地址",
+					"采集模块出厂时间" };
 			Object[][] data = new Object[list.size()][7];
-			for(int i =0; i<list.size();i++){
+			for (int i = 0; i < list.size(); i++) {
 				data[i][0] = list.get(i).getGatherNo();
 				data[i][1] = list.get(i).getItemname();
 				data[i][2] = list.get(i).getStatus();
@@ -1220,60 +1353,60 @@ public class ExportExcelController {
 			}
 			filename = "采集模块" + sdf.format(new Date()) + ".xls";
 
-			ServletContext scontext=request.getSession().getServletContext();
-			//获取绝对路径
-			String abpath=scontext.getRealPath("");
-			//String contextpath=scontext. getContextPath() ; 获取虚拟路径
-			
-			String path = abpath+"excelfiles/" + filename;
+			ServletContext scontext = request.getSession().getServletContext();
+			// 获取绝对路径
+			String abpath = scontext.getRealPath("");
+			// String contextpath=scontext. getContextPath() ; 获取虚拟路径
+
+			String path = abpath + "excelfiles/" + filename;
 			new CommonExcelUtil(dtime, titles, data, path, "采集模块数据");
-			
+
 			file = new File(path);
 			HttpHeaders headers = new HttpHeaders();
 			String fileName = "";
-			
-			fileName = new String(filename.getBytes("gb2312"),"iso-8859-1");
-			
+
+			fileName = new String(filename.getBytes("gb2312"), "iso-8859-1");
+
 			headers.setContentDispositionFormData("attachment", fileName);
 			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-			
-			//处理ie无法下载的问题
+
+			// 处理ie无法下载的问题
 			response.setContentType("application/octet-stream;charset=utf-8");
-			response.setHeader( "Content-Disposition", 
-					"attachment;filename=\""+ fileName); 
+			response.setHeader("Content-Disposition", "attachment;filename=\"" + fileName);
 			ServletOutputStream o = response.getOutputStream();
 			o.flush();
-			
+
 			return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file), headers, HttpStatus.CREATED);
-		}catch (Exception e) {
-	    	return null;
-		}  finally {
+		} catch (Exception e) {
+			return null;
+		} finally {
 			file.delete();
 		}
 	}
-	
+
 	/**
 	 * 导出焊工
+	 * 
 	 * @param request
 	 * @param response
 	 * @return
 	 */
 	@RequestMapping("/exporWelder")
 	@ResponseBody
-	public ResponseEntity<byte[]> exporWelder(HttpServletRequest request,HttpServletResponse response){
+	public ResponseEntity<byte[]> exporWelder(HttpServletRequest request, HttpServletResponse response) {
 		File file = null;
 		try {
-			String str=(String) request.getSession().getAttribute("searchStr");
+			String str = (String) request.getSession().getAttribute("searchStr");
 			String parentid = request.getParameter("parent");
 			BigInteger parent = null;
-			if(iutil.isNull(parentid)){
+			if (iutil.isNull(parentid)) {
 				parent = new BigInteger(parentid);
 			}
-			List<Person> list = ps.findAll(parent,str);
+			List<Person> list = ps.findAll(parent, str);
 			String dtime = null;
-			String[] titles = new String[]{"姓名","编号","手机","级别","卡号","资质","部门","备注"};
+			String[] titles = new String[] { "姓名", "编号", "手机", "级别", "卡号", "资质", "部门", "备注" };
 			Object[][] data = new Object[list.size()][8];
-			for(int i =0; i<list.size();i++){
+			for (int i = 0; i < list.size(); i++) {
 				data[i][0] = list.get(i).getName();
 				data[i][1] = list.get(i).getWelderno();
 				data[i][2] = list.get(i).getCellphone();
@@ -1285,81 +1418,81 @@ public class ExportExcelController {
 			}
 			filename = "焊工管理" + sdf.format(new Date()) + ".xls";
 
-			ServletContext scontext=request.getSession().getServletContext();
-			//获取绝对路径
-			String abpath=scontext.getRealPath("");
-			//String contextpath=scontext. getContextPath() ; 获取虚拟路径
-			
-			String path = abpath+"excelfiles/" + filename;
+			ServletContext scontext = request.getSession().getServletContext();
+			// 获取绝对路径
+			String abpath = scontext.getRealPath("");
+			// String contextpath=scontext. getContextPath() ; 获取虚拟路径
+
+			String path = abpath + "excelfiles/" + filename;
 			new CommonExcelUtil(dtime, titles, data, path, "焊工管理数据");
-			
+
 			file = new File(path);
 			HttpHeaders headers = new HttpHeaders();
 			String fileName = "";
-			
-			fileName = new String(filename.getBytes("gb2312"),"iso-8859-1");
-			
+
+			fileName = new String(filename.getBytes("gb2312"), "iso-8859-1");
+
 			headers.setContentDispositionFormData("attachment", fileName);
 			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-			
-			//处理ie无法下载的问题
+
+			// 处理ie无法下载的问题
 			response.setContentType("application/octet-stream;charset=utf-8");
-			response.setHeader( "Content-Disposition", 
-					"attachment;filename=\""+ fileName); 
+			response.setHeader("Content-Disposition", "attachment;filename=\"" + fileName);
 			ServletOutputStream o = response.getOutputStream();
 			o.flush();
-			
+
 			return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file), headers, HttpStatus.CREATED);
-		}catch (Exception e) {
-	    	return null;
-		}  finally {
+		} catch (Exception e) {
+			return null;
+		} finally {
 			file.delete();
 		}
 	}
-	
+
 	/**
 	 * 导出派工任务
+	 * 
 	 * @param request
 	 * @param response
 	 * @return
 	 */
 	@RequestMapping("/exporWeldTask")
 	@ResponseBody
-	public ResponseEntity<byte[]> exporWeldTask(HttpServletRequest request,HttpServletResponse response){
+	public ResponseEntity<byte[]> exporWeldTask(HttpServletRequest request, HttpServletResponse response) {
 		File file = null;
 		try {
-			String serach="";
-			MyUser user = (MyUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			String serach = "";
+			MyUser user = (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			int instype = im.getUserInsfType(new BigInteger(String.valueOf(user.getId())));
 			BigInteger userinsid = im.getUserInsfId(new BigInteger(String.valueOf(user.getId())));
-			int bz=0;
-			if(instype==20){
-			}else if(instype==23){
-				serach = "j.fitemId="+userinsid;
-			}else{
-				List<Insframework> ls = im.getInsIdByParent(userinsid,24);
-				for(Insframework inns : ls ){
-					if(bz==0){
-						serach=serach+"(j.fitemId="+inns.getId();
-					}else{
-						serach=serach+" or j.fitemId="+inns.getId();
+			int bz = 0;
+			if (instype == 20) {
+			} else if (instype == 23) {
+				serach = "j.fitemId=" + userinsid;
+			} else {
+				List<Insframework> ls = im.getInsIdByParent(userinsid, 24);
+				for (Insframework inns : ls) {
+					if (bz == 0) {
+						serach = serach + "(j.fitemId=" + inns.getId();
+					} else {
+						serach = serach + " or j.fitemId=" + inns.getId();
 					}
 					bz++;
 				}
-				serach=serach+" or j.fitemId="+userinsid+")";
+				serach = serach + " or j.fitemId=" + userinsid + ")";
 			}
-			if(request.getParameter("searchStr")!=null&&serach!=null&&serach!=""){
-				serach=serach+" and "+request.getParameter("searchStr");
+			if (request.getParameter("searchStr") != null && serach != null && serach != "") {
+				serach = serach + " and " + request.getParameter("searchStr");
 			}
-			if(request.getParameter("searchStr")!=null&&(serach==null||serach=="")){
-				serach=serach+request.getParameter("searchStr");
+			if (request.getParameter("searchStr") != null && (serach == null || serach == "")) {
+				serach = serach + request.getParameter("searchStr");
 			}
 			List<WeldedJunction> list = wjm.getWeldedJunctionAll(serach);
 			String dtime = null;
-			String[] titles = new String[]{"任务编号","计划开始时间","工程符号","焊接方法","焊接位置","母材型号","焊材型号","分配焊工","工艺设计","预热要求",
-					"道间温度","碳刨要求","后热要求","退火焊道","装配间隙","碳刨深度","碳刨宽度","后热温度","后热时间","工艺库名称"};
+			String[] titles = new String[] { "任务编号", "计划开始时间", "工程符号", "焊接方法", "焊接位置", "母材型号", "焊材型号", "分配焊工", "工艺设计",
+					"预热要求", "道间温度", "碳刨要求", "后热要求", "退火焊道", "装配间隙", "碳刨深度", "碳刨宽度", "后热温度", "后热时间", "工艺库名称" };
 			Object[][] data = new Object[list.size()][20];
-			for(int i =0; i<list.size();i++){
+			for (int i = 0; i < list.size(); i++) {
 				data[i][0] = list.get(i).getWeldedJunctionno();
 				data[i][1] = list.get(i).getStartTime();
 				data[i][2] = list.get(i).getFengineering_symbol();
@@ -1383,46 +1516,46 @@ public class ExportExcelController {
 			}
 			filename = "派工任务管理" + sdf.format(new Date()) + ".xls";
 
-			ServletContext scontext=request.getSession().getServletContext();
-			//获取绝对路径
-			String abpath=scontext.getRealPath("");
-			//String contextpath=scontext. getContextPath() ; 获取虚拟路径
-			
-			String path = abpath+"excelfiles/" + filename;
+			ServletContext scontext = request.getSession().getServletContext();
+			// 获取绝对路径
+			String abpath = scontext.getRealPath("");
+			// String contextpath=scontext. getContextPath() ; 获取虚拟路径
+
+			String path = abpath + "excelfiles/" + filename;
 			new CommonExcelUtil(dtime, titles, data, path, "派工任务管理数据");
-			
+
 			file = new File(path);
 			HttpHeaders headers = new HttpHeaders();
 			String fileName = "";
-			
-			fileName = new String(filename.getBytes("gb2312"),"iso-8859-1");
-			
+
+			fileName = new String(filename.getBytes("gb2312"), "iso-8859-1");
+
 			headers.setContentDispositionFormData("attachment", fileName);
 			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-			
-			//处理ie无法下载的问题
+
+			// 处理ie无法下载的问题
 			response.setContentType("application/octet-stream;charset=utf-8");
-			response.setHeader( "Content-Disposition", 
-					"attachment;filename=\""+ fileName); 
+			response.setHeader("Content-Disposition", "attachment;filename=\"" + fileName);
 			ServletOutputStream o = response.getOutputStream();
 			o.flush();
-			
+
 			return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file), headers, HttpStatus.CREATED);
-		}catch (Exception e) {
-	    	return null;
-		}  finally {
+		} catch (Exception e) {
+			return null;
+		} finally {
 			file.delete();
 		}
 	}
-	
+
 	/**
 	 * 设备任务表导出
+	 * 
 	 * @param request
 	 * @return
 	 */
 	@RequestMapping("/exportMachineTask")
 	@ResponseBody
-	public ResponseEntity<byte[]> exportMachineTask(HttpServletRequest request,HttpServletResponse response){
+	public ResponseEntity<byte[]> exportMachineTask(HttpServletRequest request, HttpServletResponse response) {
 		File file = null;
 		String time1 = request.getParameter("dtoTime1");
 		String time2 = request.getParameter("dtoTime2");
@@ -1430,73 +1563,73 @@ public class ExportExcelController {
 		int status = Integer.parseInt(request.getParameter("status"));
 		WeldDto dto = new WeldDto();
 		BigInteger itemid = null;
-		String dtime = "统计日期："+time1+"--"+time2;
-		try{
-			if(iutil.isNull(time1)){
+		String dtime = "统计日期：" + time1 + "--" + time2;
+		try {
+			if (iutil.isNull(time1)) {
 				dto.setDtoTime1(time1);
 			}
-			if(iutil.isNull(time2)){
+			if (iutil.isNull(time2)) {
 				dto.setDtoTime2(time2);
 			}
-			if(iutil.isNull(item)){
+			if (iutil.isNull(item)) {
 				itemid = new BigInteger(item);
 			}
 			List<DataStatistics> list = dss.getMachineTask(itemid, dss.getDay(time1, time2), status);
-			String[] titles = new String []{"所属班组","设备编号","日期","任务号","状态"};
+			String[] titles = new String[] { "所属班组", "设备编号", "日期", "任务号", "状态" };
 			Object[][] data = new Object[list.size()][9];
-			int ii=0;
-			for(DataStatistics i:list){
-				if(ii<list.size()){
-					data[ii][0]=i.getInsname();
-					data[ii][1]=i.getMachineno();
-					data[ii][2]=i.getTime();
-					data[ii][3]=i.getTaskno();
-					data[ii][4]=i.getType()==1?"未分配":"已分配";
+			int ii = 0;
+			for (DataStatistics i : list) {
+				if (ii < list.size()) {
+					data[ii][0] = i.getInsname();
+					data[ii][1] = i.getMachineno();
+					data[ii][2] = i.getTime();
+					data[ii][3] = i.getTaskno();
+					data[ii][4] = i.getType() == 1 ? "未分配" : "已分配";
 				}
 				ii++;
 			}
-			filename = "焊机任务表" + sdf.format(new Date())+".xls";
+			filename = "焊机任务表" + sdf.format(new Date()) + ".xls";
 
-			ServletContext scontext=request.getSession().getServletContext();
-			//获取绝对路径
-			String abpath=scontext.getRealPath("");
-			//String contextpath=scontext. getContextPath() ; 获取虚拟路径
-			
-			String path = abpath+"excelfiles/" + filename;
-			
+			ServletContext scontext = request.getSession().getServletContext();
+			// 获取绝对路径
+			String abpath = scontext.getRealPath("");
+			// String contextpath=scontext. getContextPath() ; 获取虚拟路径
+
+			String path = abpath + "excelfiles/" + filename;
+
 			new CommonExcelUtil(dtime, titles, data, path, "设备任务表");
 			file = new File(path);
 			HttpHeaders headers = new HttpHeaders();
 			String fileName = "";
-			fileName = new String(filename.getBytes("gb2312"),"iso-8859-1");
-		
+			fileName = new String(filename.getBytes("gb2312"), "iso-8859-1");
+
 			headers.setContentDispositionFormData("attachment", fileName);
 			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-			
-			//处理ie无法下载的问题
+
+			// 处理ie无法下载的问题
 			response.setContentType("application/octet-stream;charset=utf-8");
-			response.setHeader( "Content-Disposition", 
-					"attachment;filename=\""+ fileName); 
+			response.setHeader("Content-Disposition", "attachment;filename=\"" + fileName);
 			ServletOutputStream o = response.getOutputStream();
 			o.flush();
-			
+
 			return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file), headers, HttpStatus.CREATED);
 		} catch (Exception e) {
 			return null;
 		} finally {
 			file.delete();
 		}
-	}	
-	
+	}
+
 	/**
 	 * 实时数据导出
+	 * 
 	 * @param request
 	 * @param response
 	 * @return
 	 */
 	@RequestMapping("/exportLiveData")
 	@ResponseBody
-	public ResponseEntity<byte[]> exportLiveData(HttpServletRequest request,HttpServletResponse response){
+	public ResponseEntity<byte[]> exportLiveData(HttpServletRequest request, HttpServletResponse response) {
 		File file = null;
 		String time1 = request.getParameter("dtoTime1");
 		String time2 = request.getParameter("dtoTime2");
@@ -1507,96 +1640,96 @@ public class ExportExcelController {
 		BigInteger mach = new BigInteger(request.getParameter("mach"));
 		String board = request.getParameter("board");
 		WeldDto dto = new WeldDto();
-		String dtime = "统计日期："+time1+"--"+time2+"\r\n";
-		double avgEle=0,avgVol=0;
-		try{
-			if(iutil.isNull(time1)){
+		String dtime = "统计日期：" + time1 + "--" + time2 + "\r\n";
+		double avgEle = 0, avgVol = 0;
+		try {
+			if (iutil.isNull(time1)) {
 				dto.setDtoTime1(time1);
 			}
-			if(iutil.isNull(time2)){
+			if (iutil.isNull(time2)) {
 				dto.setDtoTime2(time2);
 			}
-			List<Report> list = reportService.historyData(dto,taskno,mach,welderid,solder_layer,weld_bead);
+			List<Report> list = reportService.historyData(dto, taskno, mach, welderid, solder_layer, weld_bead);
 //			dtime += "平均电流：" + String.valueOf(list.get(0).getFrealele()) + "；平均电压：" + String.valueOf(list.get(0).getFrealvol());
-			String[] titles = new String[]{"焊层号","焊道号","电流","电压","时间"};
+			String[] titles = new String[] { "焊层号", "焊道号", "电流", "电压", "时间" };
 			Object[][] data = new Object[list.size()][5];
 			int ii = 0;
-			double tempMaxEle=0,tempMinEle=0,tempMaxVol=0,tempMinVol=0;
+			double tempMaxEle = 0, tempMinEle = 0, tempMaxVol = 0, tempMinVol = 0;
 			for (Report i : list) {
 				if (ii < list.size()) {
 					data[ii][0] = i.getId();// 焊层号
 					data[ii][1] = i.getInsid();// 焊道号
-					data[ii][2] = i.getFstandardele();//电流
+					data[ii][2] = i.getFstandardele();// 电流
 					data[ii][3] = i.getFstandardvol();// 电压
-					data[ii][4] = i.getFweldingtime();//时间
-					avgEle+=i.getFstandardele();
-					avgVol+=i.getFstandardvol();
-					if(ii==0) {
+					data[ii][4] = i.getFweldingtime();// 时间
+					avgEle += i.getFstandardele();
+					avgVol += i.getFstandardvol();
+					if (ii == 0) {
 						tempMinEle = i.getFstandardele();
 						tempMinVol = i.getFstandardvol();
 					}
-					if(i.getFstandardele()>tempMaxEle) {
+					if (i.getFstandardele() > tempMaxEle) {
 						tempMaxEle = i.getFstandardele();
 					}
-					if(i.getFstandardele()<tempMinEle && i.getFstandardele()!=0) {
+					if (i.getFstandardele() < tempMinEle && i.getFstandardele() != 0) {
 						tempMinEle = i.getFstandardele();
 					}
-					if(i.getFstandardvol()>tempMaxVol) {
+					if (i.getFstandardvol() > tempMaxVol) {
 						tempMaxVol = i.getFstandardvol();
 					}
-					if(i.getFstandardvol()<tempMinVol && i.getFstandardvol()!=0) {
+					if (i.getFstandardvol() < tempMinVol && i.getFstandardvol() != 0) {
 						tempMinVol = i.getFstandardvol();
 					}
 				}
 				ii++;
 			}
 			DecimalFormat df = new DecimalFormat("0.0");
-			if(board==null || "".equals(board)){
+			if (board == null || "".equals(board)) {
 				board = "0.0";
 			}
-			String weldSpeed = df.format(Double.valueOf(board)/(list.size()/60.0));
+			String weldSpeed = df.format(Double.valueOf(board) / (list.size() / 60.0));
 			String lineEnergy = "0.0";
-			if(!weldSpeed.equals("0.0")){
-				lineEnergy = df.format((avgEle/list.size())*(avgVol/list.size())/Double.valueOf(weldSpeed)*60/1000);
+			if (!weldSpeed.equals("0.0")) {
+				lineEnergy = df.format(
+						(avgEle / list.size()) * (avgVol / list.size()) / Double.valueOf(weldSpeed) * 60 / 1000);
 			}
-			if(list.size()!=0) {
-				dtime += "任务编号："+taskno+"；平均电流：" + df.format(avgEle/list.size()) + "A；平均电压：" + df.format(avgVol/list.size()) + "V"
-						+"；平均焊接速度：" + weldSpeed + "cm/min；平均线能量：" + lineEnergy + "KJ/cm\r\n"
-						+"最大电流：" + tempMaxEle + "A；最小电流：" + tempMinEle + "A"
-						+"；最大电压：" + tempMaxVol + "V；最小电压：" + tempMinVol + "V";
-			}else {
-				dtime += "任务编号："+taskno+"；平均电流：0A；平均电压：0V；最大电流：0V；最小电流：0V；最大电压：0V；最小电压：0V";
+			if (list.size() != 0) {
+				dtime += "任务编号：" + taskno + "；平均电流：" + df.format(avgEle / list.size()) + "A；平均电压："
+						+ df.format(avgVol / list.size()) + "V" + "；平均焊接速度：" + weldSpeed + "cm/min；平均线能量：" + lineEnergy
+						+ "KJ/cm\r\n" + "最大电流：" + tempMaxEle + "A；最小电流：" + tempMinEle + "A" + "；最大电压：" + tempMaxVol
+						+ "V；最小电压：" + tempMinVol + "V";
+			} else {
+				dtime += "任务编号：" + taskno + "；平均电流：0A；平均电压：0V；最大电流：0V；最小电流：0V；最大电压：0V；最小电压：0V";
 			}
-			filename = "历史数据" + sdf.format(new Date())+".xls";
+			filename = "历史数据" + sdf.format(new Date()) + ".xls";
 
-			ServletContext scontext=request.getSession().getServletContext();
-			//获取绝对路径
-			String abpath=scontext.getRealPath("");
-			//String contextpath=scontext. getContextPath() ; 获取虚拟路径
-			
-			String path = abpath+"excelfiles/" + filename;
-			
+			ServletContext scontext = request.getSession().getServletContext();
+			// 获取绝对路径
+			String abpath = scontext.getRealPath("");
+			// String contextpath=scontext. getContextPath() ; 获取虚拟路径
+
+			String path = abpath + "excelfiles/" + filename;
+
 			new CommonExcelUtil(dtime, titles, data, path, "历史焊接数据详情");
 			file = new File(path);
 			HttpHeaders headers = new HttpHeaders();
 			String fileName = "";
-			fileName = new String(filename.getBytes("gb2312"),"iso-8859-1");
-		
+			fileName = new String(filename.getBytes("gb2312"), "iso-8859-1");
+
 			headers.setContentDispositionFormData("attachment", fileName);
 			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-			
-			//处理ie无法下载的问题
+
+			// 处理ie无法下载的问题
 			response.setContentType("application/octet-stream;charset=utf-8");
-			response.setHeader( "Content-Disposition", 
-					"attachment;filename=\""+ fileName); 
+			response.setHeader("Content-Disposition", "attachment;filename=\"" + fileName);
 			ServletOutputStream o = response.getOutputStream();
 			o.flush();
-			
+
 			return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file), headers, HttpStatus.CREATED);
 		} catch (Exception e) {
 			return null;
 		} finally {
 			file.delete();
 		}
-	}	
+	}
 }

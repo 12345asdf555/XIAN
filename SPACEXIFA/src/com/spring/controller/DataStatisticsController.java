@@ -60,6 +60,16 @@ public class DataStatisticsController {
 	}
 	
 	/**
+	 * 跳转产品超标统计
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("openunstandard")
+	public String openunstandard(){
+		return "datastatistics/unstandard";
+	}
+	
+	/**
 	 * 跳转班组生产数据页面
 	 * @param request
 	 * @return

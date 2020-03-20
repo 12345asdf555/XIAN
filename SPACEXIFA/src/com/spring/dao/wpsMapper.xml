@@ -461,6 +461,13 @@
 		where fid=#{fid};
 	</update>
 	
+	<select id="getWeldwps" resultType="Wps">
+		SELECT fid,fproduct_drawing_no,fproduct_name,fproduct_version,fwps_lib_name fwpsnum,fwps_lib_version,flag,fstatus,IF(fstatus=2,fback,NULL) fback FROM tb_wps_library
+		<if test="wps_lib_id!=null and wps_lib_id!=''">
+			where fid=#{wps_lib_id}
+		</if>
+	</select>
+	
 	<delete id="deleteWps">
 		DELETE w,e,s,j,p FROM tb_wps_library w
 		LEFT JOIN tb_employee e on w.fid=e.fwps_lib_id
@@ -531,6 +538,17 @@
 	<delete id="deleteDetail">
 		delete from tb_specification where fid=#{fid};
 	</delete>
+	
+	<select id="getstepall" resultType="Wps">
+		SELECT fstep_number,fid,femployee_id FROM tb_step where 1=1
+	</select>
+	
+	<select id="getEmployee1" resultType="Wps">
+		SELECT fid,femployee_id,femployee_version,fwps_lib_id fwpslib_id FROM tb_employee
+		<if test="employ_id!=null and employ_id!=''">
+			where fid=#{employ_id}
+		</if>
+	</select>
 	
 	<update id="passReview">
 		update tb_wps_library set fstatus=#{value} where fid=#{fid};

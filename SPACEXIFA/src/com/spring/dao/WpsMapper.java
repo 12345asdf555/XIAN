@@ -94,4 +94,7 @@ public interface WpsMapper {
 	void addEmployee1(Wps wps);
 	void addStep1(Wps wps);
 	void addWps1(Wps wps);
+	List<Wps> getWeldwps(@Param("wps_lib_id")String wps_lib_id);
+	List<Wps> getstepall();
+	List<Wps> getEmployee1(@Param("employ_id")String employ_id);
 }
