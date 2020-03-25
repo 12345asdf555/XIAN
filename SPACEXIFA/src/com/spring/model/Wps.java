@@ -174,6 +174,7 @@ public class Wps {
 	private String fjunction;
 	private String fstarttime;
 	private String endtime;
+	private BigInteger unstandardtime;
 	
 	public int getFini() {
 		return fini;
@@ -1284,5 +1285,11 @@ public class Wps {
 	}
 	public void setFitem(String fitem) {
 		this.fitem = fitem;
+	}
+	public BigInteger getUnstandardtime() {
+		return unstandardtime;
+	}
+	public void setUnstandardtime(BigInteger unstandardtime) {
+		this.unstandardtime = unstandardtime;
 	}
 }

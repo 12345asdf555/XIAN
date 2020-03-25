@@ -182,7 +182,6 @@ public class ExportExcelController {
 							}
 							data[c][11] = list.get(k).getFstep_number();
 							data[c][15] = detial.get(n).getFquantitative_project();
-							System.out.println(data[n][15]);
 							data[c][16] = detial.get(n).getFrequired_value();
 							data[c][17] = detial.get(n).getFupper_deviation();
 							data[c][18] = detial.get(n).getFlower_deviation();
@@ -248,6 +247,142 @@ public class ExportExcelController {
 		}
 	}
 
+	@RequestMapping("/exportTaskview")
+	@ResponseBody
+	public ResponseEntity<byte[]> exportTaskview(HttpServletRequest request, HttpServletResponse response) {
+		File file = null;
+		try {
+			String str = java.net.URLDecoder.decode(request.getParameter("search"), "utf-8");
+			//String str = (String) request.getSession().getAttribute("search");
+			List<Wps> list = wps.gettaskview(str);
+			String dtime = null;
+			String[] titles = new String[] { "任务编号", "焊工姓名", "焊机编号", "电子跟踪卡号", "产品图号", "产品序号", "产品名称", "工艺规程编号", "版本", "焊缝编号",
+					"焊接部位","工步号","组织机构","工艺来源","任务开始时间","任务结束时间","任务状态" };
+			Object[][] data = new Object[list.size()][17];
+			for (int i = 0; i < list.size(); i++) {
+				data[i][0] = list.get(i).getFwpsnum();
+				data[i][1] = list.get(i).getWeldername();
+				data[i][2] = list.get(i).getConname();
+				data[i][3] = list.get(i).getFproduct_drawing_no();
+				data[i][4] = list.get(i).getDianame();
+				data[i][5] = list.get(i).getFproduct_version();
+				data[i][6] = list.get(i).getFproduct_name();
+				data[i][7] = list.get(i).getFprocessname();
+				data[i][8] = list.get(i).getFwps_lib_version();
+				data[i][9] = list.get(i).getFjunction();
+				data[i][11] = list.get(i).getFstep_number();
+				data[i][12] = list.get(i).getFitem();
+				if (list.get(i).getFlag() == 0) {
+					data[i][13] = "自建";
+				} else {
+					data[i][13] = "MES";
+				}
+				data[i][14] = list.get(i).getFstarttime();
+				data[i][15] = list.get(i).getEndtime();
+				if (list.get(i).getFtorch() == 0) {
+					data[i][16] = "完成";
+				} else {
+					data[i][16] = "未完成";
+				}
+			}
+			filename = "生产任务明细" + sdf.format(new Date()) + ".xls";
+
+			ServletContext scontext = request.getSession().getServletContext();
+			// 获取绝对路径
+			String abpath = scontext.getRealPath("");
+			// String contextpath=scontext. getContextPath() ; 获取虚拟路径
+
+			String path = abpath + "excelfiles/" + filename;
+			new CommonExcelUtil(dtime, titles, data, path, "生产任务明细");
+
+			file = new File(path);
+			HttpHeaders headers = new HttpHeaders();
+			String fileName = "";
+
+			fileName = new String(filename.getBytes("gb2312"), "iso-8859-1");
+
+			headers.setContentDispositionFormData("attachment", fileName);
+			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+
+			// 处理ie无法下载的问题
+			response.setContentType("application/octet-stream;charset=utf-8");
+			response.setHeader("Content-Disposition", "attachment;filename=\"" + fileName);
+			ServletOutputStream o = response.getOutputStream();
+			o.flush();
+
+			return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file), headers, HttpStatus.CREATED);
+		} catch (Exception e) {
+			return null;
+		} finally {
+			file.delete();
+		}
+	}
+	
+	@RequestMapping("/exportunstard")
+	@ResponseBody
+	public ResponseEntity<byte[]> exportunstard(HttpServletRequest request, HttpServletResponse response) {
+		File file = null;
+		try {
+			String str = java.net.URLDecoder.decode(request.getParameter("search"), "utf-8");
+			//String str = (String) request.getSession().getAttribute("search");
+			List<Wps> list = wps.getunstard(str);
+			String dtime = null;
+			BigInteger unstandtime = null;
+			String[] titles = new String[] { "任务编号", "焊工姓名", "焊机编号", "电子跟踪卡号", "产品图号", "产品序号", "产品名称", "工艺规程编号", "版本",
+					"焊接部位","焊缝编号","组织机构","超标时长"};
+			Object[][] data = new Object[list.size()][17];
+			for (int i = 0; i < list.size(); i++) {
+				data[i][0] = list.get(i).getFwpsnum();
+				data[i][1] = list.get(i).getWeldername();
+				data[i][2] = list.get(i).getConname();
+				data[i][3] = list.get(i).getFproduct_drawing_no();
+				data[i][4] = list.get(i).getDianame();
+				data[i][5] = list.get(i).getFproduct_version();
+				data[i][6] = list.get(i).getFproduct_name();
+				data[i][7] = list.get(i).getFprocessname();
+				data[i][8] = list.get(i).getFwps_lib_version();
+				data[i][10] = list.get(i).getFjunction();
+				data[i][11] = list.get(i).getFitem();
+				unstandtime = list.get(i).getUnstandardtime();
+				if(unstandtime != null) {
+					data[i][12] = getTimeStrBySecond(unstandtime);
+				}else {
+					data[i][12] = "00:00:00";
+				}
+			}
+			filename = "生产任务明细" + sdf.format(new Date()) + ".xls";
+
+			ServletContext scontext = request.getSession().getServletContext();
+			// 获取绝对路径
+			String abpath = scontext.getRealPath("");
+			// String contextpath=scontext. getContextPath() ; 获取虚拟路径
+
+			String path = abpath + "excelfiles/" + filename;
+			new CommonExcelUtil(dtime, titles, data, path, "生产任务明细");
+
+			file = new File(path);
+			HttpHeaders headers = new HttpHeaders();
+			String fileName = "";
+
+			fileName = new String(filename.getBytes("gb2312"), "iso-8859-1");
+
+			headers.setContentDispositionFormData("attachment", fileName);
+			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+
+			// 处理ie无法下载的问题
+			response.setContentType("application/octet-stream;charset=utf-8");
+			response.setHeader("Content-Disposition", "attachment;filename=\"" + fileName);
+			ServletOutputStream o = response.getOutputStream();
+			o.flush();
+
+			return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file), headers, HttpStatus.CREATED);
+		} catch (Exception e) {
+			return null;
+		} finally {
+			file.delete();
+		}
+	}
+	
 	@RequestMapping("/exporMaintain")
 	@ResponseBody
 	public ResponseEntity<byte[]> exporMaintain(HttpServletRequest request, HttpServletResponse response) {
@@ -1247,7 +1382,7 @@ public class ExportExcelController {
 			file.delete();
 		}
 	}
-
+	
 	/**
 	 * 故障报表导出
 	 * 

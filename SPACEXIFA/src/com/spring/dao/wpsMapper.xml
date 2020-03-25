@@ -390,17 +390,28 @@
 		LEFT JOIN tb_welder w ON t.fwelderid = w.fid
 		LEFT JOIN tb_welding_machine m ON t.fmachineid = m.fid
 		LEFT JOIN tb_insframework i ON j.fitemId = i.fid
-		 WHERE 1=1
 		<if test="search!=null and search!=''">
-		    and${search}
-		</if>
-		<if test="dtoTime1!=null and dtoTime1!=''">
-			and t.frealstarttime &gt;= #{dtoTime1}
-		</if>
-		<if test="dtoTime2!=null and dtoTime2!=''">
-			and (t.frealendtime &lt;= #{dtoTime2}  or frealendtime is null)
+		    WHERE${search}
 		</if>
 		GROUP BY t.ftaskid ORDER BY t.fid
+	</select>
+	
+	<select id="getunstard" resultType="Wps">
+		select a.fjunction_id fid,a.fjunction_itemid,a.fwelder_itemid,a.fmachine_id,a.falarmtime unstandardtime,a.welding_position_id,a.fstarttime,a.fendtime,j.fwelded_junction_no fproduct_drawing_no,j.ftask_no fwpsnum,
+		j.flag flag,j.fitemId,p.fproduct_number fproduct_version,p.fwps_lib_id,l.fwps_lib_name fprocessname,
+		l.fproduct_drawing_no dianame,l.fproduct_name fproduct_name,l.fwps_lib_version fwps_lib_version,u.fjunction fjunction,
+		w.fname weldername,m.fequipment_no conname,i.fname fitem from tb_alarm a
+		LEFT JOIN tb_welded_junction j ON a.fjunction_id = j.fid
+		LEFT JOIN tb_product_number p ON a.fjunction_id = p.fcard_id
+		LEFT JOIN tb_wps_library l ON p.fwps_lib_id = l.fid
+		LEFT JOIN tb_welding_machine m ON a.fmachine_id = m.fid
+		LEFT JOIN tb_insframework i ON j.fitemId = i.fid
+		LEFT JOIN tb_junction u ON a.fjunction_no = u.fid
+		LEFT JOIN tb_welder w ON a.fwelder_id = w.fid
+		<if test="search!=null and search!=''"> 
+		   WHERE${search}
+		</if>
+		GROUP BY a.fjunction_id ORDER BY a.fid
 	</select>
 	
 	<select id="getAllWpslib" resultType="Wps">

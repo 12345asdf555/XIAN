@@ -1096,16 +1096,15 @@ public class WeldingTaskController {
 		obj.put("success", serach);
 		return obj.toString();
 	}
-	@RequestMapping("/gettaskview")
+	
+	@RequestMapping("/getTaskview")
 	@ResponseBody
-	public String gettaskview(HttpServletRequest request){
+	public String getTaskview(HttpServletRequest request){
 		pageIndex = Integer.parseInt(request.getParameter("page"));
 		pageSize = Integer.parseInt(request.getParameter("rows"));
 		page = new Page(pageIndex,pageSize,total);
 		String search = request.getParameter("search");
-		String time1 = request.getParameter("dtoTime1");
-		String time2 = request.getParameter("dtoTime2");
-		List<Wps> wpsList = wps.gettaskview(page,search,time1,time2);
+		List<Wps> wpsList = wps.gettaskview(page,search);
 		long total = 0;
 		if(wpsList != null){
 			PageInfo<Wps> pageinfo = new PageInfo<Wps>(wpsList);
@@ -1157,6 +1156,59 @@ public class WeldingTaskController {
 		obj.put("rows", ary);
 		return obj.toString();
 	}
+	
+	
+	@RequestMapping("/getunstard")
+	@ResponseBody
+	public String getunstard(HttpServletRequest request){
+		pageIndex = Integer.parseInt(request.getParameter("page"));
+		pageSize = Integer.parseInt(request.getParameter("rows"));
+		page = new Page(pageIndex,pageSize,total);
+		String search = request.getParameter("search");
+		List<Wps> wpsList = wps.getunstard(page,search);
+		long total = 0;
+		if(wpsList != null){
+			PageInfo<Wps> pageinfo = new PageInfo<Wps>(wpsList);
+			total = pageinfo.getTotal();
+		}
+		JSONObject json = new JSONObject();
+		JSONArray ary = new JSONArray();
+		JSONObject obj = new JSONObject();
+		try{
+			for(Wps wps:wpsList){
+				json.put("fid", wps.getFid());
+				json.put("fproduct_drawing_no", wps.getFproduct_drawing_no());//电子跟踪卡号
+				json.put("fproduct_name", wps.getFproduct_name());//产品名称
+				json.put("fproduct_version", wps.getFproduct_version());//产品版本号
+				json.put("fprocessname", wps.getFprocessname());//规程编号
+				json.put("fwps_lib_version", wps.getFwps_lib_version());//规程版本号
+				//json.put("fstarttime", wps.getFstarttime());
+				//json.put("endtime", wps.getEndtime());
+				json.put("fwpsnum", wps.getFwpsnum());//任务编号
+				json.put("dianame", wps.getDianame());//产品图号
+				json.put("fjunction", wps.getFjunction());//焊缝编号
+				//json.put("fstep_number", wps.getFstep_number());
+				json.put("weldername", wps.getWeldername());//焊工号
+				json.put("conname", wps.getConname());//焊机编号
+				json.put("fitem", wps.getFitem());//组织机构
+				json.put("ftime", getTimeStrBySecond(wps.getUnstandardtime()));
+				int flag = wps.getFlag();
+				json.put("flag", flag);//来源
+				if(flag == 0) {
+					json.put("flag_name", "自建");
+				}else {
+					json.put("flag_name", "MES");
+				}
+				ary.add(json);
+			}
+		}catch(Exception e){
+			e.getMessage();
+		}
+		obj.put("total", total);
+		obj.put("rows", ary);
+		return obj.toString();
+	}
+	
 	@RequestMapping("/getOperateArea")
 	@ResponseBody
 	public String getOperateArea(HttpServletRequest request){
@@ -1650,5 +1702,28 @@ public class WeldingTaskController {
 			data = false;
 		}
 		return data + "";
+	}
+	
+	public String getTimeStrBySecond(BigInteger timeParam ) {
+		if(timeParam == null){
+			return "00:00:00";
+		}
+		BigInteger[] str = timeParam.divideAndRemainder(new BigInteger("60"));//divideAndRemainder返回数组。第一个是商第二个时取模
+		BigInteger second = str[1];
+		BigInteger minuteTemp = timeParam.divide(new BigInteger("60"));//subtract：BigInteger相减，multiply：BigInteger相乘，divide : BigInteger相除
+        if (minuteTemp.compareTo(new BigInteger("0"))>0) {//compareTo：比较BigInteger类型的大小，大则返回1，小则返回-1 ，等于则返回0
+        	BigInteger[] minstr = minuteTemp.divideAndRemainder(new BigInteger("60"));
+    		BigInteger minute = minstr[1];
+    		BigInteger hour = minuteTemp.divide(new BigInteger("60"));
+            if (hour.compareTo(new BigInteger("0"))>0) {
+                return (hour.compareTo(new BigInteger("9"))>0 ? (hour + "") : ("0" + hour)) + ":" + (minute.compareTo(new BigInteger("9"))>0 ? (minute + "") : ("0" + minute))
+                        + ":" + (second .compareTo(new BigInteger("9"))>0 ? (second + "") : ("0" + second));
+            } else {
+                return "00:" + (minute.compareTo(new BigInteger("9"))>0 ? (minute + "") : ("0" + minute)) + ":"
+                        + (second .compareTo(new BigInteger("9"))>0 ? (second + "") : ("0" + second));
+            }
+        } else {
+            return "00:00:" + (second .compareTo(new BigInteger("9"))>0 ? (second + "") : ("0" + second));
+        }
 	}
 }

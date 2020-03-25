@@ -65,7 +65,7 @@ public interface WpsMapper {
 	
 	List<Wps> getAllWpslib();
 	List<Wps> getWpsList(@Param("search")String search);
-	List<Wps> gettaskview(@Param("search")String search,@Param("dtoTime1")String dtoTime1,@Param("dtoTime2")String dtoTime2);
+	List<Wps> gettaskview(@Param("search")String search);
 	List<Wps> getEmployee(@Param("fid")String fid);
 	List<Wps> getStep(@Param("employeeId")String employeeId);
 	List<Wps> getJunction(@Param("stepId")String stepId);
@@ -97,4 +97,5 @@ public interface WpsMapper {
 	List<Wps> getWeldwps(@Param("wps_lib_id")String wps_lib_id);
 	List<Wps> getstepall();
 	List<Wps> getEmployee1(@Param("employ_id")String employ_id);
+	List<Wps> getunstard(@Param("search")String search);
 }

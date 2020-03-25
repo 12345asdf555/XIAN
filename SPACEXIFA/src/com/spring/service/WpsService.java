@@ -188,7 +188,28 @@ public interface WpsService {
 	 * @param uid
 	 * @return
 	 */
-	List<Wps> gettaskview(Page page, String search,String time1,String time2);
+	List<Wps> gettaskview(Page page, String search);
+	
+	/**
+	 * 导出任务信息
+	 * @param uid
+	 * @return
+	 */
+	List<Wps> gettaskview(String search);
+	
+	/**
+	 * 产品超规范
+	 * @param uid
+	 * @return
+	 */
+	List<Wps> getunstard(Page page, String search);
+	
+	/**
+	 * 产品超规范导出
+	 * @param uid
+	 * @return
+	 */
+	List<Wps> getunstard(String search);
 	
 	/**
 	 * 查找工艺台账

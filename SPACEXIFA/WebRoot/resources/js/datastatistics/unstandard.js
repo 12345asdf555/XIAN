@@ -4,13 +4,14 @@ $(function(){
 	wpslibDatagrid();
 })
 
-var searchStr = "";
+
+var searcher = "";
 function wpslibDatagrid(){
-	parameterStr1();
-	var url1 = encodeURI("weldtask/getTaskview?search="+searchStr);
-	$("#taskviewtable").datagrid( {
+	parameterStr();
+	var url1 = encodeURI("weldtask/getunstard?search="+searcher);
+	$("#documenttable").datagrid( {
 		fitColumns : false,
-		height : '90%',
+		height : '95%',
 		width : '100%',
 		idField : 'fid',
 		pageSize : 10,
@@ -80,62 +81,44 @@ function wpslibDatagrid(){
 			width : 100,
 			halign : "center",
 			align : "left"
-		}, {
+		},{
+			field : 'fstep_number',
+			title : '焊接部位',
+			width : 100,
+			halign : "center",
+			align : "left"
+		},  {
 			field : 'fjunction',
 			title : '焊缝编号',
 			width : 100,
 			halign : "center",
 			align : "left"
 		},{
-			field : 'fstep_number',
-			title : '工步号',
-			width : 100,
-			halign : "center",
-			align : "left"
-		},  {
 			field : 'fitem',
 			title : '组织机构',
 			width : 100,
 			halign : "center",
 			align : "center"
 		},{
-			field : 'flag',
-			title : '工艺来源标志',
-//			width : 100,
-			halign : "center",
-			align : "left",
-			hidden : true
-		}, {
-			field : 'flag_name',
-			title : '工艺来源',
-			width : 80,
-			halign : "center",
-			align : "center"
-		}, {
 			field : 'fstarttime',
 			title : '任务开始时间',
 			width : 100,
 			halign : "center",
-			align : "center"
+			align : "center",
+			hidden: true
 		},{
-			field : 'endtime',
-			title : '任务结束时间',
+			field : 'ftime',
+			title : '超规范时长',
 			width : 100,
 			halign : "center",
 			align : "center"
 		},{
-			field : 'fstatus',
-			title : '状态id',
-//			width : 100,
-			halign : "center",
-			align : "left",
-			hidden : true
-		}, {
 			field : 'touch_name',
-			title : '任务状态',
+			title : '超规范次数',
 			width : 100,
 			halign : "center",
 			align : "center",
+			hidden: true
 		}] ],
 		pagination : true,
 		rowStyler: function(index,row){
@@ -152,10 +135,10 @@ function serach(){
 	wpslibDatagrid();
 }
 
-function parameterStr1(){
-	searchStr = "";
-	var dt1 = $("#dtoTime1").datetimebox('getValue');
-	var dt2 = $("#dtoTime2").datetimebox('getValue');
+function parameterStr(){
+	searcher = "";
+	var dtoTime1 = $("#dtoTime1").datetimebox('getValue');
+	var dtoTime2 = $("#dtoTime2").datetimebox('getValue');
 	var item = $("#item").combobox('getValue');
 	var product_drawing_no = $("#product_drawing_no").val();
 	var product_name = $("#product_name").val();
@@ -166,83 +149,83 @@ function parameterStr1(){
 	var junction_name = $("#junction_name").val();
 	//var welderno = $("#welderno").val();
 	if(product_drawing_no != ""){
-		if(searchStr == ""){
-			searchStr += " fproduct_drawing_no LIKE "+"'%" + product_drawing_no + "%'";
+		if(searcher == ""){
+			searcher += " fproduct_drawing_no LIKE "+"'%" + product_drawing_no + "%'";
 		}else{
-			searchStr += " AND fproduct_drawing_no LIKE "+"'%" + product_drawing_no + "%'";
+			searcher += " AND fproduct_drawing_no LIKE "+"'%" + product_drawing_no + "%'";
 		}
 	}
 	if(product_name != ""){
-		if(searchStr == ""){
-			searchStr += " l.fproduct_name LIKE "+"'%" + product_name + "%'";
+		if(searcher == ""){
+			searcher += " l.fproduct_name LIKE "+"'%" + product_name + "%'";
 		}else {
-			searchStr += " AND l.fproduct_name LIKE "+"'%" + product_name + "%'";
+			searcher += " AND l.fproduct_name LIKE "+"'%" + product_name + "%'";
 		}
 	}
 	if(taskno != ""){
-		if(searchStr == ""){
-			searchStr += " j.ftask_no LIKE "+"'%" + taskno + "%'";
+		if(searcher == ""){
+			searcher += " j.ftask_no LIKE "+"'%" + taskno + "%'";
 		}else{
-			searchStr += " AND j.ftask_no LIKE "+"'%" + taskno + "%'";
+			searcher += " AND j.ftask_no LIKE "+"'%" + taskno + "%'";
 		}
 	}
 	if(fwps_lib_num != ""){
-		if(searchStr == ""){
-			searchStr += " l.fwps_lib_version LIKE "+"'%" + fwps_lib_num + "%'";
+		if(searcher == ""){
+			searcher += " l.fwps_lib_version LIKE "+"'%" + fwps_lib_num + "%'";
 		}else{
-			searchStr += " AND l.fwps_lib_version LIKE "+"'%" + fwps_lib_num + "%'";
+			searcher += " AND l.fwps_lib_version LIKE "+"'%" + fwps_lib_num + "%'";
 		}
 	}
 	if(fwelded_junction_no != ""){
-		if(searchStr == ""){
-			searchStr += " j.fwelded_junction_no LIKE "+"'%" + fwelded_junction_no + "%'";
+		if(searcher == ""){
+			searcher += " j.fwelded_junction_no LIKE "+"'%" + fwelded_junction_no + "%'";
 		}else{
-			searchStr += " AND j.fwelded_junction_no LIKE "+"'%" + fwelded_junction_no + "%'";
+			searcher += " AND j.fwelded_junction_no LIKE "+"'%" + fwelded_junction_no + "%'";
 		}
 	}
 	if(product_number != ""){
-		if(searchStr == ""){
-			searchStr += " p.fproduct_number=" + product_number;
+		if(searcher == ""){
+			searcher += " p.fproduct_number=" + product_number;
 		}else{
-			searchStr += " AND p.fproduct_number=" + product_number;
+			searcher += " AND p.fproduct_number=" + product_number;
 		}
 	}
 	if(item != ""){
-		if(searchStr == ""){
-			searchStr += " j.fitemId LIKE "+"'%" + item + "%'";
+		if(searcher == ""){
+			searcher += " j.fitemId LIKE "+"'%" + item + "%'";
 		}else{
-			searchStr += " AND j.fitemId LIKE "+"'%" + item + "%'";
+			searcher += " AND j.fitemId LIKE "+"'%" + item + "%'";
 		}
 	}
 	if(junction_name != ""){
-		if(searchStr == ""){
-			searchStr += " u.fjunction=" + junction_name;
+		if(searcher == ""){
+			searcher += " u.fjunction=" + junction_name;
 		}else{
-			searchStr += " AND u.fjunction=" + junction_name;
+			searcher += " AND u.fjunction=" + junction_name;
 		}
 	}
-	if(dt1 != ""){
-		if(searchStr == ""){
-			searchStr += " t.frealstarttime >'" +dt1+"'";
+	if(dtoTime1 != ""){
+		if(searcher == ""){
+			searcher += " a.fstarttime >'" +dtoTime1+"'";
 		}else{
-			searchStr += " AND t.frealstarttime >'"+dt1+"'";
+			searcher += " AND a.fstarttime >'"+dtoTime1+"'";
 		}
 	}
-	if(dt2 != ""){
-		if(searchStr == ""){
-			searchStr += " t.frealendtime < '"+dt2+"'";
+	if(dtoTime2 != ""){
+		if(searcher == ""){
+			searcher += " a.fendtime < '"+dtoTime2+"'";
 		}else{
-			searchStr += " AND t.frealendtime <'"+dt2+"'";
+			searcher += " AND a.fendtime <'"+dtoTime2+"'";
 		}
 	}
 }
 
 //导出到Excel
-function exportExcel(){
-	parameterStr1();
+function exportunstardExcel(){
+	parameterStr();
 	$.messager.confirm("提示", "文件默认保存在浏览器的默认路径，<br/>如需更改路径请设置浏览器的<br/>“下载前询问每个文件的保存位置“属性！",function(result){
 		if(result){
-			var url = "export/exportTaskview?search="+ encodeURI(encodeURI(searchStr))+""; 
+			var url = "export/exportunstard?search="+ encodeURI(encodeURI(searcher))+""; 
 			var img = new Image();
 		    img.src = url;  // 设置相对路径给Image, 此时会发送出请求
 		    url = img.src;  // 此时相对路径已经变成绝对路径
@@ -286,7 +269,7 @@ window.onresize = function() {
 
 //改变表格高宽
 function domresize() {
-	$("#taskviewtable").datagrid('resize', {
+	$("#documenttable").datagrid('resize', {
 		height : $("#body").height(),
 		width : $("#body").width()
 	});

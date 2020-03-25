@@ -47,6 +47,8 @@ public class WpsServiceImpl implements WpsService{
 		
 	}
 
+	
+	
 	public void delete(BigInteger fid) {
 		// TODO Auto-generated method stub
 		mapper.delete(fid);
@@ -92,6 +94,17 @@ public class WpsServiceImpl implements WpsService{
 	public List<Wps> findAllSpe(BigInteger machine, BigInteger chanel) {
 		// TODO Auto-generated method stub
 		return mapper.findAllSpe(machine, chanel);
+	}
+	
+	@Override
+	public List<Wps> getunstard(Page page, String search){
+		PageHelper.startPage(page.getPageIndex(), page.getPageSize());
+		return mapper.getunstard(search);
+	}
+
+	@Override
+	public List<Wps> getunstard(String search){
+		return mapper.getunstard(search);
 	}
 	
 	@Override
@@ -331,10 +344,15 @@ public class WpsServiceImpl implements WpsService{
 	}
 	
 	@Override
-	public List<Wps> gettaskview(Page page, String search,String time1,String time2) {
+	public List<Wps> gettaskview(Page page, String search) {
 		// TODO Auto-generated method stub
 		PageHelper.startPage(page.getPageIndex(), page.getPageSize());
-		return mapper.gettaskview(search,time1,time2);
+		return mapper.gettaskview(search);
+	}
+	
+	@Override
+	public List<Wps> gettaskview(String search) {
+		return mapper.gettaskview(search);
 	}
 	
 	@Override
