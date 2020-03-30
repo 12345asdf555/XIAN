@@ -169,9 +169,12 @@ public class Wps {
 	private String funit_of_measurement;
 	private String femployee_id;
 	private String femployee_version;
+	private String femployee_name;
 	private String fstep_number;
 	private String fstep_id;
+	private String fstep_name;
 	private String fjunction;
+	private String fwelding_area;
 	private String fstarttime;
 	private String endtime;
 	private BigInteger unstandardtime;
@@ -1291,5 +1294,23 @@ public class Wps {
 	}
 	public void setUnstandardtime(BigInteger unstandardtime) {
 		this.unstandardtime = unstandardtime;
+	}
+	public String getFwelding_area() {
+		return fwelding_area;
+	}
+	public void setFwelding_area(String fwelding_area) {
+		this.fwelding_area = fwelding_area;
+	}
+	public String getFstep_name() {
+		return fstep_name;
+	}
+	public void setFstep_name(String fstep_name) {
+		this.fstep_name = fstep_name;
+	}
+	public String getFemployee_name() {
+		return femployee_name;
+	}
+	public void setFemployee_name(String femployee_name) {
+		this.femployee_name = femployee_name;
 	}
 }

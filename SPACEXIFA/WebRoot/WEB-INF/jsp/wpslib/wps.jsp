@@ -130,9 +130,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	   		<table id="wpslibTable" style="table-layout: fixed; width:100%;"></table>
   		</div>
 	     <!-- 添加修改工艺台账 -->
-		<div id="addOrUpdate" class="easyui-dialog" style="width: 1000px; height: 400px; padding:10px 20px" closed="true" buttons="#tdd-buttons">
+		<div id="addOrUpdate" class="easyui-dialog" style="width: 1300px; height: 500px; padding:10px 20px" closed="true" buttons="#tdd-buttons">
 			<form id="addOrUpdatefm" class="easyui-form" method="post" data-options="novalidate:true">
-				<div style="float: left;width: 28%">
+				<div style="float: left;width: 22%">
 					<div class="fitem">
 						<lable><span class="required">*</span>产品图号</lable>
 						<input type="hidden" id="validPdo">
@@ -172,20 +172,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<div style="float: left;width: 6%">
 					<hr size=200 width="1" color="black">
 				</div>
-				<div style="float: left;width: 64%">
-					<div id="employeeDiv" style="float: left;width: 33%;height: 50%">
+				<div style="float: left;width: 70%">
+					<div id="employeeDiv" style="float: left;width: 39%;height: 50%">
 						<a href="javascript:addEmployeeRow();" class="easyui-linkbutton" iconCls="icon-add"></a>
 		    			<a href="javascript:deleteEmployeeRow();" class="easyui-linkbutton" iconCls="icon-remove"></a>
 		    			<a href="javascript:saveEmployeeRow();" class="easyui-linkbutton" iconCls="icon-ok"></a>
 						<table id="femployeeTable" style="table-layout: fixed; width:100%;"></table>
 					</div>
-					<div id="stepDiv" style="float: left;width: 33%;height: 50%">
+					<div id="stepDiv" style="float: left;width: 30%;height: 50%">
 						<a href="javascript:addStepRow();" class="easyui-linkbutton" iconCls="icon-add"></a>
 		    			<a href="javascript:deleteStepRow();" class="easyui-linkbutton" iconCls="icon-remove"></a>
 		    			<a href="javascript:saveStepRow();" class="easyui-linkbutton" iconCls="icon-ok"></a>
 						<table id="fstepTable" style="table-layout: fixed; width:100%;"></table>
 					</div>
-					<div id="junctionDiv" style="float: left;width: 34%;height: 50%">
+					<div id="junctionDiv" style="float: left;width: 30%;height: 50%">
 						<a href="javascript:addJunctionRow();" class="easyui-linkbutton" iconCls="icon-add"></a>
 		    			<a href="javascript:deleteJunctionRow();" class="easyui-linkbutton" iconCls="icon-remove"></a>
 		    			<a href="javascript:saveJunctionRow();" class="easyui-linkbutton" iconCls="icon-ok"></a>

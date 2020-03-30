@@ -111,9 +111,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</div>
   	<div id="body" style="height: 78%">
   	
-  	<div id="wpsDetailsDialog" class="easyui-dialog" style="width: 1000px; height: 320px; padding:10px 20px" closed="true">
+  	<div id="wpsDetailsDialog" class="easyui-dialog" style="width: 1300px; height: 320px; padding:10px 20px" closed="true">
 		<form id="wpsDetailsForm" class="easyui-form" method="post" data-options="novalidate:true">
-			<div style="float: left;width: 28%">
+			<div style="float: left;width: 22%">
 				<div class="fitem">
 					<lable><span class="required">*</span>产品图号</lable>
 					<input type="hidden" id="validPdo">
@@ -149,14 +149,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<div style="float: left;width: 6%">
 				<hr size=200 width="1" color="black">
 			</div>
-			<div style="float: left;width: 64%">
-				<div id="employeeDiv" style="float: left;width: 33%;height: 50%">
+			<div style="float: left;width: 70%">
+				<div id="employeeDiv" style="float: left;width: 39%;height: 50%">
 					<table id="femployeeTable" style="table-layout: fixed; width:100%;"></table>
 				</div>
-				<div id="stepDiv" style="float: left;width: 33%;height: 50%">
+				<div id="stepDiv" style="float: left;width: 30%;height: 50%">
 					<table id="fstepTable" style="table-layout: fixed; width:100%;"></table>
 				</div>
-				<div id="junctionDiv" style="float: left;width: 33%;height: 50%">
+				<div id="junctionDiv" style="float: left;width: 30%;height: 50%">
 					<table id="fjunctionTable" style="table-layout: fixed; width:100%;"></table>
 				</div>
 				<div id="detailDiv" style="width: 100%;height: 50%">

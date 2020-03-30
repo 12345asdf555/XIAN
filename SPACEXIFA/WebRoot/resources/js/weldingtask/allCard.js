@@ -265,7 +265,7 @@ function openProductDetails(){
 						str += '<a id="wait" class="easyui-linkbutton"/>';
 					}
 					if(row.fstatus==0){
-						str += '<a id="doing" class="easyui-linkbutton"/>';
+						str += '<a id="doing" class="easyui-linkbutton" href="javascript:finishWork('+row.fid+')"/>';
 					}
 					if(row.fstatus==1){
 						str += '<a id="finish" class="easyui-linkbutton"/>';
@@ -575,7 +575,7 @@ function initTables(){
 	$("#femployeeTable").datagrid( {
 		fitColumns : true,
 		height : $("#wpsDetailsDialog").height()*0.48,
-		width : $("#wpsDetailsDialog").width()*0.64*0.33,
+		width : $("#wpsDetailsDialog").width()*0.64*0.428,
 		idField : 'fid',
 //		pageSize : 10,
 //		pageList : [ 10, 20, 30, 40, 50 ],
@@ -601,6 +601,13 @@ function initTables(){
 		}, {
 			field : 'femployee_version',
 			title : '工序版本',
+			width : 100,
+//			halign : "center",
+			align : "center",
+			editor:'text'
+		}, {
+			field : 'femployee_name',
+			title : '工序名称',
 			width : 100,
 //			halign : "center",
 			align : "center",
@@ -663,6 +670,13 @@ function initTables(){
 		}, {
 			field : 'fstep_number',
 			title : '工步号',
+			width : 100,
+			halign : "center",
+			align : "left",
+			editor:'text'
+		}, {
+			field : 'fstep_name',
+			title : '工步名称',
 			width : 100,
 			halign : "center",
 			align : "left",
@@ -731,6 +745,13 @@ function initTables(){
 			halign : "center",
 			align : "left",
 			editor:'text'
+		}, {
+			field : 'fwelding_area',
+			title : '焊接部位',
+			width : 100,
+			halign : "center",
+			align : "left",
+			editor:'text'
 		}] ],
 //		pagination : true,
 		rowStyler: function(index,row){
@@ -754,7 +775,7 @@ function initTables(){
 	
 	$("#wpsDetailTable").datagrid( {
 		height : $("#wpsDetailsDialog").height()*0.48,
-		width : $("#wpsDetailsDialog").width()*0.64,
+		width : $("#wpsDetailsDialog").width()*0.64*1.09,
 		idField : 'fid',
 //		pageSize : 10,
 //		pageList : [ 10, 20, 30, 40, 50 ],
@@ -825,6 +846,35 @@ function initTables(){
 			}
 		}
 	});
+}
+
+function finishWork(product_id){
+	var con = confirm("此操作不可撤销，是否确认？");
+	if(con == true){
+		$.ajax({
+			type : "post",
+			async : false,
+			url : "wps/finishWork"+"?fid="+product_id,
+			data : {},
+			dataType : "json", //返回数据形式为json  
+			success : function(result) {
+				if (result) {
+					if (!result.success) {
+						$.messager.show({
+							title : 'Error',
+							msg : result.errorMsg
+						});
+					} else {
+						alert("保存成功");
+						$('#productDetailsTable').datagrid('reload');
+					}
+				}
+			},
+			error : function(errorMsg) {
+				alert("数据请求失败，请联系系统管理员!");
+			}
+		});
+	}
 }
 
 //监听窗口大小变化

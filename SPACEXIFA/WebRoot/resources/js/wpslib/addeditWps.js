@@ -37,7 +37,7 @@ function initTables(){
 	$("#femployeeTable").datagrid( {
 		fitColumns : true,
 		height : $("#addOrUpdate").height()*0.4,
-		width : $("#addOrUpdate").width()*0.64*0.33,
+		width : $("#addOrUpdate").width()*0.64*0.428,
 		idField : 'fid',
 //		pageSize : 10,
 //		pageList : [ 10, 20, 30, 40, 50 ],
@@ -63,6 +63,13 @@ function initTables(){
 		}, {
 			field : 'femployee_version',
 			title : '工序版本',
+			width : 100,
+//			halign : "center",
+			align : "center",
+			editor:'text'
+		}, {
+			field : 'femployee_name',
+			title : '工序名称',
 			width : 100,
 //			halign : "center",
 			align : "center",
@@ -125,6 +132,13 @@ function initTables(){
 		}, {
 			field : 'fstep_number',
 			title : '工步号',
+			width : 100,
+			halign : "center",
+			align : "left",
+			editor:'text'
+		}, {
+			field : 'fstep_name',
+			title : '工步名称',
 			width : 100,
 			halign : "center",
 			align : "left",
@@ -193,6 +207,13 @@ function initTables(){
 			halign : "center",
 			align : "left",
 			editor:'text'
+		}, {
+			field : 'fwelding_area',
+			title : '焊接部位',
+			width : 100,
+			halign : "center",
+			align : "left",
+			editor:'text'
 		}] ],
 //		pagination : true,
 		rowStyler: function(index,row){
@@ -216,7 +237,7 @@ function initTables(){
 	
 	$("#wpsDetailTable").datagrid( {
 		height : $("#addOrUpdate").height()*0.4,
-		width : $("#addOrUpdate").width()*0.64,
+		width : $("#addOrUpdate").width()*0.64*1.09,
 		idField : 'fid',
 //		pageSize : 10,
 //		pageList : [ 10, 20, 30, 40, 50 ],

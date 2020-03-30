@@ -487,4 +487,13 @@ public interface WpsService {
 	 * @param wps
 	 */
 	void addWps1(Wps wps);
+	
+	/**
+	 * 报工
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年3月27日下午6:39:56
+	 * @param fid
+	 */
+	void finishWork(String fid);
 }

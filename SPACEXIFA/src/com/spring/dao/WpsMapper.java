@@ -98,4 +98,5 @@ public interface WpsMapper {
 	List<Wps> getstepall();
 	List<Wps> getEmployee1(@Param("employ_id")String employ_id);
 	List<Wps> getunstard(@Param("search")String search);
+	void finishWork(@Param("fid")String fid);
 }

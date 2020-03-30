@@ -162,7 +162,7 @@
 	</select>
 	
 	<select id="gettrackcard" parameterType="BigInteger" resultType="Wps">
-	 SELECT max(t.fid),fcard_id insid, t.fwelderid welderid,w.fwelded_junction_no fwpsnum,w.fproduct_number arcname,d.fwelder_no fname,p.fwps_lib_id macid,l.fproduct_drawing_no materialname,e.femployee_id dianame,s.fstep_number gasname,j.fjunction  FROM tb_taskresult t
+	 SELECT max(t.fid),fcard_id insid, t.fwelderid welderid,w.fwelded_junction_no fwpsnum,w.fproduct_number arcname,d.fwelder_no fname,p.fwps_lib_id macid,l.fproduct_drawing_no materialname,e.femployee_id dianame,e.femployee_name,s.fstep_number gasname,s.fstep_name,j.fjunction,j.fwelding_area  FROM tb_taskresult t
 	 LEFT JOIN tb_welded_junction w ON t.fcard_id = w.fid
 	 LEFT JOIN tb_welder d ON t.fwelderid = d.fid 
 	 LEFT JOIN tb_product_number p ON t.fcard_id = p.fcard_id
@@ -429,7 +429,7 @@
 	</select>
 	
 	<select id="getEmployee" resultType="Wps">
-		SELECT fid,femployee_id,femployee_version FROM tb_employee
+		SELECT fid,femployee_id,femployee_version,femployee_name FROM tb_employee
 		<if test="fid!=null and fid!=''">
 			where fwps_lib_id=#{fid}
 		</if>
@@ -437,7 +437,7 @@
 	</select>
 	
 	<select id="getStep" resultType="Wps">
-		SELECT fstep_number,fid FROM tb_step
+		SELECT fstep_number,fid,fstep_name FROM tb_step
 		<if test="employeeId!=null and employeeId!=''">
 			where femployee_id=#{employeeId}
 		</if>
@@ -445,7 +445,7 @@
 	</select>
 	
 	<select id="getJunction" resultType="Wps">
-		SELECT fjunction,fid FROM tb_junction
+		SELECT fjunction,fid,fwelding_area FROM tb_junction
 		<if test="stepId!=null and stepId!=''">
 			where fstep_id=#{stepId}
 		</if>
@@ -489,13 +489,13 @@
 	</delete>
 	
 	<insert id="addEmployee" parameterType="Wps" useGeneratedKeys="true" keyProperty="fid">
-		INSERT INTO tb_employee (femployee_id, femployee_version,fwps_lib_id) VALUES 
-		(#{femployee_id}, #{femployee_version}, #{fwpslib_id})
+		INSERT INTO tb_employee (femployee_id, femployee_version, femployee_name,fwps_lib_id) VALUES 
+		(#{femployee_id}, #{femployee_version}, #{femployee_name}, #{fwpslib_id})
 	</insert>
 	
 	<update id="updateEmployee" parameterType="Wps">
 		update tb_employee set 
-		femployee_id=#{femployee_id},femployee_version=#{femployee_version}
+		femployee_id=#{femployee_id},femployee_version=#{femployee_version},femployee_name=#{femployee_name}
 		where fid=#{fid};
 	</update>
 	
@@ -508,12 +508,12 @@
 	</delete>
 	
 	<insert id="addStep" parameterType="Wps" useGeneratedKeys="true" keyProperty="fid">
-		INSERT INTO tb_step (femployee_id, fstep_number) VALUES 
-		(#{femployee_id}, #{fstep_number})
+		INSERT INTO tb_step (femployee_id, fstep_number, fstep_name) VALUES 
+		(#{femployee_id}, #{fstep_number}, #{fstep_name})
 	</insert>
 	
 	<update id="updateStep" parameterType="Wps">
-		update tb_step set fstep_number=#{fstep_number} where fid=#{fid};
+		update tb_step set fstep_number=#{fstep_number},fstep_name=#{fstep_name} where fid=#{fid};
 	</update>
 	
 	<delete id="deleteStep">
@@ -524,12 +524,12 @@
 	</delete>
 	
 	<insert id="addJunction" parameterType="Wps">
-		INSERT INTO tb_junction (fstep_id, fjunction) VALUES 
-		(#{fstep_id}, #{fjunction})
+		INSERT INTO tb_junction (fstep_id, fjunction,fwelding_area) VALUES 
+		(#{fstep_id}, #{fjunction}, #{fwelding_area})
 	</insert>
 	
 	<update id="updateJunction" parameterType="Wps">
-		update tb_junction set fjunction=#{fjunction} where fid=#{fid};
+		update tb_junction set fjunction=#{fjunction},fwelding_area=#{fwelding_area} where fid=#{fid};
 	</update>
 	
 	<delete id="deleteJunction">
@@ -551,11 +551,11 @@
 	</delete>
 	
 	<select id="getstepall" resultType="Wps">
-		SELECT fstep_number,fid,femployee_id FROM tb_step where 1=1
+		SELECT fstep_name,fstep_number,fid,femployee_id FROM tb_step where 1=1
 	</select>
 	
 	<select id="getEmployee1" resultType="Wps">
-		SELECT fid,femployee_id,femployee_version,fwps_lib_id fwpslib_id FROM tb_employee
+		SELECT fid,femployee_id,femployee_version,femployee_name,fwps_lib_id fwpslib_id FROM tb_employee
 		<if test="employ_id!=null and employ_id!=''">
 			where fid=#{employ_id}
 		</if>
@@ -592,5 +592,9 @@
 	
 	<insert id="addEmployee1" parameterType="Wps" useGeneratedKeys="true" keyProperty="insid">
 		INSERT INTO tb_employee (femployee_id, femployee_version,fwps_lib_id) SELECT #{femployee_id}, #{femployee_version}, #{fwpslib_id} from DUAL where not exists(select femployee_id from tb_employee where femployee_version=#{femployee_version} and femployee_id=#{femployee_id})
+	</insert>
+	
+	<insert id="finishWork" parameterType="String">
+		INSERT INTO tb_taskresult (ftaskid,foperatetype,foperatedate) VALUES (#{fid},1,NOW())
 	</insert>
 </mapper>

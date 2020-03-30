@@ -1913,6 +1913,7 @@ public class WpsController {
 					json.put("fid", wps.getFid());
 					json.put("femployee_id", wps.getFemployee_id());
 					json.put("femployee_version", wps.getFemployee_version());
+					json.put("femployee_name", wps.getFemployee_name());
 					ary.add(json);
 				}
 			}
@@ -1921,6 +1922,7 @@ public class WpsController {
 				for(Wps wps:wpsList){
 					json.put("fid", wps.getFid());
 					json.put("fstep_number", wps.getFstep_number());
+					json.put("fstep_name", wps.getFstep_name());
 					ary.add(json);
 				}
 			}
@@ -1929,6 +1931,7 @@ public class WpsController {
 				for(Wps wps:wpsList){
 					json.put("fid", wps.getFid());
 					json.put("fjunction", wps.getFjunction());
+					json.put("fwelding_area", wps.getFwelding_area());
 					ary.add(json);
 				}
 			}
@@ -1967,6 +1970,7 @@ public class WpsController {
 					obj = ary.getJSONObject(i); 
 					wps.setFemployee_id(String.valueOf(obj.get("femployee_id")));
 					wps.setFemployee_version(String.valueOf(obj.get("femployee_version")));
+					wps.setFemployee_name(String.valueOf(obj.get("femployee_name")));
 					wps.setFwpslib_id(new BigInteger(wpsId));
 					wpsService.addEmployee(wps);
 				}
@@ -1977,6 +1981,7 @@ public class WpsController {
 					obj = ary.getJSONObject(i); 
 					wps.setFemployee_id(String.valueOf(obj.get("femployee_id")));
 					wps.setFemployee_version(String.valueOf(obj.get("femployee_version")));
+					wps.setFemployee_name(String.valueOf(obj.get("femployee_name")));
 					wps.setFid(Long.parseLong(String.valueOf(obj.get("fid"))));
 					wpsService.updateEmployee(wps);
 				}
@@ -2012,6 +2017,7 @@ public class WpsController {
 				for(int i=0;i<ary.size();i++){
 					obj = ary.getJSONObject(i); 
 					wps.setFstep_number(String.valueOf(obj.get("fstep_number")));
+					wps.setFstep_name(String.valueOf(obj.get("fstep_name")));
 					wps.setFemployee_id(employeeId);
 					wpsService.addStep(wps);
 				}
@@ -2021,6 +2027,7 @@ public class WpsController {
 				for(int i=0;i<ary.size();i++){
 					obj = ary.getJSONObject(i); 
 					wps.setFstep_number(String.valueOf(obj.get("fstep_number")));
+					wps.setFstep_name(String.valueOf(obj.get("fstep_name")));
 					wps.setFid(Long.parseLong(String.valueOf(obj.get("fid"))));
 					wpsService.updateStep(wps);
 				}
@@ -2056,6 +2063,7 @@ public class WpsController {
 				for(int i=0;i<ary.size();i++){
 					obj = ary.getJSONObject(i); 
 					wps.setFjunction(String.valueOf(obj.get("fjunction")));
+					wps.setFwelding_area(String.valueOf(obj.get("fwelding_area")));
 					wps.setFstep_id(stepId);
 					wpsService.addJunction(wps);
 				}
@@ -2065,6 +2073,7 @@ public class WpsController {
 				for(int i=0;i<ary.size();i++){
 					obj = ary.getJSONObject(i); 
 					wps.setFjunction(String.valueOf(obj.get("fjunction")));
+					wps.setFwelding_area(String.valueOf(obj.get("fwelding_area")));
 					wps.setFid(Long.parseLong(String.valueOf(obj.get("fid"))));
 					wpsService.updateJunction(wps);
 				}
@@ -2377,6 +2386,23 @@ public class WpsController {
 			obj.put("success", true);
 		}catch(Exception e){
 			obj.put("wpsId", "");
+			e.printStackTrace();
+			obj.put("success", false);
+			obj.put("errorMsg", e.getMessage());
+		}
+		return obj.toString();
+	}
+	
+	@RequestMapping("/finishWork")
+	@ResponseBody
+	public String finishWork(HttpServletRequest request){
+		JSONObject obj = new JSONObject();
+		try{
+			JSONObject json = new JSONObject();
+			String fid = request.getParameter("fid");
+			wpsService.finishWork(fid);
+			obj.put("success", true);
+		}catch(Exception e){
 			e.printStackTrace();
 			obj.put("success", false);
 			obj.put("errorMsg", e.getMessage());

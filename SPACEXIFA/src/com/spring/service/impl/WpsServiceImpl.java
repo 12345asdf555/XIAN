@@ -540,4 +540,10 @@ public class WpsServiceImpl implements WpsService{
 		// TODO Auto-generated method stub
 		mapper.addEmployee1(wps);
 	}
+
+	@Override
+	public void finishWork(String fid) {
+		// TODO Auto-generated method stub
+		mapper.finishWork(fid);
+	}
 }
