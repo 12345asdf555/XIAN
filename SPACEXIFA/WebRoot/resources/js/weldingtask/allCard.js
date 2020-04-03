@@ -262,13 +262,13 @@ function openProductDetails(){
 				formatter: function(value,row,index){
 					var str = "";
 					if(row.fstatus==2){
-						str += '<a id="wait" class="easyui-linkbutton"/>';
+						str += '<a id="waitPro" class="easyui-linkbutton"/>';
 					}
 					if(row.fstatus==0){
-						str += '<a id="doing" class="easyui-linkbutton" href="javascript:finishWork('+row.fid+')"/>';
+						str += '<a id="doingPro" class="easyui-linkbutton" href="javascript:finishWork('+row.fid+')"/>';
 					}
 					if(row.fstatus==1){
-						str += '<a id="finish" class="easyui-linkbutton"/>';
+						str += '<a id="finishPro" class="easyui-linkbutton"/>';
 					}
 					return str;
 				}
@@ -282,14 +282,14 @@ function openProductDetails(){
 				}
 			},
 			onLoadSuccess: function(data){
-				if($("#wait").length!=0){
-					$("a[id='wait']").linkbutton({text:'未领取',plain:true,iconCls:'icon-assign'});
+				if($("#waitPro").length!=0){
+					$("a[id='waitPro']").linkbutton({text:'未领取',plain:true,iconCls:'icon-assign'});
 				}
-				if($("#doing").length!=0){
-					$("a[id='doing']").linkbutton({text:'进行中',plain:true,iconCls:'icon-unfinished'});
+				if($("#doingPro").length!=0){
+					$("a[id='doingPro']").linkbutton({text:'进行中',plain:true,iconCls:'icon-unfinished'});
 				}
-				if($("#finish").length!=0){
-					$("a[id='finish']").linkbutton({text:'已完成',plain:true,iconCls:'icon-finish'});
+				if($("#finishPro").length!=0){
+					$("a[id='finishPro']").linkbutton({text:'已完成',plain:true,iconCls:'icon-finish'});
 				}
 			},
 			onDblClickRow: function(rowIndex, rowData){
@@ -501,6 +501,7 @@ function saveChange(){
 					});
 				} else {
 					alert("保存成功");
+					$('#changeWpsDiv').window('close');
 				}
 			}
 		},
