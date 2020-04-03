@@ -597,4 +597,21 @@
 	<insert id="finishWork" parameterType="String">
 		INSERT INTO tb_taskresult (ftaskid,foperatetype,foperatedate) VALUES (#{fid},1,NOW())
 	</insert>
+	
+	<select id="getHistoryDatagridList" resultType="Wps">
+		SELECT c.fid f001,c.fwelded_junction_no f002,p.fid f003,p.fprefix_number f004,p.fproduct_number f005,r.fid f006,r.fname,m.fid f007,m.fequipment_no f008,
+		m.fmodel fmode,e.fid f009,w.fstarttime,w.fendtime endtime,e.femployee_id,s.fid f010,s.fstep_number,j.fid f011,j.fjunction,j.fwelding_area FROM tb_work w 
+		LEFT JOIN tb_welded_junction c ON w.fcard_id=c.fid
+		LEFT JOIN tb_product_number p ON w.fproduct_number_id=p.fid
+		LEFT JOIN tb_employee e ON w.femployee_id=e.fid
+		LEFT JOIN tb_step s ON w.fstep_id=s.fid
+		LEFT JOIN tb_junction j ON w.fjunction_id=j.fid
+		LEFT JOIN tb_welder r ON w.fwelder_id=r.fid
+		LEFT JOIN tb_welding_machine m ON w.fmachine_id=m.fid
+		WHERE m.fequipment_no IS NOT NULL
+		<if test="search!=null and search!=''">
+			${search}
+		</if>
+		GROUP BY c.fid,p.fid,r.fid,m.fid,e.fid,s.fid,j.fid
+	</select>
 </mapper>

@@ -364,4 +364,10 @@ public class DataStatisticsServiceImpl implements DataStatisticsService {
 		// TODO Auto-generated method stub
 		return ds.getTaskDetails(userInsframework, dto);
 	}
+
+	@Override
+	public List<DataStatistics> getHistoryData(String str, String filed) {
+		// TODO Auto-generated method stub
+		return ds.getHistoryData(str, filed);
+	}
 }

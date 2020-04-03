@@ -94,4 +94,6 @@ public interface DataStatisticsMapper  extends Mapper<DataStatistics>{
 	List<DataStatistics> getWarnTimes(@Param("itemid") BigInteger itemid,@Param("dto") WeldDto dto);
 	
 	List<DataStatistics> getTaskDetails(@Param("itemid") BigInteger itemid,@Param("dto") WeldDto dto);
+	
+	List<DataStatistics> getHistoryData(@Param("str") String str, @Param("filed") String filed);
 }

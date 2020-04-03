@@ -546,4 +546,11 @@ public class WpsServiceImpl implements WpsService{
 		// TODO Auto-generated method stub
 		mapper.finishWork(fid);
 	}
+
+	@Override
+	public List<Wps> getHistoryDatagridList(Page page, String search) {
+		// TODO Auto-generated method stub
+		PageHelper.startPage(page.getPageIndex(), page.getPageSize());
+		return mapper.getHistoryDatagridList(search);
+	}
 }

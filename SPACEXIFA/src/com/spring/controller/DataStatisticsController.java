@@ -20,11 +20,13 @@ import com.spring.dto.WeldDto;
 import com.spring.model.DataStatistics;
 import com.spring.model.Dictionarys;
 import com.spring.model.LiveData;
+import com.spring.model.Wps;
 import com.spring.page.Page;
 import com.spring.service.DataStatisticsService;
 import com.spring.service.DictionaryService;
 import com.spring.service.InsframeworkService;
 import com.spring.service.LiveDataService;
+import com.spring.service.WpsService;
 import com.spring.util.IsnullUtil;
 
 import net.sf.json.JSONArray;
@@ -46,6 +48,8 @@ public class DataStatisticsController {
 	private LiveDataService ls;
 	@Autowired
 	private InsframeworkService im;
+	@Autowired
+	private WpsService wpsService;
 
 	IsnullUtil iutil = new IsnullUtil();
 	
@@ -179,6 +183,15 @@ public class DataStatisticsController {
 		request.setAttribute("parenttime2",request.getParameter("time2"));
 		request.setAttribute("fauit",request.getParameter("fauit"));
 		return "datastatistics/fauitdetail";
+	}
+	
+	/**
+	 * 跳转历史数据
+	 * @return
+	 */
+	@RequestMapping("/goHistory")
+	public String goHistory(HttpServletRequest request){
+		return "datastatistics/history";
 	}
 	
 	/**
@@ -1713,6 +1726,109 @@ public class DataStatisticsController {
 		obj.put("temp0", temp0);
 		obj.put("temp1", temp1);
 		return obj.toString();
+	}
+	
+	@RequestMapping("/getHistoryDatagridList")
+	@ResponseBody
+	public String getHistoryDatagridList(HttpServletRequest request){
+		pageIndex = Integer.parseInt(request.getParameter("page"));
+		pageSize = Integer.parseInt(request.getParameter("rows"));
+		page = new Page(pageIndex,pageSize,total);
+		String search = request.getParameter("searchStr");
+		List<Wps> wpsList = wpsService.getHistoryDatagridList(page,search);
+		long total = 0;
+		if(wpsList != null){
+			PageInfo<Wps> pageinfo = new PageInfo<Wps>(wpsList);
+			total = pageinfo.getTotal();
+		}
+		JSONObject json = new JSONObject();
+		JSONArray ary = new JSONArray();
+		JSONObject obj = new JSONObject();
+		try{
+			for(Wps wps:wpsList){
+				json.put("fcard_id", wps.getF001());//电子跟踪卡id
+				json.put("fcard_no", wps.getF002());//电子跟踪卡号
+				json.put("fproduct_id", wps.getF003());//产品序号id
+				json.put("fproduct_no", wps.getF004()+"-"+wps.getF005());//产品序号：前缀+序号
+				json.put("fwelder_id", wps.getF006());//焊工id
+				json.put("fwelder_no", wps.getFname());//焊工姓名
+				json.put("fequipment_id", wps.getF007());//焊机id
+				json.put("fequipment_no", wps.getF008());//焊机编号
+				json.put("femployee_id", wps.getF009());//工序id
+				json.put("femployee_no", wps.getFemployee_id());//工序号
+				json.put("fstep_id", wps.getF010());//工步id
+				json.put("fstep_no", wps.getFstep_number());//工步号
+				json.put("fjunction_id", wps.getF011());//焊缝id
+				json.put("fjunction_no", wps.getFjunction());//焊缝编号
+				json.put("fwelding_area", wps.getFwelding_area());//焊接部位
+				json.put("fstart_time", wps.getFstarttime());//开始时间
+				json.put("fend_time", wps.getEndtime());//结束时间
+				json.put("fmodel", wps.getFmode());//设备型号
+				ary.add(json);
+			}
+		}catch(Exception e){
+			e.getMessage();
+		}
+		obj.put("total", total);
+		obj.put("rows", ary);
+		return obj.toString();
+	}
+	
+	@RequestMapping("/getHistoryData")
+	@ResponseBody
+	public String getHistoryData(HttpServletRequest request){
+		String addRows = request.getParameter("row");
+		JSONObject obj = JSONObject.fromObject(addRows);
+		String fieldArr = request.getParameter("fieldArr");
+		JSONArray objField = JSONArray.fromObject(fieldArr);
+		JSONObject objData =  new JSONObject();
+		JSONArray aryX = new JSONArray();
+		JSONArray aryY = new JSONArray();
+		try{
+			String str = "";
+			if(obj.has("fcard_id")) {
+				str+=" AND l.fcard_id='"+String.valueOf(obj.get("fcard_id"))+"'";
+			}
+			if(obj.has("fproduct_id")) {
+				str+=" AND l.fproduct_number_id='"+String.valueOf(obj.get("fproduct_id"))+"'";
+			}
+			if(obj.has("fequipment_id")) {
+				str+=" AND l.fmachine_id='"+String.valueOf(obj.get("fequipment_id"))+"'";
+			}
+			if(obj.has("fwelder_id")) {
+				str+=" AND l.fwelder_id='"+String.valueOf(obj.get("fwelder_id"))+"'";
+			}
+			if(obj.has("femployee_id")) {
+				str+=" AND l.femployee_id='"+String.valueOf(obj.get("femployee_id"))+"'";
+			}
+			if(obj.has("fstep_id")) {
+				str+=" AND l.fstep_id='"+String.valueOf(obj.get("fstep_id"))+"'";
+			}
+			if(obj.has("fjunction_id")) {
+				str+=" AND l.fjunction_id='"+String.valueOf(obj.get("fjunction_id"))+"'";
+			}
+			String startTime = request.getParameter("startTime");
+			String endTime = request.getParameter("endTime");
+			str+=" AND l.FWeldTime>='"+startTime+"'";
+			str+=" AND l.FWeldTime<='"+endTime+"'";
+			for(int f=0;f<objField.size();f++) {
+				String filed = String.valueOf(objField.get(f));
+				List<DataStatistics> list = dss.getHistoryData(str,filed);
+				JSONArray xAxis = new JSONArray();
+				JSONArray yAxis = new JSONArray();
+				for(DataStatistics d:list){
+					yAxis.add(Double.parseDouble(d.getName()));
+					xAxis.add(d.getTime());
+				}
+				aryY.add(yAxis);
+				aryX.add(xAxis);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		objData.put("aryX", aryX);
+		objData.put("aryY", aryY);
+		return objData.toString();
 	}
 }
 

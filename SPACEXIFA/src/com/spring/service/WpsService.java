@@ -496,4 +496,15 @@ public interface WpsService {
 	 * @param fid
 	 */
 	void finishWork(String fid);
+	
+	/**
+	 * 获取历史记录表格
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年4月1日上午11:34:28
+	 * @param page
+	 * @param search
+	 * @return
+	 */
+	List<Wps> getHistoryDatagridList(Page page, String search);
 }

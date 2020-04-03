@@ -1541,4 +1541,11 @@
 		GROUP BY i.fname
 		)temp group by fid order by fid
 	</select>
+	
+	<select id="getHistoryData" resultMap="dataMap">
+		SELECT ${filed} name,l.FWeldTime time FROM tb_live_data l WHERE (fstatus='3' or fstatus='5' or fstatus='7' or fstatus='99') 
+		<if test="str!=null and str!=''">
+			 ${str}
+		</if>
+	</select>
 </mapper>

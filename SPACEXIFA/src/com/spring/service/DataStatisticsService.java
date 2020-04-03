@@ -402,4 +402,15 @@ public interface DataStatisticsService {
 	 * @return
 	 */
 	List<DataStatistics> getTaskDetails(BigInteger userInsframework, WeldDto dto);
+	
+	/**
+	 * 查询历史数据
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年4月2日下午2:28:00
+	 * @param str
+	 * @param filed
+	 * @return
+	 */
+	List<DataStatistics> getHistoryData(String str, String filed);
 }
