@@ -239,6 +239,7 @@ function importWpsExcel(){
 						});
 					} else {
 						$('#importdiv').dialog('close');
+						$('#wpslibTable').datagrid('reload');
 						alert("导入成功");
 					}
 				}

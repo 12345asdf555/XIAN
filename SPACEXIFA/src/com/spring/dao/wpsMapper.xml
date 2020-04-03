@@ -596,11 +596,11 @@
 	</insert>
 	
 	<insert id="addStep1" parameterType="Wps" useGeneratedKeys="true" keyProperty="macid">
-		INSERT INTO tb_step (femployee_id, fstep_number,fstep_name) SELECT #{femployee_id},#{fstep_number},#{fstep_name} from DUAL where not exists(select fstep_number from tb_step where femployee_id=#{femployee_id} and fstep_number=#{fstep_number})
+		INSERT INTO tb_step (femployee_id, fstep_number) SELECT #{femployee_id},#{fstep_number} from DUAL where not exists(select fstep_number from tb_step where femployee_id=#{femployee_id} and fstep_number=#{fstep_number})
 	</insert>
 	
 	<insert id="addEmployee1" parameterType="Wps" useGeneratedKeys="true" keyProperty="insid">
-		INSERT INTO tb_employee (femployee_id,femployee_version,fwps_lib_id,femployee_name) SELECT #{femployee_id}, #{femployee_version}, #{fwpslib_id}, #{femployee_name} from DUAL where not exists(select femployee_id from tb_employee where femployee_version=#{femployee_version} and femployee_id=#{femployee_id})
+		INSERT INTO tb_employee (femployee_id, femployee_version,fwps_lib_id) SELECT #{femployee_id}, #{femployee_version}, #{fwpslib_id} from DUAL where not exists(select femployee_id from tb_employee where femployee_version=#{femployee_version} and femployee_id=#{femployee_id})
 	</insert>
 	
 	<insert id="finishWork" parameterType="String">
