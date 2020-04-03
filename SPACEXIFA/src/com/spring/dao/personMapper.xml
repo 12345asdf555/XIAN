@@ -63,6 +63,10 @@
 		SELECT fid id,Fowner insid FROM tb_welder WHERE fwelder_no=#{welderno}
 	</select>
 	
+	<select id="getWeldername" parameterType="String" resultType="Person">
+		SELECT fid id,fname name FROM tb_welder WHERE Fowner=#{insid}
+	</select>
+	
 	<select id="getFreeWelder" resultType="Person">
 		select tb_welder.fid id,fwelder_no welderno,tb_welder.fname name,d.fvaluename qualiname,tb_welder.Fback,i.fname levename,i.fid insid from tb_welder 
 		INNER JOIN tb_insframework i on i.fid = tb_welder.Fowner INNER JOIN tb_dictionary d on d.fvalue = tb_welder.Fqualification where d.ftypeid=7 

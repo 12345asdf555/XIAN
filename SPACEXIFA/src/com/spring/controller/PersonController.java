@@ -269,6 +269,59 @@ public class PersonController {
 	}
 	
 	/**
+	 * 获取组织机构下的焊机信息
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/getMachines")
+	@ResponseBody
+	public String getMachines(HttpServletRequest request){
+		JSONObject json = new JSONObject();
+		JSONArray ary = new JSONArray();
+		JSONObject obj = new JSONObject();
+		BigInteger insid= new BigInteger(request.getParameter("str"));
+		try{
+			List<WeldingMachine> machinelist = machineService.getMachines(insid);
+			for(WeldingMachine machine:machinelist){
+				json.put("id", machine.getId());
+				json.put("machineno", machine.getEquipmentNo());
+				ary.add(json);
+			}
+		}catch(Exception e){
+			e.getMessage();
+		}
+		obj.put("ary", ary);
+		return obj.toString();
+	}
+	
+	/**
+	 * 获取组织机构下的焊工信息
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/getWeldername")
+	@ResponseBody
+	public String getWeldername(HttpServletRequest request){
+		JSONObject json = new JSONObject();
+		JSONArray ary = new JSONArray();
+		JSONObject obj = new JSONObject();
+		BigInteger insid= new BigInteger(request.getParameter("str"));
+		try{
+			List<Person> welderlist = welderService.getWeldername(insid);
+			for(Person welder:welderlist){
+				json.put("id", welder.getId());
+				json.put("name", welder.getName());
+				ary.add(json);
+			}
+		}catch(Exception e){
+			e.getMessage();
+		}
+		obj.put("ary", ary);
+		return obj.toString();
+	}
+	
+	
+	/**
 	 * 获取焊工焊机信息
 	 * @param request
 	 * @return

@@ -38,6 +38,8 @@ public class DataStatistics {
 	private String flaser_power;
 	private String fswing_speed;
 	private String flon_air_flow;
+	private double gas;
+	private double weldwire;
 	
 	public int getType() {
 		return type;
@@ -248,6 +250,18 @@ public class DataStatistics {
 	}
 	public void setFlon_air_flow(String flon_air_flow) {
 		this.flon_air_flow = flon_air_flow;
+	}
+	public double getGas() {
+		return gas;
+	}
+	public void setGas(double gas) {
+		this.gas = gas;
+	}
+	public double getWeldwire() {
+		return weldwire;
+	}
+	public void setWeldwire(double weldwire) {
+		this.weldwire = weldwire;
 	}
 	
 }

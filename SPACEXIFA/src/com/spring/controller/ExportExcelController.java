@@ -157,64 +157,45 @@ public class ExportExcelController {
 	public ResponseEntity<byte[]> exporWeldwps(HttpServletRequest request, HttpServletResponse response) {
 		File file = null;
 		try {
-			// String str=(String) request.getSession().getAttribute("searchStr");
 			List<Wps> list = wps.getstepall();
 			String dtime = null;
 			String wps_lib_id = "";
 			String employ_id = "";
 			String step_id = "";
 			int c = 0;
-			String[] titles = new String[] { "产品图号", "产品名称", "产品版本号", "工艺规程编号", "工艺规程版本号", "工艺来源", "驳回原因", "审核状态",
+			String[] titles = new String[] { "产品图号", "产品名称", "产品版本号", "工艺规程编号", "工艺规程版本号", "工艺来源", "审核状态",
 					"工序号", "工序版本号", "工序名称", "工步号", "工步名称", "焊缝编号", "焊接部位", "量化项目", "要求值", "上偏差", "下偏差", "计量单位" };
-			Object[][] data = new Object[500][20];
+			Object[][] data = new Object[list.size()][20];
 			for (int k = 0; k < list.size(); k++) {
-				// data[k][11] = list.get(k).getFstep_number();
-				step_id = String.valueOf(list.get(k).getFid());
-				employ_id = String.valueOf(list.get(k).getFemployee_id());
-				List<Wps> detial = wps.getDetail(step_id);
-				List<Wps> junction = wps.getJunction(step_id);
-				System.out.println(c);
-				if (junction.size() > 0 && detial.size() > 0) {
-					for (int m = 0; m < junction.size(); m++) {
-						for (int n = 0; n < (detial.size()); n++) {
-							if (junction.get(m).getFjunction() != null) {
-								data[c][13] = junction.get(m).getFjunction();
-							}
-							data[c][11] = list.get(k).getFstep_number();
-							data[c][15] = detial.get(n).getFquantitative_project();
-							data[c][16] = detial.get(n).getFrequired_value();
-							data[c][17] = detial.get(n).getFupper_deviation();
-							data[c][18] = detial.get(n).getFlower_deviation();
-							data[c][19] = detial.get(n).getFunit_of_measurement();
-							List<Wps> employ = wps.getEmployee1(employ_id);
-							if (employ != null && employ.size() > 0) {
-								for (int j = 0; j < employ.size(); j++) {
-									data[c][8] = employ.get(j).getFemployee_id();
-									data[c][9] = employ.get(j).getFemployee_version();
-									wps_lib_id = String.valueOf(employ.get(j).getFwpslib_id());
-									List<Wps> fpro = wps.getWeldwps(wps_lib_id);
-									if (fpro != null && fpro.size() > 0) {
-										for (int i = 0; i < fpro.size(); i++) {
-											data[c][0] = fpro.get(i).getFproduct_drawing_no();
-											data[c][1] = fpro.get(i).getFproduct_name();
-											data[c][2] = fpro.get(i).getFproduct_version();
-											data[c][3] = fpro.get(i).getFwpsnum();// 工艺规程编号
-											data[c][4] = fpro.get(i).getFwps_lib_version();
-											if (fpro.get(i).getFlag() == 0) {
-												data[c][5] = "自建";
-											} else {
-												data[c][5] = "MES";
-											}
-											data[c][6] = fpro.get(i).getFback();// 驳回原因
-											data[c][7] = fpro.get(i).getFstatus();// 审核状态
-										}
-									}
-								}
-							}
-							c++;
-						}
-					}
+				data[k][0] = list.get(k).getFproduct_drawing_no();
+				data[k][1] = list.get(k).getFproduct_name();
+				data[k][2] = list.get(k).getFproduct_version();
+				data[k][3] = list.get(k).getFwpsnum();
+				data[k][4] = list.get(k).getFwps_lib_version();
+				if(list.get(k).getFlag() == 0) {
+					data[k][5] = "自建";
+				}else {
+					data[k][5] = "MES";
 				}
+				if(list.get(k).getFstatus() == 2) {
+					data[k][6] = "被驳回";
+				}else if(list.get(k).getFstatus() == 1){
+					data[k][6] = "已通过";
+				}else {
+					data[k][6] = "未审核";
+				}
+				data[k][7] = list.get(k).getFemployee_id();
+				data[k][8] = list.get(k).getFemployee_name();
+				data[k][9] = list.get(k).getFemployee_version();
+				data[k][10] = list.get(k).getFstep_number();
+				data[k][11] = list.get(k).getFstep_name();
+				data[k][12] = list.get(k).getFjunction();
+				data[k][13] = list.get(k).getFwelding_area();
+				data[k][14] = list.get(k).getFquantitative_project();
+				data[k][15] = list.get(k).getFrequired_value();
+				data[k][16] = list.get(k).getFupper_deviation();
+				data[k][17] = list.get(k).getFlower_deviation();
+				data[k][18] = list.get(k).getFunit_of_measurement();
 			}
 			filename = "焊接工艺参数" + sdf.format(new Date()) + ".xls";
 			ServletContext scontext = request.getSession().getServletContext();

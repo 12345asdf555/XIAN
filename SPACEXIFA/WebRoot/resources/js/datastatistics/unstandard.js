@@ -2,6 +2,8 @@ $(function(){
 	InsframeworkCombobox();
 	//page();
 	wpslibDatagrid();
+	weldernames();
+	machinenum();
 })
 
 
@@ -82,7 +84,31 @@ function wpslibDatagrid(){
 			halign : "center",
 			align : "left"
 		},{
+			field : 'femployee_num',
+			title : '工序号',
+			width : 100,
+			halign : "center",
+			align : "left"
+		},{
+			field : 'femployee_name',
+			title : '工序名',
+			width : 100,
+			halign : "center",
+			align : "left"
+		},{
 			field : 'fstep_number',
+			title : '工步号',
+			width : 100,
+			halign : "center",
+			align : "left"
+		},{
+			field : 'fstep_name',
+			title : '工步名',
+			width : 100,
+			halign : "center",
+			align : "left"
+		},{
+			field : 'fweldingarea',
 			title : '焊接部位',
 			width : 100,
 			halign : "center",
@@ -146,13 +172,19 @@ function parameterStr(){
 	var fwps_lib_num = $("#fwps_lib_num").val();
 	var fwelded_junction_no = $("#fwelded_junction_no").val();
 	var product_number = $("#product_number").val();
+	var femployee_num = $("#femployee_num").val();
+	var femployee_name = $("#femployee_name").val();
+	var fstep_number = $("#fstep_number").val();
+	var fstep_name = $("#fstep_name").val();
+	var fweldingarea = $("#fweldingarea").val();
 	var junction_name = $("#junction_name").val();
-	//var welderno = $("#welderno").val();
+	var weldername = $("#weldername").combobox('getValue');
+	var weldmachine = $("#weldmachine").combobox('getValue');
 	if(product_drawing_no != ""){
 		if(searcher == ""){
-			searcher += " fproduct_drawing_no LIKE "+"'%" + product_drawing_no + "%'";
+			searcher += " l.fproduct_drawing_no LIKE "+"'%" + product_drawing_no + "%'";
 		}else{
-			searcher += " AND fproduct_drawing_no LIKE "+"'%" + product_drawing_no + "%'";
+			searcher += " AND l.fproduct_drawing_no LIKE "+"'%" + product_drawing_no + "%'";
 		}
 	}
 	if(product_name != ""){
@@ -204,6 +236,59 @@ function parameterStr(){
 			searcher += " AND u.fjunction=" + junction_name;
 		}
 	}
+	if(femployee_num != ""){
+		if(searcher == ""){
+			searcher += " e.femployee_id=" + femployee_num;
+		}else{
+			searcher += " AND e.femployee_id=" + femployee_num;
+		}
+	}
+	if(femployee_name != ""){
+		if(searcher == ""){
+			searcher += " e.femployee_name=" + femployee_name;
+		}else{
+			searcher += " AND e.femployee_name=" + femployee_name;
+		}
+	}
+	if(fstep_number != ""){
+		if(searcher == ""){
+			searcher += " s.fstep_number =" + fstep_number;
+		}else{
+			searcher += " AND s.fstep_number =" + fstep_number;
+		}
+	}
+	if(fstep_name != ""){
+		if(searcher == ""){
+			searcher += " s.fstep_name=" + fstep_name;
+		}else{
+			searcher += " AND s.fstep_name=" + fstep_name;
+		}
+	}
+	
+	if(fweldingarea != ""){
+		if(searcher == ""){
+			searcher += " u.fwelding_area LIKE "+"'%" + fweldingarea + "%'";
+		}else{
+			searcher += " AND u.fwelding_area LIKE "+"'%" + fweldingarea + "%'";
+		}
+	}
+	
+	if(weldername != ""){
+		if(searcher == ""){
+			searcher += " w.fid" + weldername;
+		}else{
+			searcher += " AND w.fid=" + weldername;
+		}
+	}
+	
+	if(weldmachine != ""){
+		if(searcher == ""){
+			searcher += " m.fequipment_no=" + weldmachine;
+		}else{
+			searcher += " AND m.fequipment_no=" + weldmachine;
+		}
+	}
+	
 	if(dtoTime1 != ""){
 		if(searcher == ""){
 			searcher += " a.fstarttime >'" +dtoTime1+"'";
@@ -238,28 +323,97 @@ function exportunstardExcel(){
 //所属项目
 function InsframeworkCombobox(){
 	$.ajax({  
-  type : "post",  
-  async : false,
-  url : "weldingMachine/getInsframeworkAll",  
-  data : {},  
-  dataType : "json", //返回数据形式为json  
-  success : function(result) {  
-      if (result) {
-          var optionStr = '';
-          for (var i = 0; i < result.ary.length; i++) {  
-              optionStr += "<option value=\"" + result.ary[i].id + "\" >"  
-                      + result.ary[i].name + "</option>";
-          }
-          $("#fitemId").html(optionStr);
-          $("#item").html(optionStr);
-      }  
-  },  
-  error : function(errorMsg) {  
-      alert("数据请求失败，请联系系统管理员!");  
-  }  
+	  type : "post",  
+	  async : false,
+	  url : "weldingMachine/getInsframeworkAll",  
+	  data : {},  
+	  dataType : "json", //返回数据形式为json  
+	  success : function(result) {  
+	      if (result) {
+	          var optionStr = '';
+	          for (var i = 0; i < result.ary.length; i++) {  
+	              optionStr += "<option value=\"" + result.ary[i].id + "\" >"  
+	                      + result.ary[i].name + "</option>";
+	          }
+	          $("#fitemId").html(optionStr);
+	          $("#item").html(optionStr);
+	      }  
+	  },  
+	  error : function(errorMsg) {  
+	      alert("数据请求失败，请联系系统管理员!");  
+	  }  
 	}); 
 	$("#fitemId").combobox();
 	$("#item").combobox();
+}
+
+function weldernames(){
+	$("#item").combobox({
+		onChange : function(newValue,oldValue){
+			$('#weldername').combobox('clear');
+			$.ajax({  
+			    type : "post",  
+			    async : false,
+			    url : "welders/getWeldername?str="+newValue,  
+			    data : {},  
+			    dataType : "json", //返回数据形式为json  
+			    success : function(result) {  
+			        if (result) {
+			        	if(result.ary.length!=0){
+			        		var boptionStr = '';
+			                for (var i = 0; i < result.ary.length; i++) {  
+			                    boptionStr += "<option value=\"" + result.ary[i].id + "\" >"  
+			                            + result.ary[i].name + "</option>";
+			                }
+			                $("#weldername").html(boptionStr);
+			                $("#weldername_id").html(boptionStr);
+				        	$("#weldername").combobox();
+				        	$("#weldername_id").combobox();
+				        	$("#weldername").combobox('select',result.ary[0].name);
+			        	}
+			        }  
+			    },  
+			    error : function(errorMsg) {  
+			        alert("数据请求失败，请联系系统管理员!");  
+			    }  
+				}); 
+		}
+	})
+}
+
+
+function machinenum(){
+	$("#weldername").combobox({
+		onSelect : function(record){
+			var newValue = record.value;
+			$('#weldmachine').combobox('clear');
+			$('#weldmachine').combobox('loadData',{});
+			$.ajax({  
+			    type : "post",  
+			    async : false,
+			    url : "welders/getMachines?str="+newValue,  
+			    data : {},  
+			    dataType : "json", //返回数据形式为json  
+			    success : function(result) {  
+			        if (result) {
+			        	if(result.ary.length!=0){
+			        		var boptionStr = '';
+			                for (var i = 0; i < result.ary.length; i++) {  
+			                    boptionStr += "<option value=\"" + result.ary[i].id + "\" >"  
+			                            + result.ary[i].machineno + "</option>";
+			                }
+			                $("#weldmachine").html(boptionStr);
+				        	$("#weldmachine").combobox();
+				        	$("#weldmachine").combobox('select',result.ary[0].machineno);
+			        	}
+			        }  
+			    },  
+			    error : function(errorMsg) {  
+			        alert("数据请求失败，请联系系统管理员!");  
+			    }  
+			}); 
+		}
+	})
 }
 
 //监听窗口大小变化

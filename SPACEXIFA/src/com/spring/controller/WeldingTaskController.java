@@ -1177,17 +1177,20 @@ public class WeldingTaskController {
 		try{
 			for(Wps wps:wpsList){
 				json.put("fid", wps.getFid());
-				json.put("fproduct_drawing_no", wps.getFproduct_drawing_no());//电子跟踪卡号
+				json.put("fwelded_junction_no", wps.getFwelded_junction_no());//电子跟踪卡号
+				json.put("fproduct_drawing_no", wps.getFproduct_drawing_no());//产品图号
 				json.put("fproduct_name", wps.getFproduct_name());//产品名称
-				json.put("fproduct_version", wps.getFproduct_version());//产品版本号
+				json.put("fproduct_version", wps.getFprefix_number()+"-"+wps.getFproduct_vnumber());//产品序号
 				json.put("fprocessname", wps.getFprocessname());//规程编号
 				json.put("fwps_lib_version", wps.getFwps_lib_version());//规程版本号
-				//json.put("fstarttime", wps.getFstarttime());
-				//json.put("endtime", wps.getEndtime());
 				json.put("fwpsnum", wps.getFwpsnum());//任务编号
 				json.put("dianame", wps.getDianame());//产品图号
+				json.put("femployee_num", wps.getFemployee_id());//工序号
+				json.put("femployee_name", wps.getFemployee_name());//工序名称
 				json.put("fjunction", wps.getFjunction());//焊缝编号
-				//json.put("fstep_number", wps.getFstep_number());
+				json.put("fweldingarea", wps.getFwelding_area());//焊接部位
+				json.put("fstep_number", wps.getFstep_number());//工步号
+				json.put("fstep_name", wps.getFstep_name());//工步名称
 				json.put("weldername", wps.getWeldername());//焊工号
 				json.put("conname", wps.getConname());//焊机编号
 				json.put("fitem", wps.getFitem());//组织机构

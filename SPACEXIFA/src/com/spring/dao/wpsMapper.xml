@@ -397,21 +397,23 @@
 	</select>
 	
 	<select id="getunstard" resultType="Wps">
-		select a.fjunction_id fid,a.fjunction_itemid,a.fwelder_itemid,a.fmachine_id,a.falarmtime unstandardtime,a.welding_position_id,a.fstarttime,a.fendtime,j.fwelded_junction_no fproduct_drawing_no,j.ftask_no fwpsnum,
-		j.flag flag,j.fitemId,p.fproduct_number fproduct_version,p.fwps_lib_id,l.fwps_lib_name fprocessname,
-		l.fproduct_drawing_no dianame,l.fproduct_name fproduct_name,l.fwps_lib_version fwps_lib_version,u.fjunction fjunction,
-		w.fname weldername,m.fequipment_no conname,i.fname fitem from tb_alarm a
-		LEFT JOIN tb_welded_junction j ON a.fjunction_id = j.fid
-		LEFT JOIN tb_product_number p ON a.fjunction_id = p.fcard_id
-		LEFT JOIN tb_wps_library l ON p.fwps_lib_id = l.fid
+		select a.fjunction_id,a.fwelder_id,a.fmachine_id,a.falarmtime unstandardtime,a.welding_position_id,a.fstarttime,a.fendtime,a.fproduct_number_id,a.fcard_id,a.fwps_lib_id,
+		a.femployee_id,a.fstep_id,j.fwelded_junction_no fwelded_junction_no,j.ftask_no fwpsnum,p.fprefix_number fprefix_number,p.fproduct_number fproduct_vnumber,
+		l.fwps_lib_name fprocessname,l.fwps_lib_version fwps_lib_version,l.fproduct_drawing_no fproduct_drawing_no,l.fproduct_name fproduct_name,m.fequipment_no conname,i.fname fitem,
+		u.fjunction fjunction,u.fwelding_area fwelding_area,s.fstep_number fstep_number,s.fstep_name fstep_name,e.femployee_name femployee_name,e.femployee_id femployee_id,w.fname weldername from tb_alarm a
+		LEFT JOIN tb_welded_junction j ON a.fcard_id = j.fid
+		LEFT JOIN tb_product_number p ON a.fproduct_number_id = p.fid
+		LEFT JOIN tb_wps_library l ON a.fwps_lib_id = l.fid
 		LEFT JOIN tb_welding_machine m ON a.fmachine_id = m.fid
 		LEFT JOIN tb_insframework i ON j.fitemId = i.fid
-		LEFT JOIN tb_junction u ON a.fjunction_no = u.fid
+		LEFT JOIN tb_junction u ON a.fjunction_id = u.fid
+		LEFT JOIN tb_step s ON a.fstep_id = s.fid
+		LEFT JOIN tb_employee e ON a.femployee_id = e.fid
 		LEFT JOIN tb_welder w ON a.fwelder_id = w.fid
 		<if test="search!=null and search!=''"> 
 		   WHERE${search}
 		</if>
-		GROUP BY a.fjunction_id ORDER BY a.fid
+		ORDER BY a.fid
 	</select>
 	
 	<select id="getAllWpslib" resultType="Wps">
@@ -551,13 +553,20 @@
 	</delete>
 	
 	<select id="getstepall" resultType="Wps">
-		SELECT fstep_name,fstep_number,fid,femployee_id FROM tb_step where 1=1
+		select t.fid,t.fproduct_drawing_no fproduct_drawing_no,t.fproduct_name fproduct_name,t.fproduct_version fproduct_version,t.fwps_lib_name fwpsnum,t.fwps_lib_version fwps_lib_version,
+		t.fstatus fstatus,t.flag flag,e.femployee_id femployee_id,e.femployee_name femployee_name,e.femployee_version femployee_version,e.fid,s.fstep_name fstep_name,s.fstep_number fstep_number, c.fjunction fjunction,
+		c.fwelding_area fwelding_area,p.fquantitative_project fquantitative_project,p.frequired_value frequired_value,p.fupper_deviation fupper_deviation,p.flower_deviation flower_deviation,funit_of_measurement funit_of_measurement from tb_wps_library t
+		LEFT JOIN tb_employee e on t.fid = e.fwps_lib_id
+		LEFT JOIN tb_step s on e.fid = s.femployee_id
+		LEFT JOIN tb_junction c on s.fid = c.fstep_id
+		LEFT JOIN tb_specification p on s.fid = p.fstep_id
+		where 1=1 ORDER BY t.fid
 	</select>
 	
 	<select id="getEmployee1" resultType="Wps">
 		SELECT fid,femployee_id,femployee_version,femployee_name,fwps_lib_id fwpslib_id FROM tb_employee
 		<if test="employ_id!=null and employ_id!=''">
-			where fid=#{employ_id}
+			where fid=#{employ_id} order by fwps_lib_id desc
 		</if>
 	</select>
 	
@@ -583,15 +592,15 @@
 	</select>
 	
 	<insert id="addWps1" parameterType="Wps" useGeneratedKeys="true" keyProperty="fid">
-		INSERT INTO tb_wps_library (fproduct_drawing_no, fproduct_name,fproduct_version,fwps_lib_name,fwps_lib_version,flag,fstatus) SELECT #{fproduct_drawing_no},#{fproduct_name},#{fproduct_version},#{fwpsnum},#{fwps_lib_version},#{flag},0 from DUAL where not exists(select fproduct_drawing_no from tb_wps_library where fproduct_drawing_no=#{fproduct_drawing_no} and fwps_lib_version=#{fwps_lib_version})
+		INSERT INTO tb_wps_library (fproduct_drawing_no, fproduct_name,fproduct_version,fwps_lib_name,fwps_lib_version,flag,fstatus) SELECT #{fproduct_drawing_no},#{fproduct_name},#{fproduct_version},#{fwpsnum},#{fwps_lib_version},#{flag},#{fstatus} from DUAL where not exists(select fproduct_drawing_no from tb_wps_library where fproduct_drawing_no=#{fproduct_drawing_no} and fwps_lib_version=#{fwps_lib_version})
 	</insert>
 	
 	<insert id="addStep1" parameterType="Wps" useGeneratedKeys="true" keyProperty="macid">
-		INSERT INTO tb_step (femployee_id, fstep_number) SELECT #{femployee_id},#{fstep_number} from DUAL where not exists(select fstep_number from tb_step where femployee_id=#{femployee_id} and fstep_number=#{fstep_number})
+		INSERT INTO tb_step (femployee_id, fstep_number,fstep_name) SELECT #{femployee_id},#{fstep_number},#{fstep_name} from DUAL where not exists(select fstep_number from tb_step where femployee_id=#{femployee_id} and fstep_number=#{fstep_number})
 	</insert>
 	
 	<insert id="addEmployee1" parameterType="Wps" useGeneratedKeys="true" keyProperty="insid">
-		INSERT INTO tb_employee (femployee_id, femployee_version,fwps_lib_id) SELECT #{femployee_id}, #{femployee_version}, #{fwpslib_id} from DUAL where not exists(select femployee_id from tb_employee where femployee_version=#{femployee_version} and femployee_id=#{femployee_id})
+		INSERT INTO tb_employee (femployee_id,femployee_version,fwps_lib_id,femployee_name) SELECT #{femployee_id}, #{femployee_version}, #{fwpslib_id}, #{femployee_name} from DUAL where not exists(select femployee_id from tb_employee where femployee_version=#{femployee_version} and femployee_id=#{femployee_id})
 	</insert>
 	
 	<insert id="finishWork" parameterType="String">

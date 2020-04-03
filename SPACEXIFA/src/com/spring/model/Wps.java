@@ -160,6 +160,8 @@ public class Wps {
 	private String fproduct_name;
 	private String fwps_lib_version;
 	private String fproduct_version;
+	private String fproduct_vnumber;
+	private String fprefix_number;
 	private int flag;
 
 	private String fquantitative_project;
@@ -178,6 +180,7 @@ public class Wps {
 	private String fstarttime;
 	private String endtime;
 	private BigInteger unstandardtime;
+	private String fwelded_junction_no;
 	
 	public int getFini() {
 		return fini;
@@ -1312,5 +1315,23 @@ public class Wps {
 	}
 	public void setFemployee_name(String femployee_name) {
 		this.femployee_name = femployee_name;
+	}
+	public String getFproduct_vnumber() {
+		return fproduct_vnumber;
+	}
+	public void setFproduct_vnumber(String fproduct_vnumber) {
+		this.fproduct_vnumber = fproduct_vnumber;
+	}
+	public String getFprefix_number() {
+		return fprefix_number;
+	}
+	public void setFprefix_number(String fprefix_number) {
+		this.fprefix_number = fprefix_number;
+	}
+	public String getFwelded_junction_no() {
+		return fwelded_junction_no;
+	}
+	public void setFwelded_junction_no(String fwelded_junction_no) {
+		this.fwelded_junction_no = fwelded_junction_no;
 	}
 }

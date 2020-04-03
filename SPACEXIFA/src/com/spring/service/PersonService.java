@@ -40,6 +40,12 @@ public interface PersonService {
 	List<Person> getFreeWelder(Page page,String str);
 	
 	/**
+	 * 获取所有当前组织机构下的焊工
+	 * @return
+	 */
+	List<Person> getWeldername(BigInteger insid);
+	
+	/**
 	 * 根据焊工ID获取组织机构
 	 * @param fid
 	 * @return

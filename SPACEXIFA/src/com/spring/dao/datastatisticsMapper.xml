@@ -10,6 +10,8 @@
         <result property="insname" column="insname"></result>
         <result property="total" column="total"></result>  
         <result property="num" column="num"></result>  
+        <result property="gas" column="gas"></result> 
+        <result property="weldwire" column="weldwire"></result>
        	<result property="machinenum" column="machinenum"></result>
        	<result property="junctionnum" column="junctionnum"></result>
        	<result property="worktime" column="worktime"></result>
@@ -1273,15 +1275,15 @@
 	</select>
 	
 	<select id="getWireAndFlow" resultMap="dataMap">
-	SELECT fname,sum(total) total,sum(num) num from (
-	    select j.fname, 0 total, 0 num from tb_insframework j 
+	SELECT fname,sum(weldwire) weldwire,sum(gas) gas from (
+	    select j.fname, 0 weldwire, 0 gas from tb_insframework j 
         LEFT JOIN tb_insframework ins on ins.fid = j.fparent 
         LEFT JOIN tb_insframework insf on insf.fid = ins.fparent WHERE j.ftype=23 
 		<if test="itemid!=null and itemid!=''">
 			and (j.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid}) 
 		</if>
 		union all
-		select i.fname, sum((w.fworktime*w.fwirefeedrate*if(m.fcoefficient is NULL,0,m.fcoefficient))/600) total,sum((w.fworktime*w.frateofflow)/60) num from tb_work w 
+		select i.fname, sum((w.fworktime*w.fwirefeedrate*if(m.fcoefficient is NULL,0,m.fcoefficient))/60) weldwire,sum((w.fworktime*w.frateofflow)/60) gas from tb_work w 
 		INNER JOIN tb_insframework i on i.fid  = w.fmachine_itemid
 		left JOIN tb_insframework ins on ins.fid = i.fparent
 	    left JOIN tb_insframework insf on insf.fid = ins.fparent

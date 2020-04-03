@@ -31,6 +31,7 @@ import com.spring.util.IsnullUtil;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import java.text.DecimalFormat;  
 
 @Controller
 @RequestMapping(value = "/datastatistics", produces = { "text/json;charset=UTF-8" })
@@ -1685,6 +1686,7 @@ public class DataStatisticsController {
 		return obj.toString();
 	}
 	
+
 	/**
 	 * 焊丝和气体消耗量
 	 * @param request
@@ -1695,6 +1697,7 @@ public class DataStatisticsController {
 	public String getWireAndFlow(HttpServletRequest request){
 		JSONObject obj = new JSONObject();
 		WeldDto dto = new WeldDto();
+		DecimalFormat   df  = new DecimalFormat("######0.00"); 
 		SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String time1 = dateFormat.format(new Date()).substring(0, 11)+"00:00:00";
 		JSONArray aryX = new JSONArray();
@@ -1708,13 +1711,13 @@ public class DataStatisticsController {
 			List<DataStatistics> list = dss.getWireAndFlow(im.getUserInsframework(),dto);
 			for(DataStatistics i:list){
 				aryX.add(i.getName());
-				aryS0.add(i.getTotal());
-				aryS1.add(i.getNum());
-				if(i.getTotal()>temp0) {
-					temp0 = i.getTotal();
+				aryS0.add(df.format(i.getWeldwire()));
+				aryS1.add(df.format(i.getGas()));
+				if(i.getWeldwire()>temp0) {
+					temp0 = i.getWeldwire();
 				}
-				if(i.getNum()>temp1) {
-					temp1 = i.getNum();
+				if(i.getGas()>temp1) {
+					temp1 = i.getGas();
 				}
 			}
 		}catch(Exception e){
@@ -1723,8 +1726,8 @@ public class DataStatisticsController {
 		obj.put("aryX", aryX);
 		obj.put("aryS0", aryS0);
 		obj.put("aryS1", aryS1);
-		obj.put("temp0", temp0);
-		obj.put("temp1", temp1);
+		obj.put("temp0", df.format(temp0));
+		obj.put("temp1", df.format(temp1));
 		return obj.toString();
 	}
 	

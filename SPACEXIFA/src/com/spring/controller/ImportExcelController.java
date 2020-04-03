@@ -645,6 +645,19 @@ public class ImportExcelController {
 			String mm = "";
 			String nn = "";
 			for(Wps w:we){
+				if("".equals(w.getFproduct_drawing_no()) && w.getFproduct_drawing_no() == null) {
+					obj.put("msg","产品图号、产品名称、产品版本号不能为空！");
+					obj.put("success",false);
+					return obj.toString();
+				}else if("".equals(w.getFwpsnum()) && w.getFwpsnum() == null) {
+					obj.put("msg","工艺规程编号、版本不能为空！");
+					obj.put("success",false);
+					return obj.toString();
+				}else if("".equals(w.getFemployee_id()) && w.getFemployee_id() == null) {
+					obj.put("msg","工序号、版本、名称不能为空！");
+					obj.put("success",false);
+					return obj.toString();
+				}else {
 				wpss.addWps1(w);
 				if(w.getFid()!= 0) {
 					wpsId = String.valueOf(w.getFid());
@@ -653,13 +666,14 @@ public class ImportExcelController {
 					femployee_id =String.valueOf(w.getInsid());
 					if(femployee_id.equals("0")) {
 						obj.put("success",false);
-						obj.put("msg","导入失败，请检查您的文件格式以及数据是否符合要求！");
+						obj.put("msg","导入失败，请检查导入的工序是否正确！");
 					}else {
 						w.setFemployee_id(femployee_id);
 						wpss.addStep1(w);
 						fstep_id =String.valueOf(w.getMacid());
 						if(fstep_id.equals("0")) {
-						obj.put("success",false);
+							obj.put("success",false);
+							obj.put("msg","导入失败，请检查导入的工步是否正确！");
 						}else {
 							w.setFstep_id(fstep_id);
 							wpss.addJunction(w);
@@ -667,23 +681,24 @@ public class ImportExcelController {
 						}
 					}
 				}else {
-					w.setFwpslib_id(new BigInteger(wpsId));
-					wpss.addEmployee1(w);
-					mm = String.valueOf(w.getInsid());
-					if(mm.equals("0") || mm.equals("null")) {
-						w.setFemployee_id(femployee_id);
-					}else {
-						w.setFemployee_id(mm);
-					}
-					wpss.addStep1(w);
-					nn = String.valueOf(w.getMacid());
-					if(nn.equals("0") || nn.equals("null")) {
-						w.setFstep_id(fstep_id);
-					}else {
-						w.setFstep_id(nn);
-					}
-					wpss.addJunction(w);
-					wpss.addDetail(w);
+						w.setFwpslib_id(new BigInteger(wpsId));
+						wpss.addEmployee1(w);
+						mm = String.valueOf(w.getInsid());
+						if(mm.equals("0") || mm.equals("null")) {
+							w.setFemployee_id(femployee_id);
+						}else {
+							w.setFemployee_id(mm);
+						}
+						wpss.addStep1(w);
+						nn = String.valueOf(w.getMacid());
+						if(nn.equals("0") || nn.equals("null")) {
+							w.setFstep_id(fstep_id);
+						}else {
+							w.setFstep_id(nn);
+						}
+						wpss.addJunction(w);
+						wpss.addDetail(w);
+				}
 				}
 			};
 			obj.put("success",true);
@@ -1341,11 +1356,15 @@ public class ImportExcelController {
 						p.setFwps_lib_version(cellValue);//工艺规程版本号
 						break;
  					}else if(k == 5){
-						p.setFlag(0);//工艺来源
-						break;
+ 						if(cellValue.equals("自建")) {
+ 							p.setFlag(0);//工艺来源
+ 							break;
+ 						}
  					}else if(k == 6){
-						p.setFstatus(1);//审核状态
-						break;
+ 						if(cellValue.equals("未审核")) {
+ 							p.setFstatus(0);//审核状态
+ 							break;
+ 						}
  					}else if(k == 7){
 						p.setFemployee_id(cellValue);//工序号
 						break;
@@ -1353,16 +1372,19 @@ public class ImportExcelController {
 						p.setFemployee_version(cellValue);//工序版本
 						break;
  					}else if(k == 9){
-						p.setF001(cellValue);//工序名称
+						p.setFemployee_name(cellValue);//工序名称
+						break;
+ 					}else if(k == 10){
+ 						p.setFstep_number(cellValue);//工步号
 						break;
  					}else if(k == 11){
-						p.setF002(cellValue);//工步名称
+						p.setFstep_name(cellValue);//工步名称
 						break;
  					}else if(k == 12){
 						p.setFjunction(cellValue);//焊缝编号
 						break;
  					}else if(k == 13){
-						p.setF003(cellValue);//焊接部位
+						p.setFwelding_area(cellValue);//焊接部位
 						break;
  					}else if(k == 14){
 						p.setFquantitative_project(cellValue);//量化项目

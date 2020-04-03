@@ -21,5 +21,6 @@ public interface PersonMapper {
 	Person getIdByWelderno(@Param("welderno")String welderno);
 	
 	List<Person> getFreeWelder(@Param("str")String str);
+	List<Person> getWeldername(@Param("insid")BigInteger insid);
 	String getInsidByFid(BigInteger fid);
 }

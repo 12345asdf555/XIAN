@@ -77,6 +77,11 @@ public class PersonServiceImpl implements PersonService{
 	}
 
 	@Override
+	public List<Person> getWeldername(BigInteger insid) {
+		return mapper.getWeldername(insid);
+	}
+	
+	@Override
 	public Person getIdByWelderno(String welderno) {
 		return mapper.getIdByWelderno(welderno);
 	}

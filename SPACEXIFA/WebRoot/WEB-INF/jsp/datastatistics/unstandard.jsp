@@ -43,14 +43,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</div>
 	  	<div class="functiondiv">
 	  		<div>
-	  		<div  style="float: left;">
-					<div>
-						<label>组织机构：</label>
-					</div>
-					<div>
-						<select class="easyui-combobox" style="width:120px;" name="item" id="item" data-options="editable:false"></select>
-					</div>
-				</div>
 				<div  style="float: left;">
 					<div>
 						<label>产品图号：</label>
@@ -99,6 +91,39 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<input class="easyui-textbox" style="width:120px;" name="product_number" id="product_number"/>
 					</div>
 				</div>
+				
+				<div  style="float: left;">
+					<div>
+						<label>工序号：</label>
+					</div>
+					<div>
+						<input class="easyui-textbox" style="width:120px;" name="femployee_num" id="femployee_num"/>
+					</div>
+				</div>
+				<div  style="float: left;">
+					<div>
+						<label>工序名称：</label>
+					</div>
+					<div>
+						<input class="easyui-textbox" style="width:120px;" name="femployee_name" id="femployee_name"/>
+					</div>
+				</div>
+				<div  style="float: left;">
+					<div>
+						<label>工步号：</label>
+					</div>
+					<div>
+						<input class="easyui-textbox" style="width:120px;" name="fstep_number" id="fstep_number"/>
+					</div>
+				</div>
+				<div  style="float: left;">
+					<div>
+						<label>工步名称：</label>
+					</div>
+					<div>
+						<input class="easyui-textbox" style="width:120px;" name="fstep_name" id="fstep_name"/>
+					</div>
+				</div>
 				<div  style="float: left;">
 					<div>
 						<label>焊缝编号：</label>
@@ -112,19 +137,49 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<label>焊接部位：</label>
 					</div>
 					<div>
-						<input class="easyui-textbox" style="width:120px;" name="fstep_number" id="fstep_number"/>
+						<input class="easyui-textbox" style="width:120px;" name="fweldingarea" id="fweldingarea"/>
+					</div>
+				</div>
+				<div  style="float: left;">
+					<div>
+						<label>组织机构：</label>
+					</div>
+					<div>
+						<select class="easyui-combobox" style="width:120px;" name="item" id="item" data-options="editable:false"></select>
+					</div>
+				</div>
+				<div  style="float: left;">
+					<div>
+						<label>焊工姓名：</label>
+					</div>
+					<div>
+<!-- 						<input id="weldername_id" type="hidden"> -->
+						<select class="easyui-combobox" style="width:120px;" name="weldername" id="weldername" ></select>
+					</div>
+				</div>
+				<div  style="float: left;">
+					<div>
+						<label>焊机编号：</label>
+					</div>
+					<div>
+						<select class="easyui-combobox" style="width:120px;" name="weldmachine" id="weldmachine" ></select>
 					</div>
 				</div>
 				<div  style="float: left;">
 					<div>
 						<label>时间：</label>
+					</div>
+					<div>
 						<input class="easyui-datetimebox" style="width:120px;" name="dtoTime1" id="dtoTime1">--
 						<input class="easyui-datetimebox" style="width:120px;" name="dtoTime2" id="dtoTime2">&emsp;
 					</div>
 				</div>
 				<div  style="float: left;">
 					<div>
-						<a href="javascript:serach();" class="easyui-linkbutton" iconCls="icon-select" >搜索</a>&emsp;
+						<label>查询和导出：</label>
+					</div>
+					<div>
+						<a href="javascript:serach();" class="easyui-linkbutton" iconCls="icon-select" >查询</a>&emsp;
 						<a href="javascript:exportunstardExcel();" class="easyui-linkbutton" iconCls="icon-export">导出</a>
 					</div>
 				</div>

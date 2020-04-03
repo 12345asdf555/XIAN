@@ -33,6 +33,12 @@ public interface WeldingMachineService {
 	 */
 	List<WeldingMachine> findAllweldmachine();
 	
+	
+	/**
+	 * 查询当前组织机构下的焊机型号信息
+	 */
+	List<WeldingMachine> getMachines(BigInteger insid);
+	
 	/**
 	 * 删除设备
 	 * @param wid
