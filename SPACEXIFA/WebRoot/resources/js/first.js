@@ -489,7 +489,7 @@ var aryX = new Array(), aryS0 = new Array(), aryS1 = new Array();
     	        	lang : ['数据视图', '关闭', '导出excel'],
     	        	contentToOption: function (opt) {
     	        		var obj = new Date();
-    	        		var time_name = obj.getFullYear()+"-"+obj.getMonth()+"-"+(obj.getDate()+1)+" "+obj.getHours()+"-"+obj.getMinutes()+"-"+obj.getSeconds();
+    	        		var time_name = obj.getFullYear()+"-"+(obj.getMonth()+1)+"-"+(obj.getDate())+" "+obj.getHours()+"-"+obj.getMinutes()+"-"+obj.getSeconds();
     	        		 $("#tableExcelBS").table2excel({
     	        			exclude: ".noExl",
  							name: "数据表格",
@@ -505,7 +505,7 @@ var aryX = new Array(), aryS0 = new Array(), aryS1 = new Array();
 		                var series = opt.series;
 		                var table = '<table id="tableExcelBS" style="width:90%;text-align:center"><tbody><tr>' + '<td></td>';
                         for(s = 0;s < series.length;s++){
-	                    	table += '<td>' + series[0].name + '</td>';
+	                    	table += '<td>' + series[s].name + '</td>';
                         }
                         table += '</tr>';
 		                for (var i = 0, l = axisData.length; i < l; i++) {
@@ -697,7 +697,7 @@ function showChart23(){
 	    	        lang : ['数据视图', '关闭', '导出excel'],
     	        	contentToOption: function (opt) {
     	        		var obj = new Date();
-    	        		var time_name = obj.getFullYear()+"-"+obj.getMonth()+"-"+(obj.getDate()+1)+" "+obj.getHours()+"-"+obj.getMinutes()+"-"+obj.getSeconds();
+    	        		var time_name = obj.getFullYear()+"-"+(obj.getMonth()+1)+"-"+(obj.getDate())+" "+obj.getHours()+"-"+obj.getMinutes()+"-"+obj.getSeconds();
     	        		 $("#tableExcelBS").table2excel({
     	        			exclude: ".noExl",
  							name: "数据表格",
@@ -713,7 +713,7 @@ function showChart23(){
 		                var series = opt.series;
 		                var table = '<table id="tableExcelBS" style="width:90%;text-align:center"><tbody><tr>' + '<td></td>';
                         for(s = 0;s < series.length;s++){
-	                    	table += '<td>' + series[0].name + '</td>';
+	                    	table += '<td>' + series[s].name + '</td>';
                         }
                         table += '</tr>';
 		                for (var i = 0, l = axisData.length; i < l; i++) {
