@@ -1328,12 +1328,67 @@ public class ImportExcelController {
 		            	 //处理数字过长时出现x.xxxE9
 		            	 BigDecimal big=new BigDecimal(cell.getNumericCellValue());  
 		            	 cellValue = big.toString();
-                   }if(k == 7){
-						p.setFemployee_id(cellValue);//工序号
+                   }if(k == 0){
+						p.setFproduct_drawing_no(cellValue);//产品图号
+						break;
+					}else if(k == 1){
+						p.setFproduct_name(cellValue);//产品名称
 						break;
 					}
-                   else if(k == 10){
+					else if(k == 2){
+						p.setFproduct_version(cellValue);//产品版本号
+						break;
+					}else if(k == 3){
+						p.setFwpsnum(cellValue);//工艺规程编号
+						break;
+					}else if(k == 4){
+						p.setFwps_lib_version(cellValue);//工艺规程版本号
+						break;
+					}else if(k == 5){
+						if(cellValue.equals("自建")) {
+							p.setFlag(0);//工艺来源
+							break;
+						}
+					}else if(k == 6){
+						if(cellValue.equals("未审核")) {
+							p.setFstatus(0);//审核状态
+							break;
+						}
+					}else if(k == 7){
+						p.setFemployee_id(cellValue);//工序号
+						break;
+					}else if(k == 8){
+						p.setFemployee_version(cellValue);//工序版本
+						break;
+					}else if(k == 9){
+						p.setFemployee_name(cellValue);//工序名称
+						break;
+					}else if(k == 10){
 						p.setFstep_number(cellValue);//工步号
+						break;
+					}else if(k == 11){
+						p.setFstep_name(cellValue);//工步名称
+						break;
+					}else if(k == 12){
+						p.setFjunction(cellValue);//焊缝编号
+						break;
+					}else if(k == 13){
+						p.setFwelding_area(cellValue);//焊接部位
+						break;
+					}else if(k == 14){
+						p.setFquantitative_project(cellValue);//量化项目
+						break;
+					}else if(k == 15){
+						p.setFrequired_value(cellValue);//要求值
+						break;
+					}else if(k == 16){
+						p.setFupper_deviation(cellValue);//上偏差
+						break;
+					}else if(k == 17){
+						p.setFlower_deviation(cellValue);//下偏差
+						break;
+					}else if(k == 18){
+						p.setFunit_of_measurement(cellValue);//计量单位
 						break;
 					}
 					break;
