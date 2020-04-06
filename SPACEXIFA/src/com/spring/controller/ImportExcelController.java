@@ -1421,21 +1421,21 @@ public class ImportExcelController {
 						break;
  					}else if(k == 5){
 						if(cellValue.equals("自建")) {
-							p.setArcname("0");//工艺来源
+							p.setFlag(0);//工艺来源
 							break;
 						}else {
-							p.setArcname("1");//工艺来源
+							p.setFlag(1);//工艺来源
 							break;
 						}
 					}else if(k == 6){
  						if(cellValue.equals("被驳回")) {
- 							p.setFmode("2");//审核状态
+ 							p.setFstatus(2);//审核状态
  							break;
  						}else if(cellValue.equals("已通过")) {
- 							p.setFmode("1");//审核状态
+ 							p.setFstatus(1);//审核状态
  							break;
  						}else {
- 							p.setFmode("0");//审核状态
+ 							p.setFstatus(0);//审核状态
  							break;
  						}
  					}else if(k == 7){
