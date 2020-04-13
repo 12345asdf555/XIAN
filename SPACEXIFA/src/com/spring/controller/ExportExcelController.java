@@ -309,7 +309,7 @@ public class ExportExcelController {
 			List<Wps> list = wps.getunstard(str);
 			String dtime = null;
 			BigInteger unstandtime = null;
-			String[] titles = new String[] { "任务编号", "焊工姓名", "焊机编号", "电子跟踪卡号", "产品图号", "产品序号", "产品名称", "工艺规程编号", "版本",
+			String[] titles = new String[] { "任务编号", "焊工姓名", "焊机编号", "电子跟踪卡号", "产品图号", "产品序号", "产品名称", "工艺规程编号", "规程版本","工序号","工序名","工步号","工步名",
 					"焊接部位","焊缝编号","组织机构","超标时长"};
 			Object[][] data = new Object[list.size()][17];
 			for (int i = 0; i < list.size(); i++) {
@@ -322,16 +322,21 @@ public class ExportExcelController {
 				data[i][6] = list.get(i).getFproduct_name();
 				data[i][7] = list.get(i).getFprocessname();
 				data[i][8] = list.get(i).getFwps_lib_version();
-				data[i][10] = list.get(i).getFjunction();
-				data[i][11] = list.get(i).getFitem();
+				data[i][9] = list.get(i).getFemployee_id();
+				data[i][10] = list.get(i).getFemployee_name();
+				data[i][11] = list.get(i).getFstep_number();
+				data[i][12] = list.get(i).getFstep_name();
+				data[i][13] = list.get(i).getFwelding_area();
+				data[i][14] = list.get(i).getFjunction();
+				data[i][15] = list.get(i).getFitem();
 				unstandtime = list.get(i).getUnstandardtime();
 				if(unstandtime != null) {
-					data[i][12] = getTimeStrBySecond(unstandtime);
+					data[i][16] = getTimeStrBySecond(unstandtime);
 				}else {
-					data[i][12] = "00:00:00";
+					data[i][16] = "00:00:00";
 				}
 			}
-			filename = "生产任务明细" + sdf.format(new Date()) + ".xls";
+			filename = "超标统计报表" + sdf.format(new Date()) + ".xls";
 
 			ServletContext scontext = request.getSession().getServletContext();
 			// 获取绝对路径

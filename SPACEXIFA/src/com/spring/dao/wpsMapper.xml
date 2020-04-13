@@ -162,15 +162,15 @@
 	</select>
 	
 	<select id="gettrackcard" parameterType="BigInteger" resultType="Wps">
-	 SELECT max(t.fid),fcard_id insid, t.fwelderid welderid,w.fwelded_junction_no fwpsnum,w.fproduct_number arcname,d.fwelder_no fname,p.fwps_lib_id macid,l.fproduct_drawing_no materialname,e.femployee_id dianame,e.femployee_name,s.fstep_number gasname,s.fstep_name,j.fjunction,j.fwelding_area  FROM tb_taskresult t
-	 LEFT JOIN tb_welded_junction w ON t.fcard_id = w.fid
-	 LEFT JOIN tb_welder d ON t.fwelderid = d.fid 
-	 LEFT JOIN tb_product_number p ON t.fcard_id = p.fcard_id
-	 LEFT JOIN tb_wps_library l ON p.fwps_lib_id = l.fid
-	 LEFT JOIN tb_employee e ON p.fwps_lib_id = e.fwps_lib_id
-	 LEFT JOIN tb_step s ON e.femployee_id = s.femployee_id
-	 LEFT JOIN tb_junction j ON s.fid = j.fstep_id
-	 where t.fmachineid = #{fid}
+		select j.fid,j.fwelded_junction_no fwelded_junction_no,j.ftask_no fwpsnum,j.fproduct_number fproduct_vnumber,j.fwpslib_id,
+		w.fproduct_drawing_no fproduct_drawing_no,w.fid,w.fwps_lib_name fprocessname,w.fwps_lib_version fwps_lib_version,
+		e.femployee_name femployee_name,e.femployee_id femployee_id,e.fid,s.fid,s.fstep_name fstep_name,s.fstep_number fstep_number,
+		c.fjunction fjunction,c.fid insid,c.fwelding_area fwelding_area from tb_welded_junction j 
+		LEFT JOIN tb_wps_library w ON j.fwpslib_id = w.fid
+		LEFT JOIN tb_employee e ON w.fid = e.fwps_lib_id
+		LEFT JOIN tb_step s ON e.fid = s.femployee_id
+		LEFT JOIN tb_junction c ON s.fid = c.fstep_id
+		where 1=1
 	</select>
 	
 	<insert id="saveWpslib">
@@ -560,7 +560,7 @@
 		LEFT JOIN tb_step s on e.fid = s.femployee_id
 		LEFT JOIN tb_junction c on s.fid = c.fstep_id
 		LEFT JOIN tb_specification p on s.fid = p.fstep_id
-		where 1=1 ORDER BY t.fid
+		where 1=1 group by p.fid ORDER BY t.fid desc
 	</select>
 	
 	<select id="getEmployee1" resultType="Wps">
@@ -592,15 +592,15 @@
 	</select>
 	
 	<insert id="addWps1" parameterType="Wps" useGeneratedKeys="true" keyProperty="fid">
-		INSERT INTO tb_wps_library (fproduct_drawing_no, fproduct_name,fproduct_version,fwps_lib_name,fwps_lib_version,flag,fstatus) SELECT #{fproduct_drawing_no},#{fproduct_name},#{fproduct_version},#{fwpsnum},#{fwps_lib_version},#{flag},#{fstatus} from DUAL where not exists(select fproduct_drawing_no from tb_wps_library where fproduct_drawing_no=#{fproduct_drawing_no} and fwps_lib_version=#{fwps_lib_version})
+		INSERT INTO tb_wps_library (fproduct_drawing_no, fproduct_name,fproduct_version,fwps_lib_name,fwps_lib_version,flag,fstatus) SELECT #{fproduct_drawing_no},#{fproduct_name},#{fproduct_version},#{fwpsnum},#{fwps_lib_version},#{flag},#{fstatus} from DUAL where not exists(select fproduct_drawing_no from tb_wps_library where fproduct_drawing_no=#{fproduct_drawing_no} and fwps_lib_version=#{fwps_lib_version} and fwps_lib_name = #{fwpsnum})
 	</insert>
 	
 	<insert id="addStep1" parameterType="Wps" useGeneratedKeys="true" keyProperty="macid">
-		INSERT INTO tb_step (femployee_id, fstep_number) SELECT #{femployee_id},#{fstep_number} from DUAL where not exists(select fstep_number from tb_step where femployee_id=#{femployee_id} and fstep_number=#{fstep_number})
+		INSERT INTO tb_step (femployee_id, fstep_number,fstep_name) SELECT #{femployee_id},#{fstep_number},#{fstep_name} from DUAL where not exists(select fstep_number from tb_step where femployee_id=#{femployee_id} and fstep_number=#{fstep_number})
 	</insert>
 	
 	<insert id="addEmployee1" parameterType="Wps" useGeneratedKeys="true" keyProperty="insid">
-		INSERT INTO tb_employee (femployee_id, femployee_version,fwps_lib_id) SELECT #{femployee_id}, #{femployee_version}, #{fwpslib_id} from DUAL where not exists(select femployee_id from tb_employee where femployee_version=#{femployee_version} and femployee_id=#{femployee_id})
+		INSERT INTO tb_employee (femployee_id, femployee_version,fwps_lib_id,femployee_name) SELECT #{femployee_id}, #{femployee_version}, #{fwpslib_id},#{femployee_name} from DUAL where not exists(select femployee_id from tb_employee where fwps_lib_id=#{fwpslib_id} and femployee_id=#{femployee_id})
 	</insert>
 	
 	<insert id="finishWork" parameterType="String">

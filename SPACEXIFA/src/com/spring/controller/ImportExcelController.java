@@ -688,6 +688,7 @@ public class ImportExcelController {
 							w.setFemployee_id(femployee_id);
 						}else {
 							w.setFemployee_id(mm);
+							femployee_id = mm;
 						}
 						wpss.addStep1(w);
 						nn = String.valueOf(w.getMacid());
@@ -695,6 +696,7 @@ public class ImportExcelController {
 							w.setFstep_id(fstep_id);
 						}else {
 							w.setFstep_id(nn);
+							fstep_id = nn;
 						}
 						wpss.addJunction(w);
 						wpss.addDetail(w);

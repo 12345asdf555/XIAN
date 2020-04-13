@@ -39,7 +39,7 @@ public interface WpsService {
 	void deleteWpsBelongLib(BigInteger fid);
 	void deleteMainWps(BigInteger fid);
 	int getCountByWpslibidChanel(BigInteger wpslibid,int chanel);
-	Wps gettrackcard(BigInteger wid);
+	List<Wps> gettrackcard();
 	List<Wps> getstepall();
 	List<Wps> getEmployee1(String employ_id);
 	/**

@@ -61,8 +61,8 @@ public class WpsServiceImpl implements WpsService{
 	}
 
 	@Override
-	public Wps gettrackcard(BigInteger fid){
-		return mapper.gettrackcard(fid);
+	public List<Wps> gettrackcard(){
+		return mapper.gettrackcard();
 	}
 	
 	@Override

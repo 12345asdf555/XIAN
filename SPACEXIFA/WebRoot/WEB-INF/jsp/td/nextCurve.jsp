@@ -77,11 +77,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<div style="float:left;width:30%;height:100%;margin-left:20px;text-align:center;">
 					<ul>
 						<li style="width:100%;height:28%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">
-						产品图号：<input type="text" id="r1"  value="AS-T1" readonly style="border-radius:5px;border:1px solid #ffd700;width:180px;height:20px;text-align:center;"></li>
+						&emsp;&emsp;产品图号：<input type="text" id="r1"  value="AS-T1" readonly style="border-radius:5px;border:1px solid #ffd700;width:180px;height:20px;text-align:center;"></li>
 						<li style="width:100%;height:28%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">
-						&nbsp;&nbsp;&nbsp;工序号：<input type="text" id="r2"  value="01" readonly style="border-radius:5px;border:1px solid #ffd700;width:180px;height:20px;text-align:center;"></li>
+						工艺规程编号：<input type="text" id="r2"  value="01" readonly style="border-radius:5px;border:1px solid #ffd700;width:180px;height:20px;text-align:center;"></li>
 						<li style="width:100%;height:28%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">
-						焊工工号：<input type="text" id="r3"  value="0017" readonly style="border-radius:5px;border:1px solid #ffd700;width:180px;height:20px;text-align:center;"></li>
+						&emsp;&emsp;焊工工号：<input type="text" id="r3"  value="0017" readonly style="border-radius:5px;border:1px solid #ffd700;width:180px;height:20px;text-align:center;"></li>
 					</ul>
 				</div>
 				<div style="float:left;width:30%;height:100%;margin-left:20px;text-align:center;">
@@ -89,9 +89,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<li style="width:100%;height:28%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">
 						电子跟踪卡号：<input type="text" id="r5"  value="AX00G7" readonly style="border-radius:5px;border:1px solid #ffd700;width:150px;height:20px;text-align:center;"></li>
 						<li style="width:100%;height:28%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">
-						&emsp;&emsp;&emsp;工步号：<input type="text" id="r6"  value="02" readonly style="border-radius:5px;border:1px solid #ffd700;width:150px;height:20px;text-align:center;"></li>
+						工艺规程版本：<input type="text" id="r6"  value="02" readonly style="border-radius:5px;border:1px solid #ffd700;width:150px;height:20px;text-align:center;"></li>
 						<li style="width:100%;height:28%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">
-						&emsp;&emsp;&emsp;焊层号：<input type="text" id="r7"  value="01" readonly style="border-radius:5px;border:1px solid #ffd700;width:150px;height:20px;text-align:center;"></li>
+						&emsp;&emsp;&emsp;工序号：<input type="text" id="r7"  value="01" readonly style="border-radius:5px;border:1px solid #ffd700;width:150px;height:20px;text-align:center;"></li>
 					</ul>
 				</div>
 				<div style="float:left;width:30%;height:100%;margin-left:20px;text-align:center;">
@@ -101,7 +101,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<li style="width:100%;height:28%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">
 						焊缝编号：<input type="text" id="r10"  value="h61" readonly style="border-radius:5px;border:1px solid #ffd700;width:150px;height:20px;text-align:center;"></li>
 						<li style="width:100%;height:28%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">
-						&nbsp;&nbsp;&nbsp;焊道号：<input type="text" id="r11"  value="02" readonly style="border-radius:5px;border:1px solid #ffd700;width:150px;height:20px;text-align:center;"></li>
+						&nbsp;&nbsp;&nbsp;工步号：<input type="text" id="r11"  value="02" readonly style="border-radius:5px;border:1px solid #ffd700;width:150px;height:20px;text-align:center;"></li>
 					</ul>
 				</div>
 			</fieldset>

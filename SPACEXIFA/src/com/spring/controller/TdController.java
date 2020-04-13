@@ -806,16 +806,27 @@ public class TdController {
 	@RequestMapping("/getTrackCard")
 	@ResponseBody
 	public String getTrackCard(HttpServletRequest request){
+		JSONObject obj = new JSONObject();
 		JSONObject json = new JSONObject();
-		Wps wps = Wps.gettrackcard(new BigInteger(request.getParameter("machineid")));
+		JSONArray ary = new JSONArray();
+		List<Wps> wps = Wps.gettrackcard();
 		try{
-			json.put("fwpsnum ", wps.getFwpsnum());
-			json.put("arcname", wps.getArcname());
-			json.put("fname ", wps.getFname());
-			json.put("materialname", wps.getMaterialname());
-			json.put("dianame", wps.getDianame());
-			json.put("gasname", wps.getGasname());
-			json.put("selectname", wps.getSelectname());
+			for(Wps w:wps) {
+				json.put("fwelded_junction_no", w.getFwelded_junction_no());
+				json.put("fwpsnum", w.getFwpsnum());
+				json.put("fproduct_vnumber", w.getFproduct_vnumber());
+				json.put("fproduct_drawing_no", w.getFproduct_drawing_no());
+				json.put("fprocessname", w.getFprocessname());//工艺规程编号
+				json.put("fwps_lib_version", w.getFwps_lib_version());//规程版本
+				json.put("femployee_name", w.getFemployee_name());
+				json.put("femployee_id", w.getFemployee_id());
+				json.put("fstep_name", w.getFstep_name());
+				json.put("fstep_number", w.getFstep_number());
+				json.put("fjunction", w.getFjunction());
+				json.put("insid", w.getInsid());
+				json.put("fwelding_area", w.getFwelding_area());
+				ary.add(json);
+			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}

@@ -209,7 +209,7 @@ function closeDlg(){
 	}
 }
 
-//打开文件导入dialog
+//打开文件导入dialogconfig.default.baseUrl.dev+'/reportOne?orderCode='+this.code+'&token='+token
 function importclick(){
 	$("#importdiv").dialog("open").dialog("setTitle","从excel导入数据");
 }

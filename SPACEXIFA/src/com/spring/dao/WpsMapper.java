@@ -88,7 +88,7 @@ public interface WpsMapper {
 	void passReview(@Param("fid")String fid,@Param("value")String value);
 	void turnDown(Wps wps);
 	List<Wps> getWpsCombobox();
-	Wps gettrackcard(BigInteger fid);
+	List<Wps> gettrackcard();
 	int getProcudtCount(@Param("pdn")String pdn, @Param("procudt")String procudt);
 	int getWpsversionCount(@Param("wln")String wln, @Param("wpsversion")String wpsversion, @Param("pdn")String pdn, @Param("pv")String pv);
 	void addEmployee1(Wps wps);

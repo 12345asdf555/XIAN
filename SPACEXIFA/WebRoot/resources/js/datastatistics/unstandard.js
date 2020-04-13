@@ -113,7 +113,7 @@ function wpslibDatagrid(){
 			width : 100,
 			halign : "center",
 			align : "left"
-		},  {
+		},{
 			field : 'fjunction',
 			title : '焊缝编号',
 			width : 100,
@@ -168,6 +168,7 @@ function parameterStr(){
 	var item = $("#item").combobox('getValue');
 	var product_drawing_no = $("#product_drawing_no").val();
 	var product_name = $("#product_name").val();
+	var fproduct_id = $("#fproduct_id").textbox('getValue');
 	var taskno = $("#taskno").val();
 	var fwps_lib_num = $("#fwps_lib_num").val();
 	var fwelded_junction_no = $("#fwelded_junction_no").val();
@@ -215,11 +216,21 @@ function parameterStr(){
 			searcher += " AND j.fwelded_junction_no LIKE "+"'%" + fwelded_junction_no + "%'";
 		}
 	}
+	if(fproduct_id != ""){
+		searchStr += " AND p.fproduct_number LIKE "+"'%" + fproduct_id + "%'";
+	}
+	if(fproduct_id != ""){
+		if(searcher == ""){
+			searcher += " p.fproduct_number LIKE "+"'%" + fproduct_id + "%'";
+		}else{
+			searcher += " AND p.fproduct_number LIKE "+"'%" + fproduct_id + "%'";
+		}
+	}
 	if(product_number != ""){
 		if(searcher == ""){
-			searcher += " p.fproduct_number=" + product_number;
+			searcher += " p.fprefix_number=" + product_number;
 		}else{
-			searcher += " AND p.fproduct_number=" + product_number;
+			searcher += " AND p.fprefix_number=" + product_number;
 		}
 	}
 	if(item != ""){

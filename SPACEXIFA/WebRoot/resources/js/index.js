@@ -70,116 +70,198 @@ function loadxmlDoc(file) {
 
 var resourceary = [];
 function anaylsis(ipurl){
-	//处理ie不支持indexOf
-	if (!Array.prototype.indexOf){
-  		Array.prototype.indexOf = function(elt /*, from*/){
-	    var len = this.length >>> 0;
-	    var from = Number(arguments[1]) || 0;
-	    from = (from < 0)
-	         ? Math.ceil(from)
-	         : Math.floor(from);
-	    if (from < 0)
-	      from += len;
-	    for (; from < len; from++)
-	    {
-	      if (from in this &&
-	          this[from] === elt)
-	        return from;
-	    }
-	    return -1;
-	  };
-	}
 	var object = loadxmlDoc(ipurl+"ConfigFile/menu.xml");
 	var menuinfo = object.getElementsByTagName("Menuinfo");
-	for(var m = 1; m <= menuinfo.length; m++){
-		for (var i = 0; i < menuinfo.length; i++) {
-			var showIndex = menuinfo[i].getElementsByTagName("ShowIndex");//显示位置
-			if (document.all) {
-				showIndex = showIndex[0].text;
-			} else {
-				showIndex = showIndex[0].textContent;
-			}
-			if(m == showIndex){
-				var menuName = menuinfo[i].getElementsByTagName("Name");//菜单名
-				var submenus = menuinfo[i].getElementsByTagName("Submenus");//二级菜单
-				var imgName = menuinfo[i].getElementsByTagName("ImgName");//菜单图标
-				var array = [], firstcontext = "";
+	try{
+		var a = menuinfo.item;
+		for(var m = 1; m <= menuinfo.length; m++){
+			for (var i = 0; i < menuinfo.length; i++) {
+				var showIndex = menuinfo[i].getElementsByTagName("ShowIndex");//显示位置
 				if (document.all) {
-					menuName = menuName[0].text,imgName = imgName[0].text;
+					showIndex = showIndex[0].text;
 				} else {
-					menuName = menuName[0].textContent,imgName = imgName[0].textContent;
+					showIndex = showIndex[0].textContent;
 				}
-				var context = '<ul id="ul'+showIndex+'">';
-				for (var x = 0; x < submenus.length; x++) {
-					var firstName = submenus[x].getElementsByTagName("FirstName");
-					var firstResource = submenus[x].getElementsByTagName("FirstResource");
-					var firstimgName = submenus[x].getElementsByTagName("FirstImgName");//菜单图标
-					var firstsubmenus = submenus[x].getElementsByTagName("FirstSubmenus");//三级菜单
-					var firstshowIndex = submenus[x].getElementsByTagName("FirstShowIndex");//显示位置
-					var subnenustext,flag = true,lastcontext = "";
-					if (document.all) { //IE
-						firstName = firstName[0].text,firstResource = firstResource[0].text,firstimgName = firstimgName[0].text,
-						subnenustext = firstsubmenus[0].text,firstshowIndex = firstshowIndex[0].text;
+				if(m == showIndex){
+					var menuName = menuinfo[i].getElementsByTagName("Name");//菜单名
+					var submenus = menuinfo[i].getElementsByTagName("Submenus");//二级菜单
+					var imgName = menuinfo[i].getElementsByTagName("ImgName");//菜单图标
+					var array = [], firstcontext = "";
+					if (document.all) {
+						menuName = menuName[0].text,imgName = imgName[0].text;
 					} else {
-						firstName = firstName[0].textContent,firstResource = firstResource[0].textContent,firstimgName = firstimgName[0].textContent,
-						subnenustext = firstsubmenus[0].textContent,firstshowIndex = firstshowIndex[0].textContent;
+						menuName = menuName[0].textContent,imgName = imgName[0].textContent;
 					}
-					if(subnenustext.replace(/\s+/g,"")){
-						flag = false;
-						array.push(firstshowIndex);
-						firstcontext +='<li onclick="changeColor(this)" id="'+firstshowIndex+'"><a href="javascript:openSubmenus('+showIndex+','+firstshowIndex+')">'+
-						'<div><img src="resources/images/'+firstimgName+'" />&nbsp;&nbsp;'+firstName+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="resources/images/arrow.png" id="subimg'+showIndex+'_'+firstshowIndex+'"/></div>'+
-						'</a></li><li style="height:'+browsernum+'px;"><div id="div'+showIndex+'_'+firstshowIndex+'" style="display:none;"><ul id="last'+firstshowIndex+'">';
-						for (var j = 0; j < firstsubmenus.length; j++) {
-							var LastName = firstsubmenus[j].getElementsByTagName("LastName");
-							var LastResource = firstsubmenus[j].getElementsByTagName("LastResource");
-							var LastimgName = firstsubmenus[j].getElementsByTagName("LastImgName");//菜单图标
-							var lastshowIndex = firstsubmenus[j].getElementsByTagName("LastShowIndex");//显示位置
-							if (document.all) { //IE
-								LastName = LastName[0].text,LastResource = LastResource[0].text,LastimgName = LastimgName[0].text,lastshowIndex = lastshowIndex[0].text;
-							} else {
-								LastName = LastName[0].textContent,LastResource = LastResource[0].textContent,LastimgName = LastimgName[0].textContent,lastshowIndex = lastshowIndex[0].textContent;
+					var context = '<ul id="ul'+showIndex+'">';
+					for (var x = 0; x < submenus.length; x++) {
+						var firstName = submenus[x].getElementsByTagName("FirstName");
+						var firstResource = submenus[x].getElementsByTagName("FirstResource");
+						var firstimgName = submenus[x].getElementsByTagName("FirstImgName");//菜单图标
+						var firstsubmenus = submenus[x].getElementsByTagName("FirstSubmenus");//三级菜单
+						var firstshowIndex = submenus[x].getElementsByTagName("FirstShowIndex");//显示位置
+						var subnenustext,flag = true,lastcontext = "";
+						if (document.all) { //IE
+							firstName = firstName[0].text,firstResource = firstResource[0].text,firstimgName = firstimgName[0].text,
+							subnenustext = firstsubmenus[0].text,firstshowIndex = firstshowIndex[0].text;
+						} else {
+							firstName = firstName[0].textContent,firstResource = firstResource[0].textContent,firstimgName = firstimgName[0].textContent,
+							subnenustext = firstsubmenus[0].textContent,firstshowIndex = firstshowIndex[0].textContent;
+						}
+						if($.trim(subnenustext)){
+							flag = false;
+							array.push(firstshowIndex);
+							firstcontext +='<li onclick="changeColor(this)" id="'+firstshowIndex+'"><a href="javascript:openSubmenus('+showIndex+','+firstshowIndex+')">'+
+							'<div><img src="resources/images/'+firstimgName+'" />&nbsp;&nbsp;'+firstName+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="resources/images/arrow.png" id="subimg'+showIndex+'_'+firstshowIndex+'"/></div>'+
+							'</a></li><li style="height:'+browsernum+'px;"><div id="div'+showIndex+'_'+firstshowIndex+'" style="display:none;"><ul id="last'+firstshowIndex+'">';
+							for (var j = 0; j < firstsubmenus.length; j++) {
+								var LastName = firstsubmenus[j].getElementsByTagName("LastName");
+								var LastResource = firstsubmenus[j].getElementsByTagName("LastResource");
+								var LastimgName = firstsubmenus[j].getElementsByTagName("LastImgName");//菜单图标
+								var lastshowIndex = firstsubmenus[j].getElementsByTagName("LastShowIndex");//显示位置
+								if (document.all) { //IE
+									LastName = LastName[0].text,LastResource = LastResource[0].text,LastimgName = LastimgName[0].text,lastshowIndex = lastshowIndex[0].text;
+								} else {
+									LastName = LastName[0].textContent,LastResource = LastResource[0].textContent,LastimgName = LastimgName[0].textContent,lastshowIndex = lastshowIndex[0].textContent;
+								}
+								if($.inArray(LastResource,resourceary)!=-1){
+									if(LastResource == "td/AllTd"){
+										lastcontext += '<li onclick="changeColor(this)" id="last'+lastshowIndex+'"><a href="javascript:openLive()" ><div><img src="resources/images/'+LastimgName+'" />&nbsp;&nbsp;'+LastName+'</div></a></li>';
+									}else{
+										lastcontext += '<li onclick="changeColor(this)" id="last'+lastshowIndex+'"><a href="javascript:openTab(\''+LastName+'\',\''+LastResource+'\')" ><div><img src="resources/images/'+LastimgName+'" />&nbsp;&nbsp;'+LastName+'</div></a></li>';
+									}
+								}
 							}
-							if(resourceary.indexOf(LastResource)!=-1){
-/*								if(LastResource == "td/AllTd"){
-									lastcontext += '<li onclick="changeColor(this)" id="last'+lastshowIndex+'"><a href="javascript:openLive()" ><div><img src="resources/images/'+LastimgName+'" />&nbsp;&nbsp;'+LastName+'</div></a></li>';
-								}else{*/
-									lastcontext += '<li onclick="changeColor(this)" id="last'+lastshowIndex+'"><a href="javascript:openTab(\''+LastName+'\',\''+LastResource+'\')" ><div><img src="resources/images/'+LastimgName+'" />&nbsp;&nbsp;'+LastName+'</div></a></li>';
-//								}
+							firstcontext += lastcontext+'</ul></div></li>';
+							if(lastcontext == null || lastcontext == ""){
+								firstcontext = "";
 							}
 						}
-						firstcontext += lastcontext+'</ul></div></li>';
-						if(lastcontext == null || lastcontext == ""){
-							firstcontext = "";
+						if(flag){
+							if($.inArray(firstResource,resourceary)!=-1){
+								if(firstResource == "td/AllTd"){
+									firstcontext +='<li onclick="changeColor(this)" id="'+firstshowIndex+'"><a href="javascript:openLive()" ><div><img src="resources/images/'+firstimgName+'" />&nbsp;&nbsp;'+firstName+'</div></a></li>';
+								}else{
+									firstcontext +='<li onclick="changeColor(this)" id="'+firstshowIndex+'"><a href="javascript:openTab(\''+firstName+'\',\''+firstResource+'\')" ><div><img src="resources/images/'+firstimgName+'" />&nbsp;&nbsp;'+firstName+'</div></a></li>';
+								}
+							}
 						}
 					}
-					if(flag){
-						if(resourceary.indexOf(firstResource)!=-1){
-/*							if(firstResource == "td/AllTd"){
-								firstcontext +='<li onclick="changeColor(this)" id="'+firstshowIndex+'"><a href="javascript:openLive()" ><div><img src="resources/images/'+firstimgName+'" />&nbsp;&nbsp;'+firstName+'</div></a></li>';
-							}else{*/
-								firstcontext +='<li onclick="changeColor(this)" id="'+firstshowIndex+'"><a href="javascript:openTab(\''+firstName+'\',\''+firstResource+'\')" ><div><img src="resources/images/'+firstimgName+'" />&nbsp;&nbsp;'+firstName+'</div></a></li>';
-//							}
+					context += firstcontext+'</ul>';
+					if(firstcontext != null && firstcontext != ""){
+						//动态渲染easyui的菜单样式
+						$('#accordiondiv').accordion('add', {
+							title : menuName,
+							content : context,
+							iconCls: imgName,
+							selected : false
+						});
+						menusort("ul"+showIndex,true);
+						for(var f=0;f<array.length;f++){
+							menusort("last"+array[f],false);
 						}
 					}
+					$("#accordiondiv").accordion({
+						selected:0
+					})
 				}
-				context += firstcontext+'</ul>';
-				if(firstcontext != null && firstcontext != ""){
-					//动态渲染easyui的菜单样式
-					$('#accordiondiv').accordion('add', {
-						title : menuName,
-						content : context,
-						iconCls: imgName,
-						selected : false
-					});
-					menusort("ul"+showIndex,true);
-					for(var f=0;f<array.length;f++){
-						menusort("last"+array[f],false);
+			}
+		}
+	}catch(e){ 
+		var menu1 = object.text.split("  ");
+		for(var m = 1;m <= menu1.length; m++){
+			var menu2 = menu1[m-1].split(" ");
+			if((menu2.length-3)%5 == 0){
+				for(var i = 0; i < menu2.length; i++){
+					var showIndex = menu2[1];//显示位置
+					if(m == showIndex){
+						var menuName = menu2[i];//菜单名
+						var imgName = menu2[i+2];//菜单图标
+						var array = [], firstcontext = "";
+
+						var context = '<ul id="ul'+showIndex+'">';
+						for(var i1 = 3; i1 < menu2.length; i1+=5){
+							var firstName = menu2[i1];
+							var firstResource = menu2[i1+2];
+							var firstimgName = menu2[i1+4];//菜单图标
+							//var firstsubmenus = menu2[i];//三级菜单
+							var firstshowIndex = menu2[i+1];//显示位置
+							var subnenustext,flag = true,lastcontext = "";
+							if(flag){
+								if($.inArray(firstResource,resourceary)!=-1){
+									if(firstResource == "td/AllTd"){
+										firstcontext +='<li onclick="changeColor(this)" id="'+firstshowIndex+'"><a href="javascript:openLive()" ><div><img src="resources/images/'+firstimgName+'" />&nbsp;&nbsp;'+firstName+'</div></a></li>';
+									}else{
+										firstcontext +='<li onclick="changeColor(this)" id="'+firstshowIndex+'"><a href="javascript:openTab(\''+firstName+'\',\''+firstResource+'\')" ><div><img src="resources/images/'+firstimgName+'" />&nbsp;&nbsp;'+firstName+'</div></a></li>';
+									}
+								}
+							}
+						}
+
 					}
+					context += firstcontext+'</ul>';
+					if(firstcontext != null && firstcontext != ""){
+						//动态渲染easyui的菜单样式
+						$('#accordiondiv').accordion('add', {
+							title : menuName,
+							content : context,
+							iconCls: imgName,
+							selected : false
+						});
+						menusort("ul"+showIndex,true);
+						for(var f=0;f<array.length;f++){
+							menusort("last"+array[f],false);
+						}
+					}
+					$("#accordiondiv").accordion({
+						selected:0
+					})
+					break;
 				}
-				$("#accordiondiv").accordion({
-		            selected:0
-		        })
+			}else{
+				/*var menu2 = menu1[m-1].split("+");
+				for(var i = 0; i < menu2.length; i++){
+					var showIndex = menu2[1];//显示位置
+					if(m == showIndex){
+						var menuName = menu2[i];//菜单名
+						var imgName = menu2[i+2];//菜单图标
+						var array = [], firstcontext = "";
+
+						var context = '<ul id="ul'+showIndex+'">';
+						for(var i1 = 3; i1 < menu2.length; i1+=5){
+							var firstName = menu2[i1];
+							var firstResource = menu2[i1+2];
+							var firstimgName = menu2[i1+4];//菜单图标
+							var firstsubmenus = menu2[i];//三级菜单
+							var firstshowIndex = menu2[i+1];//显示位置
+							var subnenustext,flag = true,lastcontext = "";
+							array.push(firstshowIndex);
+							firstcontext +='<li onclick="changeColor(this)" id="'+firstshowIndex+'"><a href="javascript:openSubmenus('+showIndex+','+firstshowIndex+')">'+
+							'<div><img src="resources/images/'+firstimgName+'" />&nbsp;&nbsp;'+firstName+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="resources/images/arrow.png" id="subimg'+showIndex+'_'+firstshowIndex+'"/></div>'+
+							'</a></li><li style="height:'+browsernum+'px;"><div id="div'+showIndex+'_'+firstshowIndex+'" style="display:none;"><ul id="last'+firstshowIndex+'">';
+							
+							var menu3 = menu2.split("  ");
+						}
+
+					}
+					context += firstcontext+'</ul>';
+					if(firstcontext != null && firstcontext != ""){
+						//动态渲染easyui的菜单样式
+						$('#accordiondiv').accordion('add', {
+							title : menuName,
+							content : context,
+							iconCls: imgName,
+							selected : false
+						});
+						menusort("ul"+showIndex,true);
+						for(var f=0;f<array.length;f++){
+							menusort("last"+array[f],false);
+						}
+					}
+					$("#accordiondiv").accordion({
+						selected:0
+					})
+					break;
+				}*/
 			}
 		}
 	}

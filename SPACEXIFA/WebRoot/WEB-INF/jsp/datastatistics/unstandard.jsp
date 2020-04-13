@@ -48,7 +48,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<label>产品图号：</label>
 					</div>
 					<div>
-						<input class="easyui-textbox" style="width:120px;" name="product_drawing_no" id="product_drawing_no"/>
+						<input class="easyui-textbox" style="width:100px;" name="product_drawing_no" id="product_drawing_no"/>
 					</div>
 				</div>
 				<div  style="float: left;">
@@ -56,7 +56,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<label>产品名称：</label>
 					</div>
 					<div>
-						<input class="easyui-textbox" style="width:120px;" name="product_name" id="product_name"/>
+						<input class="easyui-textbox" style="width:100px;" name="product_name" id="product_name"/>
 					</div>
 				</div>
 				<div  style="float: left;">
@@ -64,7 +64,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<label>任务编号：</label>
 					</div>
 					<div>
-						<input class="easyui-textbox" style="width:120px;" name="taskno" id="taskno"/>
+						<input class="easyui-textbox" style="width:100px;" name="taskno" id="taskno"/>
 					</div>
 				</div>
 				<div  style="float: left;">
@@ -72,7 +72,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<label>工艺规程编号：</label>
 					</div>
 					<div>
-						<input class="easyui-textbox" style="width:120px;" name="fwps_lib_num" id="fwps_lib_num"/>
+						<input class="easyui-textbox" style="width:100px;" name="fwps_lib_num" id="fwps_lib_num"/>
 					</div>
 				</div>
 				<div  style="float: left;">
@@ -80,15 +80,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<label>电子跟踪卡号：</label>
 					</div>
 					<div>
-						<input class="easyui-textbox" style="width:120px;" name="fwelded_junction_no" id="fwelded_junction_no"/>
-					</div>
-				</div>
-				<div  style="float: left;">
-					<div>
-						<label>产品序号：</label>
-					</div>
-					<div>
-						<input class="easyui-textbox" style="width:120px;" name="product_number" id="product_number"/>
+						<input class="easyui-textbox" style="width:100px;" name="fwelded_junction_no" id="fwelded_junction_no"/>
 					</div>
 				</div>
 				
@@ -97,7 +89,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<label>工序号：</label>
 					</div>
 					<div>
-						<input class="easyui-textbox" style="width:120px;" name="femployee_num" id="femployee_num"/>
+						<input class="easyui-textbox" style="width:100px;" name="femployee_num" id="femployee_num"/>
 					</div>
 				</div>
 				<div  style="float: left;">
@@ -105,7 +97,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<label>工序名称：</label>
 					</div>
 					<div>
-						<input class="easyui-textbox" style="width:120px;" name="femployee_name" id="femployee_name"/>
+						<input class="easyui-textbox" style="width:100px;" name="femployee_name" id="femployee_name"/>
 					</div>
 				</div>
 				<div  style="float: left;">
@@ -113,7 +105,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<label>工步号：</label>
 					</div>
 					<div>
-						<input class="easyui-textbox" style="width:120px;" name="fstep_number" id="fstep_number"/>
+						<input class="easyui-textbox" style="width:100px;" name="fstep_number" id="fstep_number"/>
 					</div>
 				</div>
 				<div  style="float: left;">
@@ -121,7 +113,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<label>工步名称：</label>
 					</div>
 					<div>
-						<input class="easyui-textbox" style="width:120px;" name="fstep_name" id="fstep_name"/>
+						<input class="easyui-textbox" style="width:100px;" name="fstep_name" id="fstep_name"/>
 					</div>
 				</div>
 				<div  style="float: left;">
@@ -129,7 +121,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<label>焊缝编号：</label>
 					</div>
 					<div>
-						<input class="easyui-textbox" style="width:120px;" name="junction_name" id="junction_name"/>
+						<input class="easyui-textbox" style="width:100px;" name="junction_name" id="junction_name"/>
 					</div>
 				</div>
 				<div  style="float: left;">
@@ -137,7 +129,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<label>焊接部位：</label>
 					</div>
 					<div>
-						<input class="easyui-textbox" style="width:120px;" name="fweldingarea" id="fweldingarea"/>
+						<input class="easyui-textbox" style="width:100px;" name="fweldingarea" id="fweldingarea"/>
 					</div>
 				</div>
 				<div  style="float: left;">
@@ -145,7 +137,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<label>组织机构：</label>
 					</div>
 					<div>
-						<select class="easyui-combobox" style="width:120px;" name="item" id="item" data-options="editable:false"></select>
+						<select class="easyui-combobox" style="width:100px;" name="item" id="item" data-options="editable:false"></select>
 					</div>
 				</div>
 				<div  style="float: left;">
@@ -154,7 +146,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					</div>
 					<div>
 <!-- 						<input id="weldername_id" type="hidden"> -->
-						<select class="easyui-combobox" style="width:120px;" name="weldername" id="weldername" ></select>
+						<select class="easyui-combobox" style="width:100px;" name="weldername" id="weldername" ></select>
 					</div>
 				</div>
 				<div  style="float: left;">
@@ -162,7 +154,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<label>焊机编号：</label>
 					</div>
 					<div>
-						<select class="easyui-combobox" style="width:120px;" name="weldmachine" id="weldmachine" ></select>
+						<select class="easyui-combobox" style="width:100px;" name="weldmachine" id="weldmachine" ></select>
 					</div>
 				</div>
 				<div  style="float: left;">
@@ -170,8 +162,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<label>时间：</label>
 					</div>
 					<div>
-						<input class="easyui-datetimebox" style="width:120px;" name="dtoTime1" id="dtoTime1">--
-						<input class="easyui-datetimebox" style="width:120px;" name="dtoTime2" id="dtoTime2">&emsp;
+						<input class="easyui-datetimebox" style="width:100px;" name="dtoTime1" id="dtoTime1">--
+						<input class="easyui-datetimebox" style="width:100px;" name="dtoTime2" id="dtoTime2">&emsp;
+					</div>
+				</div>
+				<div  style="float: left;">
+					<div>
+						<label>产品序号：</label>
+					</div>
+					<div>
+						<input class="easyui-textbox" name="fproduct_id" id="fproduct_id" style="width: 100px"/>--
+						<input class="easyui-textbox" style="width:60px;" name="product_number" id="product_number"/>
 					</div>
 				</div>
 				<div  style="float: left;">
