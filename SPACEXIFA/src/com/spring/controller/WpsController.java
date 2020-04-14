@@ -1804,6 +1804,7 @@ public class WpsController {
 					json.put("flag_name", "自建");
 				}else {
 					json.put("flag_name", "MES");
+					json.put("fwps_lib_version", wps.getFwps_lib_version()+"-1");
 				}
 				int fstatus = wps.getFstatus();
 				json.put("fstatus", fstatus);

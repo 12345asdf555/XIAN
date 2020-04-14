@@ -89,7 +89,7 @@ public class SocketService {
 
 		public void run() {
 			try {
-				System.out.println("处理线程启动");
+//				System.out.println("处理线程启动");
 				InputStream i = incoming.getInputStream();
 				OutputStream o = incoming.getOutputStream();
 				Scanner s = new Scanner(i);

@@ -194,10 +194,17 @@ function searchWps(){
 	});
 }
 
+function getContextPath() {
+    var pathName = document.location.pathname;
+    var index = pathName.substr(1).indexOf("/");
+    var result = pathName.substr(0,index+1);
+    return result;
+  }
+
 function wpsDetails(){
 	var row = $('#wpslibTable').datagrid('getSelected'); 
 	if (row) {
-		window.location.href = encodeURI("wps/goWpsdetails"+"?fid="+row.fid+"&fproduct_name="+row.fproduct_name+"&status="+row.fstatus);
+		window.location.href = encodeURI(getContextPath()+"/wps/goWpsdetails"+"?fid="+row.fid+"&fproduct_name="+row.fproduct_name+"&status="+row.fstatus);
 	}else{
 		alert("请先选择一条数据。");
 	}
@@ -209,7 +216,7 @@ function closeDlg(){
 	}
 }
 
-//打开文件导入dialogconfig.default.baseUrl.dev+'/reportOne?orderCode='+this.code+'&token='+token
+//打开文件导入dialog
 function importclick(){
 	$("#importdiv").dialog("open").dialog("setTitle","从excel导入数据");
 }

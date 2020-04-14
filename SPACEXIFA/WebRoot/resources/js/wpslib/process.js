@@ -122,7 +122,7 @@ function saveReason(){
 	$.ajax({
 		type : "post",
 		async : false,
-		url : "wps/turnDown?fid="+$("#flagId").val()+"&downReason="+$("#downReason").val(),
+		url : "wps/turnDown?fid="+$("#flagId").val()+"&downReason="+encodeURI($("#downReason").val()),
 		dataType : "json",
 		data : {},
 		success : function(result) {

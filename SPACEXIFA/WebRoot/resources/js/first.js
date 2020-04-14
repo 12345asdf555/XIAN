@@ -1,5 +1,7 @@
 var machine = new Array, off = new Array(), on = new Array(), warn = new Array(), stand = new Array(), cleardata = new Array();
 var chartsDiv11 = null,chartsDiv12=null,chartsDiv221 = null,chartsDiv222 = null,chartsDiv21 = null,chartsDiv23 = null,chartsDiv13 = null;
+var lockReconnect = false;//避免重复连接
+var websocketURL=null,socket=null;
 $(function(){
 	showDiv12();
 	showChart21();
@@ -48,7 +50,6 @@ $(function(){
 	setInterval(teft,30000);// 注意函数名没有引号和括弧！
 })*/
 function showDiv12(){
-	var websocketURL=null,socket=null,tryTime = 0;
 	$.ajax({
 		type : "post",
 		async : false,
@@ -91,114 +92,137 @@ function showDiv12(){
 		WEB_SOCKET_SWF_LOCATION = "resources/js/WebSocketMain.swf";
 		WEB_SOCKET_DEBUG = true;
 	}
-	try {
-		socket = new WebSocket(websocketURL);
-	} catch (err) {
-		alert("地址请求错误，请清除缓存重新连接！！！")
-	}
-	socket.onopen = function() {
-		clearData();
-	}
-	socket.onmessage = function(msg) {
-		var redata = msg.data;
-		if(redata.length==297 || redata.length%107==0){
-			for(var i = 0;i < redata.length;i+=107){
-				for(var f=0;f<machine.length;f++){
-					if(machine[f].fid==(parseInt(redata.substring(4+i, 8+i),10))){
-				if(redata.substring(4+i, 8+i)!="0000"){
-						var cleardataIndex = $.inArray(parseInt(redata.substring(4+i, 8+i),10), cleardata);
-						if(cleardataIndex==(-1)){
-							cleardata.push(parseInt(redata.substring(4+i, 8+i),10));
-							cleardata.push(new Date().getTime());
-						}else{
-							cleardata.splice(cleardataIndex+1, 1, new Date().getTime());
-						}
-						var mstatus = redata.substring(36 + i, 38 + i);
-						if(mstatus=="00"){
-							var num;
-							num = $.inArray(parseInt(redata.substring(4+i, 8+i),10), stand);
-							if(num==(-1)){
-								stand.push(parseInt(redata.substring(4+i, 8+i),10));
-							}
-							num = $.inArray(parseInt(redata.substring(4+i, 8+i),10), warn);
-							if(num!=(-1)){
-								warn.splice(num, 1);
-							}
-							num = $.inArray(parseInt(redata.substring(4+i, 8+i),10), off);
-							if(num!=(-1)){
-								off.splice(num, 1);
-							}
-							num = $.inArray(parseInt(redata.substring(4+i, 8+i),10), on);
-							if(num!=(-1)){
-								on.splice(num, 1);
-							}
-						}else if(mstatus=="03"||mstatus=="05"||mstatus=="07"){
-							var num;
-							num = $.inArray(parseInt(redata.substring(4+i, 8+i),10), on);
-							if(num==(-1)){
-								on.push(parseInt(redata.substring(4+i, 8+i),10));
-							}
-							num = $.inArray(parseInt(redata.substring(4+i, 8+i),10), warn);
-							if(num!=(-1)){
-								warn.splice(num, 1);
-							}
-							num = $.inArray(parseInt(redata.substring(4+i, 8+i),10), off);
-							if(num!=(-1)){
-								off.splice(num, 1);
-							}
-							num = $.inArray(parseInt(redata.substring(4+i, 8+i),10), stand);
-							if(num!=(-1)){
-								stand.splice(num, 1);
-							}
-						}else{
-							var num;
-							num = $.inArray(parseInt(redata.substring(4+i, 8+i),10), warn);
-							if(num==(-1)){
-								warn.push(parseInt(redata.substring(4+i, 8+i),10));
-							}
-							num = $.inArray(parseInt(redata.substring(4+i, 8+i),10), on);
-							if(num!=(-1)){
-								on.splice(num, 1);
-							}
-							num = $.inArray(parseInt(redata.substring(4+i, 8+i),10), off);
-							if(num!=(-1)){
-								off.splice(num, 1);
-							}
-							num = $.inArray(parseInt(redata.substring(4+i, 8+i),10), stand);
-							if(num!=(-1)){
-								stand.splice(num, 1);
-							}
-						}
-				}
-					}
-				}
-			}
-		}
-		var option = chartsDiv12.getOption();
-		option.series[0].data = [
-            {value:on.length, name:'工作', id :0},
-            {value:stand.length, name:'待机', id :1},
-            {value:warn.length, name:'故障', id :2},
-            {value:off.length, name:'关机', id :3}
-        ];
-		chartsDiv12.setOption(option);
+	createWebSocket();
+}
+
+function createWebSocket() {
+    try {
+    	socket = new WebSocket(websocketURL);
+    	socket.onopen = function() {
+    		clearData();
+    		lockReconnect = false;
+    	}
+    	socket.onmessage = function(msg) {
+    		var redata = msg.data;
+//    		redata = redata.substring(0,99)+"00010001000100010001"+
+//    		redata.substring(99,198)+"00010001000100010001"+
+//    		redata.substring(198)+"00010001000100010001";
+    		if(redata.length%119==0){
+    			for(var i = 0;i < redata.length;i+=119){
+    				for(var f=0;f<machine.length;f++){
+    					if(machine[f].fid==(parseInt(redata.substring(4+i, 8+i),10))){
+    				if(redata.substring(4+i, 8+i)!="0000"){
+    						var cleardataIndex = $.inArray(parseInt(redata.substring(4+i, 8+i),10), cleardata);
+    						if(cleardataIndex==(-1)){
+    							cleardata.push(parseInt(redata.substring(4+i, 8+i),10));
+    							cleardata.push(new Date().getTime());
+    						}else{
+    							cleardata.splice(cleardataIndex+1, 1, new Date().getTime());
+    						}
+    						var mstatus = redata.substring(36 + i, 38 + i);
+    						if(mstatus=="00"){
+    							var num;
+    							num = $.inArray(parseInt(redata.substring(4+i, 8+i),10), stand);
+    							if(num==(-1)){
+    								stand.push(parseInt(redata.substring(4+i, 8+i),10));
+    							}
+    							num = $.inArray(parseInt(redata.substring(4+i, 8+i),10), warn);
+    							if(num!=(-1)){
+    								warn.splice(num, 1);
+    							}
+    							num = $.inArray(parseInt(redata.substring(4+i, 8+i),10), off);
+    							if(num!=(-1)){
+    								off.splice(num, 1);
+    							}
+    							num = $.inArray(parseInt(redata.substring(4+i, 8+i),10), on);
+    							if(num!=(-1)){
+    								on.splice(num, 1);
+    							}
+    						}else if(mstatus=="03"||mstatus=="05"||mstatus=="07"){
+    							var num;
+    							num = $.inArray(parseInt(redata.substring(4+i, 8+i),10), on);
+    							if(num==(-1)){
+    								on.push(parseInt(redata.substring(4+i, 8+i),10));
+    							}
+    							num = $.inArray(parseInt(redata.substring(4+i, 8+i),10), warn);
+    							if(num!=(-1)){
+    								warn.splice(num, 1);
+    							}
+    							num = $.inArray(parseInt(redata.substring(4+i, 8+i),10), off);
+    							if(num!=(-1)){
+    								off.splice(num, 1);
+    							}
+    							num = $.inArray(parseInt(redata.substring(4+i, 8+i),10), stand);
+    							if(num!=(-1)){
+    								stand.splice(num, 1);
+    							}
+    						}else{
+    							var num;
+    							num = $.inArray(parseInt(redata.substring(4+i, 8+i),10), warn);
+    							if(num==(-1)){
+    								warn.push(parseInt(redata.substring(4+i, 8+i),10));
+    							}
+    							num = $.inArray(parseInt(redata.substring(4+i, 8+i),10), on);
+    							if(num!=(-1)){
+    								on.splice(num, 1);
+    							}
+    							num = $.inArray(parseInt(redata.substring(4+i, 8+i),10), off);
+    							if(num!=(-1)){
+    								off.splice(num, 1);
+    							}
+    							num = $.inArray(parseInt(redata.substring(4+i, 8+i),10), stand);
+    							if(num!=(-1)){
+    								stand.splice(num, 1);
+    							}
+    						}
+    				}
+    					}
+    				}
+    			}
+    		}
+    		var option = chartsDiv12.getOption();
+    		option.series[0].data = [
+                {value:on.length, name:'工作', id :0},
+                {value:stand.length, name:'待机', id :1},
+                {value:warn.length, name:'故障', id :2},
+                {value:off.length, name:'关机', id :3}
+            ];
+    		chartsDiv12.setOption(option);
+    	};
+    	socket.onclose = function(e) {
+    		if(lockReconnect == true){
+    			return;
+    		};
+    		reconnect();
+    	};
+    	socket.onerror = function(e) {
+    		if(lockReconnect == true){
+    			return;
+    		};
+    		reconnect();
+    	}
+    } catch(e) {
+    	console.log(e);
+    	console.log(e.message);
+    	reconnect();
+    }
+  }
+
+function reconnect(){
+	if(lockReconnect == true){
+		return;
 	};
-	socket.onclose = function(e) {
-		if (e.code == 4001 || e.code == 4002 || e.code == 4003 || e.code == 4005 || e.code == 4006) {
-			//如果断开原因为4001 , 4002 , 4003 不进行重连.
-			return;
-		} 
-		// 重试3次，每次之间间隔5秒
-		if (tryTime < 3) {
-			setTimeout(function() {
-				socket = null;
-				tryTime++;
-				socket = new WebSocket(websocketURL);
-			}, 5000);
-		} else {
-			tryTime = 0;
+	lockReconnect = true;
+    var tt = window.setInterval(function () {
+    	if(lockReconnect == false){
+    		window.clearInterval(tt);
+    	}
+    	try {
+    		createWebSocket();
+		} catch (e) {
+			console.log(e.message);
 		}
-	};
+    }, 10000);
 }
 
 function showChart12(){
