@@ -231,12 +231,11 @@ function showChart12(){
 		effect:'whirling'
 	});
 	option = {
-		backgroundColor: '#6495ED',
 	    title:{
 	        text: '设备状态',
 	        x:'center',
 	        textStyle: {
-                color: '#fff'
+                color: '#000000'
             }
 	    },
 		tooltip:{
@@ -263,7 +262,7 @@ function showChart12(){
 	        orient: 'vertical',
 	        x: 'left',
 	        padding:[80,0,0,60],
-	        textStyle: {color: '#fff'},
+	        textStyle: {color: '#000000'},
 	        data:['工作','待机','故障','关机']
 	    },
 		series:[{
@@ -358,7 +357,7 @@ function showChart22(){
 	        text: '设备利用率',
 	        x:'center',
 	        textStyle: {
-                color: '#fff'
+                color: '#000000'
             }
 	    },
 	    tooltip : {
@@ -380,13 +379,12 @@ function showChart22(){
 	    },
 	    series: [
 	        {
-	        	name:"设备利用率",
 	            type: 'gauge',
 	            detail: {
 	            	formatter:'{value}%',
 	            	textStyle:{
 	                    "fontSize": 15,
-	                    color: '#fff'
+	                    color: '#000000'
 	                }
 	            },
 	            data: [{value: onRatio}]
@@ -478,12 +476,11 @@ var aryX = new Array(), aryS0 = new Array(), aryS1 = new Array();
 		effect:'whirling'
 	});
 	option = {
-		backgroundColor: '#6495ED',
 	    title:{
 	        text: '开机和焊接时长',
 	        x:'center',
 	        textStyle: {
-                color: '#fff'
+                color: '#000000'
             }
 	    },
 	    tooltip: {
@@ -506,10 +503,8 @@ var aryX = new Array(), aryS0 = new Array(), aryS1 = new Array();
                 }  
             },*/
 	            dataView: {show: true, readOnly: false,
-	            	backgroundColor: '#6495ED',
 	    	        textColor: '#fff',
 	    	        textareaBorderColor: '#fff',
-	    	        textareaColor: '#6495ED',
     	        	lang : ['数据视图', '关闭', '导出excel'],
     	        	contentToOption: function (opt) {
     	        		var obj = new Date();
@@ -552,7 +547,7 @@ var aryX = new Array(), aryS0 = new Array(), aryS1 = new Array();
 	    	orient: 'horizontal',
 	    	bottom: 'bottom',
 	        data:['开机时长', '焊接时长'],
-	        textStyle: {color: '#fff'}
+	        textStyle: {color: '#000000'}
 	    },
 	    xAxis: [
 	        {
@@ -567,7 +562,7 @@ var aryX = new Array(), aryS0 = new Array(), aryS1 = new Array();
 	            axisLabel: {
                     show: true,
                     textStyle: {
-                        color: '#fff'
+                        color: '#000000'
                     },
                     interval:0,  
                     rotate:40
@@ -578,7 +573,7 @@ var aryX = new Array(), aryS0 = new Array(), aryS1 = new Array();
 	        {
 	            type: 'value',
 	            name:"开机时长",
-	            Color:"fff",
+	            Color:"000000",
 	            min: 0,
 	            max: temp0,
 	            interval: 'auto',
@@ -601,7 +596,7 @@ var aryX = new Array(), aryS0 = new Array(), aryS1 = new Array();
 	        {
 	            type: 'value',
 	            name:"焊接时长",
-	            Color:"fff",
+	            Color:"000000",
 	            min: 0,
 	            max: temp1,
 	            interval: 'auto',
@@ -685,12 +680,11 @@ function showChart23(){
 		effect:'whirling'
 	});
 	option = {
-		backgroundColor: '#6495ED',
 	    title:{
 	        text: '焊丝和气体消耗',
 	        x:'center',
 	        textStyle: {
-                color: '#fff'
+                color: '#000000'
             }
 	    },
 	    tooltip: {
@@ -714,10 +708,8 @@ function showChart23(){
 	             },  */
 	            dataView: {
 	            	show: true, readOnly: false,
-	            	backgroundColor: '#6495ED',
 	    	        textColor: '#fff',
 	    	        textareaBorderColor: '#fff',
-	    	        textareaColor: '#6495ED',
 	    	        lang : ['数据视图', '关闭', '导出excel'],
     	        	contentToOption: function (opt) {
     	        		var obj = new Date();
@@ -760,7 +752,7 @@ function showChart23(){
 	    	orient: 'horizontal',
 	    	bottom: 'bottom',
 	        data:['焊丝消耗量', '气体消耗量'],
-	        textStyle: {color: '#fff'}
+	        textStyle: {color: '#000000'}
 	    },
 	    xAxis: [
 	        {
@@ -775,7 +767,7 @@ function showChart23(){
 	            axisLabel: {
                     show: true,
                     textStyle: {
-                        color: '#fff'
+                        color: '#000000'
                     },
                     interval:0,  
                     rotate:40
@@ -786,7 +778,7 @@ function showChart23(){
 	        {
 	            type: 'value',
 	            name:"焊丝消耗",
-	            Color:"fff",
+	            Color:"000000",
 	            min: 0,
 	            max: temp0,
 	            interval: 'auto',
@@ -809,7 +801,7 @@ function showChart23(){
 	        {
 	            type: 'value',
 	            name:"气体消耗",
-	            Color:"fff",
+	            Color:"000000",
 	            min: 0,
 	            max: temp1,
 	            interval: 'auto',
