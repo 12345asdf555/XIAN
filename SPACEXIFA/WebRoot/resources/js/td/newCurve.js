@@ -113,26 +113,26 @@ function getMachine(insfid) {
 				machine = eval(result.rows);
 				for(var i=0;i<machine.length;i++){
 					var type = machine[i].type,imgnum=0;
-					if(type==41){
-						imgnum = 1;
-					}else if(type==42){
+//					if(type==41){
+//						imgnum = 1;
+//					}else if(type==42){
 						imgnum = 3;
-					}else if(type==43){
-						imgnum = 2;
-					}
-					if(machine[i].fequipment_no=="6666"){
-						imgnum = 4;
-					}
+//					}else if(type==43){
+//						imgnum = 2;
+//					}
+//					if(machine[i].fequipment_no=="6666"){
+//						imgnum = 4;
+//					}
 					off.push(machine[i].fid);
 					var str = '<div id="machine'+machine[i].fid+'" style="width:240px;height:120px;float:left;margin-right:10px;display:none">'+
-					'<div style="float:left;width:40%;height:100%;"><a href="td/goNextcurve?value='+machine[i].fid+'&valuename='+machine[i].fequipment_no+'&type='+machine[i].type+'&model='+machine[i].model+'"><img id="img'+machine[i].fid+'" src="resources/images/welder_4'+imgnum+'.png" style="height:110px;width:100%;padding-top:10px;"></a></div>'+
+					'<div style="float:left;width:40%;height:100%;"><a href="td/goNextcurve?value='+machine[i].fid+'&valuename='+machine[i].fequipment_no+'&type='+machine[i].type+'&model='+machine[i].model+'"><img id="img'+machine[i].fid+'" src="resources/images/welder_0'+imgnum+'.png" style="height:110px;width:100%;padding-top:10px;"></a></div>'+
 					'<div style="float:left;width:60%;height:100%;">'+
-					'<ul><li style="width:100%;height:19px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">设备编号：<span id="m1'+machine[i].fid+'">'+machine[i].fequipment_no+'</span></li>'+
-					'<li style="width:100%;height:19px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">任务编号：<span id="m2'+machine[i].fid+'">--</span></li>'+
-					'<li style="width:100%;height:19px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">操作人员：<span id="m3'+machine[i].fid+'">--</span></li>'+
-					'<li style="width:100%;height:19px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">焊接电流：<span id="m4'+machine[i].fid+'">--A</span></li>'+
-					'<li style="width:100%;height:19px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">焊接电压：<span id="m5'+machine[i].fid+'">--V</span></li>'+
-					'<li style="width:100%;height:19px;">焊机状态：<span id="m6'+machine[i].fid+'">关机</span></li></ul><input id="status'+machine[i].fid+'" type="hidden" value="3"></div></div>';
+					'<ul><li style="width:100%;height:28px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">设备编号：<span id="m1'+machine[i].fid+'">'+machine[i].fequipment_no+'</span></li>'+
+					'<li style="width:100%;height:28px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">任务编号：<span id="m2'+machine[i].fid+'">--</span></li>'+
+					'<li style="width:100%;height:28px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">操作人员：<span id="m3'+machine[i].fid+'">--</span></li>'+
+//					'<li style="width:100%;height:19px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">焊接电流：<span id="m4'+machine[i].fid+'">--A</span></li>'+
+//					'<li style="width:100%;height:19px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">焊接电压：<span id="m5'+machine[i].fid+'">--V</span></li>'+
+					'<li style="width:100%;height:28px;">焊机状态：<span id="m6'+machine[i].fid+'">关机</span></li></ul><input id="status'+machine[i].fid+'" type="hidden" value="3"></div></div>';
 					$("#bodydiv").append(str);
 					$("#machine"+machine[i].fid).show();
 				}
@@ -366,87 +366,23 @@ function iview(){
 						switch (mstatus){
 						case "00":
 							livestatus = "待机";
-							liveimg = "resources/images/welder_2"+imgnum+".png";
-							break;
-						case "01":
-							livestatus = "E-010 焊枪开关OFF等待";
-							liveimg = "resources/images/welder_3"+imgnum+".png";
-							break;
-						case "02":
-							livestatus = "E-000工作停止";
-							liveimg = "resources/images/welder_3"+imgnum+".png";
+							liveimg = "resources/images/welder_0"+1+".png";
 							break;
 						case "03":
 							livestatus = "工作";
-							liveimg = "resources/images/welder_1"+imgnum+".png";
-							break;
-						case "04":
-							livestatus = "电流过低";
-							liveimg = "resources/images/welder_3"+imgnum+".png";
+							liveimg = "resources/images/welder_0"+0+".png";
 							break;
 						case "05":
 							livestatus = "收弧";
-							liveimg = "resources/images/welder_1"+imgnum+".png";
-							break;
-						case "06":
-							livestatus = "电流过高";
-							liveimg = "resources/images/welder_3"+imgnum+".png";
+							liveimg = "resources/images/welder_0"+0+".png";
 							break;
 						case "07":
 							livestatus = "启弧";
-							liveimg = "resources/images/welder_1"+imgnum+".png";
+							liveimg = "resources/images/welder_0"+0+".png";
 							break;
-						case "08":
-							livestatus = "电压过低";
-							liveimg = "resources/images/welder_3"+imgnum+".png";
-							break;
-						case "09":
-							livestatus = "电压过高";
-							liveimg = "resources/images/welder_3"+imgnum+".png";
-							break;
-						case "10":
-							livestatus = "E-100控制电源异常";
-							liveimg = "resources/images/welder_3"+imgnum+".png";
-							break;
-						case "15":
-							livestatus = "E-150一次输入电压过高";
-							liveimg = "resources/images/welder_3"+imgnum+".png";
-							break;
-						case "16":
-							livestatus = "E-160一次输入电压过低";
-							liveimg = "resources/images/welder_3"+imgnum+".png";
-							break;
-						case "20":
-							livestatus = "E-200一次二次电流检出异常";
-							liveimg = "resources/images/welder_3"+imgnum+".png";
-							break;
-						case "21":
-							livestatus = "E-210电压检出异常";
-							liveimg = "resources/images/welder_3"+imgnum+".png";
-							break;
-						case "22":
-							livestatus = "E-220逆变电路反馈异常";
-							liveimg = "resources/images/welder_3"+imgnum+".png";
-							break;
-						case "30":
-							livestatus = "E-300温度异常";
-							liveimg = "resources/images/welder_3"+imgnum+".png";
-							break;
-						case "70":
-							livestatus = "E-700输出过流异常";
-							liveimg = "resources/images/welder_3"+imgnum+".png";
-							break;
-						case "71":
-							livestatus = "E-710输入缺相异常";
-							liveimg = "resources/images/welder_3"+imgnum+".png";
-							break;
-						case "98":
-							livestatus = "超规范停机";
-							liveimg = "resources/images/welder_3"+imgnum+".png";
-							break;
-						case "99":
-							livestatus = "超规范报警";
-							liveimg = "resources/images/welder_3"+imgnum+".png";
+						default:
+							livestatus = "报警";
+							liveimg = "resources/images/welder_0"+2+".png";
 							break;
 						}
 //						$("#m6"+machine[f].fid).html(livestatus);
@@ -465,7 +401,7 @@ function clearData(){
 		for(var i=0;i<cleardata.length;i=i+2){
 			if(timeflag-cleardata[i+1]>=30000){
 				cleardata.splice(i+1, 1);
-				$("#img"+cleardata[i]).attr("src","resources/images/welder_42.png");
+				$("#img"+cleardata[i]).attr("src","resources/images/welder_03.png");
 				var num;
 				num = $.inArray(cleardata[i], stand);
 				if(num!=(-1)){

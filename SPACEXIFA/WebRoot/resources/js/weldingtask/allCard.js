@@ -360,10 +360,17 @@ function searchWps(){
 	});
 }
 
+function getContextPath() {
+    var pathName = document.location.pathname;
+    var index = pathName.substr(1).indexOf("/");
+    var result = pathName.substr(0,index+1);
+    return result;
+}
+
 function wpsDetails(){
 	var row = $('#cardTable').datagrid('getSelected'); 
 	if (row) {
-		window.location.href = encodeURI("weldtask/goTrackCard"+"?fid="+row.fid+"&fwelded_junction_no="+row.fwelded_junction_no+"&status="+row.fstatus+"&fitemName="+row.fitemName);
+		window.location.href = encodeURI(getContextPath()+"/weldtask/goTrackCard"+"?fid="+row.fid+"&fwelded_junction_no="+row.fwelded_junction_no+"&status="+row.fstatus+"&fitemName="+row.fitemName);
 	}else{
 		alert("请先选择一条数据。");
 	}

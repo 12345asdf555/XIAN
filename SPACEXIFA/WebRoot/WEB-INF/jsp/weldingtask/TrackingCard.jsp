@@ -171,7 +171,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	   		<table id="cardTable" style="table-layout: fixed; width:100%;"></table>
   		</div>
 	     <!-- 添加修改工艺台账 -->
-		<div id="addOrUpdate" class="easyui-dialog" style="width: 450px; height: 400px; padding:10px 20px" closed="true" buttons="#tdd-buttons">
+		<div id="addOrUpdate" class="easyui-dialog" style="width: 380px; height: 400px; padding:10px 20px" closed="true" buttons="#tdd-buttons">
 			<form id="addOrUpdatefm" class="easyui-form" method="post" data-options="novalidate:true">
 				<div class="fitem">
 					<lable><span class="required">*</span>电子跟踪卡号</lable>
@@ -206,9 +206,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<lable><span class="required">*</span>产品数量</lable>
 					<input class="easyui-numberbox" name="fproduct_number" id="fproduct_number"  data-options="required:true"/>
 				</div>
-				<div>
+				<div  class="fitem">
 					<lable><span class="required">*</span>前缀号</lable>
 					<input class="easyui-textbox" name="fprefix_number" id="fprefix_number"  data-options="required:true"/>
+				</div>
+				<div  class="fitem">
 					<lable><span class="required">*</span>初始值</lable>
 					<input class="easyui-numberbox" name="init_number" id="init_number"  data-options="required:true"/>
 				</div>

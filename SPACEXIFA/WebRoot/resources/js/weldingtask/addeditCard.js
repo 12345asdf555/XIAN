@@ -134,6 +134,7 @@ function saveCard() {
 					alert("保存成功");
 					$('#addOrUpdate').window('close');
 					$('#cardTable').datagrid('reload');
+					getWpsCombobox();
 				}
 			}
 

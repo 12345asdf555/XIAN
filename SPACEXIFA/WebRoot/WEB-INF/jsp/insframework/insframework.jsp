@@ -63,7 +63,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</div>
 	</div>
 	 <!-- 添加修改 -->
-	<div id="dlg" class="easyui-dialog" style="width: 400px; height: 500px; padding:10px 20px" closed="true" buttons="#dlg-buttons">
+	<div id="dlg" class="easyui-dialog" style="width: 400px; height: 380px; padding:10px 20px" closed="true" buttons="#dlg-buttons">
 		<form id="fm" class="easyui-form" method="post" data-options="novalidate:true"><br/>
 			<div class="fitem">
 				<input type="hidden" id="validname" value="${insf.name }"/>
@@ -94,7 +94,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	</div>
 	
 	<!-- 删除 -->
-	<div id="rdlg" class="easyui-dialog" style="width: 400px; height: 500px; padding:10px 20px" closed="true" buttons="#remove-buttons">
+	<div id="rdlg" class="easyui-dialog" style="width: 400px; height: 380px; padding:10px 20px" closed="true" buttons="#remove-buttons">
 		<form id="rfm" class="easyui-form" method="post" data-options="novalidate:true"><br/>
 			<div class="fitem">
 				<lable>名称</lable>

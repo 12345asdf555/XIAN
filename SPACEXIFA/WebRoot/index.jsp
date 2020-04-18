@@ -81,9 +81,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<span style="float:right;padding-top:15px;font-size:16px;">改革创新  提质增效</span>
 				</div>
 			</div>
-			<div style="float:left;color:#fff;width:23%;text-align:right;padding-top:15px;" id="bottomlog">
+<!-- 			<div style="float:left;color:#fff;width:23%;text-align:right;padding-top:15px;" id="bottomlog">
 				<a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-msg" style="border: none;">消息</a>
-			</div>
+			</div> -->
 		</div>
 	</div>
 

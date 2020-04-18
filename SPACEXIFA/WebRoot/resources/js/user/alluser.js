@@ -138,7 +138,7 @@ $(function(){
 		onLoadSuccess:function(data){
 	        $("a[id='edit']").linkbutton({text:'修改',plain:true,iconCls:'icon-update'});
 	        $("a[id='remove']").linkbutton({text:'删除',plain:true,iconCls:'icon-delete'});
-	        $("a[id='role']").linkbutton({text:'角色列表',plain:true});
+	        $("a[id='role']").linkbutton({text:'角色列表',plain:true,iconCls:'icon-search'});
 	        }
 	});
 

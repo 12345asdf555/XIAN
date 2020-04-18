@@ -76,7 +76,7 @@ public class TdController {
 		String insname = tdService.findInsname(tdService.findIns(uid));
 		request.setAttribute("insname", insname);*/
 		lm.getUserId(request);
-		return "td/nextCurve";
+		return "td/newCurve";
 	}
 	/**
 	 * 任务访问实时
@@ -117,7 +117,7 @@ public class TdController {
 	    }else{
 		    request.setAttribute("time", time.substring(11));
 	    }*/
-		return "td/newCurve";
+		return "td/nextCurve";
 	}
 	
 	@RequestMapping("/AllTdd")
@@ -793,6 +793,7 @@ public class TdController {
 			WeldingMachine machinelist = wm.getWeldingMachineById(new BigInteger(request.getParameter("machineid")));
 			json.put("machineno", machinelist.getTypename());
 			json.put("mvaluename", machinelist.getMvaluename());
+			json.put("machine", machinelist.getEquipmentNo());
 			if(list!=null){
 				json.put("worktime",list.getWorktime());
 				json.put("time",list.getWorktime());

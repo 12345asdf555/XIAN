@@ -11,7 +11,7 @@ function back() {
 };
 var time = new Array();
 var chart;
-var display;
+var display = new Array();
 var historytime;
 var machine = new Array();
 var time = new Array();
@@ -60,9 +60,10 @@ var series2;
 var chart1;
 var time1 = 0,time2 = 0;
 var led = [ "0,1,2,4,5,6", "2,5", "0,2,3,4,6", "0,2,3,5,6", "1,2,3,5", "0,1,3,5,6", "0,1,3,4,5,6", "0,2,5", "0,1,2,3,4,5,6", "0,1,2,3,5,6" ];
+var lockReconnect = false;//避免重复连接
 $(function() {
 	var imgnum = $("#type").val();
-	$("#mrjpg").attr("src", "resources/images/welder_"+imgnum+"3.png");
+	$("#mrjpg").attr("src", "resources/images/welder_"+0+"3.png");
 //	var livewidth = $("#livediv").width() * 0.9;
 //	var liveheight = $("#livediv").height() / 2;
 //	$("#body31").width(livewidth);
@@ -185,7 +186,7 @@ $(function() {
 	websocket();
 })
 $(function(){
-	function teft(){
+//	function teft(){
 		//alert(1);
 		//获取电子跟踪卡号，产品图号，
 				$.ajax({
@@ -203,29 +204,33 @@ $(function(){
 						alert("数据请求失败，请联系系统管理员!");
 					}
 				});
-	}
-setInterval(teft,30000);// 注意函数名没有引号和括弧！
+//	}
+//	setInterval(teft,30000);// 注意函数名没有引号和括弧！
 })
 function websocket() {
 	if (typeof (WebSocket) == "undefined") {
 		WEB_SOCKET_SWF_LOCATION = "resources/js/WebSocketMain.swf";
 		WEB_SOCKET_DEBUG = true;
 	}
-	webclient();
+	createWebSocket();
 }
-;
+
+function createWebSocket() {
+    try {
+    	socket = new WebSocket(websocketURL);
+    	webclient();
+    } catch(e) {
+    	console.log('catch');
+    	reconnect();
+    }
+  }
+
 function webclient() {
-	var tryTime = 0;
-	try {
-		socket = new WebSocket(websocketURL);
-	} catch (err) {
-		alert("地址请求错误，请清除缓存重新连接！！！")
-	}
-	setTimeout(function() {
-		if (socket.readyState != 1) {
-			alert("与服务器连接失败,请检查网络设置!");
-		}
-	}, 10000);
+//	setTimeout(function() {
+//		if (socket.readyState != 1) {
+//			alert("与服务器连接失败,请检查网络设置!");
+//		}
+//	}, 10000);
 	socket.onopen = function() {
 		//监听加载状态改变  
 		document.onreadystatechange = completeLoading();
@@ -235,6 +240,7 @@ function webclient() {
 			var loadingMask = document.getElementById('loadingDiv');
 			loadingMask.parentNode.removeChild(loadingMask);
 		}
+		lockReconnect = false;
 	};
 	socket.onmessage = function(msg) {
 		redata = msg.data;
@@ -242,35 +248,35 @@ function webclient() {
 	};
 	//关闭事件
 	socket.onclose = function(e) {
-		if (e.code == 4001 || e.code == 4002 || e.code == 4003 || e.code == 4005 || e.code == 4006) {
-			//如果断开原因为4001 , 4002 , 4003 不进行重连.
+		if(lockReconnect == true){
 			return;
-		} 
-		// 重试3次，每次之间间隔5秒
-//		if (tryTime < 3) {
-//			setTimeout(function() {
-//				socket = null;
-//				tryTime++;
-//				var _PageHeight = document.documentElement.clientHeight,
-//					_PageWidth = document.documentElement.clientWidth;
-//				var _LoadingTop = _PageHeight > 61 ? (_PageHeight - 61) / 2 : 0,
-//					_LoadingLeft = _PageWidth > 215 ? (_PageWidth - 215) / 2 : 0;
-//				var _LoadingHtml = '<div id="loadingDiv" style="position:absolute;left:0;width:100%;height:' + _PageHeight + 'px;top:0;background:#f3f8ff;opacity:0.8;filter:alpha(opacity=80);z-index:10000;"><div style="position: absolute; cursor1: wait; left: ' + _LoadingLeft + 'px; top:' + _LoadingTop + 'px; width: auto; height: 57px; line-height: 57px; padding-left: 50px; padding-right: 5px; background: #fff url(resources/images/load.gif) no-repeat scroll 5px 10px; border: 2px solid #95B8E7; color: #696969;">""正在尝试第"' + tryTime + '"次重连，请稍候..."</div></div>';
-//				document.write(_LoadingHtml);
-				try {
-					socket = new WebSocket(websocketURL);
-				} catch (e) {
-					document.clear();
-				}
-//			}, 5000);
-//		} else {
-//			tryTime = 0;
-//		}
+		};
+		reconnect();
 	};
 	//发生了错误事件
-	socket.onerror = function() {
-//		alert("发生异常，正在尝试重新连接服务器！！！");
+	socket.onerror = function(e) {
+		if(lockReconnect == true){
+			return;
+		};
+		reconnect();
 	}
+}
+
+function reconnect(){
+	if(lockReconnect == true){
+		return;
+	};
+	lockReconnect = true;
+    var tt = window.setInterval(function () {
+    	if(lockReconnect == false){
+    		window.clearInterval(tt);
+    	}
+    	try {
+    		createWebSocket();
+		} catch (e) {
+			console.log(e.message);
+		}
+    }, 10000);
 }
 
 function iview() {
@@ -278,11 +284,10 @@ function iview() {
 	time.length = 0;
 	vol.length = 0;
 	ele.length = 0;
-	if(redata.length==297 || redata.length%99==0){
-		for (var i = 0; i < redata.length; i += 99) {
-			
-			//				if(redata.substring(8+i, 12+i)!="0000"){
-			if (parseInt(redata.substring(4 + i, 8 + i),10) == "0001") {
+	if(redata.length%119==0){
+		for (var i = 0; i < redata.length; i += 119) {
+//			console.log($("#machineid").val());
+			if(parseInt(redata.substring(8+i, 12+i), 10)==$("#machineid").val()){
 				historytime = new Date().getTime();
 				time1++;
 			    var t1 = secondToDate(time1);
@@ -293,11 +298,11 @@ function iview() {
 				   // $("#r4").html(t2);//焊接时长
 			    }
 				if(display.length){
-					var ttme = redata.substring(54 + i, 75 + i);
+					var ttme = redata.substring(54 + i, 73 + i);
 					//						time.push(Date.parse(redata.substring(20+i, 39+i)));
 					ttme = ttme.replace(/-/g, '/');
-//					time.push(Date.parse(new Date(ttme)));
-					time.push((new Date(ttme)).getTime());
+					time.push(Date.parse(new Date(ttme)));
+//					time.push((new Date(ttme)).getTime());
 					for (var d = 0; d < display.length; d++) {
 						var firstPosition = display[d].getElementsByTagName("FirstPosition");//起始位
 						var lastPosition = display[d].getElementsByTagName("LastPosition");//结束位
@@ -318,7 +323,7 @@ function iview() {
 						//activeLastPointToolip(eval("chart"+d));
 					}
 				}
-				continue;
+//				continue;
 				welderid.push(parseInt(redata.substring(0 + i, 4 + i), 10));
 				machin_id.push(parseInt(redata.substring(4 + i, 8 + i), 10));
 				junctionid.push(parseInt(redata.substring(12 + i, 16 + i), 10));
@@ -340,29 +345,30 @@ function iview() {
 						break;
 					}
 				}
-				$("#r3").html("--");
-				for (var k = 0; k < welderName.length; k++) {
-					if (welderName[k].fid == parseInt(redata.substring(0 + i, 4 + i),10)) {
-						$("#r3").html(welderName[k].fwelder_no);
-					}
-				}
-			    $("#r8").html(parseFloat((parseInt(redata.substring(95 + i, 99 + i), 10)/10).toFixed(1)) + " m/min");//送丝速度
-				machstatus.push(redata.substring(36 + i, 38 + i));
-				if(parseInt(redata.substring(32+i, 36+i),10)==137){
-					ele.push(parseFloat((parseInt(redata.substring(38 + i, 42 + i), 10) / 10).toFixed(1)));
-					$("#c1").html(parseFloat((parseInt(redata.substring(38 + i, 42 + i), 10) / 10).toFixed(1)));
-				}else{
-					ele.push(parseInt(redata.substring(38 + i, 42 + i), 10));
-					$("#c1").html(parseInt(redata.substring(38 + i, 42 + i), 10));
-				}
-				vol.push(parseFloat((parseInt(redata.substring(42 + i, 46 + i), 10) / 10).toFixed(1)));
-				gas.push(parseFloat((parseInt(redata.substring(95 + i, 99 + i), 10)/10).toFixed(1)) + " L/min");//气体流量
-				if (symbol == 0) {
-					elecurve();
-					volcurve();
-					gascurve();
-					symbol++;
-				}
+//				$("#r3").html("--");
+//				for (var k = 0; k < welderName.length; k++) {
+//					if (welderName[k].fid == parseInt(redata.substring(0 + i, 4 + i),10)) {
+//						$("#r3").html(welderName[k].fwelder_no);
+//					}
+//				}
+//			    $("#r8").html(parseFloat((parseInt(redata.substring(95 + i, 99 + i), 10)/10).toFixed(1)) + " m/min");//送丝速度
+//				machstatus.push(redata.substring(36 + i, 38 + i));
+//				if(parseInt(redata.substring(32+i, 36+i),10)==137){
+//					ele.push(parseFloat((parseInt(redata.substring(38 + i, 42 + i), 10) / 10).toFixed(1)));
+//					$("#c1").html(parseFloat((parseInt(redata.substring(38 + i, 42 + i), 10) / 10).toFixed(1)));
+//				}else{
+//					ele.push(parseInt(redata.substring(38 + i, 42 + i), 10));
+//					$("#c1").html(parseInt(redata.substring(38 + i, 42 + i), 10));
+//				}
+//				vol.push(parseFloat((parseInt(redata.substring(42 + i, 46 + i), 10) / 10).toFixed(1)));
+//				gas.push(parseFloat((parseInt(redata.substring(95 + i, 99 + i), 10)/10).toFixed(1)) + " L/min");//气体流量
+//				if (symbol == 0) {
+//					elecurve();
+//					volcurve();
+//					gascurve();
+//					symbol++;
+//				}
+				$("#l1").html(worktime.machine);
 				$("#l2").html(worktime.machineno);
 				$("#l3").html(worktime.mvaluename);
 				var imgnum = $("#type").val();
@@ -372,46 +378,51 @@ function iview() {
 					case "00":
 						$("#l5").val("待机");
 						$("#l5").css("background-color", "#55a7f3");
-						$("#mrjpg").attr("src", "resources/images/welder_"+imgnum+"1.png");
+						$("#mrjpg").attr("src", "resources/images/welder_"+0+"1.png");
 						break;
 					case "03":
 						$("#l5").val("焊接");
 						$("#l5").css("background-color", "#7cbc16");
-						$("#mrjpg").attr("src", "resources/images/welder_"+imgnum+"0.png");
+						$("#mrjpg").attr("src", "resources/images/welder_"+0+"0.png");
 						break;
 					case "05":
 						$("#l5").val("收弧");
 						$("#l5").css("background-color", "#7cbc16");
-						$("#mrjpg").attr("src", "resources/images/welder_"+imgnum+"0.png");
+						$("#mrjpg").attr("src", "resources/images/welder_"+0+"0.png");
 						break;
 					case "07":
 						$("#l5").val("启弧");
 						$("#l5").css("background-color", "#7cbc16");
-						$("#mrjpg").attr("src", "resources/images/welder_"+imgnum+"0.png");
+						$("#mrjpg").attr("src", "resources/images/welder_"+0+"0.png");
+						break;
+					default:
+						$("#l5").val("报警");
+						$("#l5").css("background-color", "#a41c26");
+						$("#mrjpg").attr("src", "resources/images/welder_"+0+"2.png");
 						break;
 					}
-					var x = time[z],
-						y = ele[z],
-						v = vol[z],
-						l = gas[z];
-					
-					
-					if (z == 0) {
-						series.addPoint([ x, y ], true, true);
-						series1.addPoint([ x, v ], true, true);
-						series2.addPoint([ x, l ], true, true);
-	
-					} else {
-						if (x > time[z - 1]) {
-							series.addPoint([ x, y ], true, true);
-							series1.addPoint([ x, v ], true, true);
-							series2.addPoint([ x, l ], true, true);
-						}
-					}
+//					var x = time[z],
+//						y = ele[z],
+//						v = vol[z],
+//						l = gas[z];
+//					
+//					
+//					if (z == 0) {
+//						series.addPoint([ x, y ], true, true);
+//						series1.addPoint([ x, v ], true, true);
+//						series2.addPoint([ x, l ], true, true);
+//	
+//					} else {
+//						if (x > time[z - 1]) {
+//							series.addPoint([ x, y ], true, true);
+//							series1.addPoint([ x, v ], true, true);
+//							series2.addPoint([ x, l ], true, true);
+//						}
+//					}
 				}
 			}
 			//				}
-			z++;
+//			z++;
 		}
 	}
 	;
@@ -502,8 +513,15 @@ function anaylsis(ipurl){
 			name = name[0].text;
 			value = value[0].text;
 		} else {
-			name = name[0].textContent;
-			value = value[0].textContent;
+			var userAgent = navigator.userAgent;
+			if(userAgent.indexOf('Trident')!=-1){
+				name = name[0].text;
+				value = value[0].text;
+				
+			}else{
+				name = name[0].textContent;
+				value = value[0].textContent;
+			}
 		}
 		if(value == 15){
 			display = menuinfo[i].getElementsByTagName("Display");//显示内容
@@ -522,12 +540,23 @@ function anaylsis(ipurl){
 					MaxValue = MaxValue[0].text;
 					MinValue = MinValue[0].text;
 				} else {
-					curveName = curveName[0].textContent;
-					divId = divId[0].textContent;
-					Unit = Unit[0].textContent;
-					Color = Color[0].textContent;
-					MaxValue = MaxValue[0].textContent;
-					MinValue = MinValue[0].textContent;
+					var userAgent = navigator.userAgent;
+					if(userAgent.indexOf('Trident')!=-1){
+						curveName = curveName[0].text;
+						divId = divId[0].text;
+						Unit = Unit[0].text;
+						Color = Color[0].text;
+						MaxValue = MaxValue[0].text;
+						MinValue = MinValue[0].text;
+						
+					}else{
+						curveName = curveName[0].textContent;
+						divId = divId[0].textContent;
+						Unit = Unit[0].textContent;
+						Color = Color[0].textContent;
+						MaxValue = MaxValue[0].textContent;
+						MinValue = MinValue[0].textContent;
+					}
 				}
 				//eval("var "+divId.toString()+"Arr=new Array()");//动态生成的存放数据的数组
 				//eval(divId.toString()+"Arr").push("xxx");//数组赋值

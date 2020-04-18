@@ -124,11 +124,11 @@ function anaylsis(ipurl){
 									LastName = LastName[0].textContent,LastResource = LastResource[0].textContent,LastimgName = LastimgName[0].textContent,lastshowIndex = lastshowIndex[0].textContent;
 								}
 								if($.inArray(LastResource,resourceary)!=-1){
-									if(LastResource == "td/AllTd"){
-										lastcontext += '<li onclick="changeColor(this)" id="last'+lastshowIndex+'"><a href="javascript:openLive()" ><div><img src="resources/images/'+LastimgName+'" />&nbsp;&nbsp;'+LastName+'</div></a></li>';
-									}else{
+//									if(LastResource == "td/AllTd"){
+//										lastcontext += '<li onclick="changeColor(this)" id="last'+lastshowIndex+'"><a href="javascript:openLive()" ><div><img src="resources/images/'+LastimgName+'" />&nbsp;&nbsp;'+LastName+'</div></a></li>';
+//									}else{
 										lastcontext += '<li onclick="changeColor(this)" id="last'+lastshowIndex+'"><a href="javascript:openTab(\''+LastName+'\',\''+LastResource+'\')" ><div><img src="resources/images/'+LastimgName+'" />&nbsp;&nbsp;'+LastName+'</div></a></li>';
-									}
+//									}
 								}
 							}
 							firstcontext += lastcontext+'</ul></div></li>';
@@ -138,11 +138,11 @@ function anaylsis(ipurl){
 						}
 						if(flag){
 							if($.inArray(firstResource,resourceary)!=-1){
-								if(firstResource == "td/AllTd"){
-									firstcontext +='<li onclick="changeColor(this)" id="'+firstshowIndex+'"><a href="javascript:openLive()" ><div><img src="resources/images/'+firstimgName+'" />&nbsp;&nbsp;'+firstName+'</div></a></li>';
-								}else{
+//								if(firstResource == "td/AllTd"){
+//									firstcontext +='<li onclick="changeColor(this)" id="'+firstshowIndex+'"><a href="javascript:openLive()" ><div><img src="resources/images/'+firstimgName+'" />&nbsp;&nbsp;'+firstName+'</div></a></li>';
+//								}else{
 									firstcontext +='<li onclick="changeColor(this)" id="'+firstshowIndex+'"><a href="javascript:openTab(\''+firstName+'\',\''+firstResource+'\')" ><div><img src="resources/images/'+firstimgName+'" />&nbsp;&nbsp;'+firstName+'</div></a></li>';
-								}
+//								}
 							}
 						}
 					}
@@ -188,11 +188,11 @@ function anaylsis(ipurl){
 							var subnenustext,flag = true,lastcontext = "";
 							if(flag){
 								if($.inArray(firstResource,resourceary)!=-1){
-									if(firstResource == "td/AllTd"){
-										firstcontext +='<li onclick="changeColor(this)" id="'+firstshowIndex+'"><a href="javascript:openLive()" ><div><img src="resources/images/'+firstimgName+'" />&nbsp;&nbsp;'+firstName+'</div></a></li>';
-									}else{
+//									if(firstResource == "td/AllTd"){
+//										firstcontext +='<li onclick="changeColor(this)" id="'+firstshowIndex+'"><a href="javascript:openLive()" ><div><img src="resources/images/'+firstimgName+'" />&nbsp;&nbsp;'+firstName+'</div></a></li>';
+//									}else{
 										firstcontext +='<li onclick="changeColor(this)" id="'+firstshowIndex+'"><a href="javascript:openTab(\''+firstName+'\',\''+firstResource+'\')" ><div><img src="resources/images/'+firstimgName+'" />&nbsp;&nbsp;'+firstName+'</div></a></li>';
-									}
+//									}
 								}
 							}
 						}
