@@ -131,9 +131,7 @@ function itemidCombobox(){
 //采集模块通讯协议
 function protocolCombobox(){
     var optionStr = ''; 
-    optionStr += "<option value='串口'>串口</option>"+
-    		"<option value='zigbee'>zigbee</option>"+
-    		"<option value='以太网'>以太网</option>";  
+    optionStr += "<option value='以太网'>以太网</option>";  
   
     $("#protocol").html(optionStr);
 	$("#protocol").combobox();
