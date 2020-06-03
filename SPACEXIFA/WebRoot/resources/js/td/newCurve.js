@@ -1,7 +1,7 @@
 var insfid;
 var lockReconnect = false;//避免重复连接
 var websocketURL, symbol=0, welderName, taskNum, socket, tt;
-var showflag = 0,timeflag;
+var showflag = 0,offFlag=0,timeflag;
 var liveary = new Array(), machine = new Array();
 var off = new Array(), on = new Array(), warn = new Array(), stand = new Array(), cleardata = new Array();
 $(function(){
@@ -123,7 +123,9 @@ function getMachine(insfid) {
 //					if(machine[i].fequipment_no=="6666"){
 //						imgnum = 4;
 //					}
-					off.push(machine[i].fid);
+					if(offFlag==0){
+						off.push(machine[i].fid);
+					}
 					var str = '<div id="machine'+machine[i].fid+'" style="width:240px;height:120px;float:left;margin-right:10px;display:none">'+
 					'<div style="float:left;width:40%;height:100%;"><a href="td/goNextcurve?value='+machine[i].fid+'&valuename='+machine[i].fequipment_no+'&type='+machine[i].type+'&model='+machine[i].model+'"><img id="img'+machine[i].fid+'" src="resources/images/welder_0'+imgnum+'.png" style="height:110px;width:100%;padding-top:10px;"></a></div>'+
 					'<div style="float:left;width:60%;height:100%;">'+
@@ -138,6 +140,7 @@ function getMachine(insfid) {
 				}
 				showflag=1;
 				$("#off").html(off.length);
+				offFlag=1;
 			}
 		},
 		error : function(errorMsg) {

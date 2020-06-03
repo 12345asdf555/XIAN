@@ -7,8 +7,16 @@ $(function(){
 	machineModel();
 	$("#iId").combobox({
         onChange:function(){  
-        	itemid = $("#iId").combobox("getValue");
-        	gatherCombobox();
+			itemid = $("#iId").combobox("getValue");
+			gatherCombobox();
+        	if(selectRow!=null){
+    			var str = $("#gid").html();
+    			str += "<option value=\"" + selectRow.gid + "\" >"  
+    			        + selectRow.gatherId + "</option>";
+    			$("#gid").html(str);
+    			$("#gid").combobox();
+    			$("#gid").combobox("select", selectRow.gid);
+        	}
         } 
      });
 	$('#dlg').dialog( {
@@ -27,6 +35,7 @@ $(function(){
 var url = "";
 var flag = 1;
 function addWeldingMachine(){
+	selectRow = null;
 	flag = 1;
 	$('#fm').form('clear');
 	$('#dlg').window( {
@@ -45,6 +54,7 @@ function editWeldingMachine(){
 	flag = 2;
 	$('#fm').form('clear');
 	var row = $('#weldingmachineTable').datagrid('getSelected');
+	selectRow = row;
 	if (row) {
 		$('#dlg').window( {
 			title : "修改焊机设备",
