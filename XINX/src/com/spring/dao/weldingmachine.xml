@@ -106,6 +106,7 @@
 		SELECT fid, fequipment_no FROM tb_welding_machine 
 	</select>
 	
+	
 	<select id="getWeldingMachineByEno"  resultType="java.math.BigInteger">
 		SELECT fid FROM tb_welding_machine where fequipment_no = #{eno}
 	</select>
@@ -193,6 +194,14 @@
 	
 	<delete id="deletefactory" parameterType="java.math.BigInteger">
 		DELETE FROM tb_equipment_manufacturer WHERE ftype = #{statusId}
+	</delete>
+	
+	<update id="addquamethod"  parameterType="com.spring.model.WeldingMachine">
+		INSERT INTO tb_qual_method(fweld_method,level) VALUES (#{typeId},#{statusId})
+	</update>
+	
+	<delete id="deletequamethod" parameterType="java.math.BigInteger">
+		DELETE FROM tb_qual_method WHERE level = #{statusId}
 	</delete>
 	
 	<select id="getMachineModel"  resultMap="wmMap">

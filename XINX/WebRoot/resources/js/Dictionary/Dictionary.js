@@ -201,8 +201,6 @@ function removeDictionary(){
 function remove(){
 	$.messager.confirm('提示', '此操作不可撤销，是否确认删除?', function(flag) {
 		if (flag) {
-			$.messager.confirm('警告', '三思啊～此操作可能导致系统崩溃，还要继续此操作吗？', function(flag) {
-				if (flag) {
 					$.ajax({  
 				        type : "post",  
 				        async : false,
@@ -227,8 +225,6 @@ function remove(){
 				            alert("数据请求失败，请联系系统管理员!");  
 				        }  
 				   }); 
-				}
-			});
 		}
 	});
 }

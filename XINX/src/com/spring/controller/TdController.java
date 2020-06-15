@@ -70,7 +70,7 @@ public class TdController {
 		String insname = tdService.findInsname(tdService.findIns(uid));
 		request.setAttribute("insname", insname);*/
 		lm.getUserId(request);
-		return "td/nextCurve";
+		return "td/newCurve";
 	}
 	
 	@RequestMapping("/goNextcurve")
@@ -92,7 +92,7 @@ public class TdController {
 	    }else{
 		    request.setAttribute("time", time.substring(11));
 	    }*/
-		return "td/newCurve";
+		return "td/nextCurve";
 	}
 	
 	@RequestMapping("/AllTdd")

@@ -52,6 +52,11 @@ public class DictionaryServiceImpl implements DictionaryService {
 	}
 	
 	@Override
+	public List<Dictionarys> getqua(){
+		return dictionaryMapper.getqua();
+	}
+	
+	@Override
 	public List<Dictionarys> getDictionaryValue(int typeid) {
 		return dictionaryMapper.getDictionaryValue(typeid);
 	}

@@ -50,7 +50,11 @@ public interface WeldingMachineMapper extends Mapper<WeldingMachine>{
 	
 	void addfactoryType(WeldingMachine wm);
 	
+	void addquamethod(WeldingMachine wm);
+	
 	void deletefactory(@Param("statusId")BigInteger statusId);
+	
+	void deletequamethod(@Param("statusId")BigInteger statusId);
 	
 	List<WeldingMachine> getAllMachine();
 	

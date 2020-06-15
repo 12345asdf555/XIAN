@@ -24,6 +24,7 @@ public interface PersonService {
 	void updateMethod(Person welder);
 	void deleteMethod(BigInteger fid);
 	List<Person> getlibarary1(int id);
+	List<Person> getSomeWelders(BigInteger str,BigInteger uid);
 	/**
 	 * 获取焊接方法
 	 * @param typeid 类型id

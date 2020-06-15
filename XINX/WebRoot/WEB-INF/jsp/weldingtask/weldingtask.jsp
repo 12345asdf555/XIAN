@@ -88,13 +88,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<lable><span class="required">*</span>任务编号</lable>
 					<input type="hidden" id="oldno" />
 					<input class="easyui-textbox" id="weldedJunctionno"  name="weldedJunctionno" data-options="validType:['wjNoValidate'],required:true" />
-					<lable><span class="required"></span>计划开始时间</lable>
-					<input class="easyui-datetimebox" name="startTime" id="startTime"/>
+					<lable><span class="required">*</span>计划开始时间</lable>
+					<input class="easyui-datetimebox" name="startTime" id="startTime" data-options="required:true"/>
 				</div>
 				<div class="fitem">
 					<lable><span class="required"></span>工程符号</lable>
 					<input class="easyui-textbox" id="fengineering_symbol"  name="fengineering_symbol" />
-					<lable><span class="required"></span>焊接方法</lable>
+					<lable><span class="required">*</span>焊接方法</lable>
 					<select class="easyui-combobox" id="fweld_method"  name="fweld_method" data-options="editable:false,required:true"></select>
 				</div>
 				<div class="fitem">
@@ -143,7 +143,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<lable><span class="required">*</span>工艺库名称</lable>
 					<select class="easyui-combobox" id="fwpslib_id"  name="fwpslib_id" data-options="editable:false,required:true"></select>
 					<lable><span class="required">*</span>分配焊工</lable>
-					<select class="easyui-combobox" id="fwelder_id"  name="fwelder_id" data-options="editable:false,required:true"></select>
+					<select class="easyui-combobox" id="fwelder_id"  name="fwelder_name" data-options="editable:false,required:true"></select>
 				</div>
 <!-- 				<div class="fitem">
 					<lable><span class="required"></span>所属班组</lable>

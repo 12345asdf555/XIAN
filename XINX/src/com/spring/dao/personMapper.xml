@@ -32,6 +32,18 @@
 		where we.welder_id =#{id}
 	</select>
 	
+	<select id="getSomeWelders" resultType="Person">
+		select m.welder_id insid,w.fname name,w.Fowner from tb_welder_method  m
+		Left join tb_welder w on m.welder_id = w.fid   
+		INNER JOIN tb_insframework i on w.Fowner=i.fid
+		INNER JOIN tb_insframework ins on ins.fid = i.fparent 
+		INNER JOIN tb_insframework insf on insf.fid = ins.fparent 
+		where flevel_id = #{str} 
+		<if test="uid!=null and uid!=''">
+			and (i.fid=#{uid} or ins.fid=#{uid} or insf.fid=#{uid} or insf.fparent=#{uid})
+		</if>
+	</select>
+	
 	<select id="getmethod" resultType="Person">
 		select fid insid,fweld_method valuename from tb_level_library where 1=1
 	</select>

@@ -25,6 +25,11 @@ public interface WeldingMachineService {
 	List<WeldingMachine> getlibarary(Page page);
 	
 	/**
+	 * 查询所有焊接方法
+	 */
+	List<WeldingMachine> getweldmethod();
+	
+	/**
 	 * 新增设备
 	 */
 	void addWeldingMachine(WeldingMachine wm);
@@ -103,6 +108,13 @@ public interface WeldingMachineService {
 	 * 删除旧厂商焊机型号绑定
 	 */
 	void deletefactory(BigInteger statusId);
+	
+	/**
+	 * 删除旧资质和焊接等级绑定
+	 */
+	void deletequamethod(BigInteger statusId);
+	
+	void addquamethod(WeldingMachine wm);
 	
 	/**
 	 * 获取所有焊机及其对应的采集模块

@@ -24,7 +24,7 @@
 
 	<body>
 		<div id="bodydiv">
-			<img src="resources/images/weldmesback.jpg" width="100%" height="100%" />
+			<img src="resources/images/weldmesback1.jpg" width="100%" height="100%" />
 		    <div id="logindiv">
 		    	<div id="formdiv" style="margin-top:90px;margin-left:100px;width:80%;">
 		    		<form name="f" action="<c:url value='j_spring_security_check'/>" method="POST">

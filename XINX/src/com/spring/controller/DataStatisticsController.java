@@ -437,7 +437,7 @@ public class DataStatisticsController {
 				DataStatistics parameter = dss.getParameter();
 				BigInteger worktime = null,standytime=null;
 				DataStatistics weld = null;
-				if(junctionnum.getJunctionnum()!=0){
+				//if(junctionnum.getJunctionnum()!=0){
 					json.put("t2", junctionnum.getJunctionnum());//焊接焊缝数
 					worktime = dss.getStaringUpTime(null, dto);
 					json.put("t4", getTimeStrBySecond(worktime));//工作时间
@@ -453,24 +453,23 @@ public class DataStatisticsController {
 						electric = (double)Math.round((time+standytimes*parameter.getStandbypower()/1000)*100)/100;//电能消耗量=焊接时间*焊接平均电流*焊接平均电压+待机时间*待机功率
 					}
 					json.put("t7", electric);//电能消耗
-				}else{
-					json.put("t2", 0);
-					json.put("t4", "00:00:00");
-					json.put("t7", 0);
-				}
+				/*
+				 * } else{ json.put("t2", 0); json.put("t4", "00:00:00"); json.put("t7", 0); }
+				 */
 				if(weld!=null){
 					json.put("t3", getTimeStrBySecond(weld.getWorktime()));//焊接时间
 					json.put("t4", getTimeStrBySecond(worktime));//工作时间
 					double weldingproductivity = (double)Math.round(weld.getWorktime().doubleValue()/worktime.doubleValue()*100*100)/100;
 					json.put("t5", weldingproductivity);//焊接效率
 					if(parameter!=null){
-						double  time = weld.getWorktime().doubleValue()/60;
+						time = (weld.getWorktime().doubleValue())/60;
 						String[] str = parameter.getWireweight().split(",");
 						double wireweight =Double.valueOf(str[0]);
-						double wire = (double)Math.round(wireweight*parameter.getSpeed()*time*100)/100;//焊丝消耗量=焊丝|焊丝重量*送丝速度*焊接时间
+						double wire = (double)Math.round(wireweight*parameter.getSpeed()*time/60*100)/100;//焊丝消耗量=焊丝|焊丝重量*送丝速度*焊接时间
 						double air = (double)Math.round(parameter.getAirflow()*time*100)/100;//气体消耗量=气体流量*焊接时间
 						json.put("t6", wire);//焊丝消耗
 						json.put("t8", air);//气体消耗
+						//json.put("t8", 0);
 					}
 				}else{
 					json.put("t3", "00:00:00");

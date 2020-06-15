@@ -28,4 +28,5 @@ public interface PersonMapper {
 	void updateMethod(Person welder);
 	void deleteMethod(BigInteger fid);
 	List<Person> getlibarary1(int id);
+	List<Person> getSomeWelders(@Param("str")BigInteger str,@Param("uid")BigInteger uid);
 }

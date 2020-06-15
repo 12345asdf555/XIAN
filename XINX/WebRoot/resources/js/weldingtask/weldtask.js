@@ -1038,30 +1038,7 @@ function exportDg(){
 	});
 }
 
-//焊工选择下拉框
-function welderCombobox(){
-	$.ajax({  
-    type : "post",  
-    async : false,
-    url : "weldtask/getWelderAll",  
-    data : {},  
-    dataType : "json", //返回数据形式为json  
-    success : function(result) {
-        if (result) {
-            var optionStr = '';  
-            for (var i = 0; i < result.ary.length; i++) { 
-                optionStr += "<option value=\"" + result.ary[i].id + "\" >"  
-                        + result.ary[i].name + "</option>";  
-            } 
-            $("#fwelder_id").append(optionStr);
-        }  
-    },  
-    error : function(errorMsg) {  
-        alert("数据请求失败，请联系系统管理员!");  
-    }  
-}); 
-	$("#fwelder_id").combobox();
-}
+
 
 //工艺选择选择下拉框
 function wpslibCombobox(){
@@ -1111,6 +1088,41 @@ function weldLevelCombobox(){
     }  
 }); 
 	$("#fweld_method").combobox();
+	
+}
+
+
+//焊工选择下拉框
+function welderCombobox(){
+	$('#fweld_method').combobox('clear');
+	$("#fweld_method").combobox({
+	onChange : function(newValue,oldValue){
+		$('#fwelder_id').combobox('clear');
+		$('#fwelder_id').combobox('loadData', {});
+		$.ajax({  
+		  type : "post",  
+		  async : false,
+		  url : "weldtask/getSomeWelder?str="+newValue,  
+		  data : {},  
+		  dataType : "json", //返回数据形式为json  
+		  success : function(result) {
+		      if (result) {
+		          var optionStr = '';  
+				  for (var i = 0; i < result.ary.length; i++) { 
+				      optionStr += "<option value=\"" + result.ary[i].id + "\" >"  
+				      + result.ary[i].name + "</option>";  
+						  } 
+				  $("#fwelder_id").combobox('setValue',result.ary[0].name);
+				  $("#fwelder_id").append(optionStr);
+				  $("#fwelder_id").combobox();
+		      }  
+		  },  
+		  error : function(errorMsg) {  
+		      alert("数据请求失败，请联系系统管理员!");  
+		  }  
+		}); 
+		}
+	});
 }
 
 //监听窗口大小变化
