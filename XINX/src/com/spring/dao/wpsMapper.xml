@@ -178,7 +178,7 @@
         LEFT JOIN tb_dictionary dd ON s.fdiameter=dd.fvalue and dd.ftypeid=13
         LEFT JOIN tb_dictionary dp ON s.fwelding_process=dp.fvalue AND dp.ftypeid=22
 		where 1=1  -->
-		SELECT s.fid,fspe_num fwpsnum,fsolder_layer,fweld_bead,fweld_method,fmaterial,d.fvaluename materialname,fdiameter,di.fvaluename dianame,fweld_ele+fweld_tuny_ele fpreset_ele_top,fweld_ele-fweld_tuny_ele fpreset_ele_bottom,
+		SELECT s.fid,fspe_num fwpsnum,fsolder_layer,fweld_bead,s.fweld_method,fmaterial,d.fvaluename materialname,fdiameter,di.fvaluename dianame,fweld_ele+fweld_tuny_ele fpreset_ele_top,fweld_ele-fweld_tuny_ele fpreset_ele_bottom,
 		fweld_vol+fweld_tuny_vol fpreset_vol_top,fweld_vol-fweld_tuny_vol fpreset_vol_bottom,fpower_polarity,fgas_flow,fweld_speed,fwelding_process fprocessid,dic.fvaluename fprocessname,fwpslib_id insid,l.fwps_lib_name insname 
 		FROM `tb_specification` s 
 		LEFT JOIN tb_dictionary d on d.fvalue=s.fmaterial and d.ftypeid=9 

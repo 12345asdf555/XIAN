@@ -69,8 +69,9 @@ public class WeldingMachineController {
 	public String goWeldingMahine(){
 		return "weldingMachine/weldingmachine";
 	}
+	
 	/**
-	 * CAT厂商焊机管理
+	 * 厂商绑定
 	 * @return
 	 */
 	@RequestMapping("/gomathine")
@@ -85,6 +86,15 @@ public class WeldingMachineController {
 	@RequestMapping("/goLibrary")
 	public String goLibrary(){
 		return "Mathine/Library";
+	}
+	
+	/**
+	 * 资质库管理
+	 * @return
+	 */
+	@RequestMapping("/goweldmethod")
+	public String goweldmethod(){
+		return "Mathine/weldmethod";
 	}
 	
 	/**
@@ -259,6 +269,31 @@ public class WeldingMachineController {
 			e.getMessage();
 		}
 		obj.put("total", total);
+		obj.put("rows",ary);
+		return obj.toString();
+	}
+	
+	/**
+	 * 资质库列表无分页
+	 * @return
+	 */
+	@RequestMapping("/getlibararylist2")
+	@ResponseBody
+	public String getlibararylist2(HttpServletRequest request){
+		JSONObject json = new JSONObject();
+		JSONArray ary = new JSONArray();
+		JSONObject obj = new JSONObject();
+		List<WeldingMachine> list=wmm.getweldmethod();
+		try{
+			for(WeldingMachine w:list){
+				json.put("id",w.getId());
+				json.put("mvaluename",w.getMvaluename());//焊接方法
+				json.put("model", w.getModel());//等级
+				ary.add(json);
+			}
+		}catch(Exception e){
+			e.getMessage();
+		}
 		obj.put("rows",ary);
 		return obj.toString();
 	}
@@ -584,6 +619,32 @@ public class WeldingMachineController {
 	}
 	
 	/**
+	 * 绑定焊接方法和等级
+	 * @return
+	 */
+	@RequestMapping("/getweldmethod")
+	@ResponseBody
+	public String getweldmethod(HttpServletRequest request){
+		WeldingMachine wm = new WeldingMachine();
+		JSONObject obj = new JSONObject();
+		try{
+			wm.setStatusId(Integer.parseInt(request.getParameter("back")));
+			wmm.deletequamethod(new BigInteger(wm.getStatusId()+""));
+			String[] str = request.getParameter("str").split(",");
+			for(int i=0;i<str.length;i++){
+				wm.setTypeId(Integer.parseInt(str[i]));
+				wmm.addquamethod(wm);
+			}
+			obj.put("success", true);
+		}catch(Exception e){
+			e.printStackTrace();
+			obj.put("success", false);
+			obj.put("errorMsg", e.getMessage());
+		}
+		return obj.toString();
+	}
+	
+	/**
 	 * 新增
 	 * @return
 	 */
@@ -749,6 +810,32 @@ public class WeldingMachineController {
 			for(Dictionarys d:dictionary){
 				json.put("manu", d.getTypeid());
 				json.put("model", d.getValue());
+				ary.add(json);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		obj.put("ary", ary);
+		return obj.toString();
+	}
+	
+	
+
+	/**
+	 * 获取等级对应的资质
+	 * @return
+	 */
+	@RequestMapping("/getqua")
+	@ResponseBody
+	public String getqua(){
+		JSONObject json = new JSONObject();
+		JSONArray ary = new JSONArray();
+		JSONObject obj = new JSONObject();
+		try{
+			List<Dictionarys> dictionary = dm.getqua();
+			for(Dictionarys d:dictionary){
+				json.put("method", d.getTypeid());
+				json.put("level", d.getValue());
 				ary.add(json);
 			}
 		}catch(Exception e){

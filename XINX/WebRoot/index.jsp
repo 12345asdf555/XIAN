@@ -39,7 +39,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	<!-- 头部 -->
   	<div region="north" style="height: 98px;" id="north">
 		<div class="head-wrap">
-			<a href="" class="logo"><img src="resources/images/weldmeslog.png" /></a>
+			<a href="" class="logo"><img src="resources/images/weldmeslog2.png" /></a>
 			<div class="time">
 				<a href="void(0)" id="headtime" style="color:#fff;"></a>
 			</div>	

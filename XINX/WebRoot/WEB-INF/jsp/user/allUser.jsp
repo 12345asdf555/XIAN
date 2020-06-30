@@ -69,7 +69,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</div>
 		
 		<!-- 添加修改 -->
-		<div id="dlg" class="easyui-dialog" style="width: 720px; height: 98%; padding:10px 20px" closed="true" buttons="#dlg-buttons">
+		<div id="dlg" class="easyui-dialog" style="width: 800px; height: 75%; padding:10px 20px" closed="true" buttons="#dlg-buttons">
 			<form id="fm" class="easyui-form" method="post" data-options="novalidate:true"><br/>
 				<div class="fitem" style="padding-right:100px;">
 	            	<lable><span class="required">*</span>用户名</lable>

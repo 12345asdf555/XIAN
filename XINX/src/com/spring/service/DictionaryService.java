@@ -31,6 +31,11 @@ public interface DictionaryService {
 	List<Dictionarys> getDictionaryValue(int typeid);
 	
 	/**
+	 * 获取资质和等级
+	 */
+	List<Dictionarys> getqua();
+	
+	/**
 	 * 根据类型值及字典值获取字典值及值名称
 	 * @param typeid 类型值
 	 * @param value 字典值

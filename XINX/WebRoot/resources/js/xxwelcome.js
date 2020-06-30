@@ -109,7 +109,7 @@ function showDiv12(){
 	};
 	socket.onmessage = function(msg) {
 		redata = msg.data;
-		if(redata.length==321 || redata.length%107==0){
+		if(redata.length==333 || redata.length%107==0){
 			for(var i = 0;i < redata.length;i+=107){
 				if(redata.substring(4+i, 8+i)!="0000" && all.indexOf(parseInt(redata.substring(4+i, 8+i),10)) != -1){
 						var cleardataIndex = $.inArray(parseInt(redata.substring(4+i, 8+i),10), cleardata);

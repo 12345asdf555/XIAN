@@ -36,6 +36,12 @@ public class PersonServiceImpl implements PersonService{
 		return mapper.findLeve(type);
 	}
 	
+	
+	@Override
+	public List<Person> getSomeWelders(BigInteger str,BigInteger uid){
+		return mapper.getSomeWelders(str,uid);
+	}
+	
 	@Override
 	public List<Person> findMethods(int id) {
 		return mapper.findMethods(id);

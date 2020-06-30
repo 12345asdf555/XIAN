@@ -35,6 +35,10 @@ public class WeldingMachineServiceImpl implements WeldingMachineService {
 		return wmm.getlibarary();
 	}
 	
+	public List<WeldingMachine> getweldmethod() {
+		return wmm.getlibarary();
+	}
+	
 	@Override
 	public List<WeldingMachine> findAllweldmachine() {
 		return wmm.findAllweldmachine();
@@ -125,6 +129,17 @@ public class WeldingMachineServiceImpl implements WeldingMachineService {
 	@Override
 	public void deletefactory(BigInteger statusId) {
 		wmm.deletefactory(statusId);
+	}
+	
+	@Override
+	public void deletequamethod(BigInteger statusId) {
+		wmm.deletequamethod(statusId);
+	}
+	
+	
+	@Override
+	public void addquamethod(WeldingMachine wm) {
+		wmm.addquamethod(wm);
 	}
 	
 	@Override

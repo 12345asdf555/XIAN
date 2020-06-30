@@ -1199,6 +1199,35 @@ public class WeldingTaskController {
 		obj.put("ary", ary);
 		return obj.toString();
 	}
+	/**
+	 * 
+	 * @Description
+	 * @author chen 焊接方法筛选焊工
+	 * @date 2020年5月25日下午1:58:38
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/getSomeWelder")
+	@ResponseBody
+	public String getSomeWelder(HttpServletRequest request){
+		BigInteger str = new BigInteger(request.getParameter("str"));
+		JSONObject json = new JSONObject();
+		JSONObject obj = new JSONObject();
+		JSONArray ary = new JSONArray();
+		try{
+			BigInteger uid = insm.getUserInsframework();
+			List<Person> p = ps.getSomeWelders(str,uid);
+			for(Person pe : p  ){
+				json.put("id", pe.getInsid());
+				json.put("name", pe.getName());
+				ary.add(json);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		obj.put("ary", ary);
+		return obj.toString();
+	}
 	
 	@RequestMapping("/getWpslibAll")
 	@ResponseBody

@@ -17,6 +17,11 @@
 		and ${str}
 		</if>
 	</select>
+	
+	<select id="getqua" resultMap="dMap">
+		SELECT fid id, fweld_method typeid,level value FROM tb_qual_method where 1=1
+	</select>
+	
 	<insert id="addDictionary" parameterType="com.spring.model.Dictionarys" useGeneratedKeys="true" keyProperty="id">
 		insert into tb_dictionary (ftypeid,fvalue,fvaluename,fback) values (#{typeid},#{value},#{valueName},#{back})
 	</insert>

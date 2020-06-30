@@ -41,4 +41,6 @@ public interface DictionaryMapper extends Mapper<Dictionarys> {
 	
 	List<Dictionarys> getManuModel();
 	
+	List<Dictionarys> getqua();
+	
 }
