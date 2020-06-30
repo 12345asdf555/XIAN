@@ -25,19 +25,19 @@ function weldDatagrid(){
 		}, {
 			field : 'name',
 			title : '姓名',
-			width : 80,
+			width : 100,
 			halign : "center",
 			align : "left"
 		}, {
 			field : 'welderno',
 			title : '编号',
-			width : 100,
+			width : 150,
 			halign : "center",
 			align : "left"
 		}, {
 			field : 'cellphone',
 			title : '手机',
-			width : 100,
+			width : 150,
 			halign : "center",
 			align : "left"
 		},{
@@ -47,16 +47,16 @@ function weldDatagrid(){
 			halign : "center",
 			align : "left",
 			hidden:true
-		}, {
-			field : 'levename',
-			title : '级别',
-			width : 100,
-			halign : "center",
-			align : "left"
 		},{
 			field : 'cardnum',
 			title : '卡号',
-			width : 100,
+			width : 200,
+			halign : "center",
+			align : "left"
+		}, {
+			field : 'levename',
+			title : '级别',
+			width : 150,
 			halign : "center",
 			align : "left"
 		},{
@@ -69,7 +69,7 @@ function weldDatagrid(){
 		}, {
 			field : 'qualiname',
 			title : '资质',
-			width : 100,
+			width : 150,
 			halign : "center",
 			align : "left"
 		},{
@@ -88,10 +88,10 @@ function weldDatagrid(){
 		},{
 			field : 'back',
 			title : '备注',
-			width : 100,
+			width : 200,
 			halign : "center",
 			align : "left"
-		},{
+		}/*,{
 			field : 'edit',
 			title : '编辑',
 			width : 150,
@@ -102,7 +102,8 @@ function weldDatagrid(){
 			str += '<a id="edit" class="easyui-linkbutton" href="javascript:editWelder()"/>';
 			str += '<a id="remove" class="easyui-linkbutton" href="javascript:removeWelder()"/>';
 			return str;
-			}}
+			}
+		}*/
 		] ],
 		rowStyler: function(index,row){
             if ((index % 2)!=0){
@@ -167,6 +168,77 @@ function importWeldingMachine(){
 		    } 
 		});
 	}
+}
+
+function searchData(){
+	var search = "";
+	var sname = $("#sname").textbox('getValue');
+	var swelderno = $("#swelderno").textbox('getValue');
+	var scellphone = $("#scellphone").textbox('getValue');
+	var scardnum = $("#scardnum").textbox('getValue');
+	var sleveid = $("#sleveid").combobox("getValue");
+	var squali = $("#squali").combobox("getValue");
+	var sowner = $("#sowner").combobox("getValue");
+	var sback = $("#sback").textbox('getValue');
+	if(sname != ""){
+		if(search == ""){
+			search += " tb_welder.fname LIKE "+"'%" + sname + "%'";
+		}else{
+			search += " AND tb_welder.fname LIKE "+"'%" + sname + "%'";
+		}
+	}
+	if(swelderno != ""){
+		if(search == ""){
+			search += " fwelder_no LIKE "+"'%" + swelderno + "%'";
+		}else {
+			search += " AND fwelder_no LIKE "+"'%" + swelderno + "%'";
+		}
+	}
+	if(scellphone != ""){
+		if(search == ""){
+			search += " FCellPhone LIKE "+"'%" + scellphone + "%'";
+		}else{
+			search += " AND FCellPhone LIKE "+"'%" + scellphone + "%'";
+		}
+	}
+	if(scardnum != ""){
+		if(search == ""){
+			search += " FCardNUm LIKE "+"'%" + scardnum + "%'";
+		}else{
+			search += " AND FCardNUm LIKE "+"'%" + scardnum + "%'";
+		}
+	}
+	if(sleveid != ""){
+		if(search == ""){
+			search += " d.fvalue LIKE "+"'%" + sleveid + "%'";
+		}else{
+			search += " AND d.fvalue LIKE "+"'%" + sleveid + "%'";
+		}
+	}
+	if(squali != ""){
+		if(search == ""){
+			search += " di.fvalue LIKE "+"'%" + squali + "%'";
+		}else{
+			search += " AND di.fvalue LIKE "+"'%" + squali + "%'";
+		}
+	}
+	if(sowner != ""){
+		if(search == ""){
+			search += " i.fid LIKE "+"'%" + sowner + "%'";
+		}else{
+			search += " AND i.fid LIKE "+"'%" + sowner + "%'";
+		}
+	}
+	if(sback != ""){
+		if(search == ""){
+			search += " tb_welder.fback LIKE "+"'%" + sback + "%'";
+		}else{
+			search += " AND tb_welder.fback LIKE "+"'%" + sback + "%'";
+		}
+	}
+	$('#welderTable').datagrid('load', {
+		"searchStr" : search
+	});
 }
 
 //监听窗口大小变化

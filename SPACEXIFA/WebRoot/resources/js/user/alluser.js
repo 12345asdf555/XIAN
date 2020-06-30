@@ -22,7 +22,7 @@
 
 $(function(){
 	$("#dg").datagrid( {
-		fitColumns : true,
+		fitColumns : false,
 		height : ($("#body").height()),
 		width : $("#body").width(),
 		idField : 'id',
@@ -50,13 +50,13 @@ $(function(){
 		}, {
 			field : 'userName',
 			title : '用户名',
-			width : 100,
+			width : 200,
 			halign : "center",
 			align : "left"
 		}, {
 			field : 'userLoginName',
 			title : '登录名',
-			width : 100,
+			width : 200,
 			halign : "center",
 			align : "left"
 		}, {
@@ -68,19 +68,19 @@ $(function(){
 		}, {
 			field : 'userEmail',
 			title : '邮箱',
-			width : 100,
+			width : 200,
 			halign : "center",
 			align : "left"
 		}, {
 			field : 'userPosition',
 			title : '岗位',
-			width : 100,
+			width : 200,
 			halign : "center",
 			align : "left"
 		}, {
 			field : 'users_insframework',
 			title : '部门',
-			width : 100,
+			width : 250,
 			halign : "center",
 			align : "left"
 		}, {
@@ -89,10 +89,10 @@ $(function(){
 			width : 100,
 			halign : "center",
 			align : "left"
-        }, {
+        }/*, {
 			field : 'role',
 			title : '角色',
-			width : 100,
+			width : 200,
 			halign : "center",
 			align : "left",
 			formatter:function(value,row,index){
@@ -100,7 +100,7 @@ $(function(){
 			str += '<a id="role" class="easyui-linkbutton" href="javascript:role('+row.id+')"/>';
 			return str; 
 			}
-		}, {
+		}*/, {
 			field : 'statusid',
 			title : '状态id',
 			width : 100,
@@ -114,7 +114,7 @@ $(function(){
 			halign : "center",
 			align : "left",
 			hidden : true
-		}, {
+		}/*, {
 			field : 'edit',
 			title : '编辑',
 			width : 150,
@@ -126,7 +126,7 @@ $(function(){
 			str += '<a id="remove" class="easyui-linkbutton" href="javascript:deleteUser('+row.insid+','+row.id+','+false+')"/>';
 			return str;
 			}
-		}]],
+		}*/]],
 		nowrap : false,
 		rowStyler: function(index,row){
             if ((index % 2)!=0){
@@ -134,12 +134,12 @@ $(function(){
             	var color=new Object();
                 return color;
             }
-		},
+		}/*,
 		onLoadSuccess:function(data){
 	        $("a[id='edit']").linkbutton({text:'修改',plain:true,iconCls:'icon-update'});
 	        $("a[id='remove']").linkbutton({text:'删除',plain:true,iconCls:'icon-delete'});
 	        $("a[id='role']").linkbutton({text:'角色列表',plain:true,iconCls:'icon-search'});
-	        }
+	        }*/
 	});
 
 })
@@ -180,6 +180,7 @@ function remove(){
 							$.messager.alert("提示", "删除成功！");
 							$('#rdlg').dialog('close');
 							$('#dg').datagrid('reload');
+							$("#dg").datagrid('clearSelections');
 //							var url = "user/AllUser";
 //							var img = new Image();
 //						    img.src = url;  // 设置相对路径给Image, 此时会发送出请求
@@ -197,7 +198,16 @@ function remove(){
 	});
 }   
         
-function role(id){
+function role(){
+	var id="";
+	var row = null;
+	row = $('#dg').datagrid('getSelected'); 
+	if (row) {
+		id = row.id;
+	}else{
+		alert("请先选择一条数据。");
+		return;
+	}
     $('#div1').dialog('open').dialog('center').dialog('setTitle','角色列表');
     $("#ro").datagrid( {
 		fitColumns : true,
@@ -314,7 +324,17 @@ function insframeworkTree(){
 //        	}
 //        }
         
-        function deleteUser(id,uid,flags){
+        function deleteUser(flags){
+        	var id="",uid="";
+        	var row = null;
+        	row = $('#dg').datagrid('getSelected'); 
+        	if (row) {
+        		id = row.insid;
+        		uid = row.id;
+        	}else{
+        		alert("请先选择一条数据。");
+        		return;
+        	}
  			$.ajax({  
  		        type : "post",  
  		        async : false,
@@ -411,6 +431,72 @@ function insframeworkTree(){
 			});
 		}
 
+        function searchData(){
+        	var search = "";
+        	var suserName = $("#suserName").textbox('getValue');
+        	var suserLoginName = $("#suserLoginName").textbox('getValue');
+        	var suserPhone = $("#suserPhone").textbox('getValue');
+        	var suserEmail = $("#suserEmail").textbox('getValue');
+        	var suserPosition = $("#suserPosition").textbox('getValue');
+        	var sinsid = $("#sinsid").combobox("getValue");
+        	var sid = "";
+        	if($("input[name='sstatusid']:checked").val()){
+        		sid = $("input[name='sstatusid']:checked").val();
+        	}
+        	if(suserName != ""){
+        		if(search == ""){
+        			search += " users_name LIKE "+"'%" + suserName + "%'";
+        		}else{
+        			search += " AND users_name LIKE "+"'%" + suserName + "%'";
+        		}
+        	}
+        	if(suserLoginName != ""){
+        		if(search == ""){
+        			search += " users_Login_Name LIKE "+"'%" + suserLoginName + "%'";
+        		}else {
+        			search += " AND users_Login_Name LIKE "+"'%" + suserLoginName + "%'";
+        		}
+        	}
+        	if(suserPhone != ""){
+        		if(search == ""){
+        			search += " users_phone LIKE "+"'%" + suserPhone + "%'";
+        		}else {
+        			search += " AND users_phone LIKE "+"'%" + suserPhone + "%'";
+        		}
+        	}
+        	if(suserEmail != ""){
+        		if(search == ""){
+        			search += " users_email LIKE "+"'%" + suserEmail + "%'";
+        		}else{
+        			search += " AND users_email LIKE "+"'%" + suserEmail + "%'";
+        		}
+        	}
+        	if(suserPosition != ""){
+        		if(search == ""){
+        			search += " users_position LIKE "+"'%" + suserPosition + "%'";
+        		}else{
+        			search += " AND users_position LIKE "+"'%" + suserPosition + "%'";
+        		}
+        	}
+        	if(sinsid != ""){
+        		if(search == ""){
+        			search += " users_insframework LIKE "+"'%" + sinsid + "%'";
+        		}else{
+        			search += " AND users_insframework LIKE "+"'%" + sinsid + "%'";
+        		}
+        	}
+        	if(sid != ""){
+        		if(search == ""){
+        			search += " d.fvalue LIKE "+"'%" + sid + "%'";
+        		}else{
+        			search += " AND d.fvalue LIKE "+"'%" + sid + "%'";
+        		}
+        	}
+        	$('#dg').datagrid('load', {
+        		"searchStr" : search
+        	});
+        }
+        
         //监听窗口大小变化
           window.onresize = function() {
           	setTimeout(domresize, 500);

@@ -224,7 +224,9 @@ public class ExportExcelController {
 		} catch (Exception e) {
 			return null;
 		} finally {
-			file.delete();
+			if(file!=null) {
+				file.delete();
+			}
 		}
 	}
 

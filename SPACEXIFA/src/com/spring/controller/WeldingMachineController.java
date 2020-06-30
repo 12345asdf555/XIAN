@@ -351,15 +351,22 @@ public class WeldingMachineController {
 		JSONObject obj = new JSONObject();
 		String itemid = request.getParameter("itemid");
 		BigInteger item = null;
-		if(iutil.isNull(itemid)){
-			item = new BigInteger(itemid);
-		}
 		try{
-			List<Gather> list = gm.getGatherByInsfid(item);
-			for(Gather g:list){
-				json.put("id", g.getId());
-				json.put("name", g.getGatherNo());
-				ary.add(json);
+			if(iutil.isNull(itemid)){
+				item = new BigInteger(itemid);
+				List<Gather> list = gm.getGatherByInsfid(item);
+				for(Gather g:list){
+					json.put("id", g.getId());
+					json.put("name", g.getGatherNo());
+					ary.add(json);
+				}
+			}else {
+				List<Gather> list = gm.getGatherAll(null,null);
+				for(Gather g:list){
+					json.put("id", g.getId());
+					json.put("name", g.getGatherNo());
+					ary.add(json);
+				}
 			}
 		}catch(Exception e){
 			e.printStackTrace();
@@ -451,6 +458,13 @@ public class WeldingMachineController {
 			if(str!=null&&!("").equals(str)){
 				int num = Integer.valueOf(request.getParameter("str"));
 				List<Dictionarys> dictionary = dm.getModelOfManu(num);
+				for(Dictionarys d:dictionary){
+					json.put("id", d.getId());
+					json.put("name", d.getValueName());
+					ary.add(json);
+				}
+			}else {
+				List<Dictionarys> dictionary = dm.getModelOfManu(null);
 				for(Dictionarys d:dictionary){
 					json.put("id", d.getId());
 					json.put("name", d.getValueName());

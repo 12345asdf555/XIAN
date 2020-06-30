@@ -78,6 +78,7 @@ function saveGather(){
 					$.messager.alert("提示", messager);
 					$('#dlg').dialog('close');
 					$('#gatherTable').datagrid('reload');
+					$("#gatherTable").datagrid('clearSelections');
 //					var url = "gather/goGather";
 //					var img = new Image();
 //				    img.src = url;  // 设置相对路径给Image, 此时会发送出请求
@@ -101,6 +102,12 @@ function statusCombobox(){
     		"<option value='维修'>维修</option>";  
     $("#status").html(optionStr);
 	$("#status").combobox();
+	var soptionStr = '';
+    soptionStr += "<option value=''>请选择</option>"+
+    		"<option value='正常'>正常</option>"+
+    		"<option value='维修'>维修</option>";  
+	$("#sstatus").html(soptionStr);
+	$("#sstatus").combobox();
 }
 
 //所属项目
@@ -113,12 +120,16 @@ function itemidCombobox(){
       dataType : "json", //返回数据形式为json  
       success : function(result) {  
           if (result) {
-              var optionStr = '';
+              var optionStr = '',soptionStr = '';
+              soptionStr += "<option value=''>请选择</option>";
               for (var i = 0; i < result.ary.length; i++) {  
                   optionStr += "<option value=\"" + result.ary[i].id + "\" >"  
                           + result.ary[i].name + "</option>";
+                  soptionStr += "<option value=\"" + result.ary[i].id + "\" >"  
+                  + result.ary[i].name + "</option>";
               }
               $("#itemid").html(optionStr);
+              $("#sitemid").html(soptionStr);
           }  
       },  
       error : function(errorMsg) {  
@@ -126,6 +137,7 @@ function itemidCombobox(){
       }  
 	}); 
 	$("#itemid").combobox();
+	$("#sitemid").combobox();
 }
 
 //采集模块通讯协议
@@ -134,6 +146,11 @@ function protocolCombobox(){
     optionStr += "<option value='以太网'>以太网</option>";  
   
     $("#protocol").html(optionStr);
-	$("#protocol").combobox();
+    $("#protocol").combobox();
+    var soptionStr = ''; 
+    soptionStr += "<option value=''>请选择</option>"+
+    	"<option value='以太网'>以太网</option>"; 
+    $("#sprotocol").html(soptionStr);
+	$("#sprotocol").combobox();
 }
 

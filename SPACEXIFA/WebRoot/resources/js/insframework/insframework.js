@@ -40,25 +40,25 @@ function insframeworkDatagrid(){
 		}, {
 			field : 'name',
 			title : '名称',
-			width : 150,
+			width : 300,
 			halign : "center",
 			align : "left"
 		}, {
 			field : 'logogram',
 			title : '简写',
-			width : 100,
+			width : 300,
 			halign : "center",
 			align : "left"
 		}, {
 			field : 'code',
 			title : '编码',
-			width : 100,
+			width : 200,
 			halign : "center",
 			align : "left"
 		}, {
 			field : 'parent',
 			title : '上级项目',
-			width : 150,
+			width : 300,
 			halign : "center",
 			align : "left"
 		}, {
@@ -81,7 +81,7 @@ function insframeworkDatagrid(){
 			halign : "center",
 			align : "left",
 			hidden : true
-		}, {
+		}/*, {
 			field : 'edit',
 			title : '编辑',
 			width : 200,
@@ -93,7 +93,7 @@ function insframeworkDatagrid(){
 				str += '<a id="remove" class="easyui-linkbutton" href="javascript:editInsf('+row.id+','+false+')"/>';
 				return str;
 			}
-		}] ],
+		}*/] ],
 		pagination : true,
 		nowrap : false,
 		rowStyler: function(index,row){
@@ -111,7 +111,16 @@ function insframeworkDatagrid(){
 }
 
 //删除/修改权限处理
-function editInsf(id,flags){
+function editInsf(flags){
+	var id="";
+	var row = null;
+	row = $('#insframeworkTable').datagrid('getSelected'); 
+	if (row) {
+		id = row.id;
+	}else{
+		alert("请先选择一条数据。");
+		return;
+	}
 		$.ajax({  
 	        type : "post",  
 	        async : false,

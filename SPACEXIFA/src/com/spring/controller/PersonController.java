@@ -182,6 +182,7 @@ public class PersonController {
 			welderService.save(welder);
 			obj.put("success", true);
 		}catch(Exception e){
+			e.printStackTrace();
 			obj.put("success", false);
 			obj.put("errorMsg", e.getMessage());
 		}

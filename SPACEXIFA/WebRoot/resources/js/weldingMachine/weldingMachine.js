@@ -14,6 +14,7 @@ function weldingMachineDatagrid(){
 		singleSelect : true,
 		rownumbers : true,
 		showPageList : false, 
+		fitColumns : true,
         columns : [ [ {
 			field : 'id',
 			title : '序号',
@@ -24,73 +25,73 @@ function weldingMachineDatagrid(){
 		}, {
 			field : 'equipmentNo',
 			title : '固定资产编号',
-//			width : 80,
+			width : 200,
 			halign : "center",
 			align : "left"
 		}, {
 			field : 'typeName',
 			title : '设备类型',
-//			width : 80,
+			width : 150,
 			halign : "center",
 			align : "left"
 		}, {
 			field : 'joinTime',
 			title : '入厂时间',
-//			width : 150,
+			width : 170,
 			halign : "center",
 			align : "left"
 		}, {
 			field : 'insframeworkName',
 			title : '所属项目',
-//			width : 80,
+			width : 150,
 			halign : "center",
 			align : "left"
 		}, {
 			field : 'statusName',
 			title : '状态',
-//			width : 80,
+			width : 100,
 			halign : "center",
 			align : "left"
 		} , {
 			field : 'manufacturerName',
 			title : '厂家',
-//			width : 150,
+			width : 200,
 			halign : "center",
 			align : "left"
 		}, {
 			field : 'isnetworking',
 			title : '是否在网',
-//			width : 80,
+			width : 100,
 			halign : "center",
 			align : "left"
 		}, {
 			field : 'gatherId',
 			title : '采集序号',
-//			width : 100,
+			width : 200,
 			halign : "center",
 			align : "left"
 		}, {
 			field : 'position',
 			title : '位置',
-//			width : 100,
+			width : 200,
 			halign : "center",
 			align : "left"
 		}, {
 			field : 'ip',
 			title : 'ip地址',
-//			width : 100,
+			width : 150,
 			halign : "center",
 			align : "left"
 		}, {
 			field : 'modelname',
 			title : '设备型号',
-//			width : 100,
+			width : 200,
 			halign : "center",
 			align : "left"
 		}, {
 			field : 'model',
 			title : '设备型号id',
-//			width : 100,
+			width : 100,
 			halign : "center",
 			align : "left",
 			hidden: true
@@ -136,7 +137,7 @@ function weldingMachineDatagrid(){
 			halign : "center",
 			align : "left",
 			hidden: true
-		}, {
+		}/*, {
 			field : 'edit',
 			title : '编辑',
 			width : 150,
@@ -149,7 +150,7 @@ function weldingMachineDatagrid(){
 //				str += '<a id="maintain" class="easyui-linkbutton" href="weldingMachine/goMaintain?wid='+row.id+'"/>';
 				return str;
 			}
-		}
+		}*/
 		] ],
 		pagination : true,
 //		fitColumns : true,
@@ -169,7 +170,17 @@ function weldingMachineDatagrid(){
 	});
 }
 
-function editMachine(id,wid,flags){
+function editMachine(flags){
+	var id="",wid="";
+	var row = null;
+	row = $('#weldingmachineTable').datagrid('getSelected'); 
+	if (row) {
+		id = row.iId;
+		wid = row.id;
+	}else{
+		alert("请先选择一条数据。");
+		return;
+	}
 	$.ajax({  
         type : "post",  
         async : false,
@@ -274,6 +285,107 @@ function insframeworkTree(){
 			})
 		 }
 	})
+}
+
+function searchData(){
+	var search = "";
+	var sequipmentNo = $("#sequipmentNo").textbox('getValue');
+	var stId = $("#stId").combobox("getValue");
+	var sjoinTime = $("#sjoinTime").datetimebox('getValue');
+	var siId = $("#siId").combobox("getValue");
+	var smanuno = $("#smanuno").combobox("getValue");
+	var sgid = $("#sgid").combobox("getValue");
+	var sposition = $("#sposition").textbox('getValue');
+	var sip = $("#sip").textbox('getValue');
+	var smodel = $("#smodel").combobox("getValue");
+	var sid = "";
+	if($("input[name='sstatusId']:checked").val()){
+		sid = $("input[name='sstatusId']:checked").val();
+	}
+	var isnetworking = "";
+	if($("input[name='sisnetworkingId']:checked").val()){
+		isnetworking = $("input[name='sisnetworkingId']:checked").val();
+	}
+	if(sequipmentNo != ""){
+		if(search == ""){
+			search += " fequipment_no LIKE "+"'%" + sequipmentNo + "%'";
+		}else{
+			search += " AND fequipment_no LIKE "+"'%" + sequipmentNo + "%'";
+		}
+	}
+	if(stId != ""){
+		if(search == ""){
+			search += " di.fvalue LIKE "+"'%" + stId + "%'";
+		}else {
+			search += " AND di.fvalue LIKE "+"'%" + stId + "%'";
+		}
+	}
+	if(sjoinTime != ""){
+		if(search == ""){
+			search += " fjoin_time=to_date(substr('" + sjoinTime + "',1,19), 'yyyy-mm-dd hh24:mi:ss')";
+		}else{
+			search += " AND fjoin_time=to_date(substr('" + sjoinTime + "',1,19), 'yyyy-mm-dd hh24:mi:ss')";
+		}
+	}
+	if(siId != ""){
+		if(search == ""){
+			search += " i.fid LIKE "+"'%" + siId + "%'";
+		}else{
+			search += " AND i.fid LIKE "+"'%" + siId + "%'";
+		}
+	}
+	if(smanuno != ""){
+		if(search == ""){
+			search += " w.fmanufacturer_id LIKE "+"'%" + smanuno + "%'";
+		}else{
+			search += " AND w.fmanufacturer_id LIKE "+"'%" + smanuno + "%'";
+		}
+	}
+	if(sgid != ""){
+		if(search == ""){
+			search += " g.fid LIKE "+"'%" + sgid + "%'";
+		}else{
+			search += " AND g.fid LIKE "+"'%" + sgid + "%'";
+		}
+	}
+	if(sposition != ""){
+		if(search == ""){
+			search += " fposition LIKE "+"'%" + sposition + "%'";
+		}else{
+			search += " AND fposition LIKE "+"'%" + sposition + "%'";
+		}
+	}
+	if(sip != ""){
+		if(search == ""){
+			search += " w.fIP LIKE "+"'%" + sip + "%'";
+		}else{
+			search += " AND w.fIP LIKE "+"'%" + sip + "%'";
+		}
+	}
+	if(smodel != ""){
+		if(search == ""){
+			search += " dict.fvalue LIKE "+"'%" + smodel + "%'";
+		}else{
+			search += " AND dict.fvalue LIKE "+"'%" + smodel + "%'";
+		}
+	}
+	if(sid != ""){
+		if(search == ""){
+			search += " d.fvalue LIKE "+"'%" + sid + "%'";
+		}else{
+			search += " AND d.fvalue LIKE "+"'%" + sid + "%'";
+		}
+	}
+	if(isnetworking != ""){
+		if(search == ""){
+			search += " fisnetworking LIKE "+"'%" + isnetworking + "%'";
+		}else{
+			search += " AND fisnetworking LIKE "+"'%" + isnetworking + "%'";
+		}
+	}
+	$('#weldingmachineTable').datagrid('load', {
+		"searchStr" : search
+	});
 }
 
 //监听窗口大小变化

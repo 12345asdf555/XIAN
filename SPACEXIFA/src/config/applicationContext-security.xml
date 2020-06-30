@@ -20,11 +20,11 @@
         <!-- <intercept-url pattern="/welder/welder.jsp" access="ROLE_ADMIN"/> -->
         <!-- <intercept-url pattern="/**" access="ROLE_**"/> -->
         <form-login login-page="/login.jsp" authentication-failure-url="/login.jsp?login_error=1" default-target-url="/index.jsp"/> 
-        <logout logout-success-url="/login.jsp" invalidate-session="true"     
+        <logout logout-success-url="/login.jsp" invalidate-session="false"     
             logout-url="/logout" />
         <session-management>  
             <concurrency-control max-sessions="1" 
-                error-if-maximum-exceeded="false" />  
+                error-if-maximum-exceeded="true" />  
         </session-management>  
         <access-denied-handler error-page="/user/Error"/>
         <custom-filter ref="myFilter" before="FILTER_SECURITY_INTERCEPTOR" />  
@@ -59,7 +59,7 @@
     
     <authentication-manager alias="authenticationManager">  
         <authentication-provider user-service-ref="myUserDetailService">  
-            <password-encoder hash="md5" />  
+            <!-- <password-encoder hash="md5" /> -->  
         </authentication-provider>  
     </authentication-manager>  
     

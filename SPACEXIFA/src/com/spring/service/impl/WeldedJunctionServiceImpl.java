@@ -149,6 +149,12 @@ public class WeldedJunctionServiceImpl implements WeldedJunctionService{
 		PageHelper.startPage(page.getPageIndex(), page.getPageSize());
 		return wjm.getCardList(search);
 	}
+	
+	@Override
+	public List<WeldedJunction> getCardList(String search) {
+		// TODO Auto-generated method stub
+		return wjm.getCardList(search);
+	}
 
 	@Override
 	public void addCard(WeldedJunction wj) {
@@ -220,5 +226,11 @@ public class WeldedJunctionServiceImpl implements WeldedJunctionService{
 	public int getTaskCount(String taskName) {
 		// TODO Auto-generated method stub
 		return wjm.getTaskCount(taskName);
+	}
+
+	@Override
+	public String getWpsIdByCardId(String fid) {
+		// TODO Auto-generated method stub
+		return wjm.getWpsIdByCardId(fid);
 	}
 }

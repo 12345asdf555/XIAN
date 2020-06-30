@@ -60,21 +60,27 @@
 		SELECT * FROM tb_maintenance_record r inner join tb_welding_maintenance m on m.fmaintenance_id = r.fid where m.fwelding_id=#{wid}
 	</select>
 	
-	<insert id="addWeldingMaintenance" parameterType="com.spring.model.WeldingMaintenance" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO tb_welding_maintenance(fwelding_id, fmaintenance_id) VALUES (#{welding.id},#{maintenance.id})
+	<insert id="addWeldingMaintenance" parameterType="com.spring.model.WeldingMaintenance" >
+		<selectKey resultType="java.math.BigInteger" order="BEFORE" keyProperty="id">
+			select TB_WELDING_MAINTENANCE_ID.nextval as id from dual
+		</selectKey>
+		INSERT INTO tb_welding_maintenance(fid, fwelding_id, fmaintenance_id) VALUES (#{id},#{welding.id},#{maintenance.id})
 	</insert>
 	
-	<insert id="addMaintenanceRecord" parameterType="com.spring.model.MaintenanceRecord" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO tb_maintenance_record(ftype_id, fviceman, fdesc, fstart_time, fend_time) VALUES 
-		(#{typeId},#{viceman},#{desc},#{startTime},#{endTime})
+	<insert id="addMaintenanceRecord" parameterType="com.spring.model.MaintenanceRecord" >
+		<selectKey resultType="java.math.BigInteger" order="BEFORE" keyProperty="id">
+			select TB_WELDING_MAINTENANCE_ID.nextval as id from dual
+		</selectKey>
+		INSERT INTO tb_maintenance_record(fid,ftype_id, fviceman, fdesc, fstart_time, fend_time) VALUES 
+		(#{id},#{typeId},#{viceman},#{desc},to_date(#{startTime}, 'yyyy-mm-dd hh24:mi:ss'),to_date(#{endTime}, 'yyyy-mm-dd hh24:mi:ss'))
 	</insert>
 	
 	<update id="updateEndtime" parameterType="java.math.BigInteger">
-		UPDATE tb_maintenance_record SET fend_time = now()  WHERE fid = #{wid}
+		UPDATE tb_maintenance_record SET fend_time = SYSDATE  WHERE fid = #{wid}
 	</update>
 	
 	<update id="updateMaintenanceRecord" parameterType="com.spring.model.MaintenanceRecord">
-		UPDATE tb_maintenance_record SET ftype_id=#{typeId},fviceman=#{viceman},fdesc=#{desc},fstart_time=#{startTime},fend_time=#{endTime} WHERE fid=#{id}
+		UPDATE tb_maintenance_record SET ftype_id=#{typeId},fviceman=#{viceman},fdesc=#{desc},to_date(fstart_time=#{startTime}, 'yyyy-mm-dd hh24:mi:ss'),to_date(fend_time=#{endTime}, 'yyyy-mm-dd hh24:mi:ss') WHERE fid=#{id}
 	</update>
 	
 	<delete id="deleteMaintenanceRecord" parameterType="java.math.BigInteger">

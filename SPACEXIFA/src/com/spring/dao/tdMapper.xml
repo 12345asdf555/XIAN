@@ -86,7 +86,7 @@
 	<select id="getLiveTime" resultType="Td">
 		SELECT sum(worktime) worktime FROM (
 	        SELECT count(fid) worktime from tb_live_data 
-	        where FWeldTime &gt;= #{totime} and FWeldTime &lt;= now() and fmachine_id=#{machineid} and (fstatus=3 or fstatus=5 or fstatus=7 or fstatus=99)
+	        where FWeldTime &gt;= #{totime} and FWeldTime &lt;= SYSDATE and fmachine_id=#{machineid} and (fstatus=3 or fstatus=5 or fstatus=7 or fstatus=99)
 	        union all
 	        SELECT sum(fworktime) worktime FROM tb_work 
 			WHERE fstarttime &gt;= #{time} and fendtime &lt;= #{totime} and fmachine_id=#{machineid}

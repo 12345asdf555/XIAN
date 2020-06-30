@@ -140,8 +140,11 @@
 		SELECT i.fid,ftype FROM tb_insframework i INNER JOIN tb_users u on i.fid = u.users_insframework where u.id=#{uid}
 	</select>
 	
-	<insert id="addInsframework" parameterType="com.spring.model.Insframework" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO tb_insframework(fname, flogogram, fcode, fparent, ftype) VALUES (#{name},#{logogram},#{code},#{parent},#{type})
+	<insert id="addInsframework" parameterType="com.spring.model.Insframework">
+		<selectKey resultType="java.math.BigInteger" order="BEFORE" keyProperty="id">
+			select TB_INSFRAMEWORK_ID.nextval as id from dual
+		</selectKey>
+		INSERT INTO tb_insframework(fid, fname, flogogram, fcode, fparent, ftype) VALUES (#{id},#{name},#{logogram},#{code},#{parent},#{type})
  	</insert>
 	
 	<update id="editInsframework" parameterType="com.spring.model.Insframework">

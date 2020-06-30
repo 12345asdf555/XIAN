@@ -1,15 +1,18 @@
 var url = "";
  function removeWelder(){
-		$('#rfm').form('clear');
-		var row = $('#welderTable').datagrid('getSelected');
-		if (row) {
-			$('#rdlg').window( {
-				title : "删除焊工",
-				modal : true
+	$('#rfm').form('clear');
+	var row = $('#welderTable').datagrid('getSelected');
+	if (row) {
+		$('#rdlg').window( {
+			title : "删除焊工",
+			modal : true
 		});
 		$('#rdlg').window('open');
 		$('#rfm').form('load', row);
 		url = "welders/destroyWelder?fid="+row.id;
+	}else{
+		alert("请先选择一条数据。");
+		return;
 	}
 }
 
@@ -33,6 +36,7 @@ var url = "";
 		      			$.messager.alert("提示", "删除成功");
 						$('#rdlg').dialog('close');
 						$('#welderTable').datagrid('reload');
+						$("#welderTable").datagrid('clearSelections');
 //						var url = "welders/AllWelder";
 //						var img = new Image();
 //					    img.src = url;  // 设置相对路径给Image, 此时会发送出请求

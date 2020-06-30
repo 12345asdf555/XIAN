@@ -78,4 +78,6 @@ public interface WeldedJunctionMapper extends Mapper<WeldedJunction>{
 	int getCardCount(@Param("cardName")String cardName);
 	
 	int getTaskCount(@Param("taskName")String taskName);
+	
+	String getWpsIdByCardId(@Param("fid")String fid);
 }

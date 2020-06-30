@@ -78,6 +78,11 @@ public class DictionaryServiceImpl implements DictionaryService {
 	@Override
 	public List<Dictionarys> getModelOfManu(int num) {
 		// TODO Auto-generated method stub
+		return dictionaryMapper.getModelOfManu(String.valueOf(num));
+	}
+	@Override
+	public List<Dictionarys> getModelOfManu(String num) {
+		// TODO Auto-generated method stub
 		return dictionaryMapper.getModelOfManu(num);
 	}
 	@Override

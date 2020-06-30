@@ -5,7 +5,7 @@ $(function(){
 
 function GatherDatagrid(){
 	$("#gatherTable").datagrid( {
-		fitColumns : true,
+		fitColumns : false,
 		height : $("#body").height(),
 		width : $("#body").width(),
 		idField : 'id',
@@ -25,7 +25,7 @@ function GatherDatagrid(){
 		}, {
 			field : 'gatherNo',
 			title : '采集模块编号',
-			width : 100,
+			width : 200,
 			halign : "center",
 			align : "left"
 		}, {
@@ -62,16 +62,16 @@ function GatherDatagrid(){
 		}, {
 			field : 'macurl',
 			title : '采集模块MAC地址',
-			width : 150,
+			width : 200,
 			halign : "center",
 			align : "left"
 		}, {
 			field : 'leavetime',
 			title : '采集模块出厂时间',
-			width : 160,
+			width : 150,
 			halign : "center",
 			align : "left"
-		}, {
+		}/*, {
 			field : 'edit',
 			title : '编辑',
 			width : 150,
@@ -83,7 +83,7 @@ function GatherDatagrid(){
 				str += '<a id="remove" class="easyui-linkbutton" href="javascript:getGather('+row.itemid+','+row.id+','+false+')"/>';
 				return str;
 			}
-		}] ],
+		}*/] ],
 		pagination : true,
 		nowrap : false,
 		rowStyler: function(index,row){
@@ -92,15 +92,25 @@ function GatherDatagrid(){
             	var color=new Object();
                 return color;
             }
-        },
+        }/*,
 		onLoadSuccess:function(data){
 	        $("a[id='edit']").linkbutton({text:'修改',plain:true,iconCls:'icon-update'});
 	        $("a[id='remove']").linkbutton({text:'删除',plain:true,iconCls:'icon-delete'});
-		}
+		}*/
 	});
 }
 
-function getGather(id,gid,flags){
+function getGather(flags){
+	var id="",gid="";
+	var row = null;
+	row = $('#gatherTable').datagrid('getSelected'); 
+	if (row) {
+		id = row.itemid;
+		gid = row.id;
+	}else{
+		alert("请先选择一条数据。");
+		return;
+	}
 	$.ajax({  
         type : "post",  
         async : false,
@@ -209,6 +219,68 @@ function importclick(){
 	}
 }
 
+function searchData(){
+	var search = "";
+	var sgatherNo = $("#sgatherNo").textbox('getValue');
+	var sitemid = $("#sitemid").combobox("getValue");
+	var sstatus = $("#sstatus").combobox("getValue");
+	var sprotocol = $("#sprotocol").combobox("getValue");
+	var sipurl = $("#sipurl").textbox('getValue');
+	var smacurl = $("#smacurl").textbox('getValue');
+	var sleavetime = $("#sleavetime").datetimebox('getValue');
+	if(sgatherNo != ""){
+		if(search == ""){
+			search += " fgather_no LIKE "+"'%" + sgatherNo + "%'";
+		}else{
+			search += " AND fgather_no LIKE "+"'%" + sgatherNo + "%'";
+		}
+	}
+	if(sitemid != ""){
+		if(search == ""){
+			search += " g.fitemId LIKE "+"'%" + sitemid + "%'";
+		}else {
+			search += " AND g.fitemId LIKE "+"'%" + sitemid + "%'";
+		}
+	}
+	if(sstatus != ""){
+		if(search == ""){
+			search += " fstatus LIKE "+"'%" + sstatus + "%'";
+		}else{
+			search += " AND fstatus LIKE "+"'%" + sstatus + "%'";
+		}
+	}
+	if(sprotocol != ""){
+		if(search == ""){
+			search += " fprotocol LIKE "+"'%" + sprotocol + "%'";
+		}else{
+			search += " AND fprotocol LIKE "+"'%" + sprotocol + "%'";
+		}
+	}
+	if(sipurl != ""){
+		if(search == ""){
+			search += " fipurl LIKE "+"'%" + sipurl + "%'";
+		}else{
+			search += " AND fipurl LIKE "+"'%" + sipurl + "%'";
+		}
+	}
+	if(smacurl != ""){
+		if(search == ""){
+			search += " fmacurl LIKE "+"'%" + smacurl + "%'";
+		}else{
+			search += " AND fmacurl LIKE "+"'%" + smacurl + "%'";
+		}
+	}
+	if(sleavetime != ""){
+		if(search == ""){
+			search += " fleavetime=to_date(substr('" + sleavetime + "',1,19), 'yyyy-mm-dd hh24:mi:ss')";
+		}else{
+			search += " AND fleavetime=to_date(substr('" + sleavetime + "',1,19), 'yyyy-mm-dd hh24:mi:ss')";
+		}
+	}
+	$('#gatherTable').datagrid('load', {
+		"searchStr" : search
+	});
+}
 
 //监听窗口大小变化
 window.onresize = function() {

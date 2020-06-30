@@ -5,6 +5,8 @@ $(function(){
 	statusRadio();
 	gatherCombobox();
 	machineModel();
+	searchMachineModel();
+//	getTime();
 	$("#iId").combobox({
         onChange:function(){  
 			itemid = $("#iId").combobox("getValue");
@@ -111,6 +113,7 @@ function saveWeldingMachine(){
 					$.messager.alert("提示", messager);
 					$('#dlg').dialog('close');
 					$('#weldingmachineTable').datagrid('reload');
+					$("#weldingmachineTable").datagrid('clearSelections');
 //					var url = "weldingMachine/goWeldingMachine";
 //					var img = new Image();
 //				    img.src = url;  // 设置相对路径给Image, 此时会发送出请求
@@ -154,7 +157,30 @@ function gatherCombobox(){
           }  
       }
 	}); 
+	$.ajax({  
+	      type : "post",  
+	      async : false,
+	      url : "weldingMachine/getGatherAll?itemid="+"",  
+	      data : {},  
+	      dataType : "json", //返回数据形式为json  
+	      success : function(result) {
+	          var optionStr = "";
+	          if (result) {
+	        	  if(result.ary.length<=0){
+	        		  optionStr += "<option></option>";  
+	        	  }else{
+	        		  optionStr += "<option value=''>请选择</option>";
+		              for (var i = 0; i < result.ary.length; i++) {  
+		                  optionStr += "<option value=\"" + result.ary[i].id + "\" >"  
+		                          + result.ary[i].name + "</option>";  
+		              }
+	        	  }
+	              $("#sgid").html(optionStr);
+	          }  
+	      }
+		}); 
 	$("#gid").combobox();
+	$("#sgid").combobox();
 }
 
 //设备类型
@@ -167,12 +193,16 @@ function typeCombobox(){
         dataType : "json", //返回数据形式为json  
         success : function(result) {
             if (result) {
-                var optionStr = '';  
+                var optionStr = '',soptionStr = '';
+                soptionStr += "<option value=''>请选择</option>";  
                 for (var i = 0; i < result.ary.length; i++) { 
                     optionStr += "<option value=\"" + result.ary[i].id + "\" >"  
                             + result.ary[i].name + "</option>";  
+                    soptionStr += "<option value=\"" + result.ary[i].id + "\" >"  
+                    + result.ary[i].name + "</option>";  
                 } 
                 $("#tId").append(optionStr);
+                $("#stId").append(soptionStr);
             }  
         },  
         error : function(errorMsg) {  
@@ -180,6 +210,7 @@ function typeCombobox(){
         }  
    }); 
 	$("#tId").combobox();
+	$("#stId").combobox();
 }
 
 //所属项目
@@ -192,12 +223,16 @@ function InsframeworkCombobox(){
       dataType : "json", //返回数据形式为json  
       success : function(result) {  
           if (result) {
-              var optionStr = '';
+              var optionStr = '',soptionStr = '';
+              soptionStr += "<option value=''>请选择</option>";
               for (var i = 0; i < result.ary.length; i++) {  
                   optionStr += "<option value=\"" + result.ary[i].id + "\" >"  
                           + result.ary[i].name + "</option>";
+                  soptionStr += "<option value=\"" + result.ary[i].id + "\" >"  
+                  + result.ary[i].name + "</option>";
               }
               $("#iId").html(optionStr);
+              $("#siId").html(soptionStr);
           }  
       },  
       error : function(errorMsg) {  
@@ -205,6 +240,7 @@ function InsframeworkCombobox(){
       }  
 	}); 
 	$("#iId").combobox();
+	$("#siId").combobox();
 }
 
 //厂商
@@ -217,12 +253,16 @@ function manuCombobox(){
 	  dataType : "json", //返回数据形式为json  
 	  success : function(result) {  
 	      if (result) {
-	          var optionStr = '';
+	          var optionStr = '',soptionStr = '';
+              soptionStr += "<option value=''>请选择</option>";
 	          for (var i = 0; i < result.ary.length; i++) {  
 	              optionStr += "<option value=\"" + result.ary[i].id + "\" >"  
 	                      + result.ary[i].name + "</option>";
+	              soptionStr += "<option value=\"" + result.ary[i].id + "\" >"  
+	              + result.ary[i].name + "</option>";
 	          }
 	          $("#manuno").html(optionStr);
+	          $("#smanuno").html(soptionStr);
 	      }  
 	  },  
 	  error : function(errorMsg) {  
@@ -230,6 +270,7 @@ function manuCombobox(){
 	  }  
 	}); 
 	$("#manuno").combobox();
+	$("#smanuno").combobox();
 }
 
 //焊机状态
@@ -242,13 +283,17 @@ function statusRadio(){
 	    dataType : "json", //返回数据形式为json  
 	    success : function(result) {
 	    	if (result) {
-	    		var str = "";
+	    		var str = "",sstr = "";
 	    		for (var i = 0; i < result.ary.length; i++) {
 	    			str += "<input type='radio' class='radioStyle' name='statusId' id='sId' value=\"" + result.ary[i].id + "\" />"  
                     + result.ary[i].name;
+	    			sstr += "<input type='radio' class='radioStyle' name='sstatusId' id='ssId' value=\"" + result.ary[i].id + "\" />"  
+	    			+ result.ary[i].name;
 	    		}
 	            $("#radios").html(str);
 	            $("input[name='statusId']").eq(0).attr("checked",true);
+	            $("#sradios").html(sstr);
+//	            $("input[name='sstatusId']").eq(0).attr("checked",true);
 	        }  
 	    },  
 	    error : function(errorMsg) {  
@@ -289,3 +334,80 @@ function machineModel(){
 		}
 	})
 }
+function searchMachineModel(){
+	$('#smodel').combobox('clear');
+	$.ajax({  
+	    type : "post",  
+	    async : false,
+	    url : "weldingMachine/getModelAll?str=",  
+	    data : {},  
+	    dataType : "json", //返回数据形式为json  
+	    success : function(result) {  
+	        if (result) {
+	        	if(result.ary.length!=0){
+	        		var boptionStr = '';
+	        		boptionStr += "<option value=''>请选择</option>";
+	                for (var i = 0; i < result.ary.length; i++) {  
+	                    boptionStr += "<option value=\"" + result.ary[i].id + "\" >"  
+	                            + result.ary[i].name + "</option>";
+	                }
+	                $("#smodel").html(boptionStr);
+		        	$("#smodel").combobox();
+//		        	$("#smodel").combobox('select',result.ary[0].id);
+	        	}
+	        }  
+	    },  
+	    error : function(errorMsg) {  
+	        alert("数据请求失败，请联系系统管理员!");  
+	    }  
+		}); 
+}
+
+////时间格式化
+//function getTime(){
+//	//获取当前时间
+//	$('#sjoinTime').datebox({
+//        onHidePanel : function() {
+//        	//获取当前时间
+//    		var now = new Date();  
+//    		now.setDate(now.getDate());//获取当前的日期 
+//    	    var year = now.getFullYear();//年  
+//    	    var month = now.getMonth() + 1;//月  
+//    	    var day = now.getDate();//日
+//    	    
+//    	    var oldtime = year + "-";
+//    	      
+//    	    if(month < 10){
+//    	        oldtime += "0";
+//    	    }
+//    	    oldtime += month + "-";
+//    	      
+//    	    if(day < 10){
+//    	        oldtime += "0";
+//    	    }          
+//    	    oldtime += day + " 00:00:00";
+//    		$("#sjoinTime").datetimebox('setValue',oldtime);
+//        },
+//        onSelect: function(date){
+//        	//获取当前时间
+//    		var now = new Date();  
+//    		now.setDate(now.getDate());//获取当前的日期 
+//    	    var year = now.getFullYear();//年  
+//    	    var month = now.getMonth() + 1;//月  
+//    	    var day = now.getDate();//日
+//    	    
+//    	    var oldtime = year + "-";
+//    	      
+//    	    if(month < 10){
+//    	        oldtime += "0";
+//    	    }
+//    	    oldtime += month + "-";
+//    	      
+//    	    if(day < 10){
+//    	        oldtime += "0";
+//    	    }          
+//    	    oldtime += day + " 00:00:00";
+//    		$("#sjoinTime").datetimebox('setValue',oldtime);
+//        } 
+//    });
+//}

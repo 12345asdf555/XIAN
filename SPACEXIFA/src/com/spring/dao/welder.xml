@@ -21,8 +21,11 @@
 		SELECT count(*) FROM tb_welder WHERE fwelder_no = #{wno}
 	</select>
 	
-	<insert id="addWelder" parameterType="com.spring.model.Dictionarys" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO tb_welder(fwelder_no,fname) VALUES (#{welderno},#{name})
+	<insert id="addWelder" parameterType="com.spring.model.Dictionarys">
+		<selectKey resultType="java.math.BigInteger" order="BEFORE" keyProperty="id">
+			select TB_DICTIONARY_ID.nextval as id from dual
+		</selectKey>
+		INSERT INTO tb_welder(fid,fwelder_no,fname) VALUES (#{id},#{welderno},#{name})
 	</insert>
 	
 	<update id="editWelder"  parameterType="com.spring.model.Dictionarys">

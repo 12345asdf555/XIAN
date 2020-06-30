@@ -1557,6 +1557,7 @@ public class WeldingTaskController {
 		try{
 			String fid = request.getParameter("fid");
 			wjm.deleteCard(fid);
+			wjm.deleteProduct(fid);
 			obj.put("success", true);
 		}catch(Exception e){
 			e.printStackTrace();
@@ -1642,8 +1643,9 @@ public class WeldingTaskController {
 			String wpsId = request.getParameter("wpsId");
 			wj.setId(new BigInteger(fid));
 			wj.setFwpslib_id(new BigInteger(wpsId));
+			String oldWpsid = wjm.getWpsIdByCardId(fid);
 			wjm.updateProductNum(wj);
-			wjm.addProductWpsHistory(fid,wpsId,userId,time);
+			wjm.addProductWpsHistory(fid,oldWpsid,userId,time);
 			obj.put("success", true);
 		}catch(Exception e){
 			e.printStackTrace();
@@ -1675,6 +1677,9 @@ public class WeldingTaskController {
 				json.put("fwps_lib_name", wjm.getFwps_lib_name());
 				json.put("fwps_lib_version", wjm.getFwps_lib_version());
 				json.put("fproduct_number", wjm.getFprefix_number()+"-"+wjm.getFproduct_number());
+				json.put("fproduct_drawing_no", wjm.getFproduct_drawing_no());
+				json.put("fproduct_name", wjm.getFproduct_name());
+				json.put("fproduct_version", wjm.getFproduct_version());
 				ary.add(json);
 			}
 		}catch(Exception e){

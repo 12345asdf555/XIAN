@@ -550,6 +550,24 @@ function historyDetails(){
 			halign : "center",
 			align : "left"
 		}, {
+			field : 'fproduct_drawing_no',
+			title : '产品图号',
+			width : 100,
+			halign : "center",
+			align : "left"
+		}, {
+			field : 'fproduct_name',
+			title : '产品名称',
+			width : 100,
+			halign : "center",
+			align : "left"
+		}, {
+			field : 'fproduct_version',
+			title : '产品版本号',
+			width : 100,
+			halign : "center",
+			align : "left"
+		}, {
 			field : 'fwps_lib_name',
 			title : '工艺规程编号',
 			width : 100,

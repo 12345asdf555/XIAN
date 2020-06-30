@@ -246,7 +246,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<div id="productDetailsDlg" class="easyui-dialog" style="width: 800px; height: 400px; padding:10px 20px" closed="true">
 			<table id="productDetailsTable" style="table-layout: fixed; width:100%;"></table>
 		</div>
-		<div id="historyDetailsDlg" class="easyui-dialog" style="width: 600px; height: 400px; padding:10px 20px" closed="true">
+		<div id="historyDetailsDlg" class="easyui-dialog" style="width: 1000px; height: 500px; padding:10px 20px" closed="true">
 			<table id="historyDetailsTable" style="table-layout: fixed; width:100%;"></table>
 		</div>
 		<div id="load" style="width:100%;height:100%;"></div>

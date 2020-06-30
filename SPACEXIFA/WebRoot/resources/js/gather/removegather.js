@@ -33,6 +33,7 @@ function remove(){
 							$.messager.alert("提示", "删除成功！");
 							$('#rdlg').dialog('close');
 							$('#gatherTable').datagrid('reload');
+							$("#gatherTable").datagrid('clearSelections');
 //							var url = "gather/goGather";
 //							var img = new Image();
 //						    img.src = url;  // 设置相对路径给Image, 此时会发送出请求

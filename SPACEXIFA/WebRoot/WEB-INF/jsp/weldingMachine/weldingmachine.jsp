@@ -34,16 +34,109 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </head>
   
   <body>
-<%--   	<jsp:include  page="../insframeworktree.jsp"/> --%>
   	<div class="functiondiv">
 		<div>
-			<a href="javascript:addWeldingMachine();" class="easyui-linkbutton" iconCls="icon-newadd">新增</a>&nbsp;&nbsp;&nbsp;&nbsp;
-			<a href="javascript:importclick();" class="easyui-linkbutton" iconCls="icon-import">导入</a>&nbsp;&nbsp;&nbsp;&nbsp;
-			<a href="javascript:exportWeldingMachine();" class="easyui-linkbutton" iconCls="icon-export">导出</a>&nbsp;&nbsp;&nbsp;&nbsp;	
-			<a href="javascript:insertSearchWeldingMachine();" class="easyui-linkbutton"iconCls="icon-select" >查找</a>
+			<div style="float: left;">
+				<div>
+					<label>固定资产编号：</label>
+				</div>
+				<div>
+					<input class="easyui-textbox" name="sequipmentNo" id="sequipmentNo" />
+				</div>
+			</div>
+			<div  style="float: left;">
+				<div>
+					<label>设备类型：</label>
+				</div>
+				<div>
+					<select class="easyui-combobox" name="stypeId" id="stId" data-options="editable:false">
+					</select>
+				</div>
+			</div>
+			<div  style="float: left;">
+				<div>
+					<label>出厂时间：</label>
+				</div>
+				<div>
+					<input class="easyui-datetimebox" style="width:150px;" name="sjoinTime" id="sjoinTime">
+				</div>
+			</div>
+			<div  style="float: left;">
+				<div>
+					<label>所属项目：</label>
+				</div>
+				<div>
+					<select class="easyui-combobox" name="siId" id="siId" data-options="editable:false">
+					</select>
+				</div>
+			</div>
+			<div style="float: left;">
+				<div>
+					<label>生成厂商：</label>
+				</div>
+				<div>
+					<select class="easyui-combobox" name="smanuno" id="smanuno" data-options="editable:false">
+					</select>
+				</div>
+			</div>
+			<div style="float: left;">
+				<div>
+					<label>采集序号：</label>
+				</div>
+				<div>
+					<select class="easyui-combobox" name="sgid" id="sgid" data-options="editable:false">
+					</select>
+				</div>
+			</div>
+			<div style="float: left;">
+				<div>
+					<label>设备位置：</label>
+				</div>
+				<div>
+					<input class="easyui-textbox" name="sposition" id="sposition" />
+				</div>
+			</div>
+			<div style="float: left;">
+				<div>
+					<label>ip地址：</label>
+				</div>
+				<div>
+					<input class="easyui-textbox" name="sip" id="sip" />
+				</div>
+			</div>
+			<div style="float: left;">
+				<div>
+					<label>设备型号：</label>
+				</div>
+				<div>
+					<select class="easyui-combobox" name="smodel" id="smodel" data-options="editable:false">
+					</select>
+				</div>
+			</div>
+			<div style="float: left;">
+				<div>
+					<label>是否联网：</label>
+				</div>
+				<div>
+					<input type="radio" class="radioStyle" id="sisnetworkingId" name="sisnetworkingId" value="0"/>是&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<input type="radio" class="radioStyle" id="sisnetworkingId" name="sisnetworkingId" value="1"/>否&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				</div>
+			</div>
+			<div style="float: left;">
+				<div>
+					<label>状态：</label>
+				</div>
+				<div>
+					<span id="sradios"></span>
+				</div>
+			</div>
+			<div  style="float: left;">
+				<a href="javascript:searchData();" class="easyui-linkbutton" iconCls="icon-select">查找</a>&nbsp;&nbsp;&nbsp;&nbsp;
+			</div>
 		</div>
 	</div>
-  	<div id="body" >
+<%--   	<jsp:include  page="../insframeworktree.jsp"/> --%>
+  	<div id="body" style="height: 67%">
 		<div id="importdiv" class="easyui-dialog" style="width:300px; height:200px;" closed="true">
 			<form id="importfm" method="post" class="easyui-form" data-options="novalidate:true" enctype="multipart/form-data"> 
 				<div>
@@ -95,9 +188,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<select class="easyui-combobox" name="manuno" id="manuno" data-options="required:true,editable:false""></select>
 				</div>
 				<div class="fitem">
-					<lable><span class="required">*</span>采集序号</lable>
+					<lable><span class="required"></span>采集序号</lable>
 					<input type="hidden" id="validgid">
-					<select class="easyui-combobox" name="gid" id="gid" data-options="required:true,validType:['checkNumber','wmGatheridValidate'],editable:false""></select>
+					<select class="easyui-combobox" name="gid" id="gid" data-options="validType:['checkNumber','wmGatheridValidate'],editable:false""></select>
 				</div>
 				<div class="fitem">
 					<lable>设备位置</lable>
@@ -181,6 +274,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<div id="remove-buttons">
 			<a href="javascript:remove();" class="easyui-linkbutton" iconCls="icon-ok">删除</a>
 			<a href="javascript:close2();" class="easyui-linkbutton" iconCls="icon-cancel" >取消</a>
+		</div>
+		<div class="functiondiv">
+			<div>
+				<a href="javascript:addWeldingMachine();" class="easyui-linkbutton" iconCls="icon-newadd">新增</a>&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="javascript:editMachine(true)" class="easyui-linkbutton" iconCls="icon-update">修改</a>&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="javascript:editMachine(false)" class="easyui-linkbutton" iconCls="icon-delete">删除</a>&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="javascript:importclick();" class="easyui-linkbutton" iconCls="icon-import">导入</a>&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="javascript:exportWeldingMachine();" class="easyui-linkbutton" iconCls="icon-export">导出</a>&nbsp;&nbsp;&nbsp;&nbsp;	
+				<!-- <a href="javascript:insertSearchWeldingMachine();" class="easyui-linkbutton"iconCls="icon-select" >查找</a> -->
+			</div>
 		</div>
 	</div>
   </body>

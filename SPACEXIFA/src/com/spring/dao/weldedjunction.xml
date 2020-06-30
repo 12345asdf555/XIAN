@@ -131,10 +131,10 @@
 		where l.fwelder_id=#{welder}
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and fweldtime &gt;= #{dto.dtoTime1}
+				and fweldtime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and fweldtime &lt;= #{dto.dtoTime2}
+				and fweldtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 		</if>group by fjunction_id
 	</select>
@@ -146,10 +146,10 @@
 		</if>
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and fweldtime &gt;= #{dto.dtoTime1}
+				and fweldtime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and fweldtime &lt;= #{dto.dtoTime2}
+				and fweldtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 		</if>
 		AND `tb_live_data`.`fstatus`='3' ORDER BY `FWeldTime` ASC LIMIT 0,1
@@ -162,10 +162,10 @@
 		</if>
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and fweldtime &gt;= #{dto.dtoTime1}
+				and fweldtime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and fweldtime &lt;= #{dto.dtoTime2}
+				and fweldtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 		</if>
 		AND `tb_live_data`.`fstatus`='3' ORDER BY `FWeldTime` DESC LIMIT 0,1
@@ -184,10 +184,10 @@
 				and l.fjunction_no = #{dto.search}
 			</if>
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and (fweldtime between #{dto.dtoTime1}
+				and (fweldtime between to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and #{dto.dtoTime2})
+				and to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss'))
 			</if>
 		</if>and (l.fstatus='3' or l.fstatus='5' or l.fstatus='7' or l.fstatus='99') group by m.fequipment_no,fwelded_junction_no
 	</select>
@@ -202,12 +202,12 @@
 	
 	<insert id="addJunction" parameterType="com.spring.model.WeldedJunction">
 		insert into tb_welded_junction(fwelded_junction_no,fserial_no,fpipeline_no,froom_no,funit,farea,fsystems,fchildren,fexternal_diameter,fwall_thickness,fdyne,fspecification,fmax_electricity,fmin_electricity,felectricity_unit,fmax_valtage,fmin_valtage,fvaltage_unit,fitemId,Fmaterial,fnextExternal_diameter,fnextwall_thickness,Fnext_material,fstart_time,fend_time, fcreater, fcreatedate,fupdater,fupdatedate,fupdatecount) 
-		values(#{weldedJunctionno},#{serialNo},#{pipelineNo},#{roomNo},#{unit},#{area},#{systems},#{ },#{externalDiameter},#{wallThickness},#{dyne},#{specification},#{maxElectricity},#{minElectricity},#{electricity_unit},#{maxValtage},#{minValtage},#{valtage_unit},#{insfid},#{material},#{nextexternaldiameter},#{nextwall_thickness},#{next_material},#{startTime},#{endTime},#{creater},now(),#{updater},now(),0);
+		values(#{weldedJunctionno},#{serialNo},#{pipelineNo},#{roomNo},#{unit},#{area},#{systems},#{ },#{externalDiameter},#{wallThickness},#{dyne},#{specification},#{maxElectricity},#{minElectricity},#{electricity_unit},#{maxValtage},#{minValtage},#{valtage_unit},#{insfid},#{material},#{nextexternaldiameter},#{nextwall_thickness},#{next_material},#{startTime},#{endTime},#{creater},SYSDATE,#{updater},SYSDATE,0)
 	</insert>
 	
 	<update id="updateJunction" parameterType="com.spring.model.WeldedJunction">
 		update tb_welded_junction set fwelded_junction_no=#{weldedJunctionno},fserial_no=#{serialNo},fpipeline_no=#{pipelineNo},froom_no=#{roomNo},funit=#{unit},farea=#{area},fsystems=#{systems},fchildren=#{children},fexternal_diameter=#{externalDiameter},fwall_thickness=#{wallThickness},fdyne=#{dyne},
-		fspecification=#{specification},fmax_electricity=#{maxElectricity},fmin_electricity=#{minElectricity},felectricity_unit=#{electricity_unit},fmax_valtage=#{maxValtage},fmin_valtage=#{minValtage},fvaltage_unit=#{valtage_unit},fitemId=#{insfid},Fmaterial=#{material},fnextExternal_diameter=#{nextexternaldiameter},fnextwall_thickness=#{nextwall_thickness},Fnext_material=#{next_material},fstart_time=#{startTime},fend_time=#{endTime},fupdater=#{updater},fupdatedate=now(),fupdatecount=fupdatecount+1 where fid=#{id};
+		fspecification=#{specification},fmax_electricity=#{maxElectricity},fmin_electricity=#{minElectricity},felectricity_unit=#{electricity_unit},fmax_valtage=#{maxValtage},fmin_valtage=#{minValtage},fvaltage_unit=#{valtage_unit},fitemId=#{insfid},Fmaterial=#{material},fnextExternal_diameter=#{nextexternaldiameter},fnextwall_thickness=#{nextwall_thickness},Fnext_material=#{next_material},fstart_time=#{startTime},fend_time=#{endTime},fupdater=#{updater},fupdatedate=SYSDATE,fupdatecount=fupdatecount+1 where fid=#{id}
 	</update>
 	
 	<delete id="deleteJunction" parameterType="java.math.BigInteger">
@@ -227,21 +227,21 @@
 	
 	<insert id="addTask" parameterType="com.spring.model.WeldedJunction">
 		insert into tb_welded_junction(fwelded_junction_no,fstart_time,fengineering_symbol,fweld_method,fweld_position,fbase_material_type,fweld_material_model,foperator,ftechnological_design,fwarm_up_requirement,finter_channel_temperature,fcarbon_requirement,fpost_heat_requirement,fannealed_weld,fassembly_clearance,fcarbon_depth,fcarbon_width,fpost_heat_temperature,fafter_hot_time,fwpslib_id,fitemId) 
-		values(#{weldedJunctionno},#{startTime},#{fengineering_symbol},#{fweld_method},#{fweld_position},#{fbase_material_type},#{fweld_material_model},#{fwelder_id},#{ftechnological_design},#{fwarm_up_requirement},#{finter_channel_temperature},#{fcarbon_requirement},#{fpost_heat_requirement},#{fannealed_weld},#{fassembly_clearance},#{fcarbon_depth},#{fcarbon_width},#{fpost_heat_temperature},#{fafter_hot_time},#{fwpslib_id},#{iid});
+		values(#{weldedJunctionno},#{startTime},#{fengineering_symbol},#{fweld_method},#{fweld_position},#{fbase_material_type},#{fweld_material_model},#{fwelder_id},#{ftechnological_design},#{fwarm_up_requirement},#{finter_channel_temperature},#{fcarbon_requirement},#{fpost_heat_requirement},#{fannealed_weld},#{fassembly_clearance},#{fcarbon_depth},#{fcarbon_width},#{fpost_heat_temperature},#{fafter_hot_time},#{fwpslib_id},#{iid})
 	</insert>
 	
 	<update id="updateTask" parameterType="com.spring.model.WeldedJunction">
 		update tb_welded_junction set fwelded_junction_no=#{weldedJunctionno},fstart_time=#{startTime},fengineering_symbol=#{fengineering_symbol},fweld_method=#{fweld_method},fweld_position=#{fweld_position},fbase_material_type=#{fbase_material_type},
 		fweld_material_model=#{fweld_material_model},foperator=#{fwelder_id},ftechnological_design=#{ftechnological_design},fwarm_up_requirement=#{fwarm_up_requirement},finter_channel_temperature=#{finter_channel_temperature},fcarbon_requirement=#{fcarbon_requirement},
 		fpost_heat_requirement=#{fpost_heat_requirement},fannealed_weld=#{fannealed_weld},fassembly_clearance=#{fassembly_clearance},fcarbon_depth=#{fcarbon_depth},fcarbon_width=#{fcarbon_width},fpost_heat_temperature=#{fpost_heat_temperature},fafter_hot_time=#{fafter_hot_time},fwpslib_id=#{fwpslib_id},fitemId=#{iid}
-		 where fwelded_junction_no=#{weldedJunctionno};
+		 where fwelded_junction_no=#{weldedJunctionno}
 	</update>
 	
 	<update id="updateTaskByFid" parameterType="com.spring.model.WeldedJunction">
 		update tb_welded_junction set fwelded_junction_no=#{weldedJunctionno},fstart_time=#{startTime},fengineering_symbol=#{fengineering_symbol},fweld_method=#{fweld_method},fweld_position=#{fweld_position},fbase_material_type=#{fbase_material_type},
 		fweld_material_model=#{fweld_material_model},foperator=#{fwelder_id},ftechnological_design=#{ftechnological_design},fwarm_up_requirement=#{fwarm_up_requirement},finter_channel_temperature=#{finter_channel_temperature},fcarbon_requirement=#{fcarbon_requirement},
 		fpost_heat_requirement=#{fpost_heat_requirement},fannealed_weld=#{fannealed_weld},fassembly_clearance=#{fassembly_clearance},fcarbon_depth=#{fcarbon_depth},fcarbon_width=#{fcarbon_width},fpost_heat_temperature=#{fpost_heat_temperature},fafter_hot_time=#{fafter_hot_time},fwpslib_id=#{fwpslib_id},fitemId=#{iid}
-		 where fid=#{id};
+		 where fid=#{id}
 	</update>
 	
 	<select id="getSwDetail" resultMap="wjMap" parameterType="java.lang.String">
@@ -253,10 +253,10 @@
 	    </if>
 	    <if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and fstarttime &gt;=#{dto.dtoTime1} 
+				and fstarttime &gt;=to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss') 
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and fendtime &lt;=#{dto.dtoTime2}
+				and fendtime &lt;=to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 		</if>
 	    UNION ALL 
@@ -272,8 +272,8 @@
 	</select>
 	
 	<select id="getCardList" resultMap="wjMap">
-		SELECT j.fid,fwelded_junction_no,ftask_no,fitemId iid,i.fname iname,j.flag,l.fwps_lib_name,l.fwps_lib_version,j.fstatus,IF(j.fstatus=2,j.fback,NULL) fback,
-		if(COUNT(DISTINCT p.fproduct_number)>COUNT(DISTINCT t.ftaskid),1,0) fdyne
+		SELECT j.fid,fwelded_junction_no,ftask_no,fitemId iid,i.fname iname,j.flag,l.fwps_lib_name,l.fwps_lib_version,j.fstatus,
+		DECODE(j.fstatus, 2, j.fback ,NULL) fback,DECODE(SIGN(COUNT(DISTINCT(p.fproduct_number))-COUNT(DISTINCT(t.ftaskid))), 1, 1 ,0) fdyne 
 		FROM tb_welded_junction j
 		LEFT JOIN tb_insframework i ON j.fitemId=i.fid 
 		LEFT JOIN tb_insframework ins on ins.fid = i.fparent
@@ -284,36 +284,38 @@
 		<if test="search!=null and search!=''">
 			WHERE ${search}
 		</if>
-		GROUP BY j.fwelded_junction_no ORDER BY j.fid
+		GROUP BY j.fid,j.fwelded_junction_no,ftask_no,fitemId,i.fname,j.flag,l.fwps_lib_name,l.fwps_lib_version,j.fstatus,DECODE(j.fstatus, 2, j.fback ,NULL) ORDER BY j.fid
 	</select>
 	
-	<insert id="addCard" parameterType="com.spring.model.WeldedJunction" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO tb_welded_junction (fwelded_junction_no, ftask_no,fitemId,flag,fstatus) VALUES 
-		(#{weldedJunctionno}, #{ftask_no}, #{iid}, #{flag}, 0)
+	<insert id="addCard" parameterType="com.spring.model.WeldedJunction">
+		<selectKey resultType="java.math.BigInteger" order="BEFORE" keyProperty="id">
+			select TB_WELDED_JUNCTION_ID.nextval as id from dual
+		</selectKey>
+		INSERT INTO tb_welded_junction (fid, fwelded_junction_no, ftask_no,fitemId,flag,fstatus) VALUES 
+		(#{id},#{weldedJunctionno}, #{ftask_no}, #{iid}, #{flag}, 0)
 	</insert>
 	
 	<update id="updateCard" parameterType="com.spring.model.WeldedJunction">
 		update tb_welded_junction set 
 		fwelded_junction_no=#{weldedJunctionno},ftask_no=#{ftask_no},fitemId=#{iid} 
-		where fid=#{id};
+		where fid=#{id}
 	</update>
 	
 	<update id="turnDown" parameterType="com.spring.model.WeldedJunction">
-		update tb_welded_junction set fstatus=2,fback=#{fback} where fid=#{insfid};
+		update tb_welded_junction set fstatus=2,fback=#{fback} where fid=#{insfid}
 	</update>
 	
 	<update id="passReview">
-		update tb_welded_junction set fstatus=#{value} where fid=#{fid};
+		update tb_welded_junction set fstatus=#{value} where fid=#{fid}
 	</update>
 	
 	<delete id="deleteCard">
-		DELETE j,p FROM tb_welded_junction j 
-		LEFT JOIN tb_product_number p ON j.fid=p.fcard_id
-		WHERE j.fid=#{id};
+		DELETE FROM tb_welded_junction j 
+		WHERE j.fid=#{id}
 	</delete>
 	
 	<delete id="deleteProduct">
-		DELETE FROM  tb_product_number WHERE fcard_id=#{id};
+		DELETE FROM  tb_product_number WHERE fcard_id=#{id}
 	</delete>
 	
 	<insert id="addProductNum" parameterType="com.spring.model.WeldedJunction">
@@ -341,7 +343,7 @@
 	
 	<insert id="addProductWpsHistory">
 		INSERT INTO tb_product_wps(fcard_id,fproduct_id,fwps_id,fuser_id,foperate_time)
-		SELECT #{fid},fid,#{wpsId},#{userId},#{time} FROM tb_product_number 
+		SELECT #{fid},fid,#{wpsId},#{userId},to_date(#{time}, 'yyyy-mm-dd hh24:mi:ss') FROM tb_product_number 
 		WHERE fcard_id=#{fid} AND fid NOT IN (SELECT DISTINCT ftaskid FROM tb_taskresult WHERE fcard_id=#{fid})
 	</insert>
 	
@@ -352,13 +354,14 @@
 	</update>
 	
 	<select id="getProductWpsHistory" resultMap="wjMap">
-		SELECT wj.fwelded_junction_no,wl.fwps_lib_name,wl.fwps_lib_version,pn.* FROM tb_product_wps pw
+		SELECT wj.fwelded_junction_no,wl.fwps_lib_name,wl.FPRODUCT_DRAWING_NO,wl.FPRODUCT_NAME,wl.FPRODUCT_VERSION,wl.fwps_lib_version,pn.* FROM tb_product_wps pw
 		LEFT JOIN tb_welded_junction wj ON pw.fcard_id=wj.fid
 		LEFT JOIN tb_product_number pn ON pw.fproduct_id=pn.fid
 		LEFT JOIN tb_wps_library wl ON pw.fwps_id=wl.fid
 		<if test="search!=null and search!=''">
 			WHERE ${search}
 		</if>
+		order by pw.fid DESC
 	</select>
 	
 	<select id="getCardCount" parameterType="String" resultType="java.lang.Integer">
@@ -367,5 +370,12 @@
 	
 	<select id="getTaskCount" parameterType="String" resultType="java.lang.Integer">
 		select count(*) from tb_welded_junction where ftask_no=#{taskName}
+	</select>
+	
+	<select id="getWpsIdByCardId" parameterType="String" resultType="String">
+		SELECT DISTINCT(FWPS_LIB_ID)
+		FROM tb_product_number p 
+		LEFT JOIN tb_taskresult t ON p.fid=t.ftaskid 
+		WHERE (t.fid IN (SELECT MAX(fid) FROM tb_taskresult GROUP BY ftaskid) OR t.foperatetype IS null) AND p.FCARD_ID=#{fid} AND t.foperatetype IS NULL
 	</select>
 </mapper>

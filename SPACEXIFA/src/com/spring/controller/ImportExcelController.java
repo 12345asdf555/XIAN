@@ -901,6 +901,14 @@ public class ImportExcelController {
 						dit.setGatherId(g);//采集序号
 						break;
 					}
+					else if(k == 8){
+						dit.setPosition(cellValue);//位置
+						break;
+					}
+					else if(k == 9){
+						dit.setIp(cellValue);//ip地址
+						break;
+					}
 					break;
 				case HSSFCell.CELL_TYPE_STRING://字符串
 					cellValue = cell.getStringCellValue();
@@ -1033,7 +1041,11 @@ public class ImportExcelController {
 		            	 BigDecimal big=new BigDecimal(cell.getNumericCellValue());  
 		            	 cellValue = big.toString();
                    }
-					if(k == 1){
+					if(k == 0){
+						p.setName(cellValue);//姓名
+						break;
+					}
+					else if(k == 1){
 						p.setWelderno(cellValue);//焊工编号
 						break;
 					}
@@ -1041,8 +1053,24 @@ public class ImportExcelController {
 						p.setCellphone(cellValue);//手机
 						break;
  					}
+					else if(k == 3){
+						p.setLevename(cellValue);//级别
+						break;
+ 					}
 					else if(k == 4){
 						p.setCardnum(cellValue);//卡号
+						break;
+ 					}
+					else if(k == 5){
+						p.setQualiname(cellValue);//资质
+						break;
+ 					}
+					else if(k == 6){
+						p.setInsname(cellValue);//部门
+						break;
+ 					}
+					else if(k == 7){
+						p.setBack(cellValue);//备注
 						break;
  					}
 					break;
@@ -2023,6 +2051,10 @@ public class ImportExcelController {
  						dit.setMacurl(cellValue);//mac地址
 						break;
  					}
+					else if(k == 6){
+						dit.setLeavetime(cellValue);//离厂时间
+						break;
+					}
 					break;
 				case HSSFCell.CELL_TYPE_BOOLEAN: // Boolean
 					cellValue = String.valueOf(cell.getBooleanCellValue());

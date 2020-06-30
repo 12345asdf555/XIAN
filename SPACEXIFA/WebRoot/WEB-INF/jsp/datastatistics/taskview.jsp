@@ -5,7 +5,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
+<html style="height: 100%">
   <head>
     <base href="<%=basePath%>">
     
@@ -36,7 +36,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	</style>
   </head>
   
-  <body>
+  <body style="height: 100%">
     <div id="body">
 		<div id="chartLoading" style="width:100%;height:100%;">
 			<div id="chartShow" style="width:160px;" align="center"><img src="resources/images/load1.gif"/>数据加载中，请稍候...</div>
@@ -110,8 +110,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<div  style="float: left;">
 					<div>
 						<label>时间：</label>
-						<input class="easyui-datetimebox" style="width:120px;" name="dtoTime1" id="dtoTime1">--
-						<input class="easyui-datetimebox" style="width:120px;" name="dtoTime2" id="dtoTime2">&emsp;
+						<input class="easyui-datetimebox" style="width:150px;" name="dtoTime1" id="dtoTime1">--
+						<input class="easyui-datetimebox" style="width:150px;" name="dtoTime2" id="dtoTime2">&emsp;
 					</div>
 				</div>
 				<div  style="float: left;">
@@ -122,7 +122,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</div>
 			</div>
 		</div>
-		<div id="wpsTableDiv" style="height:70%;">
+		<div id="wpsTableDiv" style="height:95%;">
 	   		<table id="taskviewtable" style="table-layout: fixed; width:100%;"></table>
   		</div>
     </div>

@@ -3,7 +3,7 @@
  */
 $(function(){
 	$("#dg").datagrid( {
-		fitColumns : true,
+		fitColumns : false,
 		height : ($("#body").height()),
 		width : $("#body").width(),
 		idField : 'id',
@@ -24,13 +24,13 @@ $(function(){
 		}, {
 			field : 'roleName',
 			title : '角色名',
-			width : 100,
+			width : 250,
 			halign : "center",
 			align : "left"
 		}, {
 			field : 'roleDesc',
 			title : '描述',
-			width : 100,
+			width : 250,
 			halign : "center",
 			align : "left"
 		}, {
@@ -46,10 +46,10 @@ $(function(){
 			halign : "center",
 			align : "left",
 			hidden : true
-        }, {
+        }/*, {
 			field : 'authority',
 			title : '权限列表',
-			width : 100,
+			width : 200,
 			halign : "center",
 			align : "left",
 			formatter:function(value,row,index){
@@ -60,7 +60,7 @@ $(function(){
         }, {
 			field : 'user',
 			title : '分配用户',
-			width : 100,
+			width : 200,
 			halign : "center",
 			align : "left",
 			formatter:function(value,row,index){
@@ -80,7 +80,7 @@ $(function(){
 			str += '<a id="remove" class="easyui-linkbutton" href="javascript:removeRole()"/>';
 			return str;
 			}
-		}]],
+		}*/]],
 		nowrap : false,
 		rowStyler: function(index,row){
             if ((index % 2)!=0){
@@ -88,13 +88,13 @@ $(function(){
             	var color=new Object();
                 return color;
             }
-		},
+		}/*,
 		onLoadSuccess:function(data){
 	        $("a[id='edit']").linkbutton({text:'修改',plain:true,iconCls:'icon-update'});
 	        $("a[id='remove']").linkbutton({text:'删除',plain:true,iconCls:'icon-delete'});
 	        $("a[id='authority']").linkbutton({text:'权限列表',plain:true,iconCls:'icon-search'});
 	        $("a[id='user']").linkbutton({text:'分配用户',plain:true,iconCls:'icon-redo'});
-	        }
+	        }*/
 	});
 })
 
@@ -111,6 +111,9 @@ function removeRole(){
 		$('#rfm').form('load', row);
 		showdatagrid(row.id);
 		url = "role/delRole?id="+row.id;
+	}else{
+		alert("请先选择一条数据。");
+		return;
 	}
 }
 
@@ -134,6 +137,7 @@ function remove(){
 								$.messager.alert("提示", "删除成功！");
 								$('#rdlg').dialog('close');
 								$('#dg').datagrid('reload');
+								$("#dg").datagrid('clearSelections');
 //								var url = "role/AllRole";
 //								var img = new Image();
 //							    img.src = url;  // 设置相对路径给Image, 此时会发送出请求
@@ -201,7 +205,16 @@ function showdatagrid(id){
     });
 }
 
-function authority(id){
+function authority(){
+	var id="";
+	var row = null;
+	row = $('#dg').datagrid('getSelected'); 
+	if (row) {
+		id = row.id;
+	}else{
+		alert("请先选择一条数据。");
+		return;
+	}
 	$('#div1').dialog('open').dialog('center').dialog('setTitle','权限列表');
         $("#ao").datagrid( {
 		fitColumns : true,
@@ -229,13 +242,21 @@ function authority(id){
     });
 }
         
-function userdatagrid(id){
+function userdatagrid(){
+	var id="";
+	var row = null;
+	row = $('#dg').datagrid('getSelected');
+	if (row) {
+		id = row.id;
+	}else{
+		alert("请先选择一条数据。");
+		return;
+	}
 	$('#userdlg').window( {
 		title : "分配用户",
 		modal : true
 	});
 	$('#userdlg').window('open');
-	var row = $('#dg').datagrid('getSelected');
 	$('#userfm').form('load', row);
     $("#usertt").datagrid( {
 		fitColumns : true,
@@ -310,6 +331,40 @@ function saveRoleUser(){
            }
       }
    });
+}
+
+function searchData(){
+	var search = "";
+	var sroleName = $("#sroleName").textbox('getValue');
+	var sroleDesc = $("#sroleDesc").textbox('getValue');
+	var sid = "";
+	if($("input[name='sstatusid']:checked").val()){
+		sid = $("input[name='sstatusid']:checked").val();
+	}
+	if(sroleName != ""){
+		if(search == ""){
+			search += " roles_name LIKE "+"'%" + sroleName + "%'";
+		}else{
+			search += " AND roles_name LIKE "+"'%" + sroleName + "%'";
+		}
+	}
+	if(sroleDesc != ""){
+		if(search == ""){
+			search += " roles_desc LIKE "+"'%" + sroleDesc + "%'";
+		}else {
+			search += " AND roles_desc LIKE "+"'%" + sroleDesc + "%'";
+		}
+	}
+	if(sid != ""){
+		if(search == ""){
+			search += " d.fvalue LIKE "+"'%" + sid + "%'";
+		}else{
+			search += " AND d.fvalue LIKE "+"'%" + sid + "%'";
+		}
+	}
+	$('#dg').datagrid('load', {
+		"searchStr" : search
+	});
 }
 
 //监听窗口大小变化

@@ -162,8 +162,8 @@ public class UserController {
 		JSONObject obj = new JSONObject();
 		try{
 		String fs = user.getUserPassword();
-		String xxx = DigestUtils.md5Hex(fs);
-		user.setUserPassword(xxx);
+//		String xxx = DigestUtils.md5Hex(fs);
+		user.setUserPassword(fs);
 		user.setUserInsframework(Long.parseLong(request.getParameter("userInsframework")));
         user.setStatus(Integer.parseInt(request.getParameter("status")));
 		userService.save(user);
@@ -202,12 +202,13 @@ public class UserController {
 		JSONObject obj = new JSONObject();
 		try{
 			String fs = request.getParameter("userPassword");
-			if(fs.length()<32){
-				String xxx = DigestUtils.md5Hex(fs);
-				user.setUserPassword(xxx);
-			}else{
-				user.setUserPassword(fs);
-			}
+//			if(fs.length()<32){
+//				String xxx = DigestUtils.md5Hex(fs);
+//				user.setUserPassword(xxx);
+//			}else{
+//				user.setUserPassword(fs);
+//			}
+			user.setUserPassword(fs);
 			user.setUserName(request.getParameter("userName"));
 			user.setUserLoginName(request.getParameter("userLoginName"));
 			user.setUserPhone(request.getParameter("userPhone"));
@@ -270,6 +271,7 @@ public class UserController {
 			JSONObject obj = new JSONObject();
 			try{
 				 User user = userService.findById(new Integer(id));
+				 userService.deleteRole(user.getId());
 				 userService.delete(new Integer(user.getId()));
 				 obj.put("success", true);
 			}catch(Exception e){

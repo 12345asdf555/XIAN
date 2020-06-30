@@ -418,6 +418,10 @@ public class WpsServiceImpl implements WpsService{
 	@Override
 	public void deleteWps(String fid) {
 		// TODO Auto-generated method stub
+		mapper.deleteWpsEmpStepSpe(fid);
+		mapper.deleteWpsEmpStepJun(fid);
+		mapper.deleteWpsEmpStep(fid);
+		mapper.deleteWpsEmp(fid);
 		mapper.deleteWps(fid);
 	}
 	
@@ -448,12 +452,17 @@ public class WpsServiceImpl implements WpsService{
 	@Override
 	public void deleteEmployee(String fid) {
 		// TODO Auto-generated method stub
+		mapper.deleteEmployeeStepSpe(fid);
+		mapper.deleteEmployeeStepJun(fid);
+		mapper.deleteEmployeeStep(fid);
 		mapper.deleteEmployee(fid);
 	}
 
 	@Override
 	public void deleteStep(String fid) {
 		// TODO Auto-generated method stub
+		mapper.deleteStepSpe(fid);
+		mapper.deleteStepJun(fid);
 		mapper.deleteStep(fid);
 	}
 

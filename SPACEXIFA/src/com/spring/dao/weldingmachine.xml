@@ -145,20 +145,23 @@
 		SELECT fid FROM tb_welding_machine WHERE  fgather_id = #{gatherid}
 	</select>
 	
-	<insert id="addWeldingMachine" parameterType="com.spring.model.WeldingMachine" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO tb_welding_machine(fIP, ftype_id, fequipment_no, fstatus_id, fposition, finsframework_id, 
+	<insert id="addWeldingMachine" parameterType="com.spring.model.WeldingMachine" >
+		<selectKey resultType="java.math.BigInteger" order="BEFORE" keyProperty="id">
+			select TB_WELDING_MACHINE_ID.nextval as id from dual
+		</selectKey>
+		INSERT INTO tb_welding_machine(fid,fIP, ftype_id, fequipment_no, fstatus_id, fposition, finsframework_id, 
 		fmanufacturer_id,fgather_id, fisnetworking, fjoin_time, fmodel, fcreater, fcreatedate) VALUES 
-		(#{ip},#{typeId},#{equipmentNo},#{statusId},#{position},#{insframeworkId.id},#{mvalueid},#{gatherId.id},#{isnetworking},#{joinTime},#{model},#{creater},now())
+		(#{id},#{ip},#{typeId},#{equipmentNo},#{statusId},#{position},#{insframeworkId.id},#{mvalueid},#{gatherId.id},#{isnetworking},to_date(#{joinTime}, 'yyyy-mm-dd hh24:mi:ss'),#{model},#{creater},SYSDATE)
 	</insert>
 	
 	<update id="editGatherid"  parameterType="java.math.BigInteger">
-		UPDATE tb_welding_machine SET fgather_id=null  where fid = #{wid}
+		UPDATE tb_welding_machine SET fgather_id=NULL  where fid = #{wid}
 	</update>
 	
 	<update id="editWeldingMachine"  parameterType="com.spring.model.WeldingMachine">
 		UPDATE tb_welding_machine SET fIP=#{ip},ftype_id=#{typeId},fequipment_no=#{equipmentNo},fstatus_id=#{statusId},
 		fposition=#{position},finsframework_id=#{insframeworkId.id},fmanufacturer_id=#{mvalueid},fgather_id=#{gatherId.id},
-		fisnetworking=#{isnetworking},fjoin_time=#{joinTime},fmodel=#{model},fupdater=#{updater},fupdatedate=now() where fid = #{id}
+		fisnetworking=#{isnetworking},fjoin_time=to_date(#{joinTime}, 'yyyy-mm-dd hh24:mi:ss'),fmodel=#{model},fupdater=#{updater},fupdatedate=SYSDATE where fid = #{id}
 	</update>
 	
 	<update id="editstatus"  parameterType="com.spring.model.WeldingMachine">

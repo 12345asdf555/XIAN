@@ -185,10 +185,10 @@
 		</if>
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and fstarttime &gt;= #{dto.dtoTime1}
+				and fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and fendtime &lt;= #{dto.dtoTime2}
+				and fendtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 		</if>
 		UNION 
@@ -201,10 +201,10 @@
 		</if>
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and fstarttime &gt;= #{dto.dtoTime1}
+				and fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and fendtime &lt;= #{dto.dtoTime2}
+				and fendtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 		</if>
 		UNION
@@ -217,10 +217,10 @@
 		</if>
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and fstarttime &gt;= #{dto.dtoTime1}
+				and fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and fendtime &lt;= #{dto.dtoTime2}
+				and fendtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 		</if>
 		)temp
@@ -238,10 +238,10 @@
 		</if>
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and fstarttime &gt;= #{dto.dtoTime1}
+				and fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and fendtime &lt;= #{dto.dtoTime2}
+				and fendtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 		</if>
 	</select>
@@ -261,10 +261,10 @@
 				and fmachine_id = #{dto.machineid}
 			</if>
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and fstarttime &gt;= #{dto.dtoTime1}
+				and fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and fendtime &lt;= #{dto.dtoTime2}
+				and fendtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 		</if>
 		union
@@ -280,10 +280,10 @@
 				and fmachine_id = #{dto.machineid}
 			</if>
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and fstarttime &gt;= #{dto.dtoTime1}
+				and fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and fendtime &lt;= #{dto.dtoTime2}
+				and fendtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 		</if>
 		)temp
@@ -305,10 +305,10 @@
 				and fwelder_no = #{dto.welderno}
 			</if>
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and fstarttime &gt;= #{dto.dtoTime1}
+				and fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and fendtime &lt;= #{dto.dtoTime2}
+				and fendtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 		</if>
 		union
@@ -324,10 +324,10 @@
 				and fwelder_no = #{dto.welderno}
 			</if>
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and fstarttime &gt;= #{dto.dtoTime1}
+				and fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and fendtime &lt;= #{dto.dtoTime2}
+				and fendtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 		</if>
 		)temp
@@ -347,10 +347,10 @@
 				and fmachine_id = #{dto.machineid}
 			</if>
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and fstarttime &gt;= #{dto.dtoTime1}
+				and fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and fendtime &lt;= #{dto.dtoTime2}
+				and fendtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 		</if>
 		UNION ALL
@@ -365,10 +365,10 @@
 				and fmachine_id = #{dto.machineid}
 			</if>
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and fstarttime &gt;= #{dto.dtoTime1}
+				and fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and fendtime &lt;= #{dto.dtoTime2}
+				and fendtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 		</if>
 		UNION ALL
@@ -383,10 +383,10 @@
 				and fmachine_id = #{dto.machineid}
 			</if>
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and fstarttime &gt;= #{dto.dtoTime1}
+				and fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and fendtime &lt;= #{dto.dtoTime2}
+				and fendtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 		</if>
 		)temp
@@ -406,10 +406,10 @@
 				and fjunction_no = #{dto.junctionno}
 			</if>
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and fstarttime &gt;= #{dto.dtoTime1}
+				and fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and fendtime &lt;= #{dto.dtoTime2}
+				and fendtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 		</if>
 		UNION ALL
@@ -424,10 +424,10 @@
 				and fjunction_no = #{dto.junctionno}
 			</if>
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and fstarttime &gt;= #{dto.dtoTime1}
+				and fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and fendtime &lt;= #{dto.dtoTime2}
+				and fendtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 		</if>
 		UNION ALL
@@ -442,10 +442,10 @@
 				and fjunction_no = #{dto.junctionno}
 			</if>
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and fstarttime &gt;= #{dto.dtoTime1}
+				and fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and fendtime &lt;= #{dto.dtoTime2}
+				and fendtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 		</if>
 		)temp
@@ -465,10 +465,10 @@
 				and fwelder_no = #{dto.welderno}
 			</if>
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and fstarttime &gt;= #{dto.dtoTime1}
+				and fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and fendtime &lt;= #{dto.dtoTime2}
+				and fendtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 		</if>
 		UNION ALL
@@ -483,10 +483,10 @@
 				and fwelder_no = #{dto.welderno}
 			</if>
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and fstarttime &gt;= #{dto.dtoTime1}
+				and fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and fendtime &lt;= #{dto.dtoTime2}
+				and fendtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 		</if>
 		UNION ALL
@@ -501,10 +501,10 @@
 				and fwelder_no = #{dto.welderno}
 			</if>
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and fstarttime &gt;= #{dto.dtoTime1}
+				and fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and fendtime &lt;= #{dto.dtoTime2}
+				and fendtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 		</if>
 		)temp
@@ -529,10 +529,10 @@
 				and fmachine_id = #{dto.machineid}
 			</if>
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and fstarttime &gt;= #{dto.dtoTime1}
+				and fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and fendtime &lt;= #{dto.dtoTime2}
+				and fendtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 		</if>
 	</select>
@@ -552,10 +552,10 @@
 				and fwelder_no = #{dto.welderno}
 			</if>
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and fstarttime &gt;= #{dto.dtoTime1}
+				and fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and fendtime &lt;= #{dto.dtoTime2}
+				and fendtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 		</if>
 	</select>
@@ -575,10 +575,10 @@
 				and fjunction_no = #{dto.junctionno}
 			</if>
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and fstarttime &gt;= #{dto.dtoTime1}
+				and fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and fendtime &lt;= #{dto.dtoTime2}
+				and fendtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 		</if>
 	</select>
@@ -598,10 +598,10 @@
 				and fmachine_id = #{dto.machineid}
 			</if>
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and fstarttime &gt;= #{dto.dtoTime1}
+				and fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and fendtime &lt;= #{dto.dtoTime2}
+				and fendtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 		</if>
 		)temp
@@ -622,10 +622,10 @@
 				and fwelder_no = #{dto.welderno}
 			</if>
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and fstarttime &gt;= #{dto.dtoTime1}
+				and fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and fendtime &lt;= #{dto.dtoTime2}
+				and fendtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 		</if>
 		union all 
@@ -641,10 +641,10 @@
 				and fwelder_no = #{dto.welderno}
 			</if>
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and fstarttime &gt;= #{dto.dtoTime1}
+				and fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and fendtime &lt;= #{dto.dtoTime2}
+				and fendtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 		</if>
 		)temp
@@ -665,10 +665,10 @@
 				and fjunction_no = #{dto.junctionno}
 			</if>
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and fstarttime &gt;= #{dto.dtoTime1}
+				and fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and fendtime &lt;= #{dto.dtoTime2}
+				and fendtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 		</if>
 		union all 
@@ -684,10 +684,10 @@
 				and fjunction_no = #{dto.junctionno}
 			</if>
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and fstarttime &gt;= #{dto.dtoTime1}
+				and fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and fendtime &lt;= #{dto.dtoTime2}
+				and fendtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 		</if>
 		)temp
@@ -751,16 +751,16 @@
         LEFT JOIN tb_insframework insf on insf.fid = ins.fparent WHERE j.ftype=23 
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and a.fstarttime &gt;= #{dto.dtoTime1}
+				and a.fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and a.fendtime &lt;= #{dto.dtoTime2}
+				and a.fendtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.parent!=null and dto.parent!=''">
 				and (j.fid=#{dto.parent} or ins.fid=#{dto.parent} or insf.fid=#{dto.parent} or insf.fparent=#{dto.parent})
 			</if>
 		</if>
-			GROUP BY j.fid
+			GROUP BY j.fid, j.fname
 			UNION ALL
 			SELECT j.fid, j.fname insname, 0 insid,SUM(a.fworktime) hour FROM tb_insframework j 
 			INNER JOIN tb_work a ON j.fid=a.fmachine_itemid
@@ -768,17 +768,17 @@
         	LEFT JOIN tb_insframework insf on insf.fid = ins.fparent WHERE j.ftype=23 and a.fstatus=99 
 			<if test="dto!=null and dto!=''">
 				<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-					and a.fstarttime &gt;= #{dto.dtoTime1}
+					and a.fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 				</if>
 				<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-					and a.fendtime &lt;= #{dto.dtoTime2}
+					and a.fendtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 				</if>
 				<if test="dto.parent!=null and dto.parent!=''">
 					and (j.fid=#{dto.parent} or ins.fid=#{dto.parent} or insf.fid=#{dto.parent} or insf.fparent=#{dto.parent})
 				</if>
 		</if>
-			GROUP BY j.fid
-			)temp group by fid order by fid
+			GROUP BY j.fid, j.fname
+			)temp group by fname order by fname
 	</select>
 	
 	<!-- 查询组织机构超规范焊接时长 -->
@@ -791,16 +791,16 @@
 		where i.ftype=23
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and w.fstarttime &gt;= #{dto.dtoTime1}
+				and w.fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and w.fstarttime &lt; #{dto.dtoTime2}
+				and w.fstarttime &lt; to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.parent!=null and dto.parent!=''">
 				and (i.fid=#{dto.parent} or ins.fid=#{dto.parent} or insf.fid=#{dto.parent} or insf.fparent=#{dto.parent})
 			</if>
 		</if>
-		group by i.fid
+		group by i.fid,i.fname
 		UNION ALL
 		select i.fid,i.fname,0 insid from tb_insframework  i 
 		inner JOIN tb_insframework ins on ins.fid = i.fparent
@@ -819,10 +819,10 @@
 		where i.ftype=23
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and w.fstarttime &gt;= #{dto.dtoTime1}
+				and w.fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and w.fstarttime &lt; #{dto.dtoTime2}
+				and w.fstarttime &lt; to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.parent!=null and dto.parent!=''">
 				and (i.fid=#{dto.parent} or ins.fid=#{dto.parent} or insf.fid=#{dto.parent} or insf.fparent=#{dto.parent})
@@ -852,10 +852,10 @@
         LEFT JOIN tb_insframework insf on insf.fid = ins.fparent WHERE 1=1 
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and a.fstarttime &gt;= #{dto.dtoTime1}
+				and a.fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and a.fendtime &lt;= #{dto.dtoTime2}
+				and a.fendtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="itemid!=null and itemid!=''">
 				and (i.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid})
@@ -870,10 +870,10 @@
        	LEFT JOIN tb_insframework insf on insf.fid = ins.fparent WHERE 1=1 and a.fstatus=99 
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and a.fstarttime &gt;= #{dto.dtoTime1}
+				and a.fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and a.fendtime &lt;= #{dto.dtoTime2}
+				and a.fendtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="itemid!=null and itemid!=''">
 				and (i.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid})
@@ -894,10 +894,10 @@
 		where 1=1
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and w.fstarttime &gt;= #{dto.dtoTime1}
+				and w.fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and w.fstarttime &lt; #{dto.dtoTime2}
+				and w.fstarttime &lt; to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 		</if>
 		<if test="itemid!=null and itemid!=''">
@@ -917,10 +917,10 @@
 		    INNER JOIN tb_alarm w ON w.fmachine_id=m.fid where 1=1
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and w.fstarttime &gt;= #{dto.dtoTime1}
+				and w.fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and w.fstarttime &lt; #{dto.dtoTime2}
+				and w.fstarttime &lt; to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 		</if>
 		 <if test="itemid!=null and itemid!=''">
@@ -950,10 +950,10 @@
         LEFT JOIN tb_insframework insf on insf.fid = ins.fparent WHERE 1=1 
 			<if test="dto!=null and dto!=''">
 				<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-					and a.fstarttime &gt;= #{dto.dtoTime1}
+					and a.fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 				</if>
 				<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-					and a.fendtime &lt;= #{dto.dtoTime2}
+					and a.fendtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 				</if>
 				<if test="dto.parent!=null and dto.parent!=''">
 					and (i.fid=#{dto.parent} or ins.fid=#{dto.parent} or insf.fid=#{dto.parent} or insf.fparent=#{dto.parent})
@@ -968,10 +968,10 @@
         	LEFT JOIN tb_insframework insf on insf.fid = ins.fparent WHERE 1=1 and a.fstatus=99 
 			<if test="dto!=null and dto!=''">
 				<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-					and a.fstarttime &gt;= #{dto.dtoTime1}
+					and a.fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 				</if>
 				<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-					and a.fendtime &lt;= #{dto.dtoTime2}
+					and a.fendtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 				</if>
 				<if test="dto.parent!=null and dto.parent!=''">
 					and (i.fid=#{dto.parent} or ins.fid=#{dto.parent} or insf.fid=#{dto.parent} or insf.fparent=#{dto.parent})
@@ -992,10 +992,10 @@
 		 where 1=1
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and a.fstarttime &gt;= #{dto.dtoTime1}
+				and a.fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and a.fstarttime &lt; #{dto.dtoTime2}
+				and a.fstarttime &lt; to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.parent!=null and dto.parent!=''">
 				and (i.fid=#{dto.parent} or ins.fid=#{dto.parent} or insf.fid=#{dto.parent} or insf.fparent=#{dto.parent})
@@ -1022,10 +1022,10 @@
 		 where 1=1
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and a.fstarttime &gt;= #{dto.dtoTime1}
+				and a.fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and a.fstarttime &lt; #{dto.dtoTime2}
+				and a.fstarttime &lt; to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.parent!=null and dto.parent!=''">
 				and (i.fid=#{dto.parent} or ins.fid=#{dto.parent} or insf.fid=#{dto.parent} or insf.fparent=#{dto.parent})
@@ -1058,10 +1058,10 @@
         LEFT JOIN tb_insframework insf on insf.fid = ins.fparent WHERE 1=1 
 			<if test="dto!=null and dto!=''">
 				<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-					and a.fstarttime &gt;= #{dto.dtoTime1}
+					and a.fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 				</if>
 				<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-					and a.fendtime &lt;= #{dto.dtoTime2}
+					and a.fendtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 				</if>
 				<if test="dto.parent!=null and dto.parent!=''">
 					and (i.fid=#{dto.parent} or ins.fid=#{dto.parent} or insf.fid=#{dto.parent} or insf.fparent=#{dto.parent})
@@ -1079,10 +1079,10 @@
         	LEFT JOIN tb_insframework insf on insf.fid = ins.fparent WHERE 1=1 and a.fstatus=99 
 			<if test="dto!=null and dto!=''">
 				<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-					and a.fstarttime &gt;= #{dto.dtoTime1}
+					and a.fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 				</if>
 				<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-					and a.fendtime &lt;= #{dto.dtoTime2}
+					and a.fendtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 				</if>
 				<if test="dto.parent!=null and dto.parent!=''">
 					and (i.fid=#{dto.parent} or ins.fid=#{dto.parent} or insf.fid=#{dto.parent} or insf.fparent=#{dto.parent})
@@ -1105,10 +1105,10 @@
         LEFT JOIN tb_insframework insf on insf.fid = ins.fparent WHERE 1=1 
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and a.fstarttime &gt;= #{dto.dtoTime1}
+				and a.fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and a.fstarttime &lt; #{dto.dtoTime2}
+				and a.fstarttime &lt; to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.parent!=null and dto.parent!=''">
 				and (i.fid=#{dto.parent} or ins.fid=#{dto.parent} or insf.fid=#{dto.parent} or insf.fparent=#{dto.parent})
@@ -1135,10 +1135,10 @@
         LEFT JOIN tb_insframework insf on insf.fid = ins.fparent WHERE 1=1 
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and fstarttime &gt;= #{dto.dtoTime1}
+				and fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and fstarttime &lt; #{dto.dtoTime2}
+				and fstarttime &lt; to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.parent!=null and dto.parent!=''">
 				and (i.fid=#{dto.parent} or ins.fid=#{dto.parent} or insf.fid=#{dto.parent} or insf.fparent=#{dto.parent})
@@ -1168,10 +1168,10 @@
 		</if>
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and fstarttime &gt;= #{dto.dtoTime1}
+				and fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and fendtime &lt;= #{dto.dtoTime2}
+				and fendtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.parent!=null and dto.parent!=''">
 				and (i.fid=#{dto.parent} or ins.fid=#{dto.parent} or insf.fid=#{dto.parent} or insf.fparent=#{dto.parent})
@@ -1197,10 +1197,10 @@
 		</if>
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and FWeldTime &gt;= #{dto.dtoTime1}
+				and FWeldTime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and FWeldTime &lt;= #{dto.dtoTime2}
+				and FWeldTime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.parent!=null and dto.parent!=''">
 				and (i.fid=#{dto.parent} or ins.fid=#{dto.parent} or insf.fid=#{dto.parent} or insf.fparent=#{dto.parent})
@@ -1243,10 +1243,10 @@
 				and i.fparent = #{dto.parent}
 			</if>
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and fstarttime &gt;= #{dto.dtoTime1}
+				and fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and fendtime &lt;= #{dto.dtoTime2}
+				and fendtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 		</if>
 		group by i.fid,time
@@ -1264,10 +1264,10 @@
 				and i.fparent = #{dto.parent}
 			</if>
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and fstarttime &gt;= #{dto.dtoTime1}
+				and fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and fendtime &lt;= #{dto.dtoTime2}
+				and fendtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 		</if>
 		group by i.fid,time
@@ -1283,7 +1283,7 @@
 			and (j.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid}) 
 		</if>
 		union all
-		select i.fname, sum((w.fworktime*w.fwirefeedrate*if(m.fcoefficient is NULL,0,m.fcoefficient))/60) weldwire,sum((w.fworktime*w.frateofflow)/60) gas from tb_work w 
+		select i.fname, sum((w.fworktime*w.fwirefeedrate*DECODE(m.fcoefficient, NULL, 0 ,m.fcoefficient))/60) weldwire,sum((w.fworktime*w.frateofflow)/60) gas from tb_work w 
 		INNER JOIN tb_insframework i on i.fid  = w.fmachine_itemid
 		left JOIN tb_insframework ins on ins.fid = i.fparent
 	    left JOIN tb_insframework insf on insf.fid = ins.fparent
@@ -1291,7 +1291,7 @@
 		where 1=1 
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and fstarttime &gt;= #{dto.dtoTime1} 
+				and fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss') 
 			</if>
 		</if>
 		<if test="itemid!=null and itemid!=''">
@@ -1320,7 +1320,7 @@
 		</if>
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and w.fstarttime &gt;= #{dto.dtoTime1} 
+				and w.fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss') 
 			</if>
 		</if>
 		UNION all 
@@ -1333,7 +1333,7 @@
 		</if>
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and w.fstarttime &gt;= #{dto.dtoTime1} 
+				and w.fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss') 
 			</if>
 		</if>
 		UNION all 
@@ -1346,14 +1346,14 @@
 		</if>
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and w.fstarttime &gt;= #{dto.dtoTime1} 
+				and w.fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss') 
 			</if>
 		</if>
 		)temp
 	</select>
 	
 	<select id="getOnAndWeldTime" resultMap="dataMap">
-		select fname,sum(insid) insid,sum(hour) worktime from(
+		select fid,fname,sum(insid) insid,sum(hour) worktime from(
         select j.fid,j.fname, 0 insid, 0 hour from tb_insframework j 
         LEFT JOIN tb_insframework ins on ins.fid = j.fparent 
         LEFT JOIN tb_insframework insf on insf.fid = ins.fparent WHERE j.ftype=23 
@@ -1367,13 +1367,13 @@
         LEFT JOIN tb_insframework insf on insf.fid = ins.fparent WHERE 1=1 
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and a.fstarttime &gt;= #{dto.dtoTime1} 
+				and a.fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss') 
 			</if>
 		</if>
 		<if test="itemid!=null and itemid!=''">
 			and (j.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid}) 
 		</if>
-		GROUP BY j.fname
+		GROUP BY j.fid,j.fname
 		UNION ALL
 		SELECT j.fid, j.fname insname, SUM(a.fwarntime) insid,SUM(a.fwarntime) hour FROM tb_insframework j 
 		INNER JOIN tb_warn a ON j.fid=a.fmachine_itemid
@@ -1381,13 +1381,13 @@
         LEFT JOIN tb_insframework insf on insf.fid = ins.fparent WHERE 1=1 	and a.fstatus !='99' 
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and a.fstarttime &gt;= #{dto.dtoTime1} 
+				and a.fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss') 
 			</if>
 		</if>
 		<if test="itemid!=null and itemid!=''">
 			and (j.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid}) 
 		</if>
-		GROUP BY j.fname
+		GROUP BY j.fid,j.fname
 		UNION ALL
 		SELECT j.fid, j.fname insname, SUM(a.fstandbytime) insid,0 hour FROM tb_insframework j 
 		INNER JOIN tb_standby a ON j.fid=a.fmachine_itemid
@@ -1395,14 +1395,14 @@
        	LEFT JOIN tb_insframework insf on insf.fid = ins.fparent WHERE 1=1 
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and a.fstarttime &gt;= #{dto.dtoTime1} 
+				and a.fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss') 
 			</if>
 		</if>
 		<if test="itemid!=null and itemid!=''">
 			and (j.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid}) 
 		</if>
-		GROUP BY j.fname
-		)temp group by fid order by fid
+		GROUP BY j.fid,j.fname
+		)temp group by fid,fname order by fid,fname
 	</select>
 	
 	<select id="getMachineTask" resultMap="dataMap">
@@ -1481,7 +1481,7 @@
 		</if>
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and w.fstarttime &gt;= #{dto.dtoTime1}
+				and w.fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 		</if>
 		GROUP BY w.fmachine_itemid 
@@ -1501,7 +1501,7 @@
 		</if>
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and w.fstarttime &gt;= #{dto.dtoTime1}
+				and w.fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 		</if>
 		)) t where t.ftype=23 ORDER BY t.total desc 
@@ -1519,13 +1519,13 @@
 		LEFT JOIN tb_welded_junction j ON i.fid=j.fitemId
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				WHERE fstart_time &gt;= #{dto.dtoTime1} 
+				WHERE fstart_time &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss') 
 			</if>
 		</if>
 		<if test="itemid!=null and itemid!=''">
 			and (i.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid}) 
 		</if>
-		GROUP BY i.fname
+		GROUP BY i.fid,i.fname
 		UNION ALL
 		SELECT i.fid,i.fname,0 insid,COUNT(t.fid) hour FROM tb_insframework i 
 		LEFT JOIN tb_insframework ins on ins.fid = i.fparent
@@ -1534,14 +1534,14 @@
 		LEFT JOIN tb_taskresult t ON (j.fid=t.ftaskid AND t.foperatetype=1)
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				WHERE fstart_time &gt;= #{dto.dtoTime1} 
+				WHERE fstart_time &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss') 
 			</if>
 		</if>
 		<if test="itemid!=null and itemid!=''">
 			and (i.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid}) 
 		</if> 
-		GROUP BY i.fname
-		)temp group by fid order by fid
+		GROUP BY i.fid,i.fname
+		)temp group by fname order by fname
 	</select>
 	
 	<select id="getHistoryData" resultMap="dataMap">

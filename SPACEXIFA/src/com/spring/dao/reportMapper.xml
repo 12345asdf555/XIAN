@@ -36,20 +36,20 @@
 		SELECT w.fwelder_no fweldernum,w.fname fname,w.FCellPhone num3,w.Fback fback,m.fequipment_no fmachineid,m.fmodel fmachinemodel,SUM(o.fworktime) result1 FROM tb_welder w LEFT JOIN tb_work o ON w.fwelder_no=o.fwelder_id LEFT JOIN tb_welding_machine m ON o.fmachine_id=m.fid WHERE 1=1
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and o.fstarttime &gt;= #{dto.dtoTime1}
+				and o.fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and o.fendtime &lt;= #{dto.dtoTime2}
+				and o.fendtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 		</if>
 		UNION
 		SELECT w.fwelder_no fweldernum,w.fname fname,w.FCellPhone num3,w.Fback fback,null fequipment_no,null fmodel,0 fworktime FROM tb_welder w WHERE w.fwelder_no NOT IN (SELECT DISTINCT tb_work.fwelder_id FROM tb_work WHERE 1=1
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and fstarttime &gt;= #{dto.dtoTime1}
+				and fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and fendtime &lt;= #{dto.dtoTime2}
+				and fendtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 		</if>
 		)
@@ -78,10 +78,10 @@
 		) FROM `tb_live_data` WHERE fstatus!='0' and fmachine_id=#{machid} and fwelder_id=#{weldid}
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and fweldtime &gt;= #{dto.dtoTime1}
+				and fweldtime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and fweldtime &lt;= #{dto.dtoTime2}
+				and fweldtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 		</if>
 	</select>
@@ -105,10 +105,10 @@
 		) FROM `tb_live_data` WHERE fmachine_id=#{machid}
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and fweldtime &gt;= #{dto.dtoTime1}
+				and fweldtime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and fweldtime &lt;= #{dto.dtoTime2}
+				and fweldtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 		</if>
 	</select>
@@ -132,10 +132,10 @@
 		)  AS xxx,felectricity FROM `tb_live_data` WHERE fmachine_id=#{machid} and fstatus='0'
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and fweldtime &gt;= #{dto.dtoTime1}
+				and fweldtime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and fweldtime &lt;= #{dto.dtoTime2}
+				and fweldtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 		</if>
 		)temp
@@ -160,10 +160,10 @@
 		)  AS xxx,fvoltage FROM `tb_live_data` WHERE fmachine_id=#{machid} and fstatus='0'
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and fweldtime &gt;= #{dto.dtoTime1}
+				and fweldtime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and fweldtime &lt;= #{dto.dtoTime2}
+				and fweldtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 		</if>
 		)temp
@@ -206,10 +206,10 @@
 		</if>
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and fweldtime &gt;= #{dto.dtoTime1}
+				and fweldtime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and fweldtime &lt;= #{dto.dtoTime2}
+				and fweldtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
 			</if>
 		</if>
 		<if test="fsolder_layer!=null and fsolder_layer!=''">

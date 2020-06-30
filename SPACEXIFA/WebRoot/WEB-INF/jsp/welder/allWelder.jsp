@@ -33,15 +33,81 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	
   </head>
   <body>
-  	<div class="functiondiv">
+  	  	<div class="functiondiv">
 		<div>
-			<a href="javascript:saveWelder();" class="easyui-linkbutton" iconCls="icon-newadd">新增</a>&nbsp;&nbsp;&nbsp;&nbsp;
-			<a href="javascript:importclick();" class="easyui-linkbutton" iconCls="icon-import">导入</a>&nbsp;&nbsp;&nbsp;&nbsp;
-			<a href="javascript:exportDg();" class="easyui-linkbutton" iconCls="icon-export">导出</a>&nbsp;&nbsp;&nbsp;&nbsp;	
-			<a href="javascript:insertSearchWelder();" class="easyui-linkbutton" iconCls="icon-select" >查找</a>
+			<div style="float: left;">
+				<div>
+					<label>姓名：</label>
+				</div>
+				<div>
+					<input class="easyui-textbox" name="sname" id="sname" />
+				</div>
+			</div>
+			<div style="float: left;">
+				<div>
+					<label>编号：</label>
+				</div>
+				<div>
+					<input class="easyui-textbox" name="swelderno" id="swelderno" />
+				</div>
+			</div>
+			<div style="float: left;">
+				<div>
+					<label>手机：</label>
+				</div>
+				<div>
+					<input class="easyui-textbox" name="scellphone" id="scellphone" />
+				</div>
+			</div>
+			<div style="float: left;">
+				<div>
+					<label>卡号：</label>
+				</div>
+				<div>
+					<input class="easyui-textbox" name="scardnum" id="scardnum" />
+				</div>
+			</div>
+			<div  style="float: left;">
+				<div>
+					<label>级别：</label>
+				</div>
+				<div>
+					<select class="easyui-combobox" name="sleveid" id="sleveid" data-options="editable:false">
+					</select>
+				</div>
+			</div>
+			<div  style="float: left;">
+				<div>
+					<label>资质：</label>
+				</div>
+				<div>
+					<select class="easyui-combobox" name="squali" id="squali" data-options="editable:false">
+					</select>
+				</div>
+			</div>
+			<div style="float: left;">
+				<div>
+					<label>部门：</label>
+				</div>
+				<div>
+					<select class="easyui-combobox" name="sowner" id="sowner" data-options="editable:false">
+					</select>
+				</div>
+			</div>
+			<div style="float: left;">
+				<div>
+					<label>备注：</label>
+				</div>
+				<div>
+					<input class="easyui-textbox" name="sback" id="sback" />
+				</div>
+			</div>
+			<div  style="float: left;">
+				<a href="javascript:searchData();" class="easyui-linkbutton" iconCls="icon-select">查找</a>&nbsp;&nbsp;&nbsp;&nbsp;
+			</div>
 		</div>
 	</div>
-  	<div id="body">
+  	<div id="body"  style="height: 78%">
 		<div id="importdiv" class="easyui-dialog" style="width:300px; height:200px;" closed="true">
 			<form id="importfm" method="post" class="easyui-form" data-options="novalidate:true" enctype="multipart/form-data"> 
 				<div>
@@ -70,14 +136,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    <!-- 添加修改 -->
 		<div id="dlg" class="easyui-dialog" style="width: 400px; height: 500px; padding:10px 20px" closed="true" buttons="#dlg-buttons">
 			<form id="fm" class="easyui-form" method="post" data-options="novalidate:true"><br/>
+	            <div class="fitem">
+	            	<lable><span class="required">*</span>姓名</lable>
+	                <input name="name" class="easyui-textbox" data-options="required:true">
+	            </div>
 				<div class="fitem">
 	            	<lable><span class="required">*</span>编号</lable>
 	            	<input id="validName" type="hidden" >
 	                <input name="welderno" id="welderno" class="easyui-textbox" data-options="validType:['checkNumber','welderValidate'],required:true">
-	            </div>
-	            <div class="fitem">
-	            	<lable><span class="required">*</span>姓名</lable>
-	                <input name="name" class="easyui-textbox" data-options="required:true">
 	            </div>
 	            <div class="fitem">
 	            	<lable><span class="required"></span>手机</lable>
@@ -156,6 +222,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<div id="remove-buttons">
 			<a href="javascript:remove();" class="easyui-linkbutton" iconCls="icon-ok">删除</a>
 			<a href="javascript:close2();" class="easyui-linkbutton" iconCls="icon-cancel" >取消</a>
+		</div>
+		<div class="functiondiv">
+			<div>
+				<a href="javascript:saveWelder();" class="easyui-linkbutton" iconCls="icon-newadd">新增</a>&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="javascript:editWelder()" class="easyui-linkbutton" iconCls="icon-update">修改</a>&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="javascript:removeWelder()" class="easyui-linkbutton" iconCls="icon-delete">删除</a>&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="javascript:importclick();" class="easyui-linkbutton" iconCls="icon-import">导入</a>&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="javascript:exportDg();" class="easyui-linkbutton" iconCls="icon-export">导出</a>&nbsp;&nbsp;&nbsp;&nbsp;	
+			<!-- 	<a href="javascript:insertSearchWelder();" class="easyui-linkbutton" iconCls="icon-select" >查找</a> -->
+			</div>
 		</div>
 	</div>
   </body>

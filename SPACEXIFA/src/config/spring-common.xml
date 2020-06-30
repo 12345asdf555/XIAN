@@ -23,8 +23,8 @@
 	<!-- 1. 数据源 : DriverManagerDataSource -->
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql://119.3.100.103:3306/SPACEXIFA?allowMultiQueries=true&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true&amp;failOverReadOnly=false&amp;maxReconnects=3" />
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+		<property name="url" value="jdbc:oracle:thin:@localhost:1521/orcl" />
 		<property name="username" value="root" />
 		<property name="password" value="123456" />
 	</bean>

@@ -169,6 +169,7 @@ public interface WeldedJunctionService {
 	 * @return
 	 */
 	List<WeldedJunction> getCardList(Page page, String search);
+	List<WeldedJunction> getCardList(String search);
 	
 	/**
 	 * 新增电子跟踪卡
@@ -287,4 +288,14 @@ public interface WeldedJunctionService {
 	 * @return
 	 */
 	int getTaskCount(String taskName);
+	
+	/**
+	 * 根据电子跟踪卡号id获取对应的工艺规程id
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年6月17日下午6:50:14
+	 * @param fid
+	 * @return
+	 */
+	String getWpsIdByCardId(String fid);
 }

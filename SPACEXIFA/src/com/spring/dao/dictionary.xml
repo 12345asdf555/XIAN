@@ -17,8 +17,11 @@
 		and ${str}
 		</if>
 	</select>
-	<insert id="addDictionary" parameterType="com.spring.model.Dictionarys" useGeneratedKeys="true" keyProperty="id">
-		insert into tb_dictionary (ftypeid,fvalue,fvaluename,fback) values (#{typeid},#{value},#{valueName},#{back})
+	<insert id="addDictionary" parameterType="com.spring.model.Dictionarys">
+		<selectKey resultType="java.math.BigInteger" order="BEFORE" keyProperty="id">
+			select TB_DICTIONARY_ID.nextval as id from dual
+		</selectKey>
+		insert into tb_dictionary (fid,ftypeid,fvalue,fvaluename,fback) values (#{id},#{typeid},#{value},#{valueName},#{back})
 	</insert>
 	<select id="getDictionaryMaxValue" resultType="int">
 		select max(fvalue) as value from tb_dictionary where ftypeid=#{ftypeid}
@@ -28,11 +31,11 @@
 	</select>
 	
 	<select id="getManuModel" resultMap="dMap">
-		SELECT `ftype` ftypeid,`ftype_value` fvalue FROM `tb_equipment_manufacturer` WHERE 1=1
+		SELECT ftype ftypeid,ftype_value fvalue FROM tb_equipment_manufacturer WHERE 1=1
 	</select>
 	
 	<select id="getDictionaryType" resultMap="dMap">
-		SELECT ftypeid ,fback FROM tb_dictionary GROUP BY ftypeid
+		SELECT ftypeid ,fback FROM tb_dictionary WHERE 1=1 GROUP BY ftypeid,fback
 	</select>
 	
 	<select id="getDictionaryValue" resultMap="dMap">
@@ -61,7 +64,7 @@
 	<delete id="deleteDictionary" parameterType="int">
 		delete from tb_dictionary where fid=#{id}
 	</delete>
-	<select id="getModelOfManu"  resultMap="dMap" parameterType="java.lang.Integer">
+	<select id="getModelOfManu"  resultMap="dMap" parameterType="java.lang.String">
 		SELECT em.ftype_value id,d.fvaluename 
 		FROM tb_equipment_manufacturer em 
 		LEFT JOIN tb_dictionary d ON em.ftype_value=d.fvalue and d.ftypeid=17

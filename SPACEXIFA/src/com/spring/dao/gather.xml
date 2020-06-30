@@ -53,13 +53,16 @@
 		 select count(*) from tb_gather where fgather_no = #{gatherno} and fitemId=#{itemid}
 	</select>
 	
-	<insert id="addGather" parameterType="com.spring.model.Gather" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO tb_gather(fgather_no,fitemId, fstatus, fprotocol, fipurl, fmacurl, fleavetime,fcreater,fcreatedate) VALUES
-		(#{gatherNo},#{itemid},#{status},#{protocol},#{ipurl},#{macurl},#{leavetime},#{creater},now())
+	<insert id="addGather" parameterType="com.spring.model.Gather">
+		<selectKey resultType="java.math.BigInteger" order="BEFORE" keyProperty="id">
+			select TB_GATHER_ID.nextval as id from dual
+		</selectKey>
+		INSERT INTO tb_gather(fid,fgather_no,fitemId, fstatus, fprotocol, fipurl, fmacurl, fleavetime,fcreater,fcreatedate) VALUES
+		(#{id},#{gatherNo},#{itemid},#{status},#{protocol},#{ipurl},#{macurl},to_date(substr(#{leavetime},1,19), 'yyyy-mm-dd hh24:mi:ss'),#{creater},SYSDATE)
  	</insert>
 	
 	<update id="editGather" parameterType="com.spring.model.Gather">
-		UPDATE tb_gather SET fgather_no=#{gatherNo},fitemId=#{itemid}, fstatus=#{status}, fprotocol=#{protocol}, fipurl=#{ipurl}, fmacurl=#{macurl}, fleavetime=#{leavetime}, fupdater=#{updater}, fupdatedate=now() WHERE fid=#{id}
+		UPDATE tb_gather SET fgather_no=#{gatherNo},fitemId=#{itemid}, fstatus=#{status}, fprotocol=#{protocol}, fipurl=#{ipurl}, fmacurl=#{macurl}, fleavetime=to_date(#{leavetime}, 'yyyy-mm-dd hh24:mi:ss'), fupdater=#{updater}, fupdatedate=SYSDATE WHERE fid=#{id}
 	</update>
 	
 	<delete id="deleteGather" parameterType="java.math.BigInteger">

@@ -18,13 +18,17 @@ function inscombobox(){
 		   data: {},
 		   success: function (result) {
 		      if (result) {
-		         var optionstring = "";
+		         var optionstring = "",soptionstring = '';
+		         soptionstring += "<option value=''>请选择</option>";
 		         //循环遍历 下拉框绑定
 		         for(var k=0;k<result.rows.length;k++){
 		         optionstring += "<option value=\"" + result.rows[k].insid + "\" >" + result.rows[k].insname + "</option>";
+		         soptionstring += "<option value=\"" + result.rows[k].insid + "\" >" + result.rows[k].insname + "</option>";
 		         }
 		         $("#insid").html(optionstring);
 		      	 $("#insid").combobox();
+		      	 $("#sinsid").html(soptionstring);
+		      	 $("#sinsid").combobox();
 		      }
 		   },
 		   error: function () {
@@ -157,6 +161,7 @@ function save(){
 					$.messager.alert("提示", messager);
 					$('#dlg').dialog('close');
 					$('#dg').datagrid('reload');
+					$("#dg").datagrid('clearSelections');
 				}
 			}
 			
@@ -175,12 +180,15 @@ function statusRadio(){
 	    dataType : "json", //返回数据形式为json  
 	    success : function(result) {
 	    	if (result) {
-	    		var str = "";
+	    		var str = "",sstr = "";
 	    		for (var i = 0; i < result.ary.length; i++) {
 	    			str += "<input type='radio' class='radioStyle' name='statusid' id='sId' value=\"" + result.ary[i].id + "\" />"  
                     + result.ary[i].name+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+	    			sstr += "<input type='radio' class='radioStyle' name='sstatusid' id='ssId' value=\"" + result.ary[i].id + "\" />"  
+	    			+ result.ary[i].name+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 	    		}
 	            $("#radios").html(str);
+	            $("#sradios").html(sstr);
 	        }  
 	    },  
 	    error : function(errorMsg) {  

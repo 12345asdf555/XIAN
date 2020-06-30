@@ -33,6 +33,7 @@ function remove(){
 							$.messager.alert("提示", "删除成功！");
 							$('#rdlg').dialog('close');
 							$('#weldingmachineTable').datagrid('reload');
+							$("#weldingmachineTable").datagrid('clearSelections');
 //							var url = "weldingMachine/goWeldingMachine";
 //							var img = new Image();
 //						    img.src = url;  // 设置相对路径给Image, 此时会发送出请求

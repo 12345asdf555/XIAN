@@ -9,7 +9,7 @@
 <mapper namespace="com.spring.dao.RoleMapper">
 	
 	<insert id="save" parameterType="Role">
-    	insert into tb_roles(roles_name,roles_desc,status) values(#{roleName},#{roleDesc},#{roleStatus});
+    	insert into tb_roles(roles_name,roles_desc,status) values(#{roleName},#{roleDesc},#{roleStatus})
 	<!-- 	insert into tb_roles_authorities(roles_name,authiroties_name) values(#{roleName},#{authorityName}) -->
 	</insert>
 	
@@ -24,20 +24,20 @@
 	</insert>
 	
 	<update id="update" parameterType="Role">
-		update tb_roles set roles_name=#{roleName},roles_desc=#{roleDesc},status=#{roleStatus} where id=#{id};
+		update tb_roles set roles_name=#{roleName},roles_desc=#{roleDesc},status=#{roleStatus} where id=#{id}
 		<!-- update tb_roles_authorities set authorities_name=#{authorityName} where id=#{id} -->
 	</update>
 	
 	<delete id="delete" parameterType="int">
-		delete from tb_roles where id=#{id};
+		delete from tb_roles where id=#{id}
 	</delete>
 	
 	<delete id="delete1" parameterType="int">
-		delete from tb_users_roles where roles_id=#{id};
+		delete from tb_users_roles where roles_id=#{id}
 	</delete>
 	
 	<delete id="delete2" parameterType="int">
-		delete from tb_roles_authorities where roles_id=#{id};
+		delete from tb_roles_authorities where roles_id=#{id}
 	</delete>
 	
 	<select id="updateRoleAuthority" parameterType="int" resultType="String">
@@ -49,11 +49,11 @@
 	</select>
 	
 	<delete id="deleteAuthority" parameterType="int">
-		delete from tb_roles_authorities where roles_id=#{id};
+		delete from tb_roles_authorities where roles_id=#{id}
 	</delete>
 	
 	<delete id="deleteUser" parameterType="int">
-		delete from tb_users_roles where roles_id=#{id};
+		delete from tb_users_roles where roles_id=#{id}
 	</delete>
 	
 	 <!-- mybsits_config中配置的alias类别名,也可直接配置resultType为类路劲 -->  

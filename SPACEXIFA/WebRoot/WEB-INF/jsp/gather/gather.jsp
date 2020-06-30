@@ -37,13 +37,71 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <body>
   	<div class="functiondiv">
 		<div>
-			<a href="javascript:addGather()" class="easyui-linkbutton" iconCls="icon-newadd">新增</a>&nbsp;&nbsp;&nbsp;&nbsp;
-			<a href="javascript:importDg();" class="easyui-linkbutton" iconCls="icon-import">导入</a>&nbsp;&nbsp;&nbsp;&nbsp;
-			<a href="javascript:exportDg();" class="easyui-linkbutton" iconCls="icon-export">导出</a>&nbsp;&nbsp;&nbsp;&nbsp;	
-			<a href="javascript:insertSearchGather();" class="easyui-linkbutton" iconCls="icon-select" >查找</a>
+			<div style="float: left;">
+				<div>
+					<label>采集模块编号：</label>
+				</div>
+				<div>
+					<input class="easyui-textbox" name="sgatherNo" id="sgatherNo" />
+				</div>
+			</div>
+			<div  style="float: left;">
+				<div>
+					<label>组织机构：</label>
+				</div>
+				<div>
+					<select class="easyui-combobox" name="sitemid" id="sitemid" data-options="editable:false">
+					</select>
+				</div>
+			</div>
+			<div  style="float: left;">
+				<div>
+					<label>采集模块状态：</label>
+				</div>
+				<div>
+					<select class="easyui-combobox" name="sstatus" id="sstatus" data-options="editable:false">
+					</select>
+				</div>
+			</div>
+			<div style="float: left;">
+				<div>
+					<label>采集模块协议：</label>
+				</div>
+				<div>
+					<select class="easyui-combobox" name="sprotocol" id="sprotocol" data-options="editable:false">
+					</select>
+				</div>
+			</div>
+			<div style="float: left;">
+				<div>
+					<label>采集模块IP地址：</label>
+				</div>
+				<div>
+					<input class="easyui-textbox" name="sipurl" id="sipurl" />
+				</div>
+			</div>
+			<div style="float: left;">
+				<div>
+					<label>采集模块MAC地址：</label>
+				</div>
+				<div>
+					<input class="easyui-textbox" name="smacurl" id="smacurl" />
+				</div>
+			</div>
+			<div  style="float: left;">
+				<div>
+					<label>出厂时间：</label>
+				</div>
+				<div>
+					<input class="easyui-datetimebox" style="width:150px;" name="sleavetime" id="sleavetime">
+				</div>
+			</div>
+			<div  style="float: left;">
+				<a href="javascript:searchData();" class="easyui-linkbutton" iconCls="icon-select">查找</a>&nbsp;&nbsp;&nbsp;&nbsp;
+			</div>
 		</div>
 	</div>
-  	<div id="body">
+  	<div id="body" style="height: 78%">
   		<div id="importdiv" class="easyui-dialog" style="width:300px; height:200px;" closed="true">
 			<form id="importfm" method="post" class="easyui-form" data-options="novalidate:true" enctype="multipart/form-data"> 
 				<div>
@@ -145,6 +203,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<div id="remove-buttons">
 			<a href="javascript:remove();" class="easyui-linkbutton" iconCls="icon-ok">删除</a>
 			<a href="javascript:close2();" class="easyui-linkbutton" iconCls="icon-cancel" >取消</a>
+		</div>
+		<div class="functiondiv">
+			<div>
+				<a href="javascript:addGather()" class="easyui-linkbutton" iconCls="icon-newadd">新增</a>&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="javascript:getGather(true)" class="easyui-linkbutton" iconCls="icon-update">修改</a>&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="javascript:getGather(false)" class="easyui-linkbutton" iconCls="icon-delete">删除</a>&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="javascript:importDg();" class="easyui-linkbutton" iconCls="icon-import">导入</a>&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="javascript:exportDg();" class="easyui-linkbutton" iconCls="icon-export">导出</a>&nbsp;&nbsp;&nbsp;&nbsp;	
+				<!-- <a href="javascript:insertSearchGather();" class="easyui-linkbutton" iconCls="icon-select" >查找</a> -->
+			</div>
 		</div>
 	</div>
   </body>

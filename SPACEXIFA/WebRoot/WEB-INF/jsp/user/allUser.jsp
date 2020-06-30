@@ -36,15 +36,81 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   
 <body style="height: 100%" class="easyui-layout">
   	<jsp:include  page="../insframeworktree.jsp"/>
-  	<div  id="bodys" region="center"  hide="true"  split="true" >
-	    <div class="functiondiv">
-	        <div>
-	        	<a href="javascript:saveUser();" class="easyui-linkbutton" iconCls="icon-newadd">新增</a>&nbsp;&nbsp;&nbsp;&nbsp;
-	        	<a href="javascript:insertSearchUser();" class="easyui-linkbutton" iconCls="icon-select">查找</a>   
-	    	</div>
-	    </div>
-  		<div id="body">
-	        <table id="dg" style="table-layout:fixed;width:100%"></table>
+  	<div id="bodys" region="center"  hide="true">
+	  	<div class="functiondiv">
+			<div>
+				<div style="float: left;">
+					<div>
+						<label>用户名：</label>
+					</div>
+					<div>
+						<input class="easyui-textbox" name="suserName" id="suserName" />
+					</div>
+				</div>
+				<div style="float: left;">
+					<div>
+						<label>登录名：</label>
+					</div>
+					<div>
+						<input class="easyui-textbox" name="suserLoginName" id="suserLoginName" />
+					</div>
+				</div>
+				<div style="float: left;">
+					<div>
+						<label>电话：</label>
+					</div>
+					<div>
+						<input class="easyui-textbox" name="suserPhone" id="suserPhone" />
+					</div>
+				</div>
+				<div style="float: left;">
+					<div>
+						<label>邮箱：</label>
+					</div>
+					<div>
+						<input class="easyui-textbox" name="suserEmail" id="suserEmail" />
+					</div>
+				</div>
+				<div style="float: left;">
+					<div>
+						<label>岗位：</label>
+					</div>
+					<div>
+						<input class="easyui-textbox" name="suserPosition" id="suserPosition" />
+					</div>
+				</div>
+				<div style="float: left;">
+					<div>
+						<label>部门：</label>
+					</div>
+					<div>
+						<select class="easyui-combobox" name="sinsid" id="sinsid" data-options="editable:false">
+						</select>
+					</div>
+				</div>
+				<div style="float: left;">
+					<div>
+						<label>状态：</label>
+					</div>
+					<div>
+						<span id="sradios"></span>
+					</div>
+				</div>
+				<div  style="float: left;">
+					<a href="javascript:searchData();" class="easyui-linkbutton" iconCls="icon-select">查找</a>&nbsp;&nbsp;&nbsp;&nbsp;
+				</div>
+			</div>
+		</div>
+  		<div id="body" style="height: 78%;">
+	        <table id="dg" style="table-layout:fixed;width:100%;"></table>
+	        <div class="functiondiv">
+		        <div>
+		        	<a href="javascript:saveUser();" class="easyui-linkbutton" iconCls="icon-newadd">新增</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		        	<a href="javascript:deleteUser(true)" class="easyui-linkbutton" iconCls="icon-update">修改</a>&nbsp;&nbsp;&nbsp;&nbsp;
+					<a href="javascript:deleteUser(false)" class="easyui-linkbutton" iconCls="icon-delete">删除</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		        	<a href="javascript:role();" class="easyui-linkbutton" iconCls="icon-search">角色列表</a>   
+		    	</div>
+		    </div>
 	    </div>
 	    <div id="div1" class="easyui-dialog" style="width:400px;height:400px" closed="true" buttons="#dlg-ro"algin="center">
 	        <table id="ro" style="table-layout:fixed;width:100%;" ></table>

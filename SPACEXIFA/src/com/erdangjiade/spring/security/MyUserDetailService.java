@@ -42,8 +42,14 @@ public class MyUserDetailService implements UserDetailsService {
 	    public UserDetails loadUserByUsername(String userName)    
 	            throws UsernameNotFoundException {    
 	    	
-	    	System.out.println(userName);
-	    	com.spring.model.User user = userService.LoadUser(userName);   
+	    	com.spring.model.User user = null;
+			try {
+				System.out.println(userName);
+				user = userService.LoadUser(userName);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}   
 /*	        if (null == user) {    
 	            throw new UsernameNotFoundException("用户" + userName + "不存在");    
 	        } */        

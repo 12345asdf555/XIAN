@@ -9,7 +9,7 @@
 <mapper namespace="com.spring.dao.UserMapper">
 
 	<insert id="save" parameterType="User">
-		insert into tb_users(users_name,users_password,users_login_name,users_phone,users_email,users_position,users_insframework,status) values(#{userName},#{userPassword},#{userLoginName},#{userPhone},#{userEmail},#{userPosition},#{userInsframework},#{status});
+		insert into tb_users(users_name,users_password,users_login_name,users_phone,users_email,users_position,users_insframework,status) values(#{userName},#{userPassword},#{userLoginName},#{userPhone},#{userEmail},#{userPosition},#{userInsframework},#{status})
 <!-- 		insert into tb_users_roles(users_name,roles_name) values(#{userName},#{roleName}) -->
 	</insert>
 	
@@ -19,7 +19,7 @@
 	</insert>
 	
 	<update id="update" parameterType="User">
-		update tb_users set users_name=#{userName},users_password=#{userPassword},users_login_name=#{userLoginName},users_phone=#{userPhone},users_email=#{userEmail},users_position=#{userPosition},users_insframework=#{userInsframework},status=#{status} where id=#{id};
+		update tb_users set users_name=#{userName},users_password=#{userPassword},users_login_name=#{userLoginName},users_phone=#{userPhone},users_email=#{userEmail},users_position=#{userPosition},users_insframework=#{userInsframework},status=#{status} where id=#{id}
 <!-- 		update tb_users_roles set roles_name=#{roleName} where id=#{id} -->
 	</update>
 	
@@ -28,11 +28,11 @@
 	</select>
 	
 	<delete id="deleteRole" parameterType="int">
-		delete from tb_users_roles where users_id=#{id};
+		delete from tb_users_roles where users_id=#{id}
 	</delete>
 	
 	<delete id="delete" parameterType="int">
-		delete tb_users,tb_users_roles from tb_users left join tb_users_roles on tb_users.id=tb_users_roles.users_id where tb_users.id=#{id};
+		delete from tb_users where tb_users.id=#{id}
 	</delete>
 	
 	 <!-- mybsits_config中配置的alias类别名,也可直接配置resultType为类路劲 -->  
@@ -63,7 +63,7 @@
 	</select>
 	
 	<select id="LoadUser" parameterType="String" resultType="User">
-		select id id,users_password userPassword,users_name userName from tb_users where users_login_name=#{userName};
+		select id id,users_password userPassword,users_name userName from tb_users where users_login_name=#{userName}
 	</select>
 	
 	<select id="findRole" resultType="User">

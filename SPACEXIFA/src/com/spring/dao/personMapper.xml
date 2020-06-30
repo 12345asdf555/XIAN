@@ -27,7 +27,7 @@
 	</select>
 	
 	<insert id="save" parameterType="Person">
-		insert into tb_welder(fwelder_no,fname,FCellPhone,FLeveID,FCardNUm,Fqualification,FCReateDate,FUpdateDate,Fcreater,Fupdater,Fowner,Fback) values(#{welderno},#{name},#{cellphone},#{leveid},#{cardnum},#{quali},now(),now(),#{creater},#{updater},#{owner},#{back});
+		insert into tb_welder(fwelder_no,fname,FCellPhone,FLeveID,FCardNUm,Fqualification,FCReateDate,FUpdateDate,Fcreater,Fupdater,Fowner,Fback) values(#{welderno},#{name},#{cellphone},#{leveid},#{cardnum},#{quali},SYSDATE,SYSDATE,#{creater},#{updater},#{owner},#{back})
 	</insert>
 	
 	<select id="findById" parameterType="BigInteger" resultType="Person">
@@ -40,11 +40,11 @@
 	</select>
 	
 	<update id="update" parameterType="Person">
-		update tb_welder set fwelder_no=#{welderno},fname=#{name},FCellPhone=#{cellphone},FLeveID=#{leveid},FCardNUm=#{cardnum},Fqualification=#{quali},FUpdateDate=now(),Fowner=#{owner},Fback=#{back},Fupdater=#{updater} where fid=#{id};
+		update tb_welder set fwelder_no=#{welderno},fname=#{name},FCellPhone=#{cellphone},FLeveID=#{leveid},FCardNUm=#{cardnum},Fqualification=#{quali},FUpdateDate=SYSDATE,Fowner=#{owner},Fback=#{back},Fupdater=#{updater} where fid=#{id}
 	</update>
 	
 	<delete id="delete" parameterType="BigInteger">
-		delete from tb_welder where fid=#{id};
+		delete from tb_welder where fid=#{id}
 	</delete>
 	
 	<select id="dic" resultType="Person">

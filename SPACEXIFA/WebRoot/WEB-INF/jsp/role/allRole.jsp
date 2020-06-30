@@ -33,12 +33,37 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </head>
   <body style="height: 100%">
   	<div class="functiondiv">
-        <div>
-        	<a href="javascript:saveRole();" class="easyui-linkbutton" iconCls="icon-newadd">新增</a>&nbsp;&nbsp;&nbsp;&nbsp;
-        	<a href="javascript:insertSearchRole();" class="easyui-linkbutton" iconCls="icon-select">查找</a> 
-   		</div>
-    </div>
-    <div id="body">
+		<div>
+			<div style="float: left;">
+				<div>
+					<label>角色名：</label>
+				</div>
+				<div>
+					<input class="easyui-textbox" name="sroleName" id="sroleName" />
+				</div>
+			</div>
+			<div style="float: left;">
+				<div>
+					<label>描述：</label>
+				</div>
+				<div>
+					<input class="easyui-textbox" name="sroleDesc" id="sroleDesc" />
+				</div>
+			</div>
+			<div style="float: left;">
+				<div>
+					<label>状态：</label>
+				</div>
+				<div>
+					<span id="sradios"></span>
+				</div>
+			</div>
+			<div  style="float: left;">
+				<a href="javascript:searchData();" class="easyui-linkbutton" iconCls="icon-select">查找</a>&nbsp;&nbsp;&nbsp;&nbsp;
+			</div>
+		</div>
+	</div>
+    <div id="body" style="height: 78%;">
         <div data-options="region:'center',title:'信息',iconCls:'icon-ok'">
        		<table id="dg" style="table-layout:fixed;width:100%"></table>
         </div>
@@ -136,6 +161,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<a href="javascript:saveRoleUser();" class="easyui-linkbutton" iconCls="icon-ok">保存</a>
 			<a href="javascript:closeDialog('userdlg');" class="easyui-linkbutton" iconCls="icon-cancel" >取消</a>
 		</div>
+		<div class="functiondiv">
+	        <div>
+	        	<a href="javascript:saveRole();" class="easyui-linkbutton" iconCls="icon-newadd">新增</a>&nbsp;&nbsp;&nbsp;&nbsp;
+	        	<a href="javascript:editRole()" class="easyui-linkbutton" iconCls="icon-update">修改</a>&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="javascript:removeRole()" class="easyui-linkbutton" iconCls="icon-delete">删除</a>&nbsp;&nbsp;&nbsp;&nbsp;
+	        	<a href="javascript:authority();" class="easyui-linkbutton" iconCls="icon-search">权限列表</a> 
+	        	<a href="javascript:userdatagrid();" class="easyui-linkbutton" iconCls="icon-redo">分配用户</a> 
+	   		</div>
+	    </div>
    	</div>
 </body>
 </html>

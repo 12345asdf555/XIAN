@@ -19,7 +19,7 @@ public class Person {
 	private BigInteger insid;
 	private String insname;
 	private String back;
-	private int val;
+	private Integer val;
 	private int type;
 	private String valuename;
 	private String valuenamex;

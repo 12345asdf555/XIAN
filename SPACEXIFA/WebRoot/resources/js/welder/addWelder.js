@@ -14,7 +14,7 @@ $(function(){
 	$("#welderno").textbox('textbox').blur(function(){
 		var welderno = $("#welderno").val();
 		var len = welderno.length;
-		if(len<8){
+		if(welderno!="" && len<8){
 			for(var i=0;i<8-len;i++){
 				welderno = "0"+welderno;
 			}
@@ -32,16 +32,20 @@ function insframworkCombobox(){
 	   data: {},
 	   success: function (result) {
 	      if (result) {
-	         var optionstring = "";
+	         var optionstring = "",soptionstring = '';
+	         soptionstring += "<option value=''>请选择</option>";
 	         //循环遍历 下拉框绑定
              for (var i = 0; i < result.ary.length; i++) {  
             	 optionstring += "<option value=\"" + result.ary[i].id + "\" >" + result.ary[i].name + "</option>";
+            	 soptionstring += "<option value=\"" + result.ary[i].id + "\" >" + result.ary[i].name + "</option>";
              }
 	         $("#owner").html(optionstring);
+	         $("#sowner").html(soptionstring);
 	      } else {
 	         alert('部门加载失败');
 	      }
 	      $("#owner").combobox();
+	      $("#sowner").combobox();
 	   },
 	   error: function () {
 	      alert('error');
@@ -60,16 +64,20 @@ function leveCombobox(){
 	   data: {},
 	   success: function (result) {
 	      if (result) {
-	         var optionstring = "";
+	         var optionstring = "",soptionstring = '';
+	         soptionstring += "<option value=''>请选择</option>";
 	         //循环遍历 下拉框绑定
 	         for(var k=0;k<result.rows.length;k++){
 	         optionstring += "<option value=\"" + result.rows[k].leveid + "\" >" + result.rows[k].levename + "</option>";
+	         soptionstring += "<option value=\"" + result.rows[k].leveid + "\" >" + result.rows[k].levename + "</option>";
 	         }
 	         $("#leveid").html(optionstring);
+	         $("#sleveid").html(soptionstring);
 	      } else {
 	         alert('数据加载失败');
 	      }
 	      $("#leveid").combobox();
+	      $("#sleveid").combobox();
 	   },
 	   error: function () {
 	      alert('error');
@@ -87,16 +95,20 @@ function quaidCombobox(){
 		   data: {},
 		   success: function (result) {
 		      if (result) {
-		         var optionstring = "";
+		         var optionstring = "",soptionstring = '';
+		         soptionstring += "<option value=''>请选择</option>";
 		         //循环遍历 下拉框绑定
 		         for(var k=0;k<result.rows.length;k++){
 		         optionstring += "<option value=\"" + result.rows[k].quaid + "\" >" + result.rows[k].quaname + "</option>";
+		         soptionstring += "<option value=\"" + result.rows[k].quaid + "\" >" + result.rows[k].quaname + "</option>";
 		         }
 		         $("#quali").html(optionstring);
+		         $("#squali").html(soptionstring);
 		      } else {
 		         alert('数据加载失败');
 		      }
 		      $("#quali").combobox();
+		      $("#squali").combobox();
 		   },
 		   error: function () {
 		      alert('error');
@@ -130,6 +142,9 @@ function editWelder(){
 		$('#fm').form('load', row);
 		$('#validName').val(row.welderno);
 		url = "welders/updateWelder?FID="+ row.id;
+	}else{
+		alert("请先选择一条数据。");
+		return;
 	}
 }
 //提交
@@ -172,7 +187,10 @@ function save(){
 					$.messager.alert("提示", messager);
 					$('#dlg').dialog('close');
 					$('#welderTable').datagrid('reload');
+					$("#welderTable").datagrid('clearSelections');
 				}
+			}else{
+				$('#fm').submit();
 			}
 			
 		},  

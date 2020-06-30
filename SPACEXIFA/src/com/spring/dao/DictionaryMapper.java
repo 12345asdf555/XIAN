@@ -37,8 +37,11 @@ public interface DictionaryMapper extends Mapper<Dictionarys> {
 
 	String getDicValueByType(@Param("typeid")int typeid,@Param("value")int value);
 	
-	List<Dictionarys> getModelOfManu(@Param("num")int num);
+	/* List<Dictionarys> getModelOfManu(@Param("num")int num); */
+	
+	List<Dictionarys> getModelOfManu(@Param("num")String num);
 	
 	List<Dictionarys> getManuModel();
+
 	
 }

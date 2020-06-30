@@ -9,33 +9,20 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
-import com.spring.model.Dictionarys;
-import com.spring.model.Insframework;
-import com.spring.model.MyUser;
-import com.spring.model.User;
 import com.spring.model.WeldedJunction;
 import com.spring.model.Wps;
 import com.spring.page.Page;
-import com.spring.service.DictionaryService;
-import com.spring.service.InsframeworkService;
 import com.spring.service.UserService;
 import com.spring.service.WeldedJunctionService;
 import com.spring.service.WpsService;
-import com.spring.util.IsnullUtil;
 
 import net.sf.json.JSONArray;
 
@@ -51,6 +38,8 @@ public class TerminalController {
 	
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private WeldedJunctionService wjm;
 	
 	/**
 	 * 验证登陆
@@ -384,6 +373,43 @@ public class TerminalController {
 		serrespon.put("respondtype", "succeed");
 		
 		String respondata = JSON.toJSONString(serrespon);
+        
+		//构造回调函数格式jsonpCallback(数据)
+        try {
+            String jsonpCallback = request.getParameter("jsonpCallback");
+			response.getWriter().println(jsonpCallback+"("+respondata+")");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 
+	 * @Description 获取所有电子跟踪卡
+	 * @author Bruce
+	 * @date 2020年6月23日下午7:19:13
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping("/getAllCards")
+	public void getAllCards(HttpServletRequest request,HttpServletResponse response){
+		String search = request.getParameter("search");
+		List<WeldedJunction> cardList = wjm.getCardList(search);
+		JSONObject json = new JSONObject();
+		JSONArray ary = new JSONArray();
+		JSONObject obj = new JSONObject();
+		try{
+			for(WeldedJunction wjm:cardList){
+				json.put("fid", wjm.getId());
+				json.put("fwelded_junction_no", wjm.getWeldedJunctionno());
+				ary.add(json);
+			}
+		}catch(Exception e){
+			e.getMessage();
+		}
+		obj.put("rows", ary);
+		String respondata = JSON.toJSONString(obj);
         
 		//构造回调函数格式jsonpCallback(数据)
         try {

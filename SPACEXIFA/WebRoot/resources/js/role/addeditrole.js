@@ -96,6 +96,9 @@ function editRole(){
 		$('#fm').form('load', row);
 		$('#validName').val(row.roleName);
 		url = "role/updateRole?rid="+ row.id;
+	}else{
+		alert("请先选择一条数据。");
+		return;
 	}
 }
 
@@ -166,6 +169,7 @@ function save(){
 					$.messager.alert("提示", messager);
 					$('#dlg').dialog('close');
 					$('#dg').datagrid('reload');
+					$("#dg").datagrid('clearSelections');
 				}
 	    	}  
 	    },  
@@ -183,13 +187,16 @@ function statusRadio(){
 	    dataType : "json", //返回数据形式为json  
 	    success : function(result) {
 	    	if (result) {
-	    		var str = "";
+	    		var str = "",sstr = "";
 	    		for (var i = 0; i < result.ary.length; i++) {
 	    			str += "<input type='radio' class='radioStyle' name='statusid' id='sId' value=\"" + result.ary[i].id + "\" />"  
                     + result.ary[i].name+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+	    			sstr += "<input type='radio' class='radioStyle' name='sstatusid' id='ssId' value=\"" + result.ary[i].id + "\" />"  
+	    			+ result.ary[i].name+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 	    		}
 	            $("#radios").html(str);
 	            $("input[name='statusid']").eq(0).attr("checked",true);
+	            $("#sradios").html(sstr);
 	        }  
 	    },  
 	    error : function(errorMsg) {  
