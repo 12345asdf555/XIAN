@@ -59,7 +59,7 @@
 		<if test="str!=null and str!=''">
 			and ${str}
 		</if>
-		 ORDER by tb_users.id
+		 ORDER by nlssort(tb_users.id,'NLS_SORT=SCHINESE_PINYIN_M')
 	</select>
 	
 	<select id="LoadUser" parameterType="String" resultType="User">

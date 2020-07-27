@@ -58,4 +58,8 @@ public interface InsframeworkMapper extends Mapper<Insframework>{
 	List<Insframework> getUserInsAll(@Param("str")String str);
 	
 	List<Insframework> getOperateArea(@Param("str")String str,@Param("type")int type);
+	
+	List<Insframework> getConmpany1(@Param("value1")String value1);
+	
+	List<Insframework> getCause1(@Param("id")BigInteger id,@Param("value2")BigInteger value2);
 }

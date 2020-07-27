@@ -160,7 +160,7 @@ function newSearch(){
             			"<label for='name' style='text-align:center;display:inline-block'/>焊工姓名</lable>&nbsp;" +
             			"<input class='liveInput' type='text' id='welderName"+i+"' readonly='true' value=''/></div>&nbsp;" +
             			"<div>" +
-            			"<label for='po' style='text-align:center;display:inline-block'/>设备位置</lable>&nbsp;" +
+            			"<label for='po' style='text-align:center;display:inline-block'/>设备型号</lable>&nbsp;" +
             			"<input class='liveInput' type='text' id='position"+i+"' readonly='true' value=''/></div><div/>";
 		            	$("#body").append(str);
 		            }else{

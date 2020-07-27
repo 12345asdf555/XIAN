@@ -39,7 +39,7 @@
 	</select>
 	
 	<select id="getDictionaryValue" resultMap="dMap">
-		SELECT fvalue, fvaluename FROM tb_dictionary WHERE ftypeid=#{typeid}
+		SELECT fvalue, fvaluename FROM tb_dictionary WHERE ftypeid=#{typeid} ORDER BY nlssort(FVALUENAME,'NLS_SORT=SCHINESE_PINYIN_M')
 	</select>
 	
 	<select id="getDicValueByValue" resultMap="dMap">
@@ -72,5 +72,6 @@
 		<if test="num!=null and num!=''">
 		 and em.ftype=#{num}
 		</if>
+		ORDER BY nlssort(d.fvaluename,'NLS_SORT=SCHINESE_PINYIN_M')
 	</select>
 </mapper>

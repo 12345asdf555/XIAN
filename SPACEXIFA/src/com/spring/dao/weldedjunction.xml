@@ -272,7 +272,7 @@
 	</select>
 	
 	<select id="getCardList" resultMap="wjMap">
-		SELECT j.fid,fwelded_junction_no,ftask_no,fitemId iid,i.fname iname,j.flag,l.fwps_lib_name,l.fwps_lib_version,j.fstatus,
+		SELECT j.fid,fwelded_junction_no,ftask_no,fitemId iid,i.fname iname,j.flag,l.fwps_lib_name,l.fwps_lib_version,j.fstatus,DECODE(t.FTASKID,NULL,t.FOPERATETYPE,0) roomNo,t.FTASKID,
 		DECODE(j.fstatus, 2, j.fback ,NULL) fback,DECODE(SIGN(COUNT(DISTINCT(p.fproduct_number))-COUNT(DISTINCT(t.ftaskid))), 1, 1 ,0) fdyne 
 		FROM tb_welded_junction j
 		LEFT JOIN tb_insframework i ON j.fitemId=i.fid 
@@ -284,7 +284,8 @@
 		<if test="search!=null and search!=''">
 			WHERE ${search}
 		</if>
-		GROUP BY j.fid,j.fwelded_junction_no,ftask_no,fitemId,i.fname,j.flag,l.fwps_lib_name,l.fwps_lib_version,j.fstatus,DECODE(j.fstatus, 2, j.fback ,NULL) ORDER BY j.fid
+		GROUP BY j.fid,j.fwelded_junction_no,ftask_no,fitemId,i.fname,j.flag,l.fwps_lib_name,l.fwps_lib_version,j.fstatus,t.FTASKID,t.FOPERATETYPE,DECODE(j.fstatus, 2, j.fback ,NULL) 
+		ORDER BY nlssort(j.fid,'NLS_SORT=SCHINESE_PINYIN_M')
 	</select>
 	
 	<insert id="addCard" parameterType="com.spring.model.WeldedJunction">
@@ -328,10 +329,11 @@
 		l.fproduct_drawing_no,l.fproduct_name,l.fproduct_version,l.flag FROM tb_product_number p 
 		LEFT JOIN tb_wps_library l ON p.fwps_lib_id=l.fid
 		LEFT JOIN tb_taskresult t ON p.fid=t.ftaskid 
-		WHERE (t.fid IN (SELECT MAX(fid) FROM tb_taskresult GROUP BY ftaskid) OR t.foperatetype IS null)
+		WHERE (t.fid IN (SELECT MAX(fid) FROM tb_taskresult WHERE FJUNCTION_ID IS NULL GROUP BY ftaskid) OR t.foperatetype IS null)
 		<if test="search!=null and search!=''">
 			${search}
 		</if>
+		ORDER BY p.FID ASC
 	</select>
 	
 	<select id="getProductByCardid" resultMap="wjMap">

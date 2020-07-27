@@ -302,7 +302,7 @@ function statusRadio(){
 	});
 }
 
-//设备型号
+//型号
 function machineModel(){
 	$("#manuno").combobox({
 		onChange : function(newValue,oldValue){

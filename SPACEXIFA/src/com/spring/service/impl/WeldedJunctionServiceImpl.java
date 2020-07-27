@@ -170,6 +170,13 @@ public class WeldedJunctionServiceImpl implements WeldedJunctionService{
 
 	@Override
 	public List<WeldedJunction> getProductList(Page page, String search) {
+		PageHelper.startPage(page.getPageIndex(), page.getPageSize());
+		// TODO Auto-generated method stub
+		return wjm.getProductList(search);
+	}
+	
+	@Override
+	public List<WeldedJunction> getProductList(String search) {
 		// TODO Auto-generated method stub
 		return wjm.getProductList(search);
 	}

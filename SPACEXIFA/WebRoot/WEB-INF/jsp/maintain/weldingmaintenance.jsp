@@ -35,7 +35,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <div id="topdiv">
 		<div class="mainfitem" align="center">
 			<input type="hidden" id="wId" value="${w.id }"/>
-			<lable>固定资产编号</lable>
+			<lable>设备名称</lable>
 			<input class="easyui-textbox" id="equipmentno" readonly="readonly" value="${w.equipmentNo }"/>
 			<lable>设备类型</lable>
 			<input class="easyui-textbox" id="tId" readonly="readonly" value="${w.typename}"/>
@@ -53,7 +53,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<input class="easyui-textbox" id="gatherId" readonly="readonly" value="${w.gatherId.gatherNo }"/>
 		</div>
 		<div class="mainfitem" align="center">
-			<lable>设备位置</lable>
+			<lable>设备型号</lable>
 			<input class="easyui-textbox" id="position" readonly="readonly" value="${w.position }"/>
 			<lable>是否联网</lable>
 			<input class="easyui-textbox" id="isnetworking" readonly="readonly" value="${isnetworking }"/>

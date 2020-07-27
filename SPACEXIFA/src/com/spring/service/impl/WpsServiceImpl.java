@@ -562,4 +562,40 @@ public class WpsServiceImpl implements WpsService{
 		PageHelper.startPage(page.getPageIndex(), page.getPageSize());
 		return mapper.getHistoryDatagridList(search);
 	}
+
+	@Override
+	public List<Wps> getEmployeeByJun(String search) {
+		// TODO Auto-generated method stub
+		return mapper.getEmployeeByJun(search);
+	}
+
+	@Override
+	public List<Wps> getJunctionByWpsid(String search) {
+		// TODO Auto-generated method stub
+		return mapper.getJunctionByWpsid(search);
+	}
+
+	@Override
+	public void addTaskresultRow(Wps wps) {
+		// TODO Auto-generated method stub
+		mapper.addTaskresultRow(wps);
+	}
+
+	@Override
+	public void updateTaskresult(Wps wps) {
+		// TODO Auto-generated method stub
+		mapper.updateTaskresult(wps);
+	}
+
+	@Override
+	public void overTaskresult(Wps wps) {
+		// TODO Auto-generated method stub
+		mapper.overTaskresult(wps);
+	}
+
+	@Override
+	public void overCard(Wps wps) {
+		// TODO Auto-generated method stub
+		mapper.overCard(wps);
+	}
 }

@@ -109,4 +109,10 @@ public interface WpsMapper {
 	List<Wps> getunstard(@Param("search")String search);
 	void finishWork(@Param("fid")String fid);
 	List<Wps> getHistoryDatagridList(@Param("search")String search);
+	List<Wps> getEmployeeByJun(@Param("search")String search);
+	List<Wps> getJunctionByWpsid(@Param("search")String search);
+	void addTaskresultRow(Wps wps);
+	void updateTaskresult(Wps wps);
+	void overTaskresult(Wps wps);
+	void overCard(Wps wps);
 }

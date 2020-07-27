@@ -178,4 +178,16 @@ public interface InsframeworkService {
 	 * @return
 	 */
 	BigInteger getUserInsframework();
+	
+	/**
+	 * 查看公司级
+	 * @return
+	 */
+	List<Insframework> getConmpany(BigInteger value1);
+	
+	/**
+	 * 查看公司级子级
+	 * @return
+	 */
+	List<Insframework> getCause(BigInteger id,BigInteger value2);
 }

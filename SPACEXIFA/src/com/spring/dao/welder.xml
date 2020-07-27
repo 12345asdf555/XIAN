@@ -15,6 +15,7 @@
 		<if test="str!=null and str!=''">
 			and ${str}
 		</if>
+		ORDER BY nlssort(w.fname,'NLS_SORT=SCHINESE_PINYIN_M')
 	</select>
 	
 	<select id="getWeldernoCount" resultType="java.lang.Integer">

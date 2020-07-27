@@ -145,7 +145,7 @@ function weldingnumbersDatagrid(value) {
 			align : "left"
 		}, {
 			field : 'model',
-			title : '设备型号',
+			title : '型号',
 //			width : 100,
 			halign : "center",
 			align : "left"

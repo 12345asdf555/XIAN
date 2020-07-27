@@ -76,7 +76,7 @@
 	    <if test="str!=null and str!=''">
 			and ${str}
 		</if>
-		ORDER BY tb_roles.id
+		ORDER BY nlssort(tb_roles.id,'NLS_SORT=SCHINESE_PINYIN_M')
 	</select>
 	<select id="findAllAuthority" resultType="Role">
 		select id id,authorities_desc authorityDesc from tb_authorities

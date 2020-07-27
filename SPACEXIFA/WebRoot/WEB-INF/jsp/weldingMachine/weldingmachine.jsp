@@ -38,7 +38,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<div>
 			<div style="float: left;">
 				<div>
-					<label>固定资产编号：</label>
+					<label>设备名称：</label>
 				</div>
 				<div>
 					<input class="easyui-textbox" name="sequipmentNo" id="sequipmentNo" />
@@ -90,7 +90,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 			<div style="float: left;">
 				<div>
-					<label>设备位置：</label>
+					<label>设备型号：</label>
 				</div>
 				<div>
 					<input class="easyui-textbox" name="sposition" id="sposition" />
@@ -106,7 +106,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 			<div style="float: left;">
 				<div>
-					<label>设备型号：</label>
+					<label>型号：</label>
 				</div>
 				<div>
 					<select class="easyui-combobox" name="smodel" id="smodel" data-options="editable:false">
@@ -166,9 +166,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<div id="dlg" class="easyui-dialog" style="width: 400px; height: 530px; padding:10px 20px" closed="true" buttons="#dlg-buttons">
 			<form id="fm" class="easyui-form" method="post" data-options="novalidate:true">
 				<div class="fitem">
-					<lable><span class="required">*</span>固定资产编号</lable>
+					<lable><span class="required">*</span>设备名称</lable>
 					<input type="hidden" id="valideno">
-					<input class="easyui-textbox" name="equipmentNo" id="equipmentNo"  data-options="validType:['wmEnoValidate'],required:true"/>
+					<input class="easyui-textbox" name="equipmentNo" id="equipmentNo"  data-options="required:true"/>
 				</div>
 				<div class="fitem">
 					<lable><span class="required">*</span>设备类型</lable>
@@ -193,7 +193,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<select class="easyui-combobox" name="gid" id="gid" data-options="validType:['checkNumber','wmGatheridValidate'],editable:false""></select>
 				</div>
 				<div class="fitem">
-					<lable>设备位置</lable>
+					<lable>设备型号</lable>
 					<input class="easyui-textbox" name="position" id="position"/>
 				</div>
 				<div class="fitem">
@@ -201,7 +201,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<input class="easyui-textbox" name="ip" id="ip"/>
 				</div>
 				<div class="fitem">
-					<lable>设备型号</lable>
+					<lable>型号</lable>
 					<!-- <input class="easyui-textbox" name="model" id="model"/> -->
 					<select class="easyui-combobox" name="model" id="model" data-options="required:true,editable:false""></select>
 				</div>
@@ -225,7 +225,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<div id="rdlg" class="easyui-dialog" style="width: 400px; height: 530px; padding:10px 20px" closed="true" buttons="#remove-buttons">
 			<form id="rfm" class="easyui-form" method="post" data-options="novalidate:true">
 				<div class="fitem">
-				<lable>固定资产编号</lable>
+				<lable>设备名称</lable>
 				<input type="hidden" name="wid" readonly="readonly"/>
 				<input class="easyui-textbox" name="equipmentNo" readonly="readonly"/>
 			</div>
@@ -250,7 +250,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<input class="easyui-textbox" name="gatherId" readonly="readonly"/>
 			</div>
 			<div class="fitem">
-				<lable>设备位置</lable>
+				<lable>设备型号</lable>
 				<input class="easyui-textbox" name="position" readonly="readonly"/>
 			</div>
 			<div class="fitem">
@@ -258,7 +258,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<input class="easyui-textbox" name="ip" id="ip"/>
 			</div>
 			<div class="fitem">
-					<lable>设备型号</lable>
+					<lable>型号</lable>
 					<input class="easyui-textbox" name="model" id="model"/>
 			</div>
 			<div class="fitem">

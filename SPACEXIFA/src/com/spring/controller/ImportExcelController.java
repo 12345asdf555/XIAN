@@ -958,7 +958,7 @@ public class ImportExcelController {
 						break;
 					}
 					else if(k == 10){
-						dit.setModel(cellValue);//设备型号
+						dit.setModel(cellValue);//型号
 						break;
 					}
 					break;

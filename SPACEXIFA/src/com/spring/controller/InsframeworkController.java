@@ -36,6 +36,7 @@ public class InsframeworkController {
 	private int pageIndex = 1;
 	private int pageSize = 10;
 	private int total = 0;
+	private BigInteger value3;
 	
 	@Autowired
 	private InsframeworkService im;
@@ -413,44 +414,100 @@ public class InsframeworkController {
 	public void getConmpany(HttpServletResponse response){
         String str ="";  
         StringBuilder json = new StringBuilder();
+        BigInteger companyId = im.getUserInsframework();
+        int type = im.getTypeById(companyId);
+        BigInteger value1,value2;
+        if(type==20){
+			value1=null;
+			value2=null;
+			value3=null;
+		}else if(type==21){
+			value1=im.getUserInsframework();
+			value2=null;
+			value3=null;
+		}else if(type==22){
+			value1=im.getParent(im.getUserInsframework()).getId();
+			value2=im.getUserInsframework();
+			value3=null;
+		}else{
+			value1=im.getParent(im.getParent(im.getUserInsframework()).getId()).getId();
+			value2=im.getParent(im.getUserInsframework()).getId();
+			value3=im.getUserInsframework();
+		}
         // 拼接根节点  
         Insframework b = im.getBloc();
-        if(b!=null){  
-	        json.append("[");  
-	        json.append("{\"id\":" +b.getId());
-	        json.append(",\"text\":\"" +b.getName()+ "\"");
-	        json.append(",\"state\":\"open\"");  
-	        // 获取根节点下的所有子节点  
-	        List<Insframework> treeList = im.getConmpany();
-	        // 遍历子节点下的子节点  
-	        if(treeList!=null && treeList.size()!=0){  
-	            json.append(",\"children\":[");  
-	            for (Insframework t : treeList) {  
-	                  
-	                json.append("{\"id\":" +String.valueOf(t.getId()));   
-	                json.append(",\"text\":\"" +t.getName() + "\"");   
-	                json.append(",\"state\":\"open\"");   
-	                  
-	                // 该节点有子节点  
-	                // 设置为关闭状态,而从构造异步加载tree  
-	              
-	                List<Insframework> tList = im.getCause(t.getId());  
-	                if(tList!=null && tList.size()!=0){// 存在子节点  
-	                     json.append(",\"children\":[");  
-	                     json.append(dealJsonFormat(tList));// 存在子节点的都放在一个工具类里面处理了
-	                     json.append("]");  
-	                }  
-	                json.append("},");  
-	            }  
-	            str = json.toString();  
-	            str = str.substring(0, str.length()-1);  
-	            str+="]}]";
-	        }else{
+        if(type==20) {
+            if(b!=null){  
+    	        json.append("[");  
+    	        json.append("{\"id\":" +b.getId());
+    	        json.append(",\"text\":\"" +b.getName()+ "\"");
+    	        json.append(",\"state\":\"open\"");  
+    	        // 获取根节点下的所有子节点  
+    	        List<Insframework> treeList = im.getConmpany(value1);
+    	        // 遍历子节点下的子节点  
+    	        if(treeList!=null && treeList.size()!=0){  
+    	            json.append(",\"children\":[");  
+    	            for (Insframework t : treeList) {  
+    	                  
+    	                json.append("{\"id\":" +String.valueOf(t.getId()));   
+    	                json.append(",\"text\":\"" +t.getName() + "\"");   
+    	                json.append(",\"state\":\"open\"");   
+    	                  
+    	                // 该节点有子节点  
+    	                // 设置为关闭状态,而从构造异步加载tree  
+    	              
+    	                List<Insframework> tList = im.getCause(t.getId(),value2);  
+    	                if(tList!=null && tList.size()!=0){// 存在子节点  
+    	                     json.append(",\"children\":[");  
+    	                     json.append(dealJsonFormat(tList));// 存在子节点的都放在一个工具类里面处理了
+    	                     json.append("]");  
+    	                }  
+    	                json.append("},");  
+    	            }  
+    	            str = json.toString();  
+    	            str = str.substring(0, str.length()-1);  
+    	            str+="]}]";
+    	        }else{
+    	            str = json.toString();
+    	            str+="}]";
+    	        }
+                  
+            }  
+        }else if(type==21) {
+        	List<Insframework> treeList = im.getConmpany(value1);
+        	for (Insframework tree : treeList) {  
+    	        json.append("[");  
+    	        json.append("{\"id\":" +String.valueOf(tree.getId()));
+    	        json.append(",\"text\":\"" +tree.getName()+ "\"");
+    	        json.append(",\"state\":\"open\"");  
+    	        List<Insframework> tList = im.getCause(tree.getId(),value2);  
+                if(tList!=null && tList.size()!=0){// 存在子节点  
+                     json.append(",\"children\":[");  
+                     json.append(dealJsonFormat(tList));// 存在子节点的都放在一个工具类里面处理了
+                     json.append("]");  
+     	             str = json.toString();
+     	             str+="}]";
+                } 
+        	}
+        }else if(type==22) {
+        	List<Insframework> tList = im.getCause(null,value2);
+        	if(tList!=null && tList.size()!=0){// 存在子节点  
+        		json.append("[");
+                json.append(dealJsonFormat(tList));// 存在子节点的都放在一个工具类里面处理了
+                json.append("]");
 	            str = json.toString();
-	            str+="}]";
-	        }
-              
-        }  
+           } 
+        }else {
+        	List<Insframework> tList = im.getCause(null,companyId);
+        	for (Insframework tree : tList) {  
+        		json.append("[");  
+    	        json.append("{\"id\":" +String.valueOf(tree.getId()));
+    	        json.append(",\"text\":\"" +tree.getName()+ "\"");
+    	        json.append(",\"state\":\"open\"");  
+    	        json.append("}]");
+    	        str = json.toString();
+        	}
+        }
         try {
             response.getWriter().print(str);  
         } catch (IOException e) {  

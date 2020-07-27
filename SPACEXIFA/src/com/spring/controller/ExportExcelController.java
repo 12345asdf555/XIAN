@@ -95,7 +95,7 @@ public class ExportExcelController {
 			List<WeldingMachine> list = wmm.getWeldingMachine(str);
 			String dtime = null;
 			String[] titles = new String[] { "设备编码", "设备类型", "入厂时间", "所属项目", "状态", "厂家", "是否在网", "采集序号", "位置", "ip地址",
-					"设备型号" };
+					"型号" };
 			Object[][] data = new Object[list.size()][11];
 			for (int i = 0; i < list.size(); i++) {
 				data[i][0] = list.get(i).getEquipmentNo();
@@ -124,7 +124,7 @@ public class ExportExcelController {
 			ServletContext scontext = request.getSession().getServletContext();
 			// 获取绝对路径
 			String abpath = scontext.getRealPath("");
-			// String contextpath=scontext. getContextPath() ; 获取虚拟路径
+//			 String contextpath=scontext. getContextPath() ; //获取虚拟路径
 
 			String path = abpath + "excelfiles/" + filename;
 			new CommonExcelUtil(dtime, titles, data, path, "焊机设备数据");

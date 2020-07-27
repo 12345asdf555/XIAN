@@ -44,7 +44,8 @@
 	</select>
 	
 	<select id="getAllPosition" parameterType="String" resultType="Td">
-		select tb_welding_machine.fid id,fequipment_no fequipment_no,fposition fposition,finsframework_id fci,tb_insframework.fname fcn,ftype_id typeid,fmodel fpp from tb_welding_machine 
+		select tb_welding_machine.fid id,fequipment_no fequipment_no,fposition fposition,finsframework_id fci,tb_insframework.fname fcn,ftype_id typeid,fmodel fpp,g.FGATHER_NO fstatus_id  from tb_welding_machine 
+		LEFT JOIN TB_GATHER g ON g.FID=tb_welding_machine.FGATHER_ID
 		LEFT JOIN tb_insframework ON tb_welding_machine.finsframework_id=tb_insframework.fid 
 		LEFT JOIN tb_insframework ins on ins.fid = tb_insframework.fparent 
 		LEFT JOIN tb_insframework insf on insf.fid=ins.fparent where 1=1
@@ -54,19 +55,21 @@
 		<if test="str!=null and str!=''">
 			and ${str}
 		</if>
-		ORDER BY fequipment_no ASC
+		ORDER BY nlssort(fequipment_no,'NLS_SORT=SCHINESE_PINYIN_M')
 	</select>
 	
 	<select id="getAllPositions" parameterType="String" resultType="Td">
-		select wm.fid id,fequipment_no fequipment_no,fposition fposition,finsframework_id fci,tb_insframework.fname fcn,d.fvaluename model from tb_welding_machine wm
+		select wm.fid id,fequipment_no fequipment_no,fposition fposition,finsframework_id fci,tb_insframework.fname fcn,d.fvaluename model,g.FGATHER_NO fstatus_id 
+		from tb_welding_machine wm
+		LEFT JOIN TB_GATHER g ON g.FID=wm.FGATHER_ID
 		LEFT JOIN tb_dictionary d on d.fvalue = wm.fmodel
-        LEFT JOIN tb_insframework ON wm.finsframework_id=tb_insframework.fid 
+    	LEFT JOIN tb_insframework ON wm.finsframework_id=tb_insframework.fid 
 		LEFT JOIN tb_insframework ins on ins.fid = tb_insframework.fparent 
 		LEFT JOIN tb_insframework insf on insf.fid=ins.fparent where d.ftypeid=17
 		<if test="parent!=null and parent!=''">
 			and (tb_insframework.fid=#{parent} or ins.fid=#{parent} or insf.fid=#{parent} or insf.fparent=#{parent})
 		</if>
-		order by fequipment_no asc
+		ORDER BY nlssort(fequipment_no,'NLS_SORT=SCHINESE_PINYIN_M')
 	</select>
 	
 	<select id="getMachine" parameterType="String" resultType="Td">
@@ -86,10 +89,10 @@
 	<select id="getLiveTime" resultType="Td">
 		SELECT sum(worktime) worktime FROM (
 	        SELECT count(fid) worktime from tb_live_data 
-	        where FWeldTime &gt;= #{totime} and FWeldTime &lt;= SYSDATE and fmachine_id=#{machineid} and (fstatus=3 or fstatus=5 or fstatus=7 or fstatus=99)
+	        where FWeldTime &gt;= to_date(substr(#{totime},1,19), 'yyyy-mm-dd hh24:mi:ss') and FWeldTime &lt;= SYSDATE and fmachine_id=#{machineid} and (fstatus=3 or fstatus=5 or fstatus=7 or fstatus=99)
 	        union all
 	        SELECT sum(fworktime) worktime FROM tb_work 
-			WHERE fstarttime &gt;= #{time} and fendtime &lt;= #{totime} and fmachine_id=#{machineid}
+			WHERE fstarttime &gt;= to_date(substr(#{time},1,19), 'yyyy-mm-dd hh24:mi:ss') and fendtime &lt;= to_date(substr(#{totime},1,19), 'yyyy-mm-dd hh24:mi:ss') and fmachine_id=#{machineid}
         )temp
 	</select>
 	

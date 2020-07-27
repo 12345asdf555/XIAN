@@ -494,6 +494,7 @@ public class TdController {
 					json.put("fposition", td.getFposition());
 					json.put("finsid", td.getFci());
 					json.put("finsname", td.getFcn());
+					json.put("fgather_no", td.getFstatus_id());
 					if(td.getModel().contains("NB")){
 						json.put("model", 1);
 					}else if(td.getModel().contains("CPVE")){
@@ -530,6 +531,7 @@ public class TdController {
 						json.put("fposition", td.getFposition());
 						json.put("finsid", td.getFci());
 						json.put("finsname", td.getFcn());
+						json.put("fgather_no", td.getFstatus_id());
 						if(td.getModel().contains("NB")){
 							json.put("model", 1);
 						}else if(td.getModel().contains("CPVE")){
@@ -558,6 +560,7 @@ public class TdController {
 								json.put("fposition", td.getFposition());
 								json.put("finsid", td.getFci());
 								json.put("finsname", td.getFcn());
+								json.put("fgather_no", td.getFstatus_id());
 								if(td.getModel().contains("NB")){
 									json.put("model", 1);
 								}else if(td.getModel().contains("CPVE")){
@@ -597,6 +600,7 @@ public class TdController {
 				for(Td td:getAP){
 					json.put("fid",td.getId());
 					json.put("fequipment_no", td.getFequipment_no());
+					json.put("fgather_no", td.getFstatus_id());
 					json.put("fposition", td.getFposition());
 					json.put("finsid", td.getFci());
 					json.put("finsname", td.getFcn());
@@ -620,6 +624,7 @@ public class TdController {
 					for(Td td:getAP){
 						json.put("fid",td.getId());
 						json.put("fequipment_no", td.getFequipment_no());
+						json.put("fgather_no", td.getFstatus_id());
 						json.put("fposition", td.getFposition());
 						json.put("finsid", td.getFci());
 						json.put("finsname", td.getFcn());
@@ -638,6 +643,7 @@ public class TdController {
 							if(td.getFci()==Integer.valueOf(ins.getId().toString())){
 								json.put("fid",td.getId());
 								json.put("fequipment_no", td.getFequipment_no());
+								json.put("fgather_no", td.getFstatus_id());
 								json.put("fposition", td.getFposition());
 								json.put("finsid", td.getFci());
 								json.put("finsname", td.getFcn());
@@ -789,15 +795,15 @@ public class TdController {
 /*			Calendar calendar = Calendar.getInstance();
 			calendar.add(Calendar.DATE, 1); //得到后一天
 			String totime = sdf.format(calendar.getTime());*/
-			Td list = tdService.getLiveTime(time.substring(0,11)+"00:00:00", time.substring(0,14)+"00:00", new BigInteger(request.getParameter("machineid")));
+//			Td list = tdService.getLiveTime(time.substring(0,11)+"00:00:00", time.substring(0,14)+"00:00", new BigInteger(request.getParameter("machineid")));
 			WeldingMachine machinelist = wm.getWeldingMachineById(new BigInteger(request.getParameter("machineid")));
 			json.put("machineno", machinelist.getTypename());
 			json.put("mvaluename", machinelist.getMvaluename());
 			json.put("machine", machinelist.getEquipmentNo());
-			if(list!=null){
-				json.put("worktime",list.getWorktime());
-				json.put("time",list.getWorktime());
-			}
+//			if(list!=null){
+//				json.put("worktime",list.getWorktime());
+//				json.put("time",list.getWorktime());
+//			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -813,9 +819,10 @@ public class TdController {
 		List<Wps> wps = Wps.gettrackcard();
 		try{
 			for(Wps w:wps) {
+				json.put("fid", w.getFid());
 				json.put("fwelded_junction_no", w.getFwelded_junction_no());
 				json.put("fwpsnum", w.getFwpsnum());
-				json.put("fproduct_vnumber", w.getFproduct_vnumber());
+				json.put("fproduct_number", w.getFprefix_number()+"-"+w.getConname());
 				json.put("fproduct_drawing_no", w.getFproduct_drawing_no());
 				json.put("fprocessname", w.getFprocessname());//工艺规程编号
 				json.put("fwps_lib_version", w.getFwps_lib_version());//规程版本
@@ -831,7 +838,8 @@ public class TdController {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		return json.toString();
+		obj.put("rows", ary);
+		return obj.toString();
 	}
 	
 }

@@ -159,7 +159,7 @@ function newSearchWeldingMachine(){
 //焊接设备下拉框
 function searchWeldingMachineCombobox(){
 	var optionFields = 
-		"<option value='fequipment_no'>固定资产编号</option>" +
+		"<option value='fequipment_no'>设备名称</option>" +
 		"<option value='di.fvaluename'>设备类型</option>" +
 		"<option value='fjoin_time'>入厂时间</option>" +
 		"<option value='i.fname'>所属项目</option>" +
@@ -168,7 +168,7 @@ function searchWeldingMachineCombobox(){
 		"<option value='fisnetworking'>是否在网</option>" +
 		"<option value='fposition'>位置</option>" +
 		"<option value='w.fIP'>ip地址</option>" +
-		"<option value='dict.fvaluename'>设备型号</option>";
+		"<option value='dict.fvaluename'>型号</option>";
 	$(".fields").html(optionFields);
 	createSearchCombobox();
 }
@@ -236,7 +236,7 @@ function newSearchMaintain(){
 //维修记录下拉框
 function searchMaintainCombobox(){
 	var optionFields = 
-		"<option value='fequipment_no'>固定资产编号</option>" +
+		"<option value='fequipment_no'>设备名称</option>" +
   		"<option value='d.fvaluename'>维修类型</option>" +
   		"<option value='fviceman'>维修人员</option>" +
   		"<option value='fdesc'>维修说明</option>" +

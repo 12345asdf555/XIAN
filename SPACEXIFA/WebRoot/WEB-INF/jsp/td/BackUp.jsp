@@ -38,7 +38,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<div id="bodys" region="center"  hide="true"  split="true" title="实时界面" style="background: #eee; height: 335px;">
 		<div id="body1" style="width:15%;height:100%;float:left">
 			<div class="easyui-accordion" fit="true" border="false" id="accordiondiv">
-			    <div id="body11" title="设备位置" ></div>
+			    <div id="body11" title="设备型号" ></div>
 			</div>
 		</div>
 		<div id="body2" style="width:15%;height:15%;float:left;position:absolute;left:15.5%;top:8%;">

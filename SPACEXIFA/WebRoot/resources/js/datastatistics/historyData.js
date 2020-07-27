@@ -64,7 +64,7 @@ function historyDatagrid(){
 			hidden:true
 		}, {
 			field : 'fmodel',
-			title : '设备型号',
+			title : '型号',
 //			width : 30,
 			halign : "center",
 			align : "left",
@@ -184,7 +184,7 @@ function historyDatagrid(){
         	var object = loadxmlDoc(ipurl+"ConfigFile/machine.xml");
         	var menuinfo = object.getElementsByTagName("Typeinfo");
         	for (var i = 0; i < menuinfo.length; i++) {
-        		var name = menuinfo[i].getElementsByTagName("TypeName");//设备型号
+        		var name = menuinfo[i].getElementsByTagName("TypeName");//型号
         		var value = menuinfo[i].getElementsByTagName("TypeValue");//value值
         		if (document.all) {
         			name = name[0].text;
@@ -315,10 +315,10 @@ function searchHistory(){
 		searchStr += " AND j.fwelding_area LIKE "+"'%" + fwelding_area + "%'";
 	}
 	if(dtoTime1 != ""){
-		searchStr += " AND w.fstarttime>="+"'" + dtoTime1 + "'";
+		searchStr += " AND w.fstarttime>="+"to_date('" + dtoTime1 + "', 'yyyy-mm-dd hh24:mi:ss')";
 	}
 	if(dtoTime2 != ""){
-		searchStr += " AND w.fendtime<="+"'" + dtoTime2 + "'";
+		searchStr += " AND w.fendtime<="+"to_date('" + dtoTime2 + "', 'yyyy-mm-dd hh24:mi:ss')";
 	}
 	$('#dg').datagrid("options").url="datastatistics/getHistoryDatagridList";
 	$('#dg').datagrid('load', {

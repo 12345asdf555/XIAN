@@ -134,15 +134,15 @@ $(function() {
 		success : function(result) {
 			if (result) {
 				worktime = eval(result);
-				if(worktime.worktime!=null && worktime.worktime!=''){
-					time1 = worktime.worktime;
-				}
-				if(worktime.time!=null && worktime.time!=''){
-					time2 = worktime.time;
-				}
-				var t1 = secondToDate(time1);
+//				if(worktime.worktime!=null && worktime.worktime!=''){
+//					time1 = worktime.worktime;
+//				}
+//				if(worktime.time!=null && worktime.time!=''){
+//					time2 = worktime.time;
+//				}
+//				var t1 = secondToDate(time1);
 			  //  $("#r3").html(t1);
-			    var t2 = secondToDate(time2);
+//			    var t2 = secondToDate(time2);
 			   // $("#r4").html(t2);
 			}
 		},
@@ -197,7 +197,7 @@ $(function(){
 					dataType : "json", //返回数据形式为json  
 					success : function(result) {
 						if (result) {
-							trackcards = eval(result);
+							trackcards = eval(result.rows);
 						}
 					},
 					error : function(errorMsg) {
@@ -324,33 +324,33 @@ function iview() {
 					}
 				}
 //				continue;
-				welderid.push(parseInt(redata.substring(0 + i, 4 + i), 10));
-				machin_id.push(parseInt(redata.substring(4 + i, 8 + i), 10));
-				junctionid.push(parseInt(redata.substring(12 + i, 16 + i), 10));
-				cardid.push(parseInt(redata.substring(99 + i, 103 + i), 10));
-				wpsid.push(parseInt(redata.substring(103 + i, 107 + i), 10));
-				productid.push(parseInt(redata.substring(107 + i, 111 + i), 10));
-				employeeid.push( parseInt(redata.substring(111 + i, 115 + i), 10));
-				stepid.push(parseInt(redata.substring(115 + i, 119 + i), 10));
+//				welderid.push(parseInt(redata.substring(0 + i, 4 + i), 10));
+//				machin_id.push(parseInt(redata.substring(4 + i, 8 + i), 10));
+//				junctionid.push(parseInt(redata.substring(12 + i, 16 + i), 10));
+//				cardid.push(parseInt(redata.substring(99 + i, 103 + i), 10));
+//				wpsid.push(parseInt(redata.substring(103 + i, 107 + i), 10));
+//				productid.push(parseInt(redata.substring(107 + i, 111 + i), 10));
+//				employeeid.push( parseInt(redata.substring(111 + i, 115 + i), 10));
+//				stepid.push(parseInt(redata.substring(115 + i, 119 + i), 10));
 				for (var m = 0; m < trackcards.length; m++) {
 					if (trackcards[m].insid == parseInt(redata.substring(12 + i, 16 + i),10)) {
-						$("#r1").html(welderName[k].fproduct_drawing_no);
-						$("#r2").html(welderName[k].fprocessname);
-						$("#r5").html(welderName[k].fwelded_junction_no);
-						$("#r6").html(welderName[k].fwps_lib_version);
-						$("#r7").html(welderName[k].femployee_id);
-						$("#r9").html(welderName[k].fproduct_vnumber);
-						$("#r10").html(welderName[k].fjunction);
-						$("#r11").html(welderName[k].fstep_number);
+						$("#r1").val(trackcards[m].fproduct_drawing_no);
+						$("#r2").val(trackcards[m].fprocessname);
+						$("#r5").val(trackcards[m].fwelded_junction_no);
+						$("#r6").val(trackcards[m].fwps_lib_version);
+						$("#r7").val(trackcards[m].femployee_id);
+						$("#r9").val(trackcards[m].fproduct_number);
+						$("#r10").val(trackcards[m].fjunction);
+						$("#r11").val(trackcards[m].fstep_number);
 						break;
 					}
 				}
-//				$("#r3").html("--");
-//				for (var k = 0; k < welderName.length; k++) {
-//					if (welderName[k].fid == parseInt(redata.substring(0 + i, 4 + i),10)) {
-//						$("#r3").html(welderName[k].fwelder_no);
-//					}
-//				}
+				$("#r3").html("--");
+				for (var k = 0; k < welderName.length; k++) {
+					if (welderName[k].fid == parseInt(redata.substring(0 + i, 4 + i),10)) {
+						$("#r3").val(welderName[k].fname);
+					}
+				}
 //			    $("#r8").html(parseFloat((parseInt(redata.substring(95 + i, 99 + i), 10)/10).toFixed(1)) + " m/min");//送丝速度
 //				machstatus.push(redata.substring(36 + i, 38 + i));
 //				if(parseInt(redata.substring(32+i, 36+i),10)==137){
@@ -368,9 +368,12 @@ function iview() {
 //					gascurve();
 //					symbol++;
 //				}
-				$("#l1").html(worktime.machine);
-				$("#l2").html(worktime.machineno);
-				$("#l3").html(worktime.mvaluename);
+//				$("#l1").html(worktime.machine);
+//				$("#l2").html(worktime.machineno);
+//				$("#l3").html(worktime.mvaluename);
+				$("#l1").val(worktime.machine);
+				$("#l2").val(worktime.machineno);
+				$("#l3").val(worktime.mvaluename);
 				var imgnum = $("#type").val();
 				if (time.length != 0 && z < time.length) {
 					var mstatus = redata.substring(36 + i, 38 + i);
@@ -507,7 +510,7 @@ function anaylsis(ipurl){
 	var object = loadxmlDoc(ipurl+"ConfigFile/machine.xml");
 	var menuinfo = object.getElementsByTagName("Typeinfo");
 	for (var i = 0; i < menuinfo.length; i++) {
-		var name = menuinfo[i].getElementsByTagName("TypeName");//设备型号
+		var name = menuinfo[i].getElementsByTagName("TypeName");//型号
 		var value = menuinfo[i].getElementsByTagName("TypeValue");//value值
 		if (document.all) {
 			name = name[0].text;

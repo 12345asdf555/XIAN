@@ -489,7 +489,7 @@
 				align : "left"
 			}, {
 				field : 'fposition',
-				title : '设备位置',
+				title : '设备型号',
 				width : 100,
 				halign : "center",
 				align : "left"

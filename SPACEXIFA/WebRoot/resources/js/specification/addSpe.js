@@ -1273,7 +1273,7 @@ function insframeworkTree() {
 						hidden : true
 					}, {
 						field : 'equipmentNo',
-						title : '固定资产编号',
+						title : '设备名称',
 						width : 80,
 						halign : "center",
 						align : "left"
@@ -1303,13 +1303,13 @@ function insframeworkTree() {
 						align : "left"
 					}, {
 						field : 'modelname',
-						title : '设备型号',
+						title : '型号',
 						width : 130,
 						halign : "center",
 						align : "left"
 					}, {
 						field : 'model',
-						title : '设备型号id',
+						title : '型号id',
 						width : 100,
 						halign : "center",
 						align : "left",

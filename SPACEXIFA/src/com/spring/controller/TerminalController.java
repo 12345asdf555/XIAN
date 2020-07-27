@@ -17,11 +17,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
+import com.spring.model.Person;
 import com.spring.model.WeldedJunction;
+import com.spring.model.WeldingMachine;
 import com.spring.model.Wps;
 import com.spring.page.Page;
+import com.spring.service.PersonService;
 import com.spring.service.UserService;
 import com.spring.service.WeldedJunctionService;
+import com.spring.service.WeldingMachineService;
 import com.spring.service.WpsService;
 
 import net.sf.json.JSONArray;
@@ -40,7 +44,14 @@ public class TerminalController {
 	private UserService userService;
 	@Autowired
 	private WeldedJunctionService wjm;
-	
+	@Autowired
+	private PersonService welderService;
+	@Autowired
+	private WeldedJunctionService wjs;
+	@Autowired
+	private WpsService wpsService;
+	@Autowired
+	private WeldingMachineService wmm;
 	/**
 	 * 验证登陆
 	 * @param request
@@ -102,133 +113,33 @@ public class TerminalController {
 	 * @param request
 	 * @return
 	 */
-
-	@Autowired
-	private WeldedJunctionService wjs;
-	@Autowired
-	private WpsService wpsService;
 	
 	@RequestMapping("/scan")
 	public void scan(HttpServletRequest request,HttpServletResponse response){
 		JSONObject serrespon = new JSONObject();
-		JSONObject data = new JSONObject();
-		JSONObject basicdata = new JSONObject();
-		JSONObject weldlinedata = new JSONObject();
-		JSONObject workstepdata = new JSONObject();
-		JSONObject detailsdata = new JSONObject();
+		JSONArray ary = new JSONArray();
+		JSONObject json = new JSONObject();
 		
-		JSONObject jsondata = JSON.parseObject(request.getParameter("json"));
-		String cardnumber = JSON.parseObject(jsondata.getString("data")).getString("cardnumber");
-		BigInteger cardid = null;
-		
-		//查电子跟踪卡
-		page = new Page(1,1,total);
-		String search1 = " fwelded_junction_no = '" + cardnumber + "'";
-		List<WeldedJunction> cardList = wjs.getCardList(page,search1);
-
-		if(cardList.size()!=0){
-			//查出电子跟踪卡id
-			for(WeldedJunction wjm:cardList){
-				cardid = wjm.getId();
-				break;
-			}
-			
-			//根绝电子跟踪卡查工艺规程编号
-			String search2 = " AND p.fcard_id = '" + cardid + "'";
-			List<WeldedJunction> productList = wjs.getProductList(page,search2);
-			
-			if(productList.size() != 0){
-				//跟据工艺规程编号查询剩余信息
-				String fwps_lib_name = "";
-				String fwps_lib_version = "";
-				String fproduct_number = "";
-				String fproduct_drawing_no = "";
-				
-				//查出对应工艺规程编号和版本号
-				for(WeldedJunction wjm:productList){
-					fwps_lib_name = wjm.getFwps_lib_name();
-					fwps_lib_version = wjm.getFwps_lib_version();
-					break;
-				}
-				String search3 = " fwps_lib_name = '" + fwps_lib_name + "' AND fwps_lib_version = '" + fwps_lib_version + "'";
-				List<Wps> wpsList = wpsService.getWpsList(page,search3);
-				
-				//查出产品图号
-				for(Wps wps:wpsList){
-					fproduct_drawing_no = wps.getFproduct_drawing_no();
-				}
-				//查出所有产品序号，因界面设计为输出框不是下拉框，暂无处理，界面只显示最后只显示最后一个产品序号
-				for(WeldedJunction wjm:productList){
-					fproduct_number = wjm.getFprefix_number()+"-"+wjm.getFproduct_number();
-				}
-				serrespon.put("type", "scanrespond");
-				serrespon.put("respondtype", "succeed");
-				data.put("datalength", "5");
-				data.put("workprocedure", "焊接");
-				basicdata.put("datalength", "3");
-				basicdata.put("workprocedure", "焊接");
-				basicdata.put("productnumber", fproduct_drawing_no);
-				basicdata.put("cardnumber", cardnumber);
-				basicdata.put("serialnumber", fproduct_number);
-				data.put("basicdata", basicdata);
-				serrespon.put("data", data);
-				
-				//兄弟，后面具体的WPS恕我能力不足，看不懂你们的代码，帮不到你们了，先用模拟数据代替
-				weldlinedata.put("datalength", "1");
-				weldlinedata.put("1", "1焊缝");
-				serrespon.put("weldlinedata", weldlinedata);
-				workstepdata.put("datalength", "2");
-				workstepdata.put("1", "1工步");
-				workstepdata.put("2", "2工步");
-				serrespon.put("workstepdata", workstepdata);
-				
-				//假设共有两组数据(1：1焊缝+1工步    2：1焊缝+2工步)
-				int detailsdatalength = 2;
-				detailsdata.put("datalength", Integer.toString(detailsdatalength));
-				for(int i=0;i<detailsdatalength;i++){
-					if(i == 0){
-						JSONObject buf = new JSONObject();
-						buf.put("weldline", "1焊缝");
-						buf.put("workstep", "1工步");
-						buf.put("quantizationproject", "a");
-						buf.put("requiredvalue", "10");
-						buf.put("updeviation", "2");
-						buf.put("downdeviation", "3");
-						buf.put("measurement", "b");
-						detailsdata.put(Integer.toString(i+1), buf);
-					}else if(i == 1){
-						JSONObject buf = new JSONObject();
-						buf.put("weldline", "1焊缝");
-						buf.put("workstep", "2工步");
-						buf.put("quantizationproject", "a");
-						buf.put("requiredvalue", "15");
-						buf.put("updeviation", "3");
-						buf.put("downdeviation", "2");
-						buf.put("measurement", "b");
-						detailsdata.put(Integer.toString(i+1), buf);
-					}
-				}
-				serrespon.put("detailsdata", detailsdata);
-
-			}else{
-				//该卡号无任务
-				serrespon.put("type", "scanrespond");
-				serrespon.put("respondtype", "succeed");
-				data.put("datalength", "0");
-				serrespon.put("data", data);
-			}
-			
-			
-		}else{
-			//无此卡号
-			serrespon.put("type", "scanrespond");
-			serrespon.put("respondtype", "default");
-			data.put("datalength", "0");
-			serrespon.put("data", data);
+		String cardnumber = request.getParameter("cardnumber");
+		String search = "";
+		search = " AND p.FCARD_ID="+cardnumber;
+		List<WeldedJunction> productList = wjm.getProductList(search);
+		for(WeldedJunction wjm:productList){
+			json.put("fid", wjm.getId());
+			json.put("fproduct_number", wjm.getFprefix_number()+"-"+wjm.getFproduct_number());
+			json.put("fwps_lib_name", wjm.getFwps_lib_name());
+			json.put("fwps_lib_version", wjm.getFwps_lib_version());
+			json.put("fwps_lib_id", wjm.getFwpslib_id());
+			json.put("fproduct_drawing_no", wjm.getFproduct_drawing_no());
+			json.put("fproduct_name", wjm.getFproduct_name());
+			json.put("fproduct_version", wjm.getFproduct_version());
+			json.put("fstatus", wjm.getFstatus());
+			ary.add(json);
 		}
+		
+		serrespon.put("rows", ary);
 
         String respondata = JSON.toJSONString(serrespon);
-        
 		//构造回调函数格式jsonpCallback(数据)
         try {
             String jsonpCallback = request.getParameter("jsonpCallback");
@@ -246,28 +157,40 @@ public class TerminalController {
 	 */
 	@RequestMapping("/starttask")
 	public void starttask(HttpServletRequest request,HttpServletResponse response){
+		Wps wps = new Wps();
 		JSONObject serrespon = new JSONObject();
-		
 		JSONObject jsondata = JSON.parseObject(request.getParameter("json"));
-		String tasktype = jsondata.getString("tasktype");
-		
-		if("product".equals(tasktype)){   //最小单位为产品
-			String chanpinxuhao = JSON.parseObject(jsondata.getString("data")).getString("chanpinxuhao");
-			serrespon.put("type", "beginrespond");
-			serrespon.put("respondtype", "succeed");
-		}else if("weldline".equals(tasktype)){     //最小单位为焊缝
-			String chanpinxuhao = JSON.parseObject(jsondata.getString("data")).getString("chanpinxuhao");
-			String hanfenghao = JSON.parseObject(jsondata.getString("data")).getString("hanfenghao");
-			serrespon.put("type", "beginrespond");
-			serrespon.put("respondtype", "succeed");
-		}else if("workstep".equals(tasktype)){     //最小单位为工步
-			String chanpinxuhao = JSON.parseObject(jsondata.getString("data")).getString("chanpinxuhao");
-			String hanfenghao = JSON.parseObject(jsondata.getString("data")).getString("hanfenghao");
-			String gongbuhao = JSON.parseObject(jsondata.getString("data")).getString("gongbuhao");
-			serrespon.put("type", "beginrespond");
-			serrespon.put("respondtype", "succeed");
+		try {
+			String flag = request.getParameter("flag");
+			String cardId = jsondata.getString("cardId");
+			String machId = jsondata.getString("machId");
+			String welderId = jsondata.getString("welderId");
+			String wpsId = jsondata.getString("wpsId");
+			String productId = jsondata.getString("productId");
+			String employeeId = jsondata.getString("employeeId");
+			wps.setFwelded_junction_no(cardId);
+			wps.setMacid(new BigInteger(machId));
+			wps.setWelderid(new BigInteger(welderId));
+			wps.setFwpslib_id(new BigInteger(wpsId));
+			wps.setFproduct_name(productId);
+			wps.setFemployee_id(employeeId);
+			wps.setFstatus(Integer.parseInt(flag));
+			if("1".equals(flag)){     //最小单位为焊缝
+				String stepId = jsondata.getString("stepId");
+				wps.setFstep_id(stepId);
+			}else if("2".equals(flag)){     //最小单位为工步
+				String junctionId = jsondata.getString("junctionId");
+				String stepId = jsondata.getString("stepId");
+				wps.setFjunction(junctionId);
+				wps.setFstep_id(stepId);
+			}
+			wpsService.addTaskresultRow(wps);
+			serrespon.put("success", true);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			serrespon.put("success", false);
 		}
-		
 		String respondata = JSON.toJSONString(serrespon);
         
 		//构造回调函数格式jsonpCallback(数据)
@@ -287,20 +210,64 @@ public class TerminalController {
 	 */
 	@RequestMapping("/nextstep")
 	public void nextstep(HttpServletRequest request,HttpServletResponse response){
+		Wps wps = new Wps();
 		JSONObject serrespon = new JSONObject();
-		
-		JSONObject jsondata = JSON.parseObject(request.getParameter("json"));
-		String tasktype = jsondata.getString("tasktype");
-		String newworkstep = jsondata.getString("data");    //下一工步
-		
-		String chanpinxuhao = JSON.parseObject(jsondata.getString("data")).getString("chanpinxuhao");
-		String hanfenghao = JSON.parseObject(jsondata.getString("data")).getString("hanfenghao");
-		String gongbuhao = JSON.parseObject(jsondata.getString("data")).getString("gongbuhao");
-		
-		serrespon.put("type", "worksteprespond");
-		serrespon.put("respondtype", "succeed");
-		serrespon.put("tasktype", "weldline");
-	
+		JSONObject jsondata = JSON.parseObject(request.getParameter("oldJson"));
+		JSONObject newJsondata = JSON.parseObject(request.getParameter("newJson"));
+		try {
+			String flag = request.getParameter("flag");
+			String cardId = jsondata.getString("cardId");
+			String machId = jsondata.getString("machId");
+			String welderId = jsondata.getString("welderId");
+			String wpsId = jsondata.getString("wpsId");
+			String productId = jsondata.getString("productId");
+			String employeeId = jsondata.getString("employeeId");
+			wps.setFwelded_junction_no(cardId);
+			wps.setMacid(new BigInteger(machId));
+			wps.setWelderid(new BigInteger(welderId));
+			wps.setFwpslib_id(new BigInteger(wpsId));
+			wps.setFproduct_name(productId);
+			wps.setFemployee_id(employeeId);
+			wps.setFstatus(Integer.parseInt(flag));
+			if("0".equals(flag)){     //最小单位为焊缝
+				String stepId = jsondata.getString("stepId");
+				wps.setFstep_id(stepId);
+			}else if("1".equals(flag)){     //最小单位为工步
+				String junctionId = jsondata.getString("junctionId");
+				String stepId = jsondata.getString("stepId");
+				wps.setFjunction(junctionId);
+				wps.setFstep_id(stepId);
+			}
+			wpsService.updateTaskresult(wps);
+			cardId = newJsondata.getString("cardId");
+			machId = newJsondata.getString("machId");
+			welderId = newJsondata.getString("welderId");
+			wpsId = newJsondata.getString("wpsId");
+			productId = newJsondata.getString("productId");
+			employeeId = newJsondata.getString("employeeId");
+			wps.setFwelded_junction_no(cardId);
+			wps.setMacid(new BigInteger(machId));
+			wps.setWelderid(new BigInteger(welderId));
+			wps.setFwpslib_id(new BigInteger(wpsId));
+			wps.setFproduct_name(productId);
+			wps.setFemployee_id(employeeId);
+			wps.setFstatus(Integer.parseInt(flag));
+			if("0".equals(flag)){     //最小单位为焊缝
+				String stepId = jsondata.getString("stepId");
+				wps.setFstep_id(stepId);
+			}else if("1".equals(flag)){     //最小单位为工步
+				String junctionId = newJsondata.getString("junctionId");
+				String stepId = newJsondata.getString("stepId");
+				wps.setFjunction(junctionId);
+				wps.setFstep_id(stepId);
+			}
+			wpsService.addTaskresultRow(wps);
+			serrespon.put("success", true);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			serrespon.put("success", false);
+		}
 		String respondata = JSON.toJSONString(serrespon);
         
 		//构造回调函数格式jsonpCallback(数据)
@@ -320,28 +287,41 @@ public class TerminalController {
 	 */
 	@RequestMapping("/over")
 	public void over(HttpServletRequest request,HttpServletResponse response){
+		Wps wps = new Wps();
 		JSONObject serrespon = new JSONObject();
-		
 		JSONObject jsondata = JSON.parseObject(request.getParameter("json"));
-		String tasktype = jsondata.getString("tasktype");
-		
-		if("product".equals(tasktype)){   //最小单位为产品
-			String chanpinxuhao = JSON.parseObject(jsondata.getString("data")).getString("chanpinxuhao");
-			serrespon.put("type", "overrespond");
-			serrespon.put("respondtype", "succeed");
-		}else if("weldline".equals(tasktype)){     //最小单位为焊缝
-			String chanpinxuhao = JSON.parseObject(jsondata.getString("data")).getString("chanpinxuhao");
-			String hanfenghao = JSON.parseObject(jsondata.getString("data")).getString("hanfenghao");
-			serrespon.put("type", "overrespond");
-			serrespon.put("respondtype", "succeed");
-		}else if("workstep".equals(tasktype)){     //最小单位为工步
-			String chanpinxuhao = JSON.parseObject(jsondata.getString("data")).getString("chanpinxuhao");
-			String hanfenghao = JSON.parseObject(jsondata.getString("data")).getString("hanfenghao");
-			String gongbuhao = JSON.parseObject(jsondata.getString("data")).getString("gongbuhao");
-			serrespon.put("type", "overrespond");
-			serrespon.put("respondtype", "succeed");
+		try {
+			String flag = request.getParameter("flag");
+			String cardId = jsondata.getString("cardId");
+			String machId = jsondata.getString("machId");
+			String welderId = jsondata.getString("welderId");
+			String wpsId = jsondata.getString("wpsId");
+			String productId = jsondata.getString("productId");
+			String employeeId = jsondata.getString("employeeId");
+			wps.setFwelded_junction_no(cardId);
+			wps.setMacid(new BigInteger(machId));
+			wps.setWelderid(new BigInteger(welderId));
+			wps.setFwpslib_id(new BigInteger(wpsId));
+			wps.setFproduct_name(productId);
+			wps.setFemployee_id(employeeId);
+			wps.setFstatus(Integer.parseInt(flag));
+			if("1".equals(flag)){     //最小单位为焊缝
+				String stepId = jsondata.getString("stepId");
+				wps.setFstep_id(stepId);
+			}else if("2".equals(flag)){     //最小单位为工步
+				String junctionId = jsondata.getString("junctionId");
+				String stepId = jsondata.getString("stepId");
+				wps.setFjunction(junctionId);
+				wps.setFstep_id(stepId);
+			}
+			wpsService.updateTaskresult(wps);
+			wpsService.overTaskresult(wps);
+			serrespon.put("success", true);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			serrespon.put("success", false);
 		}
-		
 		String respondata = JSON.toJSONString(serrespon);
         
 		//构造回调函数格式jsonpCallback(数据)
@@ -361,17 +341,23 @@ public class TerminalController {
 	 */
 	@RequestMapping("/upload")
 	public void upload(HttpServletRequest request,HttpServletResponse response){
+		Wps wps = new Wps();
 		JSONObject serrespon = new JSONObject();
-		
 		JSONObject jsondata = JSON.parseObject(request.getParameter("json"));
-		String product = jsondata.getString("product");     //产品号
-		String weldline = jsondata.getString("weldline");   //焊缝号
-		String ele = jsondata.getString("ele");			    //电流
-		String vol = jsondata.getString("vol");				//电压
-
-		serrespon.put("type", "uploadrespond");
-		serrespon.put("respondtype", "succeed");
-		
+		try {
+			String cardId = jsondata.getString("cardId");
+			String machId = jsondata.getString("machId");
+			String welderId = jsondata.getString("welderId");
+			wps.setFwelded_junction_no(cardId);
+			wps.setMacid(new BigInteger(machId));
+			wps.setWelderid(new BigInteger(welderId));
+			wpsService.overCard(wps);
+			serrespon.put("success", true);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			serrespon.put("success", false);
+		}
 		String respondata = JSON.toJSONString(serrespon);
         
 		//构造回调函数格式jsonpCallback(数据)
@@ -395,6 +381,7 @@ public class TerminalController {
 	@RequestMapping("/getAllCards")
 	public void getAllCards(HttpServletRequest request,HttpServletResponse response){
 		String search = request.getParameter("search");
+		search = "(t.fid IN (SELECT MAX(fid) FROM tb_taskresult GROUP BY FCARD_ID) OR t.foperatetype IS null) ";
 		List<WeldedJunction> cardList = wjm.getCardList(search);
 		JSONObject json = new JSONObject();
 		JSONArray ary = new JSONArray();
@@ -403,12 +390,215 @@ public class TerminalController {
 			for(WeldedJunction wjm:cardList){
 				json.put("fid", wjm.getId());
 				json.put("fwelded_junction_no", wjm.getWeldedJunctionno());
+				json.put("type", wjm.getRoomNo());
 				ary.add(json);
 			}
 		}catch(Exception e){
 			e.getMessage();
 		}
 		obj.put("rows", ary);
+		String respondata = JSON.toJSONString(obj);
+        
+		//构造回调函数格式jsonpCallback(数据)
+        try {
+            String jsonpCallback = request.getParameter("jsonpCallback");
+			response.getWriter().println(jsonpCallback+"("+respondata+")");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 获取所有焊工
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年7月2日上午9:49:46
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping("/getAllWelders")
+	public void getAllWelders(HttpServletRequest request,HttpServletResponse response){
+		List<Person> findAll = welderService.getWelder();
+		JSONObject json = new JSONObject();
+		JSONArray ary = new JSONArray();
+		JSONObject obj = new JSONObject();
+		try{
+			for(Person welder:findAll){
+				json.put("id", welder.getId());
+				json.put("name", welder.getName());
+				ary.add(json);
+			}
+		}catch(Exception e){
+			e.getMessage();
+		}
+		obj.put("rows", ary);
+		String respondata = JSON.toJSONString(obj);
+        
+		//构造回调函数格式jsonpCallback(数据)
+        try {
+            String jsonpCallback = request.getParameter("jsonpCallback");
+			response.getWriter().println(jsonpCallback+"("+respondata+")");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 获取所有焊机
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年7月2日上午9:49:46
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping("/getAllMachine")
+	public void getAllMachine(HttpServletRequest request,HttpServletResponse response){
+		List<WeldingMachine> list = wmm.getWeldingMachine(null);
+		JSONObject json = new JSONObject();
+		JSONArray ary = new JSONArray();
+		JSONObject obj = new JSONObject();
+		try{
+			for(WeldingMachine wm:list){
+				json.put("id", wm.getId());
+				json.put("equipmentNo", wm.getEquipmentNo());
+				ary.add(json);
+			}
+		}catch(Exception e){
+			e.getMessage();
+		}
+		obj.put("rows", ary);
+		String respondata = JSON.toJSONString(obj);
+        
+		//构造回调函数格式jsonpCallback(数据)
+        try {
+            String jsonpCallback = request.getParameter("jsonpCallback");
+			response.getWriter().println(jsonpCallback+"("+respondata+")");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 根据工艺规程id获取焊缝、工序、工步信息
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年7月2日上午9:49:15
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping("/getParams")
+	public void getParams(HttpServletRequest request,HttpServletResponse response){
+		String search = request.getParameter("search");
+		String valueFlag = request.getParameter("valueFlag");
+		JSONObject json = new JSONObject();
+		JSONArray junAry = new JSONArray();
+		JSONArray empAry = new JSONArray();
+		JSONArray stepAry = new JSONArray();
+		JSONArray paramAry = new JSONArray();
+		JSONObject obj = new JSONObject();
+		try{
+			if(valueFlag.equals("0")) {
+				List<Wps> empList = wpsService.getEmployee(search);
+				for(Wps wps:empList){
+					json.put("fid", wps.getFid());
+					json.put("femployee", wps.getFemployee_id()+"--"+wps.getFemployee_name());
+//					json.put("femployee_version", wps.getFemployee_version());
+//					json.put("femployee_name", wps.getFemployee_name());
+					empAry.add(json);
+				}
+				List<Wps> stepList = wpsService.getStep(String.valueOf(empList.get(0).getFid()));
+				for(Wps wps:stepList){
+					json.put("fid", wps.getFid());
+					json.put("fstep", wps.getFstep_number()+"--"+wps.getFstep_name());
+//					json.put("fstep_name", wps.getFstep_name());
+					stepAry.add(json);
+				}
+				List<Wps> junList = wpsService.getJunction(String.valueOf(stepList.get(0).getFid()));
+				for(Wps wps:junList){
+					json.put("fid", wps.getFid());
+					json.put("fjunction", wps.getFjunction()+"--"+wps.getFwelding_area());
+//					json.put("fwelding_area", wps.getFwelding_area());
+					junAry.add(json);
+				}
+				List<Wps> paramList = wpsService.getDetail(String.valueOf(stepList.get(0).getFid()));
+				for(Wps wps:paramList){
+					json.put("fid", wps.getFid());
+					json.put("fquantitative_project", wps.getFquantitative_project());
+					json.put("frequired_value", wps.getFrequired_value());
+					json.put("fupper_deviation", wps.getFupper_deviation());
+					json.put("flower_deviation", wps.getFlower_deviation());
+					json.put("funit_of_measurement", wps.getFunit_of_measurement());
+					paramAry.add(json);
+				}
+				
+			}
+			if(valueFlag.equals("1")) {
+				List<Wps> stepList = wpsService.getStep(search);
+				for(Wps wps:stepList){
+					json.put("fid", wps.getFid());
+					json.put("fstep", wps.getFstep_number()+"--"+wps.getFstep_name());
+//					json.put("fstep_name", wps.getFstep_name());
+					stepAry.add(json);
+				}
+				List<Wps> junList = wpsService.getJunction(String.valueOf(stepList.get(0).getFid()));
+				for(Wps wps:junList){
+					json.put("fid", wps.getFid());
+					json.put("fjunction", wps.getFjunction()+"--"+wps.getFwelding_area());
+//					json.put("fwelding_area", wps.getFwelding_area());
+					junAry.add(json);
+				}
+				List<Wps> paramList = wpsService.getDetail(String.valueOf(stepList.get(0).getFid()));
+				for(Wps wps:paramList){
+					json.put("fid", wps.getFid());
+					json.put("fquantitative_project", wps.getFquantitative_project());
+					json.put("frequired_value", wps.getFrequired_value());
+					json.put("fupper_deviation", wps.getFupper_deviation());
+					json.put("flower_deviation", wps.getFlower_deviation());
+					json.put("funit_of_measurement", wps.getFunit_of_measurement());
+					paramAry.add(json);
+				}
+			}
+			if(valueFlag.equals("3")) {
+				List<Wps> junList = wpsService.getJunction(search);
+				for(Wps wps:junList){
+					json.put("fid", wps.getFid());
+					json.put("fjunction", wps.getFjunction()+"--"+wps.getFwelding_area());
+//					json.put("fwelding_area", wps.getFwelding_area());
+					junAry.add(json);
+				}
+				List<Wps> paramList = wpsService.getDetail(search);
+				for(Wps wps:paramList){
+					json.put("fid", wps.getFid());
+					json.put("fquantitative_project", wps.getFquantitative_project());
+					json.put("frequired_value", wps.getFrequired_value());
+					json.put("fupper_deviation", wps.getFupper_deviation());
+					json.put("flower_deviation", wps.getFlower_deviation());
+					json.put("funit_of_measurement", wps.getFunit_of_measurement());
+					paramAry.add(json);
+				}
+			}
+//			if(valueFlag.equals("3")) {
+//				List<Wps> wpsList = wpsService.getDetail(search);
+//				for(Wps wps:wpsList){
+//					json.put("fid", wps.getFid());
+//					json.put("fquantitative_project", wps.getFquantitative_project());
+//					json.put("frequired_value", wps.getFrequired_value());
+//					json.put("fupper_deviation", wps.getFupper_deviation());
+//					json.put("flower_deviation", wps.getFlower_deviation());
+//					json.put("funit_of_measurement", wps.getFunit_of_measurement());
+//					paramAry.add(json);
+//				}
+//			}
+		}catch(Exception e){
+			e.getMessage();
+		}
+		obj.put("stepAry", junAry);
+		obj.put("junAry", empAry);
+		obj.put("empAry", stepAry);
+		obj.put("paramAry", paramAry);
 		String respondata = JSON.toJSONString(obj);
         
 		//构造回调函数格式jsonpCallback(数据)

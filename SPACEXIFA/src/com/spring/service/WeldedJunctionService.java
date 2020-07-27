@@ -226,6 +226,7 @@ public interface WeldedJunctionService {
 	 * @return
 	 */
 	List<WeldedJunction> getProductList(Page page, String search);
+	List<WeldedJunction> getProductList(String search);
 	
 	/**
 	 * 根据卡号获取对应的产品信息

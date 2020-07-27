@@ -1,7 +1,7 @@
 var machine = new Array(), off = new Array(), on = new Array(), warn = new Array(), stand = new Array(), cleardata = new Array();
 var chartsDiv11 = null,chartsDiv12=null,chartsDiv221 = null,chartsDiv222 = null,chartsDiv21 = null,chartsDiv23 = null,chartsDiv13 = null;
 var lockReconnect = false;//避免重复连接
-var websocketURL=null,socket=null;
+var websocketURL=null,websocket=null;
 $(function(){
 	showDiv12();
 	showChart21();
@@ -97,12 +97,12 @@ function showDiv12(){
 
 function createWebSocket() {
     try {
-    	socket = new WebSocket(websocketURL);
-    	socket.onopen = function() {
+    	websocket = new WebSocket(websocketURL);
+    	websocket.onopen = function() {
     		clearData();
     		lockReconnect = false;
     	}
-    	socket.onmessage = function(msg) {
+    	websocket.onmessage = function(msg) {
     		var redata = msg.data;
 //    		redata = redata.substring(0,99)+"00010001000100010001"+
 //    		redata.substring(99,198)+"00010001000100010001"+
@@ -189,13 +189,13 @@ function createWebSocket() {
             ];
     		chartsDiv12.setOption(option);
     	};
-    	socket.onclose = function(e) {
+    	websocket.onclose = function(e) {
     		if(lockReconnect == true){
     			return;
     		};
     		reconnect();
     	};
-    	socket.onerror = function(e) {
+    	websocket.onerror = function(e) {
     		if(lockReconnect == true){
     			return;
     		};

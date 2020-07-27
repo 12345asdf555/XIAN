@@ -26,7 +26,7 @@
 		<if test="str!=null and str!=''">
 			and ${str}
 		</if>
-		ORDER BY g.fid
+		ORDER BY nlssort(g.fgather_no,'NLS_SORT=SCHINESE_PINYIN_M')
 	</select>
 	
 	<select id="getGatherByInsfid" resultMap="gatherMap">
@@ -35,6 +35,7 @@
 		<if test="insfid!=null and insfid!=''">
 			and i.fid=#{insfid}
 		</if>
+		ORDER BY nlssort(g.fgather_no,'NLS_SORT=SCHINESE_PINYIN_M')
 	</select>
 	
 	<select id="getGatherByNo" resultType="java.math.BigInteger">

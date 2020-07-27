@@ -74,12 +74,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				&nbsp;
 			</div>
 			<div style="float:left;color:#fff;width:53%;height:55px;position: relative;" id="bottomlog">
-				<div style="float:left;width:640px;margin: auto;left:0;right:0;position: absolute;text-align:center;">
+				<!-- <div style="float:left;width:640px;margin: auto;left:0;right:0;position: absolute;text-align:center;">
 					<span style="float:right;padding-top:15px;">
 						&nbsp;&nbsp;&nbsp;&nbsp;重准备 强协调 控过程&nbsp;&nbsp;|&nbsp;&nbsp;抓策划 解扣子 接地气&nbsp;&nbsp;|&nbsp;&nbsp;想明白 写下来 照着干
 					</span>
 					<span style="float:right;padding-top:15px;font-size:16px;">改革创新  提质增效</span>
-				</div>
+				</div> -->
 			</div>
 <!-- 			<div style="float:left;color:#fff;width:23%;text-align:right;padding-top:15px;" id="bottomlog">
 				<a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-msg" style="border: none;">消息</a>

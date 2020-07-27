@@ -1766,7 +1766,7 @@ public class DataStatisticsController {
 				json.put("fwelding_area", wps.getFwelding_area());//焊接部位
 				json.put("fstart_time", wps.getFstarttime());//开始时间
 				json.put("fend_time", wps.getEndtime());//结束时间
-				json.put("fmodel", wps.getFmode());//设备型号
+				json.put("fmodel", wps.getFmode());//型号
 				ary.add(json);
 			}
 		}catch(Exception e){
@@ -1812,8 +1812,8 @@ public class DataStatisticsController {
 			}
 			String startTime = request.getParameter("startTime");
 			String endTime = request.getParameter("endTime");
-			str+=" AND l.FWeldTime>='"+startTime+"'";
-			str+=" AND l.FWeldTime<='"+endTime+"'";
+			str+=" AND l.FWeldTime>=to_date('"+startTime+"', 'yyyy-mm-dd hh24:mi:ss')";
+			str+=" AND l.FWeldTime<=to_date('"+endTime+"', 'yyyy-mm-dd hh24:mi:ss')";
 			for(int f=0;f<objField.size();f++) {
 				String filed = String.valueOf(objField.get(f));
 				List<DataStatistics> list = dss.getHistoryData(str,filed);

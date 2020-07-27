@@ -126,15 +126,15 @@ function getMachine(insfid) {
 					if(offFlag==0){
 						off.push(machine[i].fid);
 					}
-					var str = '<div id="machine'+machine[i].fid+'" style="width:240px;height:120px;float:left;margin-right:10px;display:none">'+
-					'<div style="float:left;width:40%;height:100%;"><a href="td/goNextcurve?value='+machine[i].fid+'&valuename='+machine[i].fequipment_no+'&type='+machine[i].type+'&model='+machine[i].model+'"><img id="img'+machine[i].fid+'" src="resources/images/welder_0'+imgnum+'.png" style="height:110px;width:100%;padding-top:10px;"></a></div>'+
-					'<div style="float:left;width:60%;height:100%;">'+
-					'<ul><li style="width:100%;height:28px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">设备编号：<span id="m1'+machine[i].fid+'">'+machine[i].fequipment_no+'</span></li>'+
-					'<li style="width:100%;height:28px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">任务编号：<span id="m2'+machine[i].fid+'">--</span></li>'+
-					'<li style="width:100%;height:28px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">操作人员：<span id="m3'+machine[i].fid+'">--</span></li>'+
-//					'<li style="width:100%;height:19px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">焊接电流：<span id="m4'+machine[i].fid+'">--A</span></li>'+
+					var str = '<div id="machine'+machine[i].fid+'" style="width:340px;height:120px;float:left;margin-right:10px;display:none">'+
+					'<div style="float:left;width:30%;height:100%;"><a href="td/goNextcurve?value='+machine[i].fid+'&valuename='+machine[i].fequipment_no+'&type='+machine[i].type+'&model='+machine[i].model+'"><img id="img'+machine[i].fid+'" src="resources/images/welder_0'+imgnum+'.png" style="height:110px;width:100%;padding-top:10px;"></a></div>'+
+					'<div style="float:left;width:70%;height:100%;">'+
+					'<ul><li style="width:100%;height:23px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">设备编号：<span id="m1'+machine[i].fid+'">'+machine[i].fequipment_no+'</span></li>'+
+					'<li style="width:100%;height:19px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">采集编号：<span id="m4'+machine[i].fid+'">'+machine[i].fgather_no+'</span></li>'+
+					'<li style="width:100%;height:23px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">跟踪卡号：<span id="m2'+machine[i].fid+'">--</span></li>'+
+					'<li style="width:100%;height:23px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">操作人员：<span id="m3'+machine[i].fid+'">--</span></li>'+
 //					'<li style="width:100%;height:19px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">焊接电压：<span id="m5'+machine[i].fid+'">--V</span></li>'+
-					'<li style="width:100%;height:28px;">焊机状态：<span id="m6'+machine[i].fid+'">关机</span></li></ul><input id="status'+machine[i].fid+'" type="hidden" value="3"></div></div>';
+					'<li style="width:100%;height:23px;">焊机状态：<span id="m6'+machine[i].fid+'">关机</span></li></ul><input id="status'+machine[i].fid+'" type="hidden" value="3"></div></div>';
 					$("#bodydiv").append(str);
 					$("#machine"+machine[i].fid).show();
 				}
@@ -148,38 +148,38 @@ function getMachine(insfid) {
 		}
 	});
 	
-//	//获取焊工信息
-//	$.ajax({  
-//	      type : "post",  
-//	      async : false,
-//	      url : welderurl,  
-//	      data : {},  
-//	      dataType : "json", //返回数据形式为json  
-//	      success : function(result) {
-//	          if (result) {
-//	        	  welderName=eval(result.rows);
-//	          }  
-//	      },
-//	      error : function(errorMsg) {  
-//	          alert("数据请求失败，请联系系统管理员!");
-//		}
-//	});
-//	//任务
-//	$.ajax({
-//		type : "post",
-//		async : false,
-//		url : "weldtask/getWeldTask",
-//		data : {},
-//		dataType : "json", //返回数据形式为json  
-//		success : function(result) {
-//			if (result) {
-//				taskNum = eval(result.rows);
-//			}
-//		},
-//		error : function(errorMsg) {
-//			alert("数据请求失败，请联系系统管理员!");
-//		}
-//	});
+	//获取焊工信息
+	$.ajax({  
+	      type : "post",  
+	      async : false,
+	      url : welderurl,  
+	      data : {},  
+	      dataType : "json", //返回数据形式为json  
+	      success : function(result) {
+	          if (result) {
+	        	  welderName=eval(result.rows);
+	          }  
+	      },
+	      error : function(errorMsg) {  
+	          alert("数据请求失败，请联系系统管理员!");
+		}
+	});
+	//任务
+	$.ajax({
+		type : "post",
+		async : false,
+		url : "weldtask/getWeldTask",
+		data : {},
+		dataType : "json", //返回数据形式为json  
+		success : function(result) {
+			if (result) {
+				taskNum = eval(result.rows);
+			}
+		},
+		error : function(errorMsg) {
+			alert("数据请求失败，请联系系统管理员!");
+		}
+	});
 }
 function websocket() {
 	if (typeof (WebSocket) == "undefined") {
@@ -291,16 +291,16 @@ function iview(){
 						}
 //						$("#m3"+machine[f].fid).html("--");
 //						$("#m2"+machine[f].fid).html("--");
-//						for(var k=0;k<welderName.length;k++){
-//							if(welderName[k].fid==parseInt(redata.substring(0+i, 4+i),10)){
-//								$("#m3"+machine[f].fid).html(welderName[k].fwelder_no);
-//							}
-//						}
-//						for(var t=0;t<taskNum.length;t++){
-//							if(taskNum[t].id==parseInt(redata.substring(12+i, 16+i),10)){
-//								$("#m2"+machine[f].fid).html(taskNum[t].weldedJunctionno);
-//							}
-//						}
+						for(var k=0;k<welderName.length;k++){
+							if(welderName[k].fid==parseInt(redata.substring(0+i, 4+i),10)){
+								$("#m3"+machine[f].fid).html(welderName[k].fname);
+							}
+						}
+						for(var t=0;t<taskNum.length;t++){
+							if(taskNum[t].id==parseInt(redata.substring(99+i, 103+i),10)){
+								$("#m2"+machine[f].fid).html(taskNum[t].weldedJunctionno);
+							}
+						}
 //						var liveele = parseInt(redata.substring(38+i, 42+i),10);
 //			            var livevol = parseFloat((parseInt(redata.substring(42+i, 46+i),10)/10).toFixed(2));
 //			            $("#m4"+machine[f].fid).html(liveele+"A");
@@ -388,7 +388,7 @@ function iview(){
 							liveimg = "resources/images/welder_0"+2+".png";
 							break;
 						}
-//						$("#m6"+machine[f].fid).html(livestatus);
+						$("#m6"+machine[f].fid).html(livestatus);
 						$("#img"+parseInt(redata.substring(4+i, 8+i),10)).attr("src",liveimg);
 						$("#machine"+parseInt(redata.substring(4+i, 8+i),10)).show();
 					}

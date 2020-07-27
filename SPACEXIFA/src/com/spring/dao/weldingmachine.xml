@@ -57,7 +57,7 @@
 		<if test="str!=null and str!=''">
 			and ${str}
 		</if>
-		ORDER BY w.fid
+		ORDER BY nlssort(w.fequipment_no,'NLS_SORT=SCHINESE_PINYIN_M')
 	</select>
 	
 	<select id="getAllMachine" resultMap="wmMap">

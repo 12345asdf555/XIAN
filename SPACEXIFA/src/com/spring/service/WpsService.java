@@ -507,4 +507,60 @@ public interface WpsService {
 	 * @return
 	 */
 	List<Wps> getHistoryDatagridList(Page page, String search);
+	
+	/**
+	 * 根据焊缝编号查询对应的工序
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年7月2日上午10:12:23
+	 * @param search
+	 * @return
+	 */
+	List<Wps> getEmployeeByJun(String search);
+	
+	/**
+	 * 根据wps获取焊缝信息
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年7月2日下午2:24:24
+	 * @param search
+	 * @return
+	 */
+	List<Wps> getJunctionByWpsid(String search);
+	
+	/**
+	 * 新增任务执行表记录
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年7月3日下午4:12:26
+	 * @param wps
+	 */
+	void addTaskresultRow(Wps wps);
+	
+	/**
+	 * 更新任务执行记录
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年7月4日下午7:53:45
+	 * @param wps
+	 */
+	void updateTaskresult(Wps wps);
+	
+	/**
+	 * 结束任务执行记录
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年7月4日下午7:54:06
+	 * @param wps
+	 */
+	void overTaskresult(Wps wps);
+	
+	/**
+	 * 结束电子任务跟踪卡
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年7月9日下午11:38:40
+	 * @param wps
+	 */
+	void overCard(Wps wps);
 }

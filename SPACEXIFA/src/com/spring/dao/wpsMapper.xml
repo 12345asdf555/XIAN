@@ -162,11 +162,15 @@
 	</select>
 	
 	<select id="gettrackcard" parameterType="BigInteger" resultType="Wps">
-		select j.fid,j.fwelded_junction_no fwelded_junction_no,j.ftask_no fwpsnum,j.fproduct_number fproduct_vnumber,j.fwpslib_id,
+		select j.fid,j.fwelded_junction_no fwelded_junction_no,
+		p.FPREFIX_NUMBER,p.FPRODUCT_NUMBER conname,
 		w.fproduct_drawing_no fproduct_drawing_no,w.fid,w.fwps_lib_name fprocessname,w.fwps_lib_version fwps_lib_version,
-		e.femployee_name femployee_name,e.femployee_id femployee_id,e.fid,s.fid,s.fstep_name fstep_name,s.fstep_number fstep_number,
-		c.fjunction fjunction,c.fid insid,c.fwelding_area fwelding_area from tb_welded_junction j 
-		LEFT JOIN tb_wps_library w ON j.fwpslib_id = w.fid
+		e.femployee_name femployee_name,e.femployee_id femployee_id,e.fid,
+		s.fid,s.fstep_name fstep_name,s.fstep_number fstep_number,
+		c.fjunction fjunction,c.fid insid,c.fwelding_area fwelding_area 
+		from tb_welded_junction j 
+		LEFT JOIN TB_PRODUCT_NUMBER p ON j.FID=p.FCARD_ID
+		LEFT JOIN tb_wps_library w ON p.FWPS_LIB_ID = w.fid
 		LEFT JOIN tb_employee e ON w.fid = e.fwps_lib_id
 		LEFT JOIN tb_step s ON e.fid = s.femployee_id
 		LEFT JOIN tb_junction c ON s.fid = c.fstep_id
@@ -413,7 +417,7 @@
 		<if test="search!=null and search!=''"> 
 		   WHERE${search}
 		</if>
-		ORDER BY a.fid
+		ORDER BY nlssort(a.fid,'NLS_SORT=SCHINESE_PINYIN_M')
 	</select>
 	
 	<select id="getAllWpslib" resultType="Wps">
@@ -427,7 +431,7 @@
 		<if test="search!=null and search!=''">
 			where ${search}
 		</if>
-		ORDER by fid DESC
+		ORDER BY nlssort(fid,'NLS_SORT=SCHINESE_PINYIN_M')
 	</select>
 	
 	<select id="getEmployee" resultType="Wps">
@@ -435,7 +439,7 @@
 		<if test="fid!=null and fid!=''">
 			where fwps_lib_id=#{fid}
 		</if>
-		group by fid,femployee_id,femployee_version,femployee_name ORDER by fid
+		group by fid,femployee_id,femployee_version,femployee_name ORDER by ORDER BY nlssort(fid,'NLS_SORT=SCHINESE_PINYIN_M')
 	</select>
 	
 	<select id="getStep" resultType="Wps">
@@ -443,7 +447,7 @@
 		<if test="employeeId!=null and employeeId!=''">
 			where femployee_id=#{employeeId}
 		</if>
-		group by fstep_number,fid,fstep_name ORDER by fid
+		group by fstep_number,fid,fstep_name ORDER BY nlssort(fid,'NLS_SORT=SCHINESE_PINYIN_M')
 	</select>
 	
 	<select id="getJunction" resultType="Wps">
@@ -451,7 +455,7 @@
 		<if test="stepId!=null and stepId!=''">
 			where fstep_id=#{stepId}
 		</if>
-		group by fjunction,fid,fwelding_area ORDER by fid
+		group by fjunction,fid,fwelding_area ORDER BY nlssort(fid,'NLS_SORT=SCHINESE_PINYIN_M')
 	</select>
 	
 	<select id="getDetail" resultType="Wps">
@@ -459,7 +463,7 @@
 		<if test="stepId!=null and stepId!=''">
 			where fstep_id=#{stepId}
 		</if>
-		ORDER by fid
+		ORDER BY nlssort(fid,'NLS_SORT=SCHINESE_PINYIN_M')
 	</select>
 	
 	<insert id="addWps" parameterType="Wps" >
@@ -727,6 +731,58 @@
 		<if test="search!=null and search!=''">
 			${search}
 		</if>
-		GROUP BY c.fid,p.fid,r.fid,m.fid,e.fid,s.fid,j.fid
+		GROUP BY c.fid,c.fwelded_junction_no,p.fid,r.fid,m.fid,e.fid,s.fid,j.fid,p.fprefix_number,p.fproduct_number,r.fname,m.fequipment_no,
+		m.fmodel,w.fstarttime,w.fendtime,e.femployee_id,s.fstep_number,j.fjunction,j.fwelding_area
 	</select>
+	
+	<select id="getEmployeeByJun" resultType="Wps">
+		SELECT tb_employee.fid,tb_employee.femployee_id,tb_employee.femployee_version,tb_employee.femployee_name FROM tb_employee
+		LEFT JOIN TB_STEP ON TB_EMPLOYEE.FID=TB_STEP.FEMPLOYEE_ID
+		LEFT JOIN TB_JUNCTION ON TB_STEP.FID=TB_JUNCTION.FSTEP_ID
+		<if test="search!=null and search!=''">
+			where TB_JUNCTION.FID=#{search}
+		</if>
+		group by tb_employee.fid,tb_employee.femployee_id,tb_employee.femployee_version,tb_employee.femployee_name ORDER by tb_employee.fid
+	</select>
+	
+	<select id="getJunctionByWpsid" resultType="Wps">
+		SELECT fjunction,tb_junction.fid,fwelding_area FROM tb_junction
+		LEFT JOIN TB_STEP ON TB_JUNCTION.FSTEP_ID=TB_STEP.FID
+		LEFT JOIN TB_EMPLOYEE ON TB_EMPLOYEE.FID=TB_STEP.FEMPLOYEE_ID
+		LEFT JOIN TB_WPS_LIBRARY ON TB_EMPLOYEE.FWPS_LIB_ID=TB_WPS_LIBRARY.FID
+		<if test="search!=null and search!=''">
+			where TB_WPS_LIBRARY.FID=#{search}
+		</if>
+		group by fjunction,tb_junction.fid,fwelding_area ORDER by fid
+	</select>
+	
+	<insert id="addTaskresultRow" parameterType="Wps">
+		<selectKey resultType="java.lang.Long" order="AFTER" keyProperty="fid">
+			select TB_TASKRESULT_ID.currval as fid from dual
+		</selectKey>
+		INSERT INTO TB_TASKRESULT (FTASKID,FWELDERID,FMACHINEID,FREALSTARTTIME,FOPERATETYPE,FLAG,FCARD_ID,FEMPLOYEE_ID,FSTEP_ID,FJUNCTION_ID) 
+		VALUES (#{fproduct_name},#{welderid},#{macid},SYSDATE,0,#{fstatus},#{fwelded_junction_no},#{femployee_id},#{fstep_id},#{fjunction})
+	</insert>
+	
+	<update id="updateTaskresult" parameterType="Wps">
+		update TB_TASKRESULT set FOPERATETYPE=1 
+		where FCARD_ID=#{fwelded_junction_no} AND FTASKID=#{fproduct_name} AND FWELDERID=#{welderid} 
+		AND FJUNCTION_ID=#{fjunction} 
+		<if test="femployee_id!=null and femployee_id!=''">
+			AND FEMPLOYEE_ID=#{femployee_id} 
+		</if>
+		<if test="fstep_id!=null and fstep_id!=''">
+			AND FSTEP_ID=#{fstep_id}
+		</if>
+	</update>
+	
+	<insert id="overTaskresult" parameterType="Wps">
+		INSERT INTO TB_TASKRESULT (FTASKID,FWELDERID,FMACHINEID,FREALENDTIME,FOPERATETYPE,FLAG,FCARD_ID) 
+		VALUES (#{fproduct_name},#{welderid},#{macid},SYSDATE,1,#{fstatus},#{fwelded_junction_no})
+	</insert>
+	
+	<insert id="overCard" parameterType="Wps">
+		INSERT INTO TB_TASKRESULT (FWELDERID,FMACHINEID,FREALENDTIME,FOPERATETYPE,FCARD_ID) 
+		VALUES (#{welderid},#{macid},SYSDATE,1,#{fwelded_junction_no})
+	</insert>
 </mapper>

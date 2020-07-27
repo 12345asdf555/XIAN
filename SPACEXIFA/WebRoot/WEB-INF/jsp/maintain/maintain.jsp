@@ -73,7 +73,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<div id="dlg" class="easyui-dialog" style="width: 400px; height: 500px; padding:10px 20px" closed="true" buttons="#dlg-buttons">
 			<form id="fm" class="easyui-form" method="post" data-options="novalidate:true"><br/>
 			<div class="fitem">
-				<lable><span class="required">*</span>固定资产编号</lable>
+				<lable><span class="required">*</span>设备名称</lable>
 				<select class="easyui-combobox" name="wid" id="wid" data-options="required:true,editable:false"></select>
 			</div>
 			<div class="fitem">
@@ -106,7 +106,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<div id="rdlg" class="easyui-dialog" style="width: 400px; height: 500px; padding:10px 20px" closed="true" buttons="#remove-buttons">
 			<form id="rfm" class="easyui-form" method="post" data-options="novalidate:true"><br/>
 				<div class="fitem">
-					<lable>固定资产编号</lable>
+					<lable>设备名称</lable>
 					<input type="hidden" id="wid" readonly="readonly" />
 					<input class="easyui-textbox" name="equipmentNo" readonly="readonly" />
 				</div>

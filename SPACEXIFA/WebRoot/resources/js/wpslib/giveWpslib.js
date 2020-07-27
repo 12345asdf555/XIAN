@@ -507,7 +507,7 @@ function selectMachineList(value){
 			hidden:true
 		}, {
 			field : 'equipmentNo',
-			title : '固定资产编号',
+			title : '设备名称',
 //				width : 80,
 			halign : "center",
 			align : "left"
@@ -567,7 +567,7 @@ function selectMachineList(value){
 				align : "left"
 			}, {
 				field : 'model',
-				title : '设备型号',
+				title : '型号',
 //				width : 100,
 				halign : "center",
 				align : "left"
@@ -901,7 +901,7 @@ function selectSxMachineList(status){
 			hidden:true
 		}, {
 			field : 'equipmentNo',
-			title : '固定资产编号',
+			title : '设备名称',
 			halign : "center",
 			align : "left"
 		}, {
