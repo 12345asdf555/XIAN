@@ -460,6 +460,16 @@
 		group by fjunction,fwelding_area ORDER BY nlssort(fid,'NLS_SORT=SCHINESE_PINYIN_M')
 	</select>
 	
+	<select id="getJunctionByStepid" resultType="Wps">
+		SELECT fjunction,max(TB_JUNCTION.fid) fid,fwelding_area FROM tb_junction
+		LEFT JOIN TB_STEP_JUNCTION ON TB_JUNCTION.FID=TB_STEP_JUNCTION.FJUNCTION_ID 
+		LEFT JOIN TB_STEP ON TB_STEP_JUNCTION.FSTEP_ID=tb_step.FID 
+		<if test="stepId!=null and stepId!=''">
+			where TB_STEP_JUNCTION.fstep_id=#{stepId}
+		</if>
+		group by fjunction,fwelding_area ORDER BY nlssort(fid,'NLS_SORT=SCHINESE_PINYIN_M')
+	</select>
+	
 	<select id="getDetail" resultType="Wps">
 		SELECT fid,fquantitative_project,frequired_value,fupper_deviation,flower_deviation,funit_of_measurement FROM tb_specification
 		<if test="stepId!=null and stepId!=''">
@@ -540,6 +550,18 @@
 		)
 	</delete>
 	
+	<delete id="deleteWpsEmpSJ">
+		DELETE FROM TB_STEP_JUNCTION WHERE EXISTS
+		(
+			SELECT 1
+		  	FROM tb_wps_library,TB_EMPLOYEE,TB_STEP 
+		  	WHERE tb_wps_library.FID=TB_EMPLOYEE.fwps_lib_id 
+		  	AND TB_EMPLOYEE.FID=TB_STEP.femployee_id 
+		  	AND TB_STEP.FID=TB_STEP_JUNCTION.fstep_id 
+		  	AND tb_wps_library.fid=#{fid}
+		)
+	</delete>
+	
 	<insert id="addEmployee" parameterType="Wps">
 		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="fid">
 			select TB_EMPLOYEE_ID.nextval as id from dual
@@ -590,6 +612,17 @@
 		)
 	</delete>
 	
+	<delete id="deleteEmployeeSJ">
+		DELETE FROM TB_STEP_JUNCTION WHERE EXISTS
+		(
+			SELECT 1
+		  	FROM TB_STEP,TB_EMPLOYEE 
+		  	WHERE TB_EMPLOYEE.FID=TB_STEP.femployee_id 
+		  	AND TB_STEP.FID=TB_STEP_JUNCTION.FSTEP_ID 
+		  	AND TB_EMPLOYEE.fid=#{fid}
+		)
+	</delete>
+	
 	<insert id="addStep" parameterType="Wps" >
 		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="fid">
 			select TB_STEP_ID.nextval as id from dual
@@ -627,8 +660,8 @@
 	</delete>
 	
 	<insert id="addJunction" parameterType="Wps">
-		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="fid">
-			select TB_JUNCTION_ID.nextval as id from dual
+		<selectKey resultType="java.lang.Long" order="AFTER" keyProperty="fid">
+			select TB_JUNCTION_ID.currval as id from dual
 		</selectKey>
 		INSERT INTO tb_junction (fstep_id, fjunction,fwelding_area) VALUES 
 		(#{fstep_id}, #{fjunction}, #{fwelding_area})
@@ -641,6 +674,9 @@
 	
 	<delete id="deleteStepJunction">
 		DELETE FROM tb_step_junction WHERE fstep_id=#{stepId}
+		<if test="search!=null and search!=''">
+			${search}
+		</if>
 	</delete>
 	
 	<update id="updateJunction" parameterType="Wps">

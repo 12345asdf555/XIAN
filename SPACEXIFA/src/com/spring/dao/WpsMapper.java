@@ -69,6 +69,7 @@ public interface WpsMapper {
 	List<Wps> getEmployee(@Param("fid")String fid);
 	List<Wps> getStep(@Param("employeeId")String employeeId);
 	List<Wps> getJunction(@Param("stepId")String stepId);
+	List<Wps> getJunctionByStepid(@Param("stepId")String stepId);
 	List<Wps> getDetail(@Param("stepId")String stepId);
 	void addWps(Wps wps);
 	void updateWps(Wps wps);
@@ -77,11 +78,13 @@ public interface WpsMapper {
 	void deleteWpsEmpStep(String fid);
 	void deleteWpsEmpStepJun(String fid);
 	void deleteWpsEmpStepSpe(String fid);
+	void deleteWpsEmpSJ(String fid);
 	void addEmployee(Wps wps);
 	void updateEmployee(Wps wps);
 	void deleteEmployee(String fid);
 	void deleteEmployeeStep(String fid);
 	void deleteEmployeeStepJun(String fid);
+	void deleteEmployeeSJ(String fid);
 	void deleteEmployeeStepSpe(String fid);
 	void addStep(Wps wps);
 	void updateStep(Wps wps);
@@ -116,5 +119,5 @@ public interface WpsMapper {
 	void overTaskresult(Wps wps);
 	void overCard(Wps wps);
 	void addStepJunction(@Param("stepId")String stepId,@Param("junctionId")String junctionId );
-	void deleteStepJunction(@Param("stepId")String stepId);
+	void deleteStepJunction(@Param("stepId")String stepId,@Param("search")String search);
 }

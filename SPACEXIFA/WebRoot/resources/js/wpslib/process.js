@@ -28,7 +28,7 @@ function wpsDetail(){
 		singleSelect : true,
 		rownumbers : true,
 //		showPageList : false,
-		fitColumns : true,
+//		fitColumns : true,
 		columns : [ [ {
 			field : 'fid',
 			title : '序号',
@@ -39,35 +39,35 @@ function wpsDetail(){
 		}, {
 			field : 'fquantitative_project',
 			title : '量化项目',
-			width : 100,
+			width : 200,
 			halign : "center",
 			align : "left",
 			editor:'text'
 		}, {
 			field : 'frequired_value',
 			title : '要求值',
-			width : 100,
+			width : 200,
 			halign : "center",
 			align : "left",
 			editor:'text'
 		}, {
 			field : 'fupper_deviation',
 			title : '上偏差',
-			width : 100,
+			width : 200,
 			halign : "center",
 			align : "left",
 			editor:'text'
 		}, {
 			field : 'flower_deviation',
 			title : '下偏差',
-			width : 100,
+			width : 200,
 			halign : "center",
 			align : "left",
 			editor:'text'
 		}, {
 			field : 'funit_of_measurement',
 			title : '计量单位',
-			width : 100,
+			width : 200,
 			halign : "center",
 			align : "left",
 			editor:'text'

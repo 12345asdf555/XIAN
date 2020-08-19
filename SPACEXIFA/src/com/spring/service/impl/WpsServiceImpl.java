@@ -396,6 +396,12 @@ public class WpsServiceImpl implements WpsService{
 		// TODO Auto-generated method stub
 		return mapper.getJunction(stepId);
 	}
+	
+	@Override
+	public List<Wps> getJunctionByStepid(String stepId) {
+		// TODO Auto-generated method stub
+		return mapper.getJunctionByStepid(stepId);
+	}
 
 	@Override
 	public List<Wps> getDetail(String stepId) {
@@ -420,6 +426,7 @@ public class WpsServiceImpl implements WpsService{
 		// TODO Auto-generated method stub
 		mapper.deleteWpsEmpStepSpe(fid);
 		mapper.deleteWpsEmpStepJun(fid);
+		mapper.deleteWpsEmpSJ(fid);
 		mapper.deleteWpsEmpStep(fid);
 		mapper.deleteWpsEmp(fid);
 		mapper.deleteWps(fid);
@@ -454,6 +461,7 @@ public class WpsServiceImpl implements WpsService{
 		// TODO Auto-generated method stub
 		mapper.deleteEmployeeStepSpe(fid);
 		mapper.deleteEmployeeStepJun(fid);
+		mapper.deleteEmployeeSJ(fid);
 		mapper.deleteEmployeeStep(fid);
 		mapper.deleteEmployee(fid);
 	}
@@ -462,7 +470,7 @@ public class WpsServiceImpl implements WpsService{
 	public void deleteStep(String fid) {
 		// TODO Auto-generated method stub
 		mapper.deleteStepSpe(fid);
-		mapper.deleteStepJun(fid);
+//		mapper.deleteStepJun(fid);
 		mapper.deleteStep(fid);
 	}
 
@@ -606,8 +614,8 @@ public class WpsServiceImpl implements WpsService{
 	}
 
 	@Override
-	public void deleteStepJunction(String stepId) {
+	public void deleteStepJunction(String stepId,String search) {
 		// TODO Auto-generated method stub
-		mapper.deleteStepJunction(stepId);
+		mapper.deleteStepJunction(stepId,search);
 	}
 }

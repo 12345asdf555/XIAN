@@ -734,7 +734,7 @@ function initTables(){
 			}else{
 				stepId = "";
 			}
-			junctionUrl = "wps/getInfo?search=" + rowData.fid +"&valueFlag=2";
+			junctionUrl = "wps/getInfo?search=" + rowData.fid +"&valueFlag=4";
 			$('#fjunctionTable').datagrid("options").url=junctionUrl;
 			$('#fjunctionTable').datagrid('reload');
 			detailUrl = "wps/getInfo?search=" + rowData.fid +"&valueFlag=3";

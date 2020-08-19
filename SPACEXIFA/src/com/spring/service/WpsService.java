@@ -255,6 +255,16 @@ public interface WpsService {
 	List<Wps> getJunction(String stepId);
 	
 	/**
+	 * 根据工步号查询焊缝号
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年2月5日下午5:16:53
+	 * @param stepId 工步号
+	 * @return
+	 */
+	List<Wps> getJunctionByStepid(String stepId);
+	
+	/**
 	 * 根据工序号和工步号查询参数
 	 * @Description
 	 * @author Bruce
@@ -581,5 +591,5 @@ public interface WpsService {
 	 * @date 2020年8月18日下午6:29:22
 	 * @param stepId
 	 */
-	void deleteStepJunction(String stepId);
+	void deleteStepJunction(String stepId,String search);
 }

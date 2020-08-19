@@ -1950,6 +1950,16 @@ public class WpsController {
 					ary.add(json);
 				}
 			}
+			if(valueFlag.equals("4")) {
+				List<Wps> wpsList = wpsService.getJunctionByStepid(search);
+				for(Wps wps:wpsList){
+					json.put("fid", wps.getFid());
+					json.put("fjunction", wps.getFjunction());
+					json.put("fwelding_area", wps.getFwelding_area());
+					json.put("fstatus", wps.getFstatus());
+					ary.add(json);
+				}
+			}
 		}catch(Exception e){
 			e.getMessage();
 			e.printStackTrace();
@@ -1972,6 +1982,10 @@ public class WpsController {
 				String wpsId = request.getParameter("wpsId");
 				for(int i=0;i<ary.size();i++){
 					obj = ary.getJSONObject(i); 
+					if(String.valueOf(obj.get("femployee_id"))==null||"".equals(String.valueOf(obj.get("femployee_id")))
+							||String.valueOf(obj.get("femployee_name"))==null||"".equals(String.valueOf(obj.get("femployee_name")))) {
+						continue;
+					}
 					wps.setFemployee_id(String.valueOf(obj.get("femployee_id")));
 					wps.setFemployee_version(String.valueOf(obj.get("femployee_version")));
 					wps.setFemployee_name(String.valueOf(obj.get("femployee_name")));
@@ -1983,6 +1997,10 @@ public class WpsController {
 			if(ary.size()!=0) {
 				for(int i=0;i<ary.size();i++){
 					obj = ary.getJSONObject(i); 
+					if(String.valueOf(obj.get("femployee_id"))==null||"".equals(String.valueOf(obj.get("femployee_id")))
+							||String.valueOf(obj.get("femployee_name"))==null||"".equals(String.valueOf(obj.get("femployee_name")))) {
+						continue;
+					}
 					wps.setFemployee_id(String.valueOf(obj.get("femployee_id")));
 					wps.setFemployee_version(String.valueOf(obj.get("femployee_version")));
 					wps.setFemployee_name(String.valueOf(obj.get("femployee_name")));
@@ -2020,6 +2038,10 @@ public class WpsController {
 				String employeeId = request.getParameter("employeeId");
 				for(int i=0;i<ary.size();i++){
 					obj = ary.getJSONObject(i); 
+					if(String.valueOf(obj.get("fstep_number"))==null||"".equals(String.valueOf(obj.get("fstep_number")))
+							||String.valueOf(obj.get("fstep_name"))==null||"".equals(String.valueOf(obj.get("fstep_name")))) {
+						continue;
+					}
 					wps.setFstep_number(String.valueOf(obj.get("fstep_number")));
 					wps.setFstep_name(String.valueOf(obj.get("fstep_name")));
 					wps.setFstep_version(String.valueOf(obj.get("fstep_version")));
@@ -2031,6 +2053,10 @@ public class WpsController {
 			if(ary.size()!=0) {
 				for(int i=0;i<ary.size();i++){
 					obj = ary.getJSONObject(i); 
+					if(String.valueOf(obj.get("fstep_number"))==null||"".equals(String.valueOf(obj.get("fstep_number")))
+							||String.valueOf(obj.get("fstep_name"))==null||"".equals(String.valueOf(obj.get("fstep_name")))) {
+						continue;
+					}
 					wps.setFstep_number(String.valueOf(obj.get("fstep_number")));
 					wps.setFstep_name(String.valueOf(obj.get("fstep_name")));
 					wps.setFstep_version(String.valueOf(obj.get("fstep_version")));
@@ -2043,6 +2069,7 @@ public class WpsController {
 				for(int i=0;i<ary.size();i++){
 					obj = ary.getJSONObject(i);
 					wpsService.deleteStep(String.valueOf(obj.get("fid")));
+					wpsService.deleteStepJunction(String.valueOf(obj.get("fid")),null);
 				}
 			}
 			obj.put("success", true);
@@ -2065,11 +2092,11 @@ public class WpsController {
 			String deleteRows = request.getParameter("deleteRows");
 			String selectRows = request.getParameter("selectRows");
 			ary = JSONArray.fromObject(selectRows);
+			wpsService.deleteStepJunction(request.getParameter("stepId"),null);
 			if(ary.size()!=0) {
 				for(int i=0;i<ary.size();i++){
 					obj = ary.getJSONObject(i);
 					if(obj.get("fid") != null) {
-						wpsService.deleteStepJunction(request.getParameter("stepId"));
 						wpsService.addStepJunction(request.getParameter("stepId"), String.valueOf(obj.get("fid")));
 					}
 				}
@@ -2079,6 +2106,9 @@ public class WpsController {
 				String stepId = request.getParameter("stepId");
 				for(int i=0;i<ary.size();i++){
 					obj = ary.getJSONObject(i); 
+					if(String.valueOf(obj.get("fjunction"))==null||"".equals(String.valueOf(obj.get("fjunction")))) {
+						continue;
+					}
 					wps.setFjunction(String.valueOf(obj.get("fjunction")));
 					wps.setFwelding_area(String.valueOf(obj.get("fwelding_area")));
 					wps.setFstep_id(stepId);
@@ -2090,6 +2120,9 @@ public class WpsController {
 			if(ary.size()!=0) {
 				for(int i=0;i<ary.size();i++){
 					obj = ary.getJSONObject(i); 
+					if(String.valueOf(obj.get("fjunction"))==null||"".equals(String.valueOf(obj.get("fjunction")))) {
+						continue;
+					}
 					wps.setFjunction(String.valueOf(obj.get("fjunction")));
 					wps.setFwelding_area(String.valueOf(obj.get("fwelding_area")));
 					wps.setFid(Long.parseLong(String.valueOf(obj.get("fid"))));
@@ -2101,6 +2134,8 @@ public class WpsController {
 				for(int i=0;i<ary.size();i++){
 					obj = ary.getJSONObject(i);
 					wpsService.deleteJunction(String.valueOf(obj.get("fid")));
+					String search = " AND FJUNCTION_ID="+String.valueOf(obj.get("fid"));
+					wpsService.deleteStepJunction(request.getParameter("stepId"),search);
 				}
 			}
 			obj.put("success", true);
@@ -2126,6 +2161,9 @@ public class WpsController {
 				String stepId = request.getParameter("stepId");
 				for(int i=0;i<ary.size();i++){
 					obj = ary.getJSONObject(i); 
+					if(String.valueOf(obj.get("fquantitative_project"))==null||"".equals(String.valueOf(obj.get("fquantitative_project")))) {
+						continue;
+					}
 					wps.setFquantitative_project(String.valueOf(obj.get("fquantitative_project")));
 					wps.setFrequired_value(String.valueOf(obj.get("frequired_value")));
 					wps.setFupper_deviation(String.valueOf(obj.get("fupper_deviation")));
@@ -2139,6 +2177,9 @@ public class WpsController {
 			if(ary.size()!=0) {
 				for(int i=0;i<ary.size();i++){
 					obj = ary.getJSONObject(i); 
+					if(String.valueOf(obj.get("fquantitative_project"))==null||"".equals(String.valueOf(obj.get("fquantitative_project")))) {
+						continue;
+					}
 					wps.setFquantitative_project(String.valueOf(obj.get("fquantitative_project")));
 					wps.setFrequired_value(String.valueOf(obj.get("frequired_value")));
 					wps.setFupper_deviation(String.valueOf(obj.get("fupper_deviation")));
@@ -2391,6 +2432,7 @@ public class WpsController {
 					for(Wps jtl:junctionList) {
 						jtl.setFstep_id(String.valueOf(spl.getFid()));
 						wpsService.addJunction(jtl);
+						wpsService.addStepJunction(jtl.getFstep_id(), String.valueOf(jtl.getFid()));
 					}
 					List<Wps> detailList = wpsService.getDetail(sid);
 					for(Wps dil:detailList) {

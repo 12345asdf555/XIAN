@@ -200,6 +200,8 @@ function initTables(){
 		rownumbers : true,
 //		showPageList : false,
 		fitColumns : true,
+		selectOnCheck : false,
+		checkOnSelect : false,
 		columns : [ [ {
 			field : 'fid',
 			title : '序号',
@@ -359,7 +361,8 @@ function deleteEmployeeRow(){
 		if(rows.length!=0){
 			var con=confirm("该操作将删除所选数据及其关联数据，并且无法撤销，是否继续？")
 			if (con==true){
-				for(var r=0;r<rows.length;r++){
+				var len = rows.length;
+				for(var r=len-1;r>=0;r--){
 					var index = $('#femployeeTable').datagrid('getRowIndex',rows[r]);
 					$('#femployeeTable').datagrid('deleteRow', index);
 				}
@@ -433,7 +436,8 @@ function deleteStepRow(){
 		if(rows.length!=0){
 			var r=confirm("该操作将删除所选数据及其关联数据，并且无法撤销，是否继续？")
 			if (r==true){
-				for(var r=0;r<rows.length;r++){
+				var len = rows.length;
+				for(var r=len-1;r>=0;r--){
 					var index = $('#fstepTable').datagrid('getRowIndex',rows[r]);
 					$('#fstepTable').datagrid('deleteRow', index);
 				}
@@ -506,7 +510,8 @@ function deleteJunctionRow(){
 		if(rows.length!=0){
 			var r=confirm("该操作将删除所选数据及其关联数据，并且无法撤销，是否继续？")
 			if (r==true){
-				for(var r=0;r<rows.length;r++){
+				var len = rows.length;
+				for(var r=len-1;r>=0;r--){
 					var index = $('#fjunctionTable').datagrid('getRowIndex',rows[r]);
 					$('#fjunctionTable').datagrid('deleteRow', index);
 				}
@@ -526,7 +531,7 @@ function saveJunctionRow(){
 		var deleteRows = $("#fjunctionTable").datagrid('getChanges', 'deleted'); //获取删除的数据
 		var updateRows = $("#fjunctionTable").datagrid('getChanges', 'updated'); //获取删除的数据
 		var addRows = $("#fjunctionTable").datagrid('getChanges', 'inserted'); //获取删除的数据
-		var selectRows = $("#fjunctionTable").datagrid('getSelections'); //获取选择的数据
+		var selectRows = $("#fjunctionTable").datagrid('getChecked'); //获取选择的数据
 //		console.log(dd.every(val => changeRows.includes(val)));
 //		if(deleteRows.length!=0){
 //			changeRows.filter((item) => !deleteRows.some((items) => item === items));
@@ -581,7 +586,8 @@ function deleteDetailRow(){
 		if(rows.length!=0){
 			var r=confirm("该操作将删除所选数据及其关联数据，并且无法撤销，是否继续？")
 			if (r==true){
-				for(var r=0;r<rows.length;r++){
+				var len = rows.length;
+				for(var r=len-1;r>=0;r--){
 					var index = $('#wpsDetailTable').datagrid('getRowIndex',rows[r]);
 					$('#wpsDetailTable').datagrid('deleteRow', index);
 				}
