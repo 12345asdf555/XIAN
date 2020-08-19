@@ -1550,4 +1550,46 @@
 			 ${str}
 		</if>
 	</select>
+	
+	<select id="getMachineData" resultMap="dataMap">
+		SELECT max(t.name) name,t.machineno machineno, sum(weldwire) weldwire,sum(gas) gas,sum(t.id) id,sum(t.insid) insid from (
+		select max(i.fname) name,max(w.fweld_no) machineno,sum((w.fworktime*w.fwirefeedrate*DECODE(m.fcoefficient, NULL, 0 ,m.fcoefficient))/60) weldwire,
+		sum((w.fworktime*w.frateofflow)/60) gas,sum(fworktime) id,0 insid from tb_work w
+		INNER JOIN tb_insframework i on i.fid  = w.fmachine_itemid 
+		left JOIN tb_insframework ins on ins.fid = i.fparent
+    	left JOIN tb_insframework insf on insf.fid = ins.fparent
+    	left JOIN tb_material_coefficient m on w.fmaterialgas = m.fmaterial and w.fwirediameter = m.fdiameter and w.fmachinemodel=m.fmodel
+		where fmachine_id!=0
+		<if test="itemid!=null and itemid!=''">
+			and (i.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid})
+		</if>
+		<if test="dto!=null and dto!=''">
+			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
+				and fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
+				and fendtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
+			</if>
+		</if>
+		GROUP BY fmachine_id
+		UNION 
+		select max(i.fname) name,max(w.fweld_no) machineno,0 weldwire,0 gas,0 id,sum(fstandbytime) insid from tb_standby  w
+		INNER JOIN tb_insframework i on i.fid  = w.fmachine_itemid 
+		left JOIN tb_insframework ins on ins.fid = i.fparent
+   		left JOIN tb_insframework insf on insf.fid = ins.fparent
+		where fmachine_id!=0 
+		<if test="itemid!=null and itemid!=''">
+			and (i.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid})
+		</if>
+		<if test="dto!=null and dto!=''">
+			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
+				and fstarttime &gt;= to_date(#{dto.dtoTime1}, 'yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
+				and fendtime &lt;= to_date(#{dto.dtoTime2}, 'yyyy-mm-dd hh24:mi:ss')
+			</if>
+		</if>
+		GROUP BY fmachine_id
+		) t GROUP BY t.machineno
+	</select>
 </mapper>

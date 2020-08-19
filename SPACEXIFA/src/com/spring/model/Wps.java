@@ -162,6 +162,7 @@ public class Wps {
 	private String fproduct_version;
 	private String fproduct_vnumber;
 	private String fprefix_number;
+	private String fsuffix_number;
 	private int flag;
 
 	private String fquantitative_project;
@@ -175,6 +176,7 @@ public class Wps {
 	private String fstep_number;
 	private String fstep_id;
 	private String fstep_name;
+	private String fstep_version;
 	private String fjunction;
 	private String fwelding_area;
 	private String fstarttime;
@@ -1333,5 +1335,17 @@ public class Wps {
 	}
 	public void setFwelded_junction_no(String fwelded_junction_no) {
 		this.fwelded_junction_no = fwelded_junction_no;
+	}
+	public String getFsuffix_number() {
+		return fsuffix_number;
+	}
+	public void setFsuffix_number(String fsuffix_number) {
+		this.fsuffix_number = fsuffix_number;
+	}
+	public String getFstep_version() {
+		return fstep_version;
+	}
+	public void setFstep_version(String fstep_version) {
+		this.fstep_version = fstep_version;
 	}
 }

@@ -35,35 +35,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	<div class="functiondiv">
 		<div>
 			<div style="float: left;">
-				<div>
-					<label>角色名：</label>
-				</div>
-				<div>
-					<input class="easyui-textbox" name="sroleName" id="sroleName" />
-				</div>
+				<label>角色名：</label>
+				<input class="easyui-textbox" name="sroleName" id="sroleName" />
 			</div>
 			<div style="float: left;">
-				<div>
-					<label>描述：</label>
-				</div>
-				<div>
-					<input class="easyui-textbox" name="sroleDesc" id="sroleDesc" />
-				</div>
+				<label>描述：</label>
+				<input class="easyui-textbox" name="sroleDesc" id="sroleDesc" />
 			</div>
 			<div style="float: left;">
-				<div>
-					<label>状态：</label>
-				</div>
-				<div>
-					<span id="sradios"></span>
-				</div>
+				<label>状态：</label>
+				<span id="sradios"></span>
 			</div>
 			<div  style="float: left;">
 				<a href="javascript:searchData();" class="easyui-linkbutton" iconCls="icon-select">查找</a>&nbsp;&nbsp;&nbsp;&nbsp;
 			</div>
 		</div>
 	</div>
-    <div id="body" style="height: 78%;">
+    <div id="body" style="height: 84%;">
         <div data-options="region:'center',title:'信息',iconCls:'icon-ok'">
        		<table id="dg" style="table-layout:fixed;width:100%"></table>
         </div>

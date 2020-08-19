@@ -370,4 +370,10 @@ public class DataStatisticsServiceImpl implements DataStatisticsService {
 		// TODO Auto-generated method stub
 		return ds.getHistoryData(str, filed);
 	}
+
+	@Override
+	public List<DataStatistics> getMachineData(Page page, BigInteger insid, WeldDto dto) {
+		PageHelper.startPage(page.getPageIndex(), page.getPageSize());
+		return ds.getMachineData(insid, dto);
+	}
 }

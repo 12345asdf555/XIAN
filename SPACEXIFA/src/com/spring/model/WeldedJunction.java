@@ -74,6 +74,7 @@ public class WeldedJunction {
 	private String ftask_no;
 	private int flag;
 	private String fprefix_number;
+	private String fsuffix_number;
 	private String fproduct_number;
 	private String fback;
 	private String fproduct_drawing_no;
@@ -475,6 +476,12 @@ public class WeldedJunction {
 	}
 	public void setFproduct_version(String fproduct_version) {
 		this.fproduct_version = fproduct_version;
+	}
+	public String getFsuffix_number() {
+		return fsuffix_number;
+	}
+	public void setFsuffix_number(String fsuffix_number) {
+		this.fsuffix_number = fsuffix_number;
 	}
 	
 }

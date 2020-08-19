@@ -1924,6 +1924,7 @@ public class WpsController {
 					json.put("fid", wps.getFid());
 					json.put("fstep_number", wps.getFstep_number());
 					json.put("fstep_name", wps.getFstep_name());
+					json.put("fstep_version", wps.getFstep_version());
 					ary.add(json);
 				}
 			}
@@ -1933,6 +1934,7 @@ public class WpsController {
 					json.put("fid", wps.getFid());
 					json.put("fjunction", wps.getFjunction());
 					json.put("fwelding_area", wps.getFwelding_area());
+					json.put("fstatus", wps.getFstatus());
 					ary.add(json);
 				}
 			}
@@ -1950,6 +1952,7 @@ public class WpsController {
 			}
 		}catch(Exception e){
 			e.getMessage();
+			e.printStackTrace();
 		}
 		obj.put("rows", ary);
 		return obj.toString();
@@ -2019,6 +2022,7 @@ public class WpsController {
 					obj = ary.getJSONObject(i); 
 					wps.setFstep_number(String.valueOf(obj.get("fstep_number")));
 					wps.setFstep_name(String.valueOf(obj.get("fstep_name")));
+					wps.setFstep_version(String.valueOf(obj.get("fstep_version")));
 					wps.setFemployee_id(employeeId);
 					wpsService.addStep(wps);
 				}
@@ -2029,6 +2033,7 @@ public class WpsController {
 					obj = ary.getJSONObject(i); 
 					wps.setFstep_number(String.valueOf(obj.get("fstep_number")));
 					wps.setFstep_name(String.valueOf(obj.get("fstep_name")));
+					wps.setFstep_version(String.valueOf(obj.get("fstep_version")));
 					wps.setFid(Long.parseLong(String.valueOf(obj.get("fid"))));
 					wpsService.updateStep(wps);
 				}
@@ -2058,6 +2063,17 @@ public class WpsController {
 			String addRows = request.getParameter("addRows");
 			String updateRows = request.getParameter("updateRows");
 			String deleteRows = request.getParameter("deleteRows");
+			String selectRows = request.getParameter("selectRows");
+			ary = JSONArray.fromObject(selectRows);
+			if(ary.size()!=0) {
+				for(int i=0;i<ary.size();i++){
+					obj = ary.getJSONObject(i);
+					if(obj.get("fid") != null) {
+						wpsService.deleteStepJunction(request.getParameter("stepId"));
+						wpsService.addStepJunction(request.getParameter("stepId"), String.valueOf(obj.get("fid")));
+					}
+				}
+			}
 			ary = JSONArray.fromObject(addRows);
 			if(ary.size()!=0) {				
 				String stepId = request.getParameter("stepId");
@@ -2067,6 +2083,7 @@ public class WpsController {
 					wps.setFwelding_area(String.valueOf(obj.get("fwelding_area")));
 					wps.setFstep_id(stepId);
 					wpsService.addJunction(wps);
+					wpsService.addStepJunction(stepId, String.valueOf(wps.getFid()));
 				}
 			}
 			ary = JSONArray.fromObject(updateRows);

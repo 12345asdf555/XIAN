@@ -37,98 +37,56 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	<div class="functiondiv">
 		<div>
 			<div style="float: left;">
-				<div>
-					<label>设备名称：</label>
-				</div>
-				<div>
-					<input class="easyui-textbox" name="sequipmentNo" id="sequipmentNo" />
-				</div>
+				<label>设备名称：</label>
+				<input class="easyui-textbox" name="sequipmentNo" id="sequipmentNo" />
+			</div>
+			<div style="float: left;">
+				<label>设备类型：</label>
+				<select class="easyui-combobox" name="stypeId" id="stId" data-options="editable:false">
+				</select>
 			</div>
 			<div  style="float: left;">
-				<div>
-					<label>设备类型：</label>
-				</div>
-				<div>
-					<select class="easyui-combobox" name="stypeId" id="stId" data-options="editable:false">
-					</select>
-				</div>
+				<label>出厂时间：</label>
+				<input class="easyui-datetimebox" style="width:150px;" name="sjoinTime" id="sjoinTime">
 			</div>
 			<div  style="float: left;">
-				<div>
-					<label>出厂时间：</label>
-				</div>
-				<div>
-					<input class="easyui-datetimebox" style="width:150px;" name="sjoinTime" id="sjoinTime">
-				</div>
-			</div>
-			<div  style="float: left;">
-				<div>
-					<label>所属项目：</label>
-				</div>
-				<div>
-					<select class="easyui-combobox" name="siId" id="siId" data-options="editable:false">
-					</select>
-				</div>
+				<label>所属项目：</label>
+				<select class="easyui-combobox" name="siId" id="siId" data-options="editable:false">
+				</select>
 			</div>
 			<div style="float: left;">
-				<div>
-					<label>生成厂商：</label>
-				</div>
-				<div>
-					<select class="easyui-combobox" name="smanuno" id="smanuno" data-options="editable:false">
-					</select>
-				</div>
+				<label>生成厂商：</label>
+				<select class="easyui-combobox" name="smanuno" id="smanuno" data-options="editable:false">
+				</select>
+			</div>
+			<div>
+				<label>采集序号：</label>
+				<select class="easyui-combobox" name="sgid" id="sgid" data-options="editable:false">
+				</select>
+			</div>
+		</div>
+		<div>
+			<div style="float: left;">
+				<label>设备型号：</label>
+				<input class="easyui-textbox" name="sposition" id="sposition" />
 			</div>
 			<div style="float: left;">
-				<div>
-					<label>采集序号：</label>
-				</div>
-				<div>
-					<select class="easyui-combobox" name="sgid" id="sgid" data-options="editable:false">
-					</select>
-				</div>
+				<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ip地址：</label>
+				<input class="easyui-textbox" name="sip" id="sip" />
 			</div>
 			<div style="float: left;">
-				<div>
-					<label>设备型号：</label>
-				</div>
-				<div>
-					<input class="easyui-textbox" name="sposition" id="sposition" />
-				</div>
+				<label>型&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号：</label>
+				<select class="easyui-combobox" name="smodel" id="smodel" data-options="editable:false">
+				</select>
 			</div>
 			<div style="float: left;">
-				<div>
-					<label>ip地址：</label>
-				</div>
-				<div>
-					<input class="easyui-textbox" name="sip" id="sip" />
-				</div>
+				<label>是否联网：</label>
+				<input type="radio" class="radioStyle" id="sisnetworkingId" name="sisnetworkingId" value="0"/>是&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<input type="radio" class="radioStyle" id="sisnetworkingId" name="sisnetworkingId" value="1"/>否&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			</div>
 			<div style="float: left;">
-				<div>
-					<label>型号：</label>
-				</div>
-				<div>
-					<select class="easyui-combobox" name="smodel" id="smodel" data-options="editable:false">
-					</select>
-				</div>
-			</div>
-			<div style="float: left;">
-				<div>
-					<label>是否联网：</label>
-				</div>
-				<div>
-					<input type="radio" class="radioStyle" id="sisnetworkingId" name="sisnetworkingId" value="0"/>是&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					<input type="radio" class="radioStyle" id="sisnetworkingId" name="sisnetworkingId" value="1"/>否&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				</div>
-			</div>
-			<div style="float: left;">
-				<div>
-					<label>状态：</label>
-				</div>
-				<div>
-					<span id="sradios"></span>
-				</div>
+				<label>状态：</label>
+				<span id="sradios"></span>
 			</div>
 			<div  style="float: left;">
 				<a href="javascript:searchData();" class="easyui-linkbutton" iconCls="icon-select">查找</a>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -136,7 +94,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</div>
 	</div>
 <%--   	<jsp:include  page="../insframeworktree.jsp"/> --%>
-  	<div id="body" style="height: 67%">
+  	<div id="body" style="height: 77%">
 		<div id="importdiv" class="easyui-dialog" style="width:300px; height:200px;" closed="true">
 			<form id="importfm" method="post" class="easyui-form" data-options="novalidate:true" enctype="multipart/form-data"> 
 				<div>
@@ -190,7 +148,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<div class="fitem">
 					<lable><span class="required"></span>采集序号</lable>
 					<input type="hidden" id="validgid">
-					<select class="easyui-combobox" name="gid" id="gid" data-options="validType:['checkNumber','wmGatheridValidate'],editable:false""></select>
+					<select class="easyui-combobox" name="gid" id="gid" data-options="validType:['checkNumber','wmGatheridValidate'],editable:false,multiple:true"></select>
 				</div>
 				<div class="fitem">
 					<lable>设备型号</lable>

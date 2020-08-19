@@ -183,7 +183,7 @@ function getWpsCombobox() {
 		pagination: true,
 		pageSize : 10,
 		pageList : [ 10, 20, 30, 40, 50 ],
-		url : "wps/getWpsList?search=fid NOT IN (SELECT DISTINCT fwps_lib_id FROM tb_product_number WHERE fwps_lib_id IS NOT NULL) AND fstatus=1",
+		url : "wps/getWpsList?search=fstatus=1",
 //		singleSelect : true,
 		rownumbers : true,
 		showPageList : false,

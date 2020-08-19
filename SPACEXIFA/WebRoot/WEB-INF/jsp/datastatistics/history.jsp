@@ -24,7 +24,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 	<script type="text/javascript" src="resources/js/weldingtask/json2.js"></script>
 	<script type="text/javascript" src="resources/js/echarts.js"></script>
-	<script type="text/javascript" src="resources/js/load.js"></script>
+	<!-- <script type="text/javascript" src="resources/js/load.js"></script> -->
 	<script type="text/javascript" src="resources/js/jquery.min.js"></script>
 	<script type="text/javascript" src="resources/js/jquery.easyui.min.js"></script>
 	<script type="text/javascript" src="resources/js/easyui-lang-zh_CN.js"></script>
@@ -38,82 +38,66 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    	<div class="functiondiv">
 				<div>
 					<div style="float: left;">
-						<div>
 							<label>电子跟踪卡号：</label>
 		<!-- 				</div>
 						<div> -->
 							<input class="easyui-textbox" name="fcard_id" id="fcard_id" />
-						</div>
 					</div>
 					<div style="float: left;">
-						<div>
 							<label>产品序号：</label>
 		<!-- 				</div>
 						<div> -->
 							<input class="easyui-textbox" name="fprefix_number" id="fprefix_number" style="width: 90px"/> -- 
 							<input class="easyui-textbox" name="fproduct_id" id="fproduct_id" style="width: 45px"/>
-						</div>
 					</div>
 					<div style="float: left;">
-						<div>
 							<label>设备编号：</label>
 		<!-- 				</div>
 						<div> -->
 							<input class="easyui-textbox" name="fequipment_id" id="fequipment_id" />
-						</div>
 					</div>
 					<div style="float: left;">
-						<div>
 							<label>焊工号：</label>
 		<!-- 				</div>
 						<div> -->
 							<input class="easyui-textbox" name="fwelder_id" id="fwelder_id" />
-						</div>
 					</div>
-					<div style="float: left;">
-						<div>
+					<div>
 							<label>工序号：</label>
 		<!-- 				</div>
 						<div> -->
 							<input class="easyui-textbox" name="femployee_id" id="femployee_id" />
-						</div>
 					</div>
+				</div>
+				<div>
 					<div style="float: left;">
-						<div>
-							<label>工步号：</label>
+							<label>&nbsp;&nbsp;&nbsp;&nbsp;工&nbsp;&nbsp;&nbsp;&nbsp;步&nbsp;&nbsp;&nbsp;&nbsp;号&nbsp;：</label>
 		<!-- 				</div>
 						<div> -->
 							<input class="easyui-textbox" name="fstep_id" id="fstep_id" />
-						</div>
 					</div>
 					<div style="float: left;">
-						<div>
-							<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;焊缝编号：</label>
+							<label>焊缝编号：</label>
 		<!-- 				</div>
 						<div> -->
 							<input class="easyui-textbox" name="fjunction_id" id="fjunction_id" />
-						</div>
 					</div>
 					<div style="float: left;">
-						<div>
 							<label>焊接部位：</label>
 		<!-- 				</div>
 						<div> -->
 							<input class="easyui-textbox" name="fwelding_area" id="fwelding_area" />
-						</div>
 					</div>
 					<div style="float: left;">
-						<div>
 							<label>时间：</label>
 		<!-- 				</div>
 						<div> -->
 							<input class="easyui-datetimebox" name="dtoTime1" id="dtoTime1"> -- 
 							<input class="easyui-datetimebox" name="dtoTime2" id="dtoTime2">
-						</div>
 					</div>
-				</div>
-				<div style="float: left;">
-					<a href="javascript:searchHistory();" class="easyui-linkbutton" iconCls="icon-select">查找</a>&nbsp;&nbsp;&nbsp;&nbsp;
+					<div style="float: left;">
+						<a href="javascript:searchHistory();" class="easyui-linkbutton" iconCls="icon-select">查找</a>&nbsp;&nbsp;&nbsp;&nbsp;
+					</div>
 				</div>
 			</div>
 			<div id="tableDiv" style="height: 70%">

@@ -413,4 +413,12 @@ public interface DataStatisticsService {
 	 * @return
 	 */
 	List<DataStatistics> getHistoryData(String str, String filed);
+	
+	/**
+	 * 班组生产数据报表
+	 * @param bigInteger 组织机构id
+	 * @param dto 时间
+	 * @return
+	 */
+	List<DataStatistics> getMachineData(Page page, BigInteger insid, WeldDto dto);
 }

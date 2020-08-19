@@ -439,23 +439,25 @@
 		<if test="fid!=null and fid!=''">
 			where fwps_lib_id=#{fid}
 		</if>
-		group by fid,femployee_id,femployee_version,femployee_name ORDER by ORDER BY nlssort(fid,'NLS_SORT=SCHINESE_PINYIN_M')
+		group by fid,femployee_id,femployee_version,femployee_name ORDER BY nlssort(fid,'NLS_SORT=SCHINESE_PINYIN_M')
 	</select>
 	
 	<select id="getStep" resultType="Wps">
-		SELECT fstep_number,fid,fstep_name FROM tb_step
+		SELECT fstep_number,fid,fstep_name,fstep_version FROM tb_step
 		<if test="employeeId!=null and employeeId!=''">
 			where femployee_id=#{employeeId}
 		</if>
-		group by fstep_number,fid,fstep_name ORDER BY nlssort(fid,'NLS_SORT=SCHINESE_PINYIN_M')
+		group by fstep_number,fid,fstep_name,fstep_version ORDER BY nlssort(fid,'NLS_SORT=SCHINESE_PINYIN_M')
 	</select>
 	
 	<select id="getJunction" resultType="Wps">
-		SELECT fjunction,fid,fwelding_area FROM tb_junction
-		<if test="stepId!=null and stepId!=''">
-			where fstep_id=#{stepId}
-		</if>
-		group by fjunction,fid,fwelding_area ORDER BY nlssort(fid,'NLS_SORT=SCHINESE_PINYIN_M')
+		SELECT fjunction,max(TB_JUNCTION.fid) fid,fwelding_area,max(DECODE(TB_STEP_JUNCTION.FSTEP_ID, #{stepId}, 1 ,0)) fstatus FROM tb_junction
+		LEFT JOIN TB_STEP_JUNCTION ON TB_JUNCTION.FID=TB_STEP_JUNCTION.FJUNCTION_ID 
+		LEFT JOIN TB_STEP ON TB_STEP_JUNCTION.FSTEP_ID=tb_step.FID 
+<!-- 		<if test="stepId!=null and stepId!=''">
+			where TB_STEP_JUNCTION.fstep_id=#{stepId}
+		</if> -->
+		group by fjunction,fwelding_area ORDER BY nlssort(fid,'NLS_SORT=SCHINESE_PINYIN_M')
 	</select>
 	
 	<select id="getDetail" resultType="Wps">
@@ -592,8 +594,8 @@
 		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="fid">
 			select TB_STEP_ID.nextval as id from dual
 		</selectKey>
-		INSERT INTO tb_step (fid,femployee_id, fstep_number, fstep_name) VALUES 
-		(#{fid}, #{femployee_id}, #{fstep_number}, #{fstep_name})
+		INSERT INTO tb_step (fid,femployee_id, fstep_number, fstep_name, fstep_version) VALUES 
+		(#{fid}, #{femployee_id}, #{fstep_number}, #{fstep_name}, #{fstep_version})
 	</insert>
 	
 	<update id="updateStep" parameterType="Wps">
@@ -625,9 +627,21 @@
 	</delete>
 	
 	<insert id="addJunction" parameterType="Wps">
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="fid">
+			select TB_JUNCTION_ID.nextval as id from dual
+		</selectKey>
 		INSERT INTO tb_junction (fstep_id, fjunction,fwelding_area) VALUES 
 		(#{fstep_id}, #{fjunction}, #{fwelding_area})
 	</insert>
+	
+	<insert id="addStepJunction">
+		INSERT INTO tb_step_junction (fstep_id, fjunction_id) VALUES 
+		(#{stepId}, #{junctionId})
+	</insert>
+	
+	<delete id="deleteStepJunction">
+		DELETE FROM tb_step_junction WHERE fstep_id=#{stepId}
+	</delete>
 	
 	<update id="updateJunction" parameterType="Wps">
 		update tb_junction set fjunction=#{fjunction},fwelding_area=#{fwelding_area} where fid=#{fid}
@@ -653,7 +667,7 @@
 	
 	<select id="getstepall" resultType="Wps">
 		select t.fid,t.fproduct_drawing_no fproduct_drawing_no,t.fproduct_name fproduct_name,t.fproduct_version fproduct_version,t.fwps_lib_name fwpsnum,t.fwps_lib_version fwps_lib_version,
-		t.fstatus fstatus,t.flag flag,e.femployee_id femployee_id,e.femployee_name femployee_name,e.femployee_version femployee_version,e.fid,s.fstep_name fstep_name,s.fstep_number fstep_number, c.fjunction fjunction,
+		t.fstatus fstatus,t.flag flag,e.femployee_id femployee_id,e.femployee_name femployee_name,e.femployee_version femployee_version,e.fid,s.fstep_name fstep_name,s.fstep_number fstep_number,fstep_version, c.fjunction fjunction,
 		c.fwelding_area fwelding_area,p.fquantitative_project fquantitative_project,p.frequired_value frequired_value,p.fupper_deviation fupper_deviation,p.flower_deviation flower_deviation,funit_of_measurement funit_of_measurement,
 		row_number() over(partition by p.fid order by t.fid desc)  
 		from tb_wps_library t
@@ -703,7 +717,7 @@
 		<selectKey resultType="java.math.BigInteger" order="BEFORE" keyProperty="macid">
 			select TB_STEP_ID.nextval as id from dual
 		</selectKey>
-		INSERT INTO tb_step (fid,femployee_id, fstep_number,fstep_name) SELECT #{macid},#{femployee_id},#{fstep_number},#{fstep_name} from DUAL where not exists(select fstep_number from tb_step where femployee_id=#{femployee_id} and fstep_number=#{fstep_number})
+		INSERT INTO tb_step (fid,femployee_id, fstep_number,fstep_name, fstep_version) SELECT #{macid},#{femployee_id},#{fstep_number},#{fstep_name},#{fstep_version} from DUAL where not exists(select fstep_number from tb_step where femployee_id=#{femployee_id} and fstep_number=#{fstep_number})
 	</insert>
 	
 	<insert id="addEmployee1" parameterType="Wps">
@@ -718,8 +732,8 @@
 	</insert>
 	
 	<select id="getHistoryDatagridList" resultType="Wps">
-		SELECT c.fid f001,c.fwelded_junction_no f002,p.fid f003,p.fprefix_number f004,p.fproduct_number f005,r.fid f006,r.fname,m.fid f007,m.fequipment_no f008,
-		m.fmodel fmode,e.fid f009,w.fstarttime,w.fendtime endtime,e.femployee_id,s.fid f010,s.fstep_number,j.fid f011,j.fjunction,j.fwelding_area FROM tb_work w 
+		SELECT c.fid f001,MAX(c.fwelded_junction_no) f002,p.fid f003,MAX(p.fprefix_number) f004,MAX(p.fproduct_number) f005,r.fid f006,MAX(r.fname),m.fid f007,MAX(m.fequipment_no) f008,
+		MAX(m.fmodel) fmode,e.fid f009,MAX(w.fstarttime),MAX(w.fendtime) endtime,MAX(e.femployee_id),s.fid f010,MAX(s.fstep_number),j.fid f011,MAX(j.fjunction),MAX(j.fwelding_area) FROM tb_work w 
 		LEFT JOIN tb_welded_junction c ON w.fcard_id=c.fid
 		LEFT JOIN tb_product_number p ON w.fproduct_number_id=p.fid
 		LEFT JOIN tb_employee e ON w.femployee_id=e.fid
@@ -731,8 +745,7 @@
 		<if test="search!=null and search!=''">
 			${search}
 		</if>
-		GROUP BY c.fid,c.fwelded_junction_no,p.fid,r.fid,m.fid,e.fid,s.fid,j.fid,p.fprefix_number,p.fproduct_number,r.fname,m.fequipment_no,
-		m.fmodel,w.fstarttime,w.fendtime,e.femployee_id,s.fstep_number,j.fjunction,j.fwelding_area
+		GROUP BY c.fid,p.fid,r.fid,m.fid,e.fid,s.fid,j.fid
 	</select>
 	
 	<select id="getEmployeeByJun" resultType="Wps">

@@ -563,4 +563,23 @@ public interface WpsService {
 	 * @param wps
 	 */
 	void overCard(Wps wps);
+	
+	/**
+	 * 对应工步焊缝
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年8月18日下午5:56:19
+	 * @param stepId 工步id
+	 * @param junctionId 焊缝id
+	 */
+	void addStepJunction(String stepId,String junctionId );
+	
+	/**
+	 * 删除工步焊缝对应关系
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年8月18日下午6:29:22
+	 * @param stepId
+	 */
+	void deleteStepJunction(String stepId);
 }

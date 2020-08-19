@@ -115,4 +115,6 @@ public interface WpsMapper {
 	void updateTaskresult(Wps wps);
 	void overTaskresult(Wps wps);
 	void overCard(Wps wps);
+	void addStepJunction(@Param("stepId")String stepId,@Param("junctionId")String junctionId );
+	void deleteStepJunction(@Param("stepId")String stepId);
 }

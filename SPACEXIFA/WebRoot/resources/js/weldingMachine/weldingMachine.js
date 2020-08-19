@@ -31,7 +31,7 @@ function weldingMachineDatagrid(){
 		}, {
 			field : 'typeName',
 			title : '设备类型',
-			width : 150,
+			width : 100,
 			halign : "center",
 			align : "left"
 		}, {
@@ -43,19 +43,19 @@ function weldingMachineDatagrid(){
 		}, {
 			field : 'insframeworkName',
 			title : '所属项目',
-			width : 150,
+			width : 100,
 			halign : "center",
 			align : "left"
 		}, {
 			field : 'statusName',
 			title : '状态',
-			width : 100,
+			width : 80,
 			halign : "center",
 			align : "left"
 		} , {
 			field : 'manufacturerName',
 			title : '厂家',
-			width : 200,
+			width : 100,
 			halign : "center",
 			align : "left"
 		}, {
@@ -67,7 +67,7 @@ function weldingMachineDatagrid(){
 		}, {
 			field : 'gatherId',
 			title : '采集序号',
-			width : 200,
+			width : 80,
 			halign : "center",
 			align : "left"
 		}, {

@@ -21,23 +21,23 @@ function setParam(){
 
 function dgDatagrid(){
 	setParam();
-	var column = new Array();
-	$.ajax({  
-        type : "post",  
-        async : false,
-        url : "datastatistics/getMachineData"+chartStr,
-        data : {},  
-        dataType : "json", //返回数据形式为json  
-        success : function(result) {
-            if (result) {
-            	 for(var i=0;i<result.ary.length;i++){
-            		 column.push({field:"t"+i,title:result.ary[i].title,width:100,halign : "center",align : "left",sortable : true,
-            				sorter : function(a,b){
-            					return (a>b?1:-1);
-            				}});
-             	 }
+//	var column = new Array();
+//	$.ajax({  
+//        type : "post",  
+//        async : false,
+//        url : "datastatistics/getMachineData"+chartStr,
+//        data : {},  
+//        dataType : "json", //返回数据形式为json  
+//        success : function(result) {
+//            if (result) {
+//            	 for(var i=0;i<result.ary.length;i++){
+//            		 column.push({field:"t"+i,title:result.ary[i].title,width:200,halign : "center",align : "left",sortable : true,
+//            				sorter : function(a,b){
+//            					return (a>b?1:-1);
+//            				}});
+//             	 }
             	 var grid = {
-            			 fitColumns : true,
+//            			 fitColumns : true,
         				 height : $("#body").height(),
         				 width : $("#body").width(),
         				 url : "datastatistics/getMachineData"+chartStr,
@@ -49,7 +49,81 @@ function dgDatagrid(){
         				 pagination : true,
         				 remoteSort : false,
         				 nowrap : false,
-        				 columns : [column],
+        				 columns : [
+        					 [
+        						 {
+        							field : 't1',
+        							title : '设备编号',
+        							width : 250,
+        							halign : "center",
+        							align : "left",
+        							sortable : true,
+        							sorter : function(a,b){
+        								return (a>b?1:-1);
+        							}
+        						 }, {
+        							field : 't0',
+        							title : '班组',
+        							width : 150,
+        							halign : "center",
+        							align : "left",
+        							sortable : true,
+        							sorter : function(a,b){
+        								return (a>b?1:-1);
+        							}
+        						 }, {
+        							field : 't2',
+        							title : '焊接时间',
+        							width : 150,
+        							halign : "center",
+        							align : "left",
+        							sortable : true,
+        							sorter : function(a,b){
+        								return (a>b?1:-1);
+        							}
+        						 }, {
+        							field : 't3',
+        							title : '工作时间',
+        							width : 150,
+        							halign : "center",
+        							align : "left",
+        							sortable : true,
+        							sorter : function(a,b){
+        								return (a>b?1:-1);
+        							}
+        						 }, {
+        							field : 't4',
+        							title : '焊接效率(%)',
+        							width : 150,
+        							halign : "center",
+        							align : "left",
+        							sortable : true,
+        							sorter : function(a,b){
+        								return (a>b?1:-1);
+        							}
+        						 }, {
+        							field : 't5',
+        							title : '焊丝消耗(KG)',
+        							width : 150,
+        							halign : "center",
+        							align : "left",
+        							sortable : true,
+        							sorter : function(a,b){
+        								return (a>b?1:-1);
+        							}
+        						 } , {
+         							field : 't6',
+         							title : '气体消耗(L)',
+         							width : 150,
+         							halign : "center",
+         							align : "left",
+         							sortable : true,
+         							sorter : function(a,b){
+         								return (a>b?1:-1);
+         							}
+        						 }
+        					 ]
+        				 ],
         				 rowStyler: function(index,row){
         					 if ((index % 2)!=0){
         		            	 //处理行代背景色后无法选中
@@ -62,13 +136,13 @@ function dgDatagrid(){
         		         }
                  };
             	 $('#dg').datagrid(grid);  
-            	 $('#dg').datagrid('loadData', result.rows);
-            }  
-        },  
-        error : function(errorMsg) {  
-            alert("数据请求失败，请联系系统管理员!");  
-        }  
-   }); 
+//            	 $('#dg').datagrid('loadData', result.rows);
+//            }  
+//        },  
+//        error : function(errorMsg) {  
+//            alert("数据请求失败，请联系系统管理员!");  
+//        }  
+//   }); 
 }
 
 function itemcombobox(){

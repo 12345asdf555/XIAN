@@ -40,61 +40,35 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	  	<div class="functiondiv">
 			<div>
 				<div style="float: left;">
-					<div>
-						<label>用户名：</label>
-					</div>
-					<div>
-						<input class="easyui-textbox" name="suserName" id="suserName" />
-					</div>
+					<label>用户名：</label>
+					<input class="easyui-textbox" name="suserName" id="suserName" />
 				</div>
 				<div style="float: left;">
-					<div>
-						<label>登录名：</label>
-					</div>
-					<div>
-						<input class="easyui-textbox" name="suserLoginName" id="suserLoginName" />
-					</div>
+					<label>登录名：</label>
+					<input class="easyui-textbox" name="suserLoginName" id="suserLoginName" />
 				</div>
 				<div style="float: left;">
-					<div>
-						<label>电话：</label>
-					</div>
-					<div>
-						<input class="easyui-textbox" name="suserPhone" id="suserPhone" />
-					</div>
+					<label>电话：</label>
+					<input class="easyui-textbox" name="suserPhone" id="suserPhone" />
 				</div>
 				<div style="float: left;">
-					<div>
-						<label>邮箱：</label>
-					</div>
-					<div>
-						<input class="easyui-textbox" name="suserEmail" id="suserEmail" />
-					</div>
+					<label>邮箱：</label>
+					<input class="easyui-textbox" name="suserEmail" id="suserEmail" />
+				</div>
+				<div>
+					<label>岗位：</label>
+					<input class="easyui-textbox" name="suserPosition" id="suserPosition" />
+				</div>
+			</div>
+			<div>
+				<div style="float: left;">
+					<label>部门：</label>
+					<select class="easyui-combobox" name="sinsid" id="sinsid" data-options="editable:false">
+					</select>
 				</div>
 				<div style="float: left;">
-					<div>
-						<label>岗位：</label>
-					</div>
-					<div>
-						<input class="easyui-textbox" name="suserPosition" id="suserPosition" />
-					</div>
-				</div>
-				<div style="float: left;">
-					<div>
-						<label>部门：</label>
-					</div>
-					<div>
-						<select class="easyui-combobox" name="sinsid" id="sinsid" data-options="editable:false">
-						</select>
-					</div>
-				</div>
-				<div style="float: left;">
-					<div>
-						<label>状态：</label>
-					</div>
-					<div>
-						<span id="sradios"></span>
-					</div>
+					<label>状态：</label>
+					<span id="sradios"></span>
 				</div>
 				<div  style="float: left;">
 					<a href="javascript:searchData();" class="easyui-linkbutton" iconCls="icon-select">查找</a>&nbsp;&nbsp;&nbsp;&nbsp;

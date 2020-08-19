@@ -598,4 +598,16 @@ public class WpsServiceImpl implements WpsService{
 		// TODO Auto-generated method stub
 		mapper.overCard(wps);
 	}
+
+	@Override
+	public void addStepJunction(String stepId, String junctionId) {
+		// TODO Auto-generated method stub
+		mapper.addStepJunction(stepId, junctionId);
+	}
+
+	@Override
+	public void deleteStepJunction(String stepId) {
+		// TODO Auto-generated method stub
+		mapper.deleteStepJunction(stepId);
+	}
 }

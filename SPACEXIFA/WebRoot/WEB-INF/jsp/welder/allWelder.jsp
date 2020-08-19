@@ -36,71 +36,41 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	  	<div class="functiondiv">
 		<div>
 			<div style="float: left;">
-				<div>
-					<label>姓名：</label>
-				</div>
-				<div>
-					<input class="easyui-textbox" name="sname" id="sname" />
-				</div>
+				<label>姓名：</label>
+				<input class="easyui-textbox" name="sname" id="sname" />
 			</div>
 			<div style="float: left;">
-				<div>
-					<label>编号：</label>
-				</div>
-				<div>
-					<input class="easyui-textbox" name="swelderno" id="swelderno" />
-				</div>
+				<label>编号：</label>
+				<input class="easyui-textbox" name="swelderno" id="swelderno" />
 			</div>
 			<div style="float: left;">
-				<div>
-					<label>手机：</label>
-				</div>
-				<div>
-					<input class="easyui-textbox" name="scellphone" id="scellphone" />
-				</div>
+				<label>手机：</label>
+				<input class="easyui-textbox" name="scellphone" id="scellphone" />
 			</div>
-			<div style="float: left;">
-				<div>
-					<label>卡号：</label>
-				</div>
-				<div>
-					<input class="easyui-textbox" name="scardnum" id="scardnum" />
-				</div>
+			<div>
+				<label>卡号：</label>
+				<input class="easyui-textbox" name="scardnum" id="scardnum" />
+			</div>
+		</div>
+		<div>
+			<div  style="float: left;">
+				<label>级别：</label>
+				<select class="easyui-combobox" name="sleveid" id="sleveid" data-options="editable:false">
+				</select>
 			</div>
 			<div  style="float: left;">
-				<div>
-					<label>级别：</label>
-				</div>
-				<div>
-					<select class="easyui-combobox" name="sleveid" id="sleveid" data-options="editable:false">
-					</select>
-				</div>
-			</div>
-			<div  style="float: left;">
-				<div>
-					<label>资质：</label>
-				</div>
-				<div>
-					<select class="easyui-combobox" name="squali" id="squali" data-options="editable:false">
-					</select>
-				</div>
+				<label>资质：</label>
+				<select class="easyui-combobox" name="squali" id="squali" data-options="editable:false">
+				</select>
 			</div>
 			<div style="float: left;">
-				<div>
-					<label>部门：</label>
-				</div>
-				<div>
-					<select class="easyui-combobox" name="sowner" id="sowner" data-options="editable:false">
-					</select>
-				</div>
+				<label>部门：</label>
+				<select class="easyui-combobox" name="sowner" id="sowner" data-options="editable:false">
+				</select>
 			</div>
 			<div style="float: left;">
-				<div>
-					<label>备注：</label>
-				</div>
-				<div>
-					<input class="easyui-textbox" name="sback" id="sback" />
-				</div>
+				<label>备注：</label>
+				<input class="easyui-textbox" name="sback" id="sback" />
 			</div>
 			<div  style="float: left;">
 				<a href="javascript:searchData();" class="easyui-linkbutton" iconCls="icon-select">查找</a>&nbsp;&nbsp;&nbsp;&nbsp;

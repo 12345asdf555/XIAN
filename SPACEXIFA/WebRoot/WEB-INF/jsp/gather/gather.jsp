@@ -38,63 +38,37 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	<div class="functiondiv">
 		<div>
 			<div style="float: left;">
-				<div>
-					<label>采集模块编号：</label>
-				</div>
-				<div>
-					<input class="easyui-textbox" name="sgatherNo" id="sgatherNo" />
-				</div>
+				<label>采集模块编号：</label>
+				<input class="easyui-textbox" name="sgatherNo" id="sgatherNo" />
 			</div>
 			<div  style="float: left;">
-				<div>
-					<label>组织机构：</label>
-				</div>
-				<div>
-					<select class="easyui-combobox" name="sitemid" id="sitemid" data-options="editable:false">
-					</select>
-				</div>
+				<label>组织机构：</label>
+				<select class="easyui-combobox" name="sitemid" id="sitemid" data-options="editable:false">
+				</select>
 			</div>
 			<div  style="float: left;">
-				<div>
-					<label>采集模块状态：</label>
-				</div>
-				<div>
-					<select class="easyui-combobox" name="sstatus" id="sstatus" data-options="editable:false">
-					</select>
-				</div>
+				<label>采集模块状态：</label>
+				<select class="easyui-combobox" name="sstatus" id="sstatus" data-options="editable:false">
+				</select>
+			</div>
+			<div>
+				<label>采集模块协议：</label>
+				<select class="easyui-combobox" name="sprotocol" id="sprotocol" data-options="editable:false">
+				</select>
+			</div>
+		</div>
+		<div>
+			<div style="float: left;">
+				<label>采集模块IP地址：</label>
+				<input class="easyui-textbox" name="sipurl" id="sipurl" />
 			</div>
 			<div style="float: left;">
-				<div>
-					<label>采集模块协议：</label>
-				</div>
-				<div>
-					<select class="easyui-combobox" name="sprotocol" id="sprotocol" data-options="editable:false">
-					</select>
-				</div>
-			</div>
-			<div style="float: left;">
-				<div>
-					<label>采集模块IP地址：</label>
-				</div>
-				<div>
-					<input class="easyui-textbox" name="sipurl" id="sipurl" />
-				</div>
-			</div>
-			<div style="float: left;">
-				<div>
-					<label>采集模块MAC地址：</label>
-				</div>
-				<div>
-					<input class="easyui-textbox" name="smacurl" id="smacurl" />
-				</div>
+				<label>采集模块MAC地址：</label>
+				<input class="easyui-textbox" name="smacurl" id="smacurl" />
 			</div>
 			<div  style="float: left;">
-				<div>
-					<label>出厂时间：</label>
-				</div>
-				<div>
-					<input class="easyui-datetimebox" style="width:150px;" name="sleavetime" id="sleavetime">
-				</div>
+				<label>出厂时间：</label>
+				<input class="easyui-datetimebox" style="width:150px;" name="sleavetime" id="sleavetime">
 			</div>
 			<div  style="float: left;">
 				<a href="javascript:searchData();" class="easyui-linkbutton" iconCls="icon-select">查找</a>&nbsp;&nbsp;&nbsp;&nbsp;

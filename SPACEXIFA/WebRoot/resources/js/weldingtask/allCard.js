@@ -600,8 +600,8 @@ var employeeUrl = "/",stepUrl = "/",junctionUrl = "/",detailUrl = "/";
 function initTables(){
 	$("#femployeeTable").datagrid( {
 		fitColumns : true,
-		height : $("#wpsDetailsDialog").height()*0.48,
-		width : $("#wpsDetailsDialog").width()*0.64*0.428,
+		height : $("#wpsDetailsDialog").height()*0.495,
+		width : $("#wpsDetailsDialog").width()*0.64*0.545,
 		idField : 'fid',
 //		pageSize : 10,
 //		pageList : [ 10, 20, 30, 40, 50 ],
@@ -676,8 +676,8 @@ function initTables(){
 	});
 	
 	$("#fstepTable").datagrid( {
-		height : $("#wpsDetailsDialog").height()*0.48,
-		width : $("#wpsDetailsDialog").width()*0.64*0.33,
+		height : $("#wpsDetailsDialog").height()*0.495,
+		width : $("#wpsDetailsDialog").width()*0.64*0.58,
 		idField : 'fid',
 //		pageSize : 10,
 //		pageList : [ 10, 20, 30, 40, 50 ],
@@ -706,6 +706,13 @@ function initTables(){
 			width : 100,
 			halign : "center",
 			align : "left",
+			editor:'text'
+		}, {
+			field : 'fstep_version',
+			title : '工步版本',
+			width : 100,
+//			halign : "center",
+			align : "center",
 			editor:'text'
 		}] ],
 //		pagination : true,
@@ -747,8 +754,8 @@ function initTables(){
 	});
 	
 	$("#fjunctionTable").datagrid( {
-		height : $("#wpsDetailsDialog").height()*0.48,
-		width : $("#wpsDetailsDialog").width()*0.64*0.33,
+		height : $("#wpsDetailsDialog").height()*0.495,
+		width : $("#wpsDetailsDialog").width()*0.64*0.359,
 		idField : 'fid',
 //		pageSize : 10,
 //		pageList : [ 10, 20, 30, 40, 50 ],
@@ -800,8 +807,8 @@ function initTables(){
 	});
 	
 	$("#wpsDetailTable").datagrid( {
-		height : $("#wpsDetailsDialog").height()*0.48,
-		width : $("#wpsDetailsDialog").width()*0.64*1.09,
+		height : $("#wpsDetailsDialog").height()*0.495,
+		width : $("#wpsDetailsDialog").width()*0.64*0.77,
 		idField : 'fid',
 //		pageSize : 10,
 //		pageList : [ 10, 20, 30, 40, 50 ],

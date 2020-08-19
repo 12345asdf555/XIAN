@@ -164,7 +164,7 @@ public class ExportExcelController {
 			String step_id = "";
 			int c = 0;
 			String[] titles = new String[] { "产品图号", "产品名称", "产品版本号", "工艺规程编号", "工艺规程版本号", "工艺来源", "审核状态",
-					"工序号", "工序版本号", "工序名称", "工步号", "工步名称", "焊缝编号", "焊接部位", "量化项目", "要求值", "上偏差", "下偏差", "计量单位" };
+					"工序号", "工序版本号", "工序名称", "工步号", "工步名称", "工步版本", "焊缝编号", "焊接部位", "量化项目", "要求值", "上偏差", "下偏差", "计量单位" };
 			Object[][] data = new Object[list.size()][20];
 			for (int k = 0; k < list.size(); k++) {
 				data[k][0] = list.get(k).getFproduct_drawing_no();
@@ -189,13 +189,14 @@ public class ExportExcelController {
 				data[k][9] = list.get(k).getFemployee_version();
 				data[k][10] = list.get(k).getFstep_number();
 				data[k][11] = list.get(k).getFstep_name();
-				data[k][12] = list.get(k).getFjunction();
-				data[k][13] = list.get(k).getFwelding_area();
-				data[k][14] = list.get(k).getFquantitative_project();
-				data[k][15] = list.get(k).getFrequired_value();
-				data[k][16] = list.get(k).getFupper_deviation();
-				data[k][17] = list.get(k).getFlower_deviation();
-				data[k][18] = list.get(k).getFunit_of_measurement();
+				data[k][12] = list.get(k).getFstep_version();
+				data[k][13] = list.get(k).getFjunction();
+				data[k][14] = list.get(k).getFwelding_area();
+				data[k][15] = list.get(k).getFquantitative_project();
+				data[k][16] = list.get(k).getFrequired_value();
+				data[k][17] = list.get(k).getFupper_deviation();
+				data[k][18] = list.get(k).getFlower_deviation();
+				data[k][19] = list.get(k).getFunit_of_measurement();
 			}
 			filename = "焊接工艺参数" + sdf.format(new Date()) + ".xls";
 			ServletContext scontext = request.getSession().getServletContext();

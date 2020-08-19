@@ -56,68 +56,42 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	  	<div class="functiondiv">
 			<div>
 				<div style="float: left;">
-					<div>
-						<label>产品图号：</label>
-					</div>
-					<div>
-						<input class="easyui-textbox" name="product_drawing_no" id="product_drawing_no" />
-					</div>
+					<label>产品图号：</label>
+					<input class="easyui-textbox" name="product_drawing_no" id="product_drawing_no" />
 				</div>
 				<div  style="float: left;">
-					<div>
-						<label>产品名称：</label>
-					</div>
-					<div>
-						<input class="easyui-textbox" name="product_name" id="product_name" />
-					</div>
+					<label>产品名称：</label>
+					<input class="easyui-textbox" name="product_name" id="product_name" />
 				</div>
 				<div  style="float: left;">
-					<div>
-						<label>产品版本号：</label>
-					</div>
-					<div>
-						<input class="easyui-textbox" name="product_version" id="product_version" />
-					</div>
+					<label>产品版本号：</label>
+					<input class="easyui-textbox" name="product_version" id="product_version" />
+				</div>
+				<div>
+					<label>工艺规程编号：</label>
+					<input class="easyui-textbox" name="wps_lib_name" id="wps_lib_name" />
+				</div>
+			</div>
+			<div>
+				<div  style="float: left;">
+					<label>工艺规程版本号：</label>
+					<input class="easyui-textbox" name="wps_lib_version" id="wps_lib_version" />
 				</div>
 				<div  style="float: left;">
-					<div>
-						<label>工艺规程编号：</label>
-					</div>
-					<div>
-						<input class="easyui-textbox" name="wps_lib_name" id="wps_lib_name" />
-					</div>
+					<label>工艺来源：</label>
+					<select class="easyui-combobox" name="wflag" id="wflag" data-options="editable:false">
+						<option value="">无</option>
+						<option value="0">自建</option>
+						<option value="1">MES</option>
+					</select>
 				</div>
 				<div  style="float: left;">
-					<div>
-						<label>工艺规程版本号：</label>
-					</div>
-					<div>
-						<input class="easyui-textbox" name="wps_lib_version" id="wps_lib_version" />
-					</div>
-				</div>
-				<div  style="float: left;">
-					<div>
-						<label>工艺来源：</label>
-					</div>
-					<div>
-						<select class="easyui-combobox" name="wflag" id="wflag" data-options="editable:false">
-							<option value="">无</option>
-							<option value="0">自建</option>
-							<option value="1">MES</option>
-						</select>
-					</div>
-				</div>
-				<div  style="float: left;">
-					<div>
-						<label>工艺审核：</label>
-					</div>
-					<div>
-						<select class="easyui-combobox" name="status" id="status" data-options="editable:false"">
-							<option value="">无</option>
-							<option value="0">待审核</option>
-							<option value="1">已通过</option>
-						</select>
-					</div>
+					<label>工艺审核：</label>
+					<select class="easyui-combobox" name="status" id="status" data-options="editable:false"">
+						<option value="">无</option>
+						<option value="0">待审核</option>
+						<option value="1">已通过</option>
+					</select>
 				</div>
 				<div  style="float: left;">
 					<a href="javascript:searchWps();" class="easyui-linkbutton" iconCls="icon-select">查找</a>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -173,25 +147,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<hr size=200 width="1" color="black">
 				</div>
 				<div style="float: left;width: 70%">
-					<div id="employeeDiv" style="float: left;width: 39%;height: 50%">
+					<div id="employeeDiv" style="float: left;width: 50%;height: 50%">
 						<a href="javascript:addEmployeeRow();" class="easyui-linkbutton" iconCls="icon-add"></a>
 		    			<a href="javascript:deleteEmployeeRow();" class="easyui-linkbutton" iconCls="icon-remove"></a>
 		    			<a href="javascript:saveEmployeeRow();" class="easyui-linkbutton" iconCls="icon-ok"></a>
 						<table id="femployeeTable" style="table-layout: fixed; width:100%;"></table>
 					</div>
-					<div id="stepDiv" style="float: left;width: 30%;height: 50%">
+					<div id="stepDiv" style="float: left;width: 50%;height: 50%">
 						<a href="javascript:addStepRow();" class="easyui-linkbutton" iconCls="icon-add"></a>
 		    			<a href="javascript:deleteStepRow();" class="easyui-linkbutton" iconCls="icon-remove"></a>
 		    			<a href="javascript:saveStepRow();" class="easyui-linkbutton" iconCls="icon-ok"></a>
 						<table id="fstepTable" style="table-layout: fixed; width:100%;"></table>
 					</div>
-					<div id="junctionDiv" style="float: left;width: 30%;height: 50%">
+					<div id="junctionDiv" style="float: left;width: 33%;height: 50%">
 						<a href="javascript:addJunctionRow();" class="easyui-linkbutton" iconCls="icon-add"></a>
 		    			<a href="javascript:deleteJunctionRow();" class="easyui-linkbutton" iconCls="icon-remove"></a>
 		    			<a href="javascript:saveJunctionRow();" class="easyui-linkbutton" iconCls="icon-ok"></a>
 						<table id="fjunctionTable" style="table-layout: fixed; width:100%;"></table>
 					</div>
-					<div id="detailDiv" style="width: 100%;height: 50%">
+					<div id="detailDiv" style="float: left;width: 65%;height: 50%">
 						<a href="javascript:addDetailRow();" class="easyui-linkbutton" iconCls="icon-add"></a>
 		    			<a href="javascript:deleteDetailRow();" class="easyui-linkbutton" iconCls="icon-remove"></a>
 		    			<a href="javascript:saveDetailRow();" class="easyui-linkbutton" iconCls="icon-ok"></a>

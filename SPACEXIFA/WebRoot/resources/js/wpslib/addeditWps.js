@@ -37,7 +37,7 @@ function initTables(){
 	$("#femployeeTable").datagrid( {
 		fitColumns : true,
 		height : $("#addOrUpdate").height()*0.4,
-		width : $("#addOrUpdate").width()*0.64*0.428,
+		width : $("#addOrUpdate").width()*0.64*0.545,
 		idField : 'fid',
 //		pageSize : 10,
 //		pageList : [ 10, 20, 30, 40, 50 ],
@@ -113,7 +113,7 @@ function initTables(){
 	
 	$("#fstepTable").datagrid( {
 		height : $("#addOrUpdate").height()*0.4,
-		width : $("#addOrUpdate").width()*0.64*0.33,
+		width : $("#addOrUpdate").width()*0.64*0.58,
 		idField : 'fid',
 //		pageSize : 10,
 //		pageList : [ 10, 20, 30, 40, 50 ],
@@ -142,6 +142,13 @@ function initTables(){
 			width : 100,
 			halign : "center",
 			align : "left",
+			editor:'text'
+		}, {
+			field : 'fstep_version',
+			title : '工步版本',
+			width : 100,
+//			halign : "center",
+			align : "center",
 			editor:'text'
 		}] ],
 //		pagination : true,
@@ -184,7 +191,7 @@ function initTables(){
 	
 	$("#fjunctionTable").datagrid( {
 		height : $("#addOrUpdate").height()*0.4,
-		width : $("#addOrUpdate").width()*0.64*0.33,
+		width : $("#addOrUpdate").width()*0.64*0.359,
 		idField : 'fid',
 //		pageSize : 10,
 //		pageList : [ 10, 20, 30, 40, 50 ],
@@ -201,6 +208,9 @@ function initTables(){
 			align : "left",
 			hidden:true
 		}, {
+		    field:'ck',
+			checkbox:true
+		}, {
 			field : 'fjunction',
 			title : '焊缝编号',
 			width : 100,
@@ -214,6 +224,13 @@ function initTables(){
 			halign : "center",
 			align : "left",
 			editor:'text'
+		}, {
+			field : 'fstatus',
+			title : '标志',
+//			width : 30,
+			halign : "center",
+			align : "left",
+			hidden:true
 		}] ],
 //		pagination : true,
 		rowStyler: function(index,row){
@@ -223,6 +240,18 @@ function initTables(){
                 return color;
             }
         },
+		onBeforeLoad:function(data){
+			 $('#fjunctionTable').datagrid('clearChecked');
+		},
+		onLoadSuccess:function(data){
+			 if(data){
+				 $.each(data.rows, function(index, item){
+					 if(item.fstatus==1){
+				         $('#fjunctionTable').datagrid('checkRow', index);
+					 }
+				 })
+			 }
+		},
 		onDblClickCell: function(index,field,value){
 			if (endEditing(2)){
 //				$('#femployeeTable').datagrid('selectRow', index)
@@ -237,7 +266,7 @@ function initTables(){
 	
 	$("#wpsDetailTable").datagrid( {
 		height : $("#addOrUpdate").height()*0.4,
-		width : $("#addOrUpdate").width()*0.64*1.09,
+		width : $("#addOrUpdate").width()*0.64*0.77,
 		idField : 'fid',
 //		pageSize : 10,
 //		pageList : [ 10, 20, 30, 40, 50 ],
@@ -497,18 +526,20 @@ function saveJunctionRow(){
 		var deleteRows = $("#fjunctionTable").datagrid('getChanges', 'deleted'); //获取删除的数据
 		var updateRows = $("#fjunctionTable").datagrid('getChanges', 'updated'); //获取删除的数据
 		var addRows = $("#fjunctionTable").datagrid('getChanges', 'inserted'); //获取删除的数据
+		var selectRows = $("#fjunctionTable").datagrid('getSelections'); //获取选择的数据
 //		console.log(dd.every(val => changeRows.includes(val)));
 //		if(deleteRows.length!=0){
 //			changeRows.filter((item) => !deleteRows.some((items) => item === items));
 //		}
-		if(addRows.length!=0||updateRows.length!=0||deleteRows.length!=0){
+		if(addRows.length!=0||updateRows.length!=0||deleteRows.length!=0||selectRows.length!=0){
 			$.ajax({
 				type : "post",
 				async : false,
 				url : "wps/saveJunction?stepId="+stepId,
 				data : {addRows:JSON.stringify(addRows),
 						updateRows:JSON.stringify(updateRows),
-						deleteRows:JSON.stringify(deleteRows)},
+						deleteRows:JSON.stringify(deleteRows),
+						selectRows:JSON.stringify(selectRows)},
 				dataType : "json", //返回数据形式为json  
 				success : function(result) {
 					$('#fjunctionTable').datagrid("options").url="wps/getInfo?search=" + stepId +"&valueFlag=2";

@@ -676,8 +676,12 @@ public class ImportExcelController {
 							obj.put("msg","导入失败，请检查导入的工步是否正确！");
 						}else {
 							w.setFstep_id(fstep_id);
-							wpss.addJunction(w);
-							wpss.addDetail(w);
+							if(!"".equals(w.getFjunction())&&w.getFjunction()!=null) {
+								wpss.addJunction(w);
+							}
+							if(!"".equals(w.getFquantitative_project())&&w.getFquantitative_project()!=null) {
+								wpss.addDetail(w);
+							}
 						}
 					}
 				}else {
@@ -698,8 +702,12 @@ public class ImportExcelController {
 							w.setFstep_id(nn);
 							fstep_id = nn;
 						}
-						wpss.addJunction(w);
-						wpss.addDetail(w);
+						if(!"".equals(w.getFjunction())&&w.getFjunction()!=null) {
+							wpss.addJunction(w);
+						}
+						if(!"".equals(w.getFquantitative_project())&&w.getFquantitative_project()!=null) {
+							wpss.addDetail(w);
+						}
 				}
 				}
 			};
@@ -1409,24 +1417,27 @@ public class ImportExcelController {
 						p.setFstep_name(cellValue);//工步名称
 						break;
 					}else if(k == 12){
-						p.setFjunction(cellValue);//焊缝编号
+						p.setFstep_version(cellValue);//工步版本
 						break;
 					}else if(k == 13){
-						p.setFwelding_area(cellValue);//焊接部位
+						p.setFjunction(cellValue);//焊缝编号
 						break;
 					}else if(k == 14){
-						p.setFquantitative_project(cellValue);//量化项目
+						p.setFwelding_area(cellValue);//焊接部位
 						break;
 					}else if(k == 15){
-						p.setFrequired_value(cellValue);//要求值
+						p.setFquantitative_project(cellValue);//量化项目
 						break;
 					}else if(k == 16){
-						p.setFupper_deviation(cellValue);//上偏差
+						p.setFrequired_value(cellValue);//要求值
 						break;
 					}else if(k == 17){
-						p.setFlower_deviation(cellValue);//下偏差
+						p.setFupper_deviation(cellValue);//上偏差
 						break;
 					}else if(k == 18){
+						p.setFlower_deviation(cellValue);//下偏差
+						break;
+					}else if(k == 19){
 						p.setFunit_of_measurement(cellValue);//计量单位
 						break;
 					}
@@ -1484,24 +1495,27 @@ public class ImportExcelController {
 						p.setFstep_name(cellValue);//工步名称
 						break;
  					}else if(k == 12){
-						p.setFjunction(cellValue);//焊缝编号
+						p.setFstep_version(cellValue);//工步版本
 						break;
  					}else if(k == 13){
-						p.setFwelding_area(cellValue);//焊接部位
+						p.setFjunction(cellValue);//焊缝编号
 						break;
  					}else if(k == 14){
-						p.setFquantitative_project(cellValue);//量化项目
+						p.setFwelding_area(cellValue);//焊接部位
 						break;
  					}else if(k == 15){
-						p.setFrequired_value(cellValue);//要求值
+						p.setFquantitative_project(cellValue);//量化项目
 						break;
  					}else if(k == 16){
-						p.setFupper_deviation(cellValue);//上偏差
+						p.setFrequired_value(cellValue);//要求值
 						break;
  					}else if(k == 17){
-						p.setFlower_deviation(cellValue);//下偏差
+						p.setFupper_deviation(cellValue);//上偏差
 						break;
  					}else if(k == 18){
+						p.setFlower_deviation(cellValue);//下偏差
+						break;
+ 					}else if(k == 19){
 						p.setFunit_of_measurement(cellValue);//计量单位
 						break;
  					}
