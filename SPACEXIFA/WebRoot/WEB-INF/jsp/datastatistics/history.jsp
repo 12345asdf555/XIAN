@@ -48,7 +48,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<!-- 				</div>
 						<div> -->
 							<input class="easyui-textbox" name="fprefix_number" id="fprefix_number" style="width: 90px"/> -- 
-							<input class="easyui-textbox" name="fproduct_id" id="fproduct_id" style="width: 45px"/>
+							<input class="easyui-textbox" name="fproduct_id" id="fproduct_id" style="width: 45px"/> -- 
+							<input class="easyui-textbox" name="fsuffix_number" id="fsuffix_number" style="width: 90px"/>
 					</div>
 					<div style="float: left;">
 							<label>设备编号：</label>

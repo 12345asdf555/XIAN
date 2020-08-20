@@ -1180,7 +1180,7 @@ public class WeldingTaskController {
 				json.put("fwelded_junction_no", wps.getFwelded_junction_no());//电子跟踪卡号
 				json.put("fproduct_drawing_no", wps.getFproduct_drawing_no());//产品图号
 				json.put("fproduct_name", wps.getFproduct_name());//产品名称
-				json.put("fproduct_version", wps.getFprefix_number()+"-"+wps.getFproduct_vnumber());//产品序号
+				json.put("fproduct_version", wps.getFprefix_number()+wps.getFproduct_vnumber()+wps.getFsuffix_number());//产品序号
 				json.put("fprocessname", wps.getFprocessname());//规程编号
 				json.put("fwps_lib_version", wps.getFwps_lib_version());//规程版本号
 				json.put("fwpsnum", wps.getFwpsnum());//任务编号
@@ -1491,6 +1491,7 @@ public class WeldingTaskController {
 			String cardFlag = request.getParameter("cardFlag");
 			int fproduct_number = Integer.parseInt(request.getParameter("fproduct_number"));
 			String prefix_number = request.getParameter("fprefix_number");
+			String fsuffix_number = request.getParameter("fsuffix_number");
 			int init_number = Integer.parseInt(request.getParameter("init_number"));
 			wj.setWeldedJunctionno(fwelded_junction_no);
 			wj.setFtask_no(ftask_no);
@@ -1501,6 +1502,7 @@ public class WeldingTaskController {
 //			BigInteger id = wj.getId();
 			for(int i=0;i<fproduct_number;i++) {
 				wj.setFprefix_number(prefix_number);
+				wj.setFsuffix_number(fsuffix_number);
 				wj.setFproduct_number(String.valueOf(init_number+i));
 				wjm.addProductNum(wj);
 			}
@@ -1526,6 +1528,7 @@ public class WeldingTaskController {
 			String cardFlag = request.getParameter("cardFlag");
 			int fproduct_number = Integer.parseInt(request.getParameter("fproduct_number"));
 			String prefix_number = request.getParameter("fprefix_number");
+			String fsuffix_number = request.getParameter("fsuffix_number");
 			int init_number = Integer.parseInt(request.getParameter("init_number"));
 			wj.setId(new BigInteger(fid));
 			wj.setWeldedJunctionno(fwelded_junction_no);
@@ -1538,6 +1541,7 @@ public class WeldingTaskController {
 //			BigInteger id = wj.getId();
 			for(int i=0;i<fproduct_number;i++) {
 				wj.setFprefix_number(prefix_number);
+				wj.setFsuffix_number(fsuffix_number);
 				wj.setFproduct_number(String.valueOf(init_number+i));
 				wjm.addProductNum(wj);
 			}
@@ -1586,7 +1590,7 @@ public class WeldingTaskController {
 		try{
 			for(WeldedJunction wjm:productList){
 				json.put("fid", wjm.getId());
-				json.put("fproduct_number", wjm.getFprefix_number()+"-"+wjm.getFproduct_number());
+				json.put("fproduct_number", wjm.getFprefix_number()+wjm.getFproduct_number()+wjm.getFsuffix_number());
 				json.put("fwps_lib_name", wjm.getFwps_lib_name());
 				json.put("fwps_lib_version", wjm.getFwps_lib_version());
 				json.put("fstatus", wjm.getFstatus());
@@ -1619,6 +1623,7 @@ public class WeldingTaskController {
 		JSONObject obj = new JSONObject();
 		try{
 			json.put("fprefix_number", product.getFprefix_number());
+			json.put("fsuffix_number", product.getFsuffix_number());
 			json.put("fproduct_number", product.getId());
 			json.put("finit_number", product.getFproduct_number());
 			json.put("fwps_lib_id", product.getFwpslib_id());
@@ -1676,7 +1681,7 @@ public class WeldingTaskController {
 				json.put("fwelded_junction_no", wjm.getWeldedJunctionno());
 				json.put("fwps_lib_name", wjm.getFwps_lib_name());
 				json.put("fwps_lib_version", wjm.getFwps_lib_version());
-				json.put("fproduct_number", wjm.getFprefix_number()+"-"+wjm.getFproduct_number());
+				json.put("fproduct_number", wjm.getFprefix_number()+wjm.getFproduct_number()+wjm.getFsuffix_number());
 				json.put("fproduct_drawing_no", wjm.getFproduct_drawing_no());
 				json.put("fproduct_name", wjm.getFproduct_name());
 				json.put("fproduct_version", wjm.getFproduct_version());

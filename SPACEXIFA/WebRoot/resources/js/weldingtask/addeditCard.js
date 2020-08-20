@@ -80,6 +80,7 @@ function editWps() {
 			success : function(result) {
 				if (result.row.length!=0) {
 					$("#fprefix_number").textbox('setValue', result.row[0].fprefix_number); 
+					$("#fsuffix_number").textbox('setValue', result.row[0].fsuffix_number); 
 					$("#fproduct_number").numberbox('setValue', result.row[0].fproduct_number); 
 					$("#init_number").numberbox('setValue', result.row[0].finit_number); 
 					$('#fwps_lib_id').combogrid('setValue', result.row[0].fwps_lib_id);

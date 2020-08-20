@@ -278,6 +278,7 @@ function searchHistory(){
 	var searchStr = "";
 	var fcard_id = $("#fcard_id").textbox('getValue');
 	var fprefix_number = $("#fprefix_number").textbox('getValue');
+	var fsuffix_number = $("#fsuffix_number").textbox('getValue');
 	var fproduct_id = $("#fproduct_id").textbox('getValue');
 	var fequipment_id = $("#fequipment_id").textbox('getValue');
 	var fwelder_id = $("#fwelder_id").textbox('getValue');
@@ -295,6 +296,9 @@ function searchHistory(){
 	}
 	if(fprefix_number!=""){
 		searchStr += " AND p.fprefix_number LIKE "+"'%" + fprefix_number + "%'";
+	}
+	if(fsuffix_number!=""){
+		searchStr += " AND p.fsuffix_number LIKE "+"'%" + fsuffix_number + "%'";
 	}
 	if(fequipment_id != ""){
 		searchStr += " AND m.fequipment_no LIKE "+"'%" + fequipment_id + "%'";

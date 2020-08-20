@@ -163,7 +163,7 @@
 	
 	<select id="gettrackcard" parameterType="BigInteger" resultType="Wps">
 		select j.fid,j.fwelded_junction_no fwelded_junction_no,
-		p.FPREFIX_NUMBER,p.FPRODUCT_NUMBER conname,
+		p.FPREFIX_NUMBER,p.FPRODUCT_NUMBER conname,p.fsuffix_number
 		w.fproduct_drawing_no fproduct_drawing_no,w.fid,w.fwps_lib_name fprocessname,w.fwps_lib_version fwps_lib_version,
 		e.femployee_name femployee_name,e.femployee_id femployee_id,e.fid,
 		s.fid,s.fstep_name fstep_name,s.fstep_number fstep_number,
@@ -402,7 +402,7 @@
 	
 	<select id="getunstard" resultType="Wps">
 		select a.fjunction_id,a.fwelder_id,a.fmachine_id,a.falarmtime unstandardtime,a.welding_position_id,a.fstarttime,a.fendtime,a.fproduct_number_id,a.fcard_id,a.fwps_lib_id,
-		a.femployee_id,a.fstep_id,j.fwelded_junction_no fwelded_junction_no,j.ftask_no fwpsnum,p.fprefix_number fprefix_number,p.fproduct_number fproduct_vnumber,
+		a.femployee_id,a.fstep_id,j.fwelded_junction_no fwelded_junction_no,j.ftask_no fwpsnum,p.fprefix_number fprefix_number,p.fsuffix_number,p.fproduct_number fproduct_vnumber,
 		l.fwps_lib_name fprocessname,l.fwps_lib_version fwps_lib_version,l.fproduct_drawing_no fproduct_drawing_no,l.fproduct_name fproduct_name,m.fequipment_no conname,i.fname fitem,
 		u.fjunction fjunction,u.fwelding_area fwelding_area,s.fstep_number fstep_number,s.fstep_name fstep_name,e.femployee_name femployee_name,e.femployee_id femployee_id,w.fname weldername from tb_alarm a
 		LEFT JOIN tb_welded_junction j ON a.fcard_id = j.fid
@@ -768,7 +768,7 @@
 	</insert>
 	
 	<select id="getHistoryDatagridList" resultType="Wps">
-		SELECT c.fid f001,MAX(c.fwelded_junction_no) f002,p.fid f003,MAX(p.fprefix_number) f004,MAX(p.fproduct_number) f005,r.fid f006,MAX(r.fname),m.fid f007,MAX(m.fequipment_no) f008,
+		SELECT c.fid f001,MAX(c.fwelded_junction_no) f002,p.fid f003,MAX(p.fprefix_number) f004,MAX(p.fsuffix_number) fsuffix_number,MAX(p.fproduct_number) f005,r.fid f006,MAX(r.fname),m.fid f007,MAX(m.fequipment_no) f008,
 		MAX(m.fmodel) fmode,e.fid f009,MAX(w.fstarttime),MAX(w.fendtime) endtime,MAX(e.femployee_id),s.fid f010,MAX(s.fstep_number),j.fid f011,MAX(j.fjunction),MAX(j.fwelding_area) FROM tb_work w 
 		LEFT JOIN tb_welded_junction c ON w.fcard_id=c.fid
 		LEFT JOIN tb_product_number p ON w.fproduct_number_id=p.fid

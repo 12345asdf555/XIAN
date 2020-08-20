@@ -320,8 +320,8 @@
 	</delete>
 	
 	<insert id="addProductNum" parameterType="com.spring.model.WeldedJunction">
-		INSERT INTO tb_product_number (fprefix_number,fproduct_number,fcard_id,fwps_lib_id) VALUES 
-		(#{fprefix_number}, #{fproduct_number}, #{id}, #{fwpslib_id})
+		INSERT INTO tb_product_number (fprefix_number,fproduct_number,fcard_id,fwps_lib_id,fsuffix_number) VALUES 
+		(#{fprefix_number}, #{fproduct_number}, #{id}, #{fwpslib_id}, #{fsuffix_number})
 	</insert>
 	
 	<select id="getProductList" resultMap="wjMap">
@@ -337,10 +337,10 @@
 	</select>
 	
 	<select id="getProductByCardid" resultMap="wjMap">
-		SELECT p.fwps_lib_id fwpslib_id,fprefix_number,MIN(fproduct_number) fproduct_number,COUNT(p.fid) id 
+		SELECT p.fwps_lib_id fwpslib_id,max(fprefix_number) fprefix_number,max(fsuffix_number) fsuffix_number,MIN(fproduct_number) fproduct_number,COUNT(p.fid) id 
 		FROM tb_product_number p 
 		WHERE p.fcard_id=#{fid}
-		GROUP BY fwps_lib_id,fprefix_number
+		GROUP BY fwps_lib_id
 	</select>
 	
 	<insert id="addProductWpsHistory">

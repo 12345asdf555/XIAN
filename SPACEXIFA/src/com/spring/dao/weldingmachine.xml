@@ -106,9 +106,10 @@
 	</select>
 	
 	<select id="getMachines" resultMap="wmMap">
-		select a.fmachine_id,a.fwelder_id,m.fid fid,m.fequipment_no fequipment_no from tb_alarm a
-		LEFT JOIN tb_welding_machine m on a.fmachine_id = m.fid
-		where a.fwelder_id  = #{insid}
+		select fid fid,fequipment_no fequipment_no from tb_welding_machine 
+		<if test="insid!=null and insid!=''">
+			 where FINSFRAMEWORK_ID=#{insid}
+		</if>
 	</select>
 	
 	<select id="getWeldingMachineByEno"  resultType="java.math.BigInteger">

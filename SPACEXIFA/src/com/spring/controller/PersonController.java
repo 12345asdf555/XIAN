@@ -280,7 +280,11 @@ public class PersonController {
 		JSONObject json = new JSONObject();
 		JSONArray ary = new JSONArray();
 		JSONObject obj = new JSONObject();
-		BigInteger insid= new BigInteger(request.getParameter("str"));
+		String str = request.getParameter("str");
+		BigInteger insid = null;
+		if(!"".equals(str)&&str!=null) {
+			insid = new BigInteger(str);
+		}
 		try{
 			List<WeldingMachine> machinelist = machineService.getMachines(insid);
 			for(WeldingMachine machine:machinelist){
@@ -306,7 +310,11 @@ public class PersonController {
 		JSONObject json = new JSONObject();
 		JSONArray ary = new JSONArray();
 		JSONObject obj = new JSONObject();
-		BigInteger insid= new BigInteger(request.getParameter("str"));
+		String str = request.getParameter("str");
+		BigInteger insid= null;
+		if(!"".equals(str) && str!=null) {
+			insid = new BigInteger(str);
+		}
 		try{
 			List<Person> welderlist = welderService.getWeldername(insid);
 			for(Person welder:welderlist){

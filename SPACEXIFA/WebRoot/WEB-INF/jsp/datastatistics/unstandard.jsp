@@ -62,7 +62,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<div  style="float: left;">
 					<label>产品序号：</label>
 					<input class="easyui-textbox" name="fproduct_id" id="fproduct_id" style="width: 100px"/>--
-					<input class="easyui-textbox" style="width:60px;" name="product_number" id="product_number"/>
+					<input class="easyui-textbox" style="width:60px;" name="product_number" id="product_number"/>--
+					<input class="easyui-textbox" name="fsuffix_number" id="fsuffix_number" style="width: 100px"/>
 				</div>
 				<div>
 					<label>工艺规程编号：</label>
@@ -106,7 +107,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</div>
 				<div  style="float: left;">
 					<label>焊机编号：</label>
-					<select class="easyui-combobox" style="width:100px;" name="weldmachine" id="weldmachine" ></select>
+					<select class="easyui-combobox" style="width:200px;" name="weldmachine" id="weldmachine" ></select>
 				</div>
 				<div  style="float: left;">
 					<label>时间：</label>

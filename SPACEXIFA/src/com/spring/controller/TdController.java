@@ -822,7 +822,7 @@ public class TdController {
 				json.put("fid", w.getFid());
 				json.put("fwelded_junction_no", w.getFwelded_junction_no());
 				json.put("fwpsnum", w.getFwpsnum());
-				json.put("fproduct_number", w.getFprefix_number()+"-"+w.getConname());
+				json.put("fproduct_number", w.getFprefix_number()+w.getConname()+w.getFsuffix_number());
 				json.put("fproduct_drawing_no", w.getFproduct_drawing_no());
 				json.put("fprocessname", w.getFprocessname());//工艺规程编号
 				json.put("fwps_lib_version", w.getFwps_lib_version());//规程版本

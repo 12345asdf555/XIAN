@@ -64,7 +64,11 @@
 	</select>
 	
 	<select id="getWeldername" parameterType="String" resultType="Person">
-		SELECT fid id,fname name FROM tb_welder WHERE Fowner=#{insid}
+		SELECT fid id,fname name FROM tb_welder 
+		<if test="insid!=null and insid!=''">
+			 WHERE Fowner=#{insid}
+		</if>
+		
 	</select>
 	
 	<select id="getFreeWelder" resultType="Person">

@@ -126,7 +126,7 @@ public class TerminalController {
 		List<WeldedJunction> productList = wjm.getProductList(search);
 		for(WeldedJunction wjm:productList){
 			json.put("fid", wjm.getId());
-			json.put("fproduct_number", wjm.getFprefix_number()+"-"+wjm.getFproduct_number());
+			json.put("fproduct_number", wjm.getFprefix_number()+wjm.getFproduct_number()+wjm.getFsuffix_number());
 			json.put("fwps_lib_name", wjm.getFwps_lib_name());
 			json.put("fwps_lib_version", wjm.getFwps_lib_version());
 			json.put("fwps_lib_id", wjm.getFwpslib_id());

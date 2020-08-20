@@ -169,6 +169,7 @@ function parameterStr(){
 	var product_drawing_no = $("#product_drawing_no").val();
 	var product_name = $("#product_name").val();
 	var fproduct_id = $("#fproduct_id").textbox('getValue');
+	var fsuffix_number = $("#fsuffix_number").textbox('getValue');
 	var taskno = $("#taskno").val();
 	var fwps_lib_num = $("#fwps_lib_num").val();
 	var fwelded_junction_no = $("#fwelded_junction_no").val();
@@ -217,20 +218,24 @@ function parameterStr(){
 		}
 	}
 	if(fproduct_id != ""){
-		searchStr += " AND p.fproduct_number LIKE "+"'%" + fproduct_id + "%'";
-	}
-	if(fproduct_id != ""){
 		if(searcher == ""){
-			searcher += " p.fproduct_number LIKE "+"'%" + fproduct_id + "%'";
+			searcher += " p.fprefix_number LIKE "+"'%" + fproduct_id + "%'";
 		}else{
-			searcher += " AND p.fproduct_number LIKE "+"'%" + fproduct_id + "%'";
+			searcher += " AND p.fprefix_number LIKE "+"'%" + fproduct_id + "%'";
 		}
 	}
 	if(product_number != ""){
 		if(searcher == ""){
-			searcher += " p.fprefix_number=" + product_number;
+			searcher += " p.fproduct_number=" + product_number;
 		}else{
-			searcher += " AND p.fprefix_number=" + product_number;
+			searcher += " AND p.fproduct_number=" + product_number;
+		}
+	}
+	if(fsuffix_number != ""){
+		if(searcher == ""){
+			searcher += " p.fsuffix_number LIKE "+"'%" + fsuffix_number + "%'";
+		}else{
+			searcher += " p.fsuffix_number LIKE "+"'%" + fsuffix_number + "%'";
 		}
 	}
 	if(item != ""){
@@ -294,9 +299,9 @@ function parameterStr(){
 	
 	if(weldmachine != ""){
 		if(searcher == ""){
-			searcher += " m.fequipment_no=" + weldmachine;
+			searcher += " m.fid LIKE "+"'%" + weldmachine + "%'";
 		}else{
-			searcher += " AND m.fequipment_no=" + weldmachine;
+			searcher += " AND m.fid LIKE "+"'%" + weldmachine + "%'";
 		}
 	}
 	
@@ -359,9 +364,68 @@ function InsframeworkCombobox(){
 }
 
 function weldernames(){
+	$('#weldername').combobox('clear');
+	$('#weldername').combobox('loadData', {});
+	$.ajax({  
+	    type : "post",  
+	    async : false,
+	    url : "welders/getWeldername?str=",  
+	    data : {},  
+	    dataType : "json", //返回数据形式为json  
+	    success : function(result) {  
+	        if (result) {
+	        	if(result.ary.length!=0){
+	        		var boptionStr = '';
+	                for (var i = 0; i < result.ary.length; i++) {  
+	                    boptionStr += "<option value=\"" + result.ary[i].id + "\" >"  
+	                            + result.ary[i].name + "</option>";
+	                }
+	                $("#weldername").html(boptionStr);
+	                $("#weldername_id").html(boptionStr);
+		        	$("#weldername").combobox();
+		        	$("#weldername_id").combobox();
+		        	$("#weldername").combobox('select',result.ary[0].name);
+	        	}
+	        }  
+	    },  
+	    error : function(errorMsg) {  
+	        alert("数据请求失败，请联系系统管理员!");  
+	    }  
+		}); 
+}
+
+
+function machinenum(){
+	$('#weldmachine').combobox('clear');
+	$('#weldmachine').combobox('loadData',{});
+	$.ajax({  
+	    type : "post",  
+	    async : false,
+	    url : "welders/getMachines?str=",  
+	    data : {},  
+	    dataType : "json", //返回数据形式为json  
+	    success : function(result) {  
+	        if (result) {
+	        	if(result.ary.length!=0){
+	        		var boptionStr = '';
+	                for (var i = 0; i < result.ary.length; i++) {  
+	                    boptionStr += "<option value=\"" + result.ary[i].id + "\" >"  
+	                            + result.ary[i].machineno + "</option>";
+	                }
+	                $("#weldmachine").html(boptionStr);
+		        	$("#weldmachine").combobox();
+		        	$("#weldmachine").combobox('select',result.ary[0].machineno);
+	        	}
+	        }  
+	    },  
+	    error : function(errorMsg) {  
+	        alert("数据请求失败，请联系系统管理员!");  
+	    }  
+	});
 	$("#item").combobox({
 		onChange : function(newValue,oldValue){
 			$('#weldername').combobox('clear');
+			$('#weldername').combobox('loadData', {});
 			$.ajax({  
 			    type : "post",  
 			    async : false,
@@ -387,16 +451,8 @@ function weldernames(){
 			    error : function(errorMsg) {  
 			        alert("数据请求失败，请联系系统管理员!");  
 			    }  
-				}); 
-		}
-	})
-}
-
-
-function machinenum(){
-	$("#weldername").combobox({
-		onSelect : function(record){
-			var newValue = record.value;
+			}); 
+			
 			$('#weldmachine').combobox('clear');
 			$('#weldmachine').combobox('loadData',{});
 			$.ajax({  

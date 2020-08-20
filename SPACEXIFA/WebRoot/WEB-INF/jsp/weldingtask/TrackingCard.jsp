@@ -151,7 +151,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	   		<table id="cardTable" style="table-layout: fixed; width:100%;"></table>
   		</div>
 	     <!-- 添加修改工艺台账 -->
-		<div id="addOrUpdate" class="easyui-dialog" style="width: 380px; height: 400px; padding:10px 20px" closed="true" buttons="#tdd-buttons">
+		<div id="addOrUpdate" class="easyui-dialog" style="width: 380px; height: 450px; padding:10px 20px" closed="true" buttons="#tdd-buttons">
 			<form id="addOrUpdatefm" class="easyui-form" method="post" data-options="novalidate:true">
 				<div class="fitem">
 					<lable><span class="required">*</span>电子跟踪卡号</lable>
@@ -189,6 +189,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<div  class="fitem">
 					<lable><span class="required">*</span>前缀号</lable>
 					<input class="easyui-textbox" name="fprefix_number" id="fprefix_number"  data-options="required:true"/>
+				</div>
+				<div  class="fitem">
+					<lable><span class="required">*</span>后缀号</lable>
+					<input class="easyui-textbox" name="fsuffix_number" id="fsuffix_number"  data-options="required:true"/>
 				</div>
 				<div  class="fitem">
 					<lable><span class="required">*</span>初始值</lable>

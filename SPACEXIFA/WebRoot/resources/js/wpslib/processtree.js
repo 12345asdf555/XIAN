@@ -31,7 +31,7 @@ function insframeworkTree() {
 				$.ajax({
 					type : "post",
 					async : false,
-					url : "wps/getInfo?search=" + node.id +"&valueFlag=2",
+					url : "wps/getInfo?search=" + node.id +"&valueFlag=4",
 					dataType : "json",
 					data : {},
 					success : function(result) {
