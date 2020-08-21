@@ -824,11 +824,42 @@
 			AND FSTEP_ID=#{fstep_id}
 		</if>
 	</update>
+	<select id="getEmployeStep" resultType="Wps">
+		SELECT e.FID fid,e.FEMPLOYEE_NAME femployee_name,e.FEMPLOYEE_ID femployee_id,e.FEMPLOYEE_VERSION femployee_version from TB_STEP 
+		LEFT JOIN TB_EMPLOYEE e on e.fid = TB_STEP.FEMPLOYEE_ID
+		<if test="stepId!=null and stepId!=''">
+			where TB_STEP.FID = #{stepId}
+		</if>
+		group by e.FID,e.FEMPLOYEE_NAME,e.FEMPLOYEE_ID,e.FEMPLOYEE_VERSION ORDER BY nlssort(fid,'NLS_SORT=SCHINESE_PINYIN_M')
+	</select>
 	
+	<select id="getJunctionWeld" resultType="Wps">
+		SELECT FID fid,FWELDING_AREA fwelding_area FROM TB_JUNCTION
+		<if test="junctionId!=null and junctionId!=''">
+			where fid=#{junctionId}
+		</if>
+	</select>
+	
+	<select id="getJunctionStep" resultType="Wps">
+		select p.FEMPLOYEE_ID femployee_id,p.FID fid,p.FSTEP_NAME fstep_name,p.FSTEP_NUMBER fstep_number,p.FSTEP_VERSION fstep_version from TB_STEP_JUNCTION s
+		LEFT JOIN TB_STEP p on p.FID = s.FSTEP_ID
+		<if test="junctionId!=null and junctionId!=''">
+			where s.FJUNCTION_ID=#{junctionId}
+		</if>
+		group by femployee_id,p.fid,fstep_name,fstep_number,fstep_version ORDER BY nlssort(fid,'NLS_SORT=SCHINESE_PINYIN_M')
+	</select>
 	<insert id="overTaskresult" parameterType="Wps">
-		INSERT INTO TB_TASKRESULT (FTASKID,FWELDERID,FMACHINEID,FREALENDTIME,FOPERATETYPE,FLAG,FCARD_ID) 
-		VALUES (#{fproduct_name},#{welderid},#{macid},SYSDATE,1,#{fstatus},#{fwelded_junction_no})
+		INSERT INTO TB_TASKRESULT (FTASKID,FWELDERID,FMACHINEID,FREALENDTIME,FOPERATETYPE,FLAG,FCARD_ID,FEMPLOYEE_ID,FSTEP_ID,FJUNCTION_ID) 
+		VALUES (#{fproduct_name},#{welderid},#{macid},SYSDATE,1,#{fstatus},#{fwelded_junction_no},#{femployee_id},#{fstep_id},#{fjunction})
 	</insert>
+	
+	
+	<select id="getTaskParameter" resultType="Wps">
+		SELECT avg(FELECTRICITY) fweld_ele,avg(FVOLTAGE) fweld_vol from TB_LIVE_DATA t where 1=1 
+		<if test="search!=null and search!=''">
+			and ${search}
+		</if>
+	</select>
 	
 	<insert id="overCard" parameterType="Wps">
 		INSERT INTO TB_TASKRESULT (FWELDERID,FMACHINEID,FREALENDTIME,FOPERATETYPE,FCARD_ID) 

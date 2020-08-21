@@ -392,9 +392,27 @@ public class WpsServiceImpl implements WpsService{
 	}
 
 	@Override
+	public List<Wps> getEmployeStep(String stepId) {
+		// TODO Auto-generated method stub
+		return mapper.getEmployeStep(stepId);
+	}
+	
+	@Override
+	public List<Wps> getJunctionStep(String junctionId) {
+		// TODO Auto-generated method stub
+		return mapper.getJunctionStep(junctionId);
+	}
+	
+	@Override
 	public List<Wps> getJunction(String stepId) {
 		// TODO Auto-generated method stub
 		return mapper.getJunction(stepId);
+	}
+	
+	@Override
+	public List<Wps> getJunctionWeld(String junctionId) {
+		// TODO Auto-generated method stub
+		return mapper.getJunctionWeld(junctionId);
 	}
 	
 	@Override
@@ -583,6 +601,12 @@ public class WpsServiceImpl implements WpsService{
 		return mapper.getJunctionByWpsid(search);
 	}
 
+	@Override
+	public List<Wps> getTaskParameter(String search) {
+		// TODO Auto-generated method stub
+		return mapper.getTaskParameter(search);
+	}
+	
 	@Override
 	public void addTaskresultRow(Wps wps) {
 		// TODO Auto-generated method stub

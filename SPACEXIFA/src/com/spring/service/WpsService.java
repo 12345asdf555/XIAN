@@ -245,6 +245,26 @@ public interface WpsService {
 	List<Wps> getStep(String employeeId);
 	
 	/**
+	 * 根据工步查询工序
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年2月5日下午5:16:42
+	 * @param stepId 工步id
+	 * @return
+	 */
+	List<Wps> getEmployeStep(String stepId);
+	
+	/**
+	 * 根据焊缝号查询工步
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年2月5日下午5:16:42
+	 * @param employeeId 工序号
+	 * @return
+	 */
+	List<Wps> getJunctionStep(String junctionId);
+	
+	/**
 	 * 根据工步号查询焊缝号
 	 * @Description
 	 * @author Bruce
@@ -253,6 +273,15 @@ public interface WpsService {
 	 * @return
 	 */
 	List<Wps> getJunction(String stepId);
+	
+	/**
+	 * 根据焊缝号查询焊接位置
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年2月5日下午5:16:53
+	 * @return
+	 */
+	List<Wps> getJunctionWeld(String junctionId);
 	
 	/**
 	 * 根据工步号查询焊缝号
@@ -537,6 +566,16 @@ public interface WpsService {
 	 * @return
 	 */
 	List<Wps> getJunctionByWpsid(String search);
+	
+	/**
+	 * 根据当前工步获取平均电流、电压
+	 * @Description
+	 * @author Bruce
+	 * @date 2020年7月2日下午2:24:24
+	 * @param search
+	 * @return
+	 */
+	List<Wps> getTaskParameter(String search);
 	
 	/**
 	 * 新增任务执行表记录

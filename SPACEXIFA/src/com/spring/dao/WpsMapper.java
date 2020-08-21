@@ -68,7 +68,10 @@ public interface WpsMapper {
 	List<Wps> gettaskview(@Param("search")String search);
 	List<Wps> getEmployee(@Param("fid")String fid);
 	List<Wps> getStep(@Param("employeeId")String employeeId);
+	List<Wps> getEmployeStep(@Param("stepId")String stepId);
+	List<Wps> getJunctionStep(@Param("junctionId")String junctionId);
 	List<Wps> getJunction(@Param("stepId")String stepId);
+	List<Wps> getJunctionWeld(@Param("junctionId")String junctionId);
 	List<Wps> getJunctionByStepid(@Param("stepId")String stepId);
 	List<Wps> getDetail(@Param("stepId")String stepId);
 	void addWps(Wps wps);
@@ -114,6 +117,7 @@ public interface WpsMapper {
 	List<Wps> getHistoryDatagridList(@Param("search")String search);
 	List<Wps> getEmployeeByJun(@Param("search")String search);
 	List<Wps> getJunctionByWpsid(@Param("search")String search);
+	List<Wps> getTaskParameter(@Param("search")String search);
 	void addTaskresultRow(Wps wps);
 	void updateTaskresult(Wps wps);
 	void overTaskresult(Wps wps);

@@ -38,12 +38,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   
 <body class="easyui-layout">
 	<jsp:include  page="../insframeworktreei.jsp"/>
-	<div id="bodydiv" region="center"  hide="true"  split="true" title="焊机实时状态监测" style="background: #fff; width:600px;height: 335px;">
+	<div id="bodydiv" region="center"  hide="true"  split="true" title="焊机实时状态监测" style="background: url('resources/images/weldmachine4.jpg') no-repeat;background-size:cover; width:600px;height: 335px;">
 	</div>
-	<style type="text/css">
-	    #load{ display: none; position: absolute; left:0; top:0;width: 100%; height: 40%; background-color: #555753; z-index:10001; -moz-opacity: 0.4; opacity:0.5; filter: alpha(opacity=70);}
-		#show{display: none; position: absolute; top: 45%; left: 45%; width: 180px; height: 5%; padding: 8px; border: 8px solid #E8E9F7; background-color: white; z-index:10002; overflow: auto;}
-	</style>
+<!-- 	<style type="text/css"> -->
+<!-- 	    #load{ display: none; position: absolute; left:0; top:0;width: 100%; height: 40%; background-color: #555753; z-index:10001; -moz-opacity: 0.4; opacity:0.5; filter: alpha(opacity=70);} */ -->
+<!--  		#show{display: none; position: absolute; top: 45%; left: 45%; width: 180px; height: 5%; padding: 8px; border: 8px solid #E8E9F7; background-color: white; z-index:10002; overflow: auto;} */ -->
+<!-- 	</style> -->
 </body>
 </html>
  

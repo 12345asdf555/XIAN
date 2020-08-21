@@ -14,6 +14,32 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.InputStream;
+import java.io.OutputStream;
+
+import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
+import javax.servlet.http.HttpServletRequest;
+import javax.xml.namespace.QName;
+
+import org.apache.cxf.endpoint.Client;
+import org.apache.cxf.jaxws.endpoint.dynamic.JaxWsDynamicClientFactory;
+import org.apache.neethi.util.Service;
+import org.aspectj.weaver.ast.Call;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.SAXReader;
+import org.dom4j.io.XMLWriter;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
@@ -168,6 +194,8 @@ public class TerminalController {
 			String wpsId = jsondata.getString("wpsId");
 			String productId = jsondata.getString("productId");
 			String employeeId = jsondata.getString("employeeId");
+			String stepId = jsondata.getString("stepId");
+			String junctionId = jsondata.getString("junctionId");
 			wps.setFwelded_junction_no(cardId);
 			wps.setMacid(new BigInteger(machId));
 			wps.setWelderid(new BigInteger(welderId));
@@ -175,12 +203,14 @@ public class TerminalController {
 			wps.setFproduct_name(productId);
 			wps.setFemployee_id(employeeId);
 			wps.setFstatus(Integer.parseInt(flag));
+			wps.setFjunction(junctionId);
+			wps.setFstep_id(stepId);
 			if("1".equals(flag)){     //最小单位为焊缝
-				String stepId = jsondata.getString("stepId");
+				//String stepId = jsondata.getString("stepId");
 				wps.setFstep_id(stepId);
 			}else if("2".equals(flag)){     //最小单位为工步
-				String junctionId = jsondata.getString("junctionId");
-				String stepId = jsondata.getString("stepId");
+				//String junctionId = jsondata.getString("junctionId");
+				//String stepId = jsondata.getString("stepId");
 				wps.setFjunction(junctionId);
 				wps.setFstep_id(stepId);
 			}
@@ -298,6 +328,8 @@ public class TerminalController {
 			String wpsId = jsondata.getString("wpsId");
 			String productId = jsondata.getString("productId");
 			String employeeId = jsondata.getString("employeeId");
+			String stepId = jsondata.getString("stepId");
+			String junctionId = jsondata.getString("junctionId");
 			wps.setFwelded_junction_no(cardId);
 			wps.setMacid(new BigInteger(machId));
 			wps.setWelderid(new BigInteger(welderId));
@@ -305,14 +337,16 @@ public class TerminalController {
 			wps.setFproduct_name(productId);
 			wps.setFemployee_id(employeeId);
 			wps.setFstatus(Integer.parseInt(flag));
+			wps.setFstep_id(stepId);
+			wps.setFjunction(junctionId);
 			if("1".equals(flag)){     //最小单位为焊缝
-				String stepId = jsondata.getString("stepId");
-				wps.setFstep_id(stepId);
+				//String stepId = jsondata.getString("stepId");
+				//wps.setFstep_id(stepId);
 			}else if("2".equals(flag)){     //最小单位为工步
-				String junctionId = jsondata.getString("junctionId");
-				String stepId = jsondata.getString("stepId");
-				wps.setFjunction(junctionId);
-				wps.setFstep_id(stepId);
+				//String junctionId = jsondata.getString("junctionId");
+				//String stepId = jsondata.getString("stepId");
+				//wps.setFjunction(junctionId);
+				//wps.setFstep_id(stepId);
 			}
 			wpsService.updateTaskresult(wps);
 			wpsService.overTaskresult(wps);
@@ -480,6 +514,187 @@ public class TerminalController {
 			e.printStackTrace();
 		}
 	}
+	/**
+	 * 任务上传
+	 * @Description
+	 * @author chen
+	 * @date 2020年8月21日下午7:10:17
+	 * @param request 任务上传
+	 * @param response 
+	 */
+	@RequestMapping("/TaskUpload")
+	public void TaskUpload(HttpServletRequest request,HttpServletResponse response){
+		Wps wps = new Wps();
+		JSONObject serrespon = new JSONObject();
+		JSONObject jsondata = JSON.parseObject(request.getParameter("json"));
+		String search = "";
+		double ele = 0.0,vol = 0.0;
+		try {
+			//String flag = request.getParameter("flag");
+			String cardId = jsondata.getString("cardId");
+			String machId = jsondata.getString("machId");
+			String welderId = jsondata.getString("welderId");
+			String wpsId = jsondata.getString("wpsId");
+			String productId = jsondata.getString("productId");
+			String employeeId = jsondata.getString("employeeId");
+			String stepId = jsondata.getString("stepId");
+			String junctionId = jsondata.getString("junctionId");
+			if(cardId != ""){
+				if(search == ""){
+					search += " t.FCARD_ID LIKE "+"'%" + cardId + "%'";
+				}else{
+					search += " AND t.FCARD_ID LIKE "+"'%" + cardId + "%'";
+				}
+			}
+			if(productId != ""){
+				if(search == ""){
+					search += " t.FPRODUCT_NUMBER_ID LIKE "+"'%" + productId + "%'";
+				}else{
+					search += " AND t.FPRODUCT_NUMBER_ID LIKE "+"'%" + productId + "%'";
+				}
+			}
+			if(employeeId != ""){
+				if(search == ""){
+					search += " t.FEMPLOYEE_ID LIKE "+"'%" + employeeId + "%'";
+				}else{
+					search += " AND t.FEMPLOYEE_ID LIKE "+"'%" + employeeId + "%'";
+				}
+			}
+			if(stepId != ""){
+				if(search == ""){
+					search += " t.FSTEP_ID LIKE "+"'%" + stepId + "%'";
+				}else{
+					search += " AND t.FSTEP_ID LIKE "+"'%" + stepId + "%'";
+				}
+			}
+			if(junctionId != ""){
+				if(search == ""){
+					search += " t.FJUNCTION_ID LIKE "+"'%" + junctionId + "%'";
+				}else{
+					search += " AND t.FJUNCTION_ID LIKE "+"'%" + junctionId + "%'";
+				}
+			}
+			List<Wps> list = wpsService.getTaskParameter(search);
+			try {
+				for(Wps w:list){
+					ele = list.get(0).getFweld_ele();
+					vol = list.get(0).getFweld_vol();
+				}
+			}
+			catch (Exception e) {
+				// TODO: handle exception
+			}
+			serrespon.put("success", true);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			serrespon.put("success", false);
+		}
+		String respondata = JSON.toJSONString(serrespon);
+        
+		//构造回调函数格式jsonpCallback(数据)
+        try {
+            String jsonpCallback = request.getParameter("jsonpCallback");
+			response.getWriter().println(jsonpCallback+"("+respondata+")");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+		
+		// TODO Auto-generated method stub
+		
+        String path = "C:\\Users\\Admin\\My Job\\Tools\\apache-tomcat-8.0.53\\webapps\\CardList"+"\\"+"25-202007-008501-2020072910243930.xml";
+        //String path = "E:\\Xmlfile\\card.xml";
+        byte[] buffer = null;  
+        try {  
+        	File file = new File(path);  
+        	SAXReader reader = new SAXReader();
+			// 读取xml文件到Document中
+			Document doc = null;
+			try {
+				doc = reader.read(file);
+				// 获取xml文件的根节点
+				Element rootElement = doc.getRootElement();
+				Element tableContent = rootElement.element("tableContent");
+				Element starttime = rootElement.element("starttime");
+				Element endtime = rootElement.element("endtime");
+				starttime.setText("2020年8月4日");
+				endtime.setText("2020年8月4日");
+				Element contentvalue = tableContent.addElement("contentvalue");
+				Element content = contentvalue.addElement("content");
+				content.setText("电流");
+				Element value = contentvalue.addElement("value");
+				value.setText(String.valueOf(ele));
+				contentvalue = tableContent.addElement("contentvalue");
+				content = contentvalue.addElement("content");
+				content.setText("电压");
+				value = contentvalue.addElement("value");
+				value.setText(String.valueOf(vol));
+				//Format格式输出格式刷
+				
+				OutputFormat format = OutputFormat.createPrettyPrint();
+				//设置xml编码
+				format.setEncoding("utf-8");
+				//另一个参数表示设置xml的格式
+				XMLWriter xw = new XMLWriter(new FileWriter(file),format);
+				//将组合好的xml封装到已经创建好的document对象中，写出真实存在的xml文件中
+				xw.write(doc);
+				//清空缓存关闭资源
+				xw.flush();
+				xw.close();
+				/*测试
+				OutputStream os = new FileOutputStream("E:\\Xmlfile\\MES2.xml");
+				//Format格式输出格式刷
+				OutputFormat format = OutputFormat.createPrettyPrint();
+				//设置xml编码
+				format.setEncoding("utf-8");
+		 
+				//写：传递两个参数一个为输出流表示生成xml文件在哪里
+				//另一个参数表示设置xml的格式
+				XMLWriter xw = new XMLWriter(os,format);
+				//将组合好的xml封装到已经创建好的document对象中，写出真实存在的xml文件中
+				xw.write(doc);
+				//清空缓存关闭资源
+				xw.flush();
+				xw.close();*/
+			} catch (DocumentException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+            FileInputStream fis = new FileInputStream(file);  
+            ByteArrayOutputStream bos = new ByteArrayOutputStream(1000);  
+            byte[] b = new byte[1000];  
+            int n;  
+            while ((n = fis.read(b)) != -1) {  
+                bos.write(b, 0, n);  
+            }  
+            fis.close();  
+            bos.close();  
+            buffer = bos.toByteArray();  
+            JaxWsDynamicClientFactory dcf = JaxWsDynamicClientFactory.newInstance();
+            Client client = dcf.createClient("http://192.168.0.99/WeldToMes/MesToWeldServices.asmx?WSDL");
+//            http://192.168.0.96:8080/CIWJN_Service/cIWJNWebService?wsdl
+//			util.Authority(client);
+            Object[] objects = null;
+            try {
+				objects = client.invoke(new QName("http://tempuri.org/", "UploadWeldFile"), new Object[]{"25-202007-008501-2020072910243930.xml",Integer.parseInt(String.valueOf(file.length())),buffer});
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            if(objects[0].toString().equals("OK")){
+            	System.out.println("OK!");
+            }else{
+            	System.out.println("NO!");
+            }
+        } catch (FileNotFoundException e) {  
+            e.printStackTrace();  
+        } catch (IOException e) {  
+            e.printStackTrace();  
+        }
+	}
 	
 	/**
 	 * 根据工艺规程id获取焊缝、工序、工步信息
@@ -501,7 +716,7 @@ public class TerminalController {
 		JSONObject obj = new JSONObject();
 		try{
 			if(valueFlag.equals("0")) {
-				List<Wps> empList = wpsService.getEmployee(search);
+				List<Wps> empList = wpsService.getEmployeStep(search);//根据工步查询工序
 				for(Wps wps:empList){
 					json.put("fid", wps.getFid());
 					json.put("femployee", wps.getFemployee_id()+"--"+wps.getFemployee_name());
@@ -509,21 +724,15 @@ public class TerminalController {
 //					json.put("femployee_name", wps.getFemployee_name());
 					empAry.add(json);
 				}
-				List<Wps> stepList = wpsService.getStep(String.valueOf(empList.get(0).getFid()));
-				for(Wps wps:stepList){
-					json.put("fid", wps.getFid());
-					json.put("fstep", wps.getFstep_number()+"--"+wps.getFstep_name());
-//					json.put("fstep_name", wps.getFstep_name());
-					stepAry.add(json);
-				}
-				List<Wps> junList = wpsService.getJunction(String.valueOf(stepList.get(0).getFid()));
-				for(Wps wps:junList){
-					json.put("fid", wps.getFid());
-					json.put("fjunction", wps.getFjunction()+"--"+wps.getFwelding_area());
-//					json.put("fwelding_area", wps.getFwelding_area());
-					junAry.add(json);
-				}
-				List<Wps> paramList = wpsService.getDetail(String.valueOf(stepList.get(0).getFid()));
+				
+//				List<Wps> junList = wpsService.getJunction(String.valueOf(stepList.get(0).getFid()));//根据工步查询焊缝
+//				for(Wps wps:junList){
+//					json.put("fid", wps.getFid());
+//					json.put("fjunction", wps.getFjunction()+"--"+wps.getFwelding_area());
+////					json.put("fwelding_area", wps.getFwelding_area());
+//					junAry.add(json);
+//				}
+				List<Wps> paramList = wpsService.getDetail(search);
 				for(Wps wps:paramList){
 					json.put("fid", wps.getFid());
 					json.put("fquantitative_project", wps.getFquantitative_project());
@@ -533,22 +742,38 @@ public class TerminalController {
 					json.put("funit_of_measurement", wps.getFunit_of_measurement());
 					paramAry.add(json);
 				}
-				
 			}
 			if(valueFlag.equals("1")) {
-				List<Wps> stepList = wpsService.getStep(search);
+//				List<Wps> stepList = wpsService.getStep(search);//根据工序查工步
+//				for(Wps wps:stepList){
+//					json.put("fid", wps.getFid());
+//					json.put("fstep", wps.getFstep_number()+"--"+wps.getFstep_name());
+//					json.put("fstep_name", wps.getFstep_name());
+//					stepAry.add(json);
+//				}
+				
+				List<Wps> stepList = wpsService.getJunctionStep(search);//根据焊缝查工步
 				for(Wps wps:stepList){
+					json.put("employid", wps.getFemployee_id());
 					json.put("fid", wps.getFid());
 					json.put("fstep", wps.getFstep_number()+"--"+wps.getFstep_name());
-//					json.put("fstep_name", wps.getFstep_name());
+					json.put("fstep_name", wps.getFstep_name());
 					stepAry.add(json);
 				}
-				List<Wps> junList = wpsService.getJunction(String.valueOf(stepList.get(0).getFid()));
+				List<Wps> junList = wpsService.getJunctionWeld(search);
 				for(Wps wps:junList){
 					json.put("fid", wps.getFid());
-					json.put("fjunction", wps.getFjunction()+"--"+wps.getFwelding_area());
-//					json.put("fwelding_area", wps.getFwelding_area());
+					//json.put("fjunction", wps.getFjunction()+"--"+wps.getFwelding_area());
+					json.put("fwelding_area", wps.getFwelding_area());
 					junAry.add(json);
+				}
+				List<Wps> empList = wpsService.getEmployee1(String.valueOf(stepList.get(0).getFemployee_id()));
+				for(Wps wps:empList){
+					json.put("fid", wps.getFid());
+					json.put("femployee", wps.getFemployee_id()+"--"+wps.getFemployee_name());
+//					json.put("femployee_version", wps.getFemployee_version());
+//					json.put("femployee_name", wps.getFemployee_name());
+					empAry.add(json);
 				}
 				List<Wps> paramList = wpsService.getDetail(String.valueOf(stepList.get(0).getFid()));
 				for(Wps wps:paramList){
@@ -562,14 +787,32 @@ public class TerminalController {
 				}
 			}
 			if(valueFlag.equals("3")) {
-				List<Wps> junList = wpsService.getJunction(search);
+				List<Wps> empList = wpsService.getEmployee(search);
+				for(Wps wps:empList){
+					json.put("fid", wps.getFid());
+					json.put("femployee", wps.getFemployee_id()+"--"+wps.getFemployee_name());
+//					json.put("femployee_version", wps.getFemployee_version());
+//					json.put("femployee_name", wps.getFemployee_name());
+					empAry.add(json);
+				}
+				
+				List<Wps> stepList = wpsService.getStep(String.valueOf(empList.get(0).getFid()));
+				for(Wps wps:stepList){
+					json.put("fid", wps.getFid());
+					json.put("fstep", wps.getFstep_number()+"--"+wps.getFstep_name());
+//					json.put("fstep_name", wps.getFstep_name());
+					stepAry.add(json);
+				}
+				
+				List<Wps> junList = wpsService.getJunctionByStepid(String.valueOf(stepList.get(0).getFid()));
 				for(Wps wps:junList){
 					json.put("fid", wps.getFid());
-					json.put("fjunction", wps.getFjunction()+"--"+wps.getFwelding_area());
-//					json.put("fwelding_area", wps.getFwelding_area());
+					json.put("fjunction", wps.getFjunction());
+					json.put("fwelding_area", wps.getFwelding_area());
 					junAry.add(json);
 				}
-				List<Wps> paramList = wpsService.getDetail(search);
+				
+				List<Wps> paramList = wpsService.getDetail(String.valueOf(stepList.get(0).getFid()));
 				for(Wps wps:paramList){
 					json.put("fid", wps.getFid());
 					json.put("fquantitative_project", wps.getFquantitative_project());
@@ -595,9 +838,9 @@ public class TerminalController {
 		}catch(Exception e){
 			e.getMessage();
 		}
-		obj.put("stepAry", junAry);
-		obj.put("junAry", empAry);
-		obj.put("empAry", stepAry);
+		obj.put("junAry", junAry);
+		obj.put("empAry", empAry);
+		obj.put("stepAry", stepAry);
 		obj.put("paramAry", paramAry);
 		String respondata = JSON.toJSONString(obj);
         

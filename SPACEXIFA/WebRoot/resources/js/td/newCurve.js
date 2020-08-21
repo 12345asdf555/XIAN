@@ -126,17 +126,111 @@ function getMachine(insfid) {
 					if(offFlag==0){
 						off.push(machine[i].fid);
 					}
-					var str = '<div id="machine'+machine[i].fid+'" style="width:340px;height:120px;float:left;margin-right:10px;display:none">'+
-					'<div style="float:left;width:30%;height:100%;"><a href="td/goNextcurve?value='+machine[i].fid+'&valuename='+machine[i].fequipment_no+'&type='+machine[i].type+'&model='+machine[i].model+'"><img id="img'+machine[i].fid+'" src="resources/images/welder_0'+imgnum+'.png" style="height:110px;width:100%;padding-top:10px;"></a></div>'+
-					'<div style="float:left;width:70%;height:100%;">'+
-					'<ul><li style="width:100%;height:23px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">设备编号：<span id="m1'+machine[i].fid+'">'+machine[i].fequipment_no+'</span></li>'+
-					'<li style="width:100%;height:19px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">采集编号：<span id="m4'+machine[i].fid+'">'+machine[i].fgather_no+'</span></li>'+
-					'<li style="width:100%;height:23px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">跟踪卡号：<span id="m2'+machine[i].fid+'">--</span></li>'+
-					'<li style="width:100%;height:23px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">操作人员：<span id="m3'+machine[i].fid+'">--</span></li>'+
-//					'<li style="width:100%;height:19px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">焊接电压：<span id="m5'+machine[i].fid+'">--V</span></li>'+
-					'<li style="width:100%;height:23px;">焊机状态：<span id="m6'+machine[i].fid+'">关机</span></li></ul><input id="status'+machine[i].fid+'" type="hidden" value="3"></div></div>';
-					$("#bodydiv").append(str);
-					$("#machine"+machine[i].fid).show();
+					if(machine[i].fgather_no=="0008"){
+						var str = '<div id="machine'+machine[i].fid+'" style="position:ABSOLUTE;width:75px;height:95px;padding-left:40px;padding-top:41px;"><a href="td/goNextcurve?value='+machine[i].fid+'&valuename='+machine[i].fequipment_no+'&type='+machine[i].type+'&model='+machine[i].model+'"><img id="img'+machine[i].fid+'" src="resources/images/welder_0'+imgnum+'.png" style="height:100%;width:100%;"></a></div>';
+						$("#bodydiv").append(str);
+						$("#machine"+machine[i].fid).show();
+					}
+					else if(machine[i].fgather_no=="0019"){
+						var str = '<div id="machine'+machine[i].fid+'" style="position:ABSOLUTE;width:75px;height:95px;padding-left:200px;padding-top:5px;"><a href="td/goNextcurve?value='+machine[i].fid+'&valuename='+machine[i].fequipment_no+'&type='+machine[i].type+'&model='+machine[i].model+'"><img id="img'+machine[i].fid+'" src="resources/images/welder_0'+imgnum+'.png" style="height:100%;width:100%;"></a></div>';
+						$("#bodydiv").append(str);
+						$("#machine"+machine[i].fid).show();
+					}
+					else if(machine[i].fgather_no=="0023"){
+						var str = '<div id="machine'+machine[i].fid+'" style="position:ABSOLUTE;width:75px;height:95px;padding-left:550px;padding-top:60px;"><a href="td/goNextcurve?value='+machine[i].fid+'&valuename='+machine[i].fequipment_no+'&type='+machine[i].type+'&model='+machine[i].model+'"><img id="img'+machine[i].fid+'" src="resources/images/welder_0'+imgnum+'.png" style="height:100%;width:100%;"></a></div>';
+						$("#bodydiv").append(str);
+						$("#machine"+machine[i].fid).show();
+					}
+					else if(machine[i].fgather_no=="0017"){
+						var str = '<div id="machine'+machine[i].fid+'" style="position:ABSOLUTE;width:75px;height:95px;padding-left:630px;padding-top:60px;"><a href="td/goNextcurve?value='+machine[i].fid+'&valuename='+machine[i].fequipment_no+'&type='+machine[i].type+'&model='+machine[i].model+'"><img id="img'+machine[i].fid+'" src="resources/images/welder_0'+imgnum+'.png" style="height:100%;width:100%;"></a></div>';
+						$("#bodydiv").append(str);
+						$("#machine"+machine[i].fid).show();
+					}
+					else if(machine[i].fgather_no=="0009"){
+						var str = '<div id="machine'+machine[i].fid+'" style="position:ABSOLUTE;width:75px;height:95px;padding-left:710px;padding-top:60px;"><a href="td/goNextcurve?value='+machine[i].fid+'&valuename='+machine[i].fequipment_no+'&type='+machine[i].type+'&model='+machine[i].model+'"><img id="img'+machine[i].fid+'" src="resources/images/welder_0'+imgnum+'.png" style="height:100%;width:100%;"></a></div>';
+						$("#bodydiv").append(str);
+						$("#machine"+machine[i].fid).show();
+					}
+					else if(machine[i].fgather_no=="0014"){
+						var str = '<div id="machine'+machine[i].fid+'" style="position:ABSOLUTE;width:75px;height:95px;padding-left:790px;padding-top:60px;"><a href="td/goNextcurve?value='+machine[i].fid+'&valuename='+machine[i].fequipment_no+'&type='+machine[i].type+'&model='+machine[i].model+'"><img id="img'+machine[i].fid+'" src="resources/images/welder_0'+imgnum+'.png" style="height:100%;width:100%;"></a></div>';
+						$("#bodydiv").append(str);
+						$("#machine"+machine[i].fid).show();
+					}
+					else if(machine[i].fgather_no=="0002"){
+						var str = '<div id="machine'+machine[i].fid+'" style="position:ABSOLUTE;width:75px;height:95px;padding-left:870px;padding-top:60px;"><a href="td/goNextcurve?value='+machine[i].fid+'&valuename='+machine[i].fequipment_no+'&type='+machine[i].type+'&model='+machine[i].model+'"><img id="img'+machine[i].fid+'" src="resources/images/welder_0'+imgnum+'.png" style="height:100%;width:100%;"></a></div>';
+						$("#bodydiv").append(str);
+						$("#machine"+machine[i].fid).show();
+					}
+					else if(machine[i].fgather_no=="0015"){
+						var str = '<div id="machine'+machine[i].fid+'" style="position:ABSOLUTE;width:75px;height:95px;padding-left:950px;padding-top:60px;"><a href="td/goNextcurve?value='+machine[i].fid+'&valuename='+machine[i].fequipment_no+'&type='+machine[i].type+'&model='+machine[i].model+'"><img id="img'+machine[i].fid+'" src="resources/images/welder_0'+imgnum+'.png" style="height:100%;width:100%;"></a></div>';
+						$("#bodydiv").append(str);
+						$("#machine"+machine[i].fid).show();
+					}
+					else if(machine[i].fgather_no=="0022"){
+						var str = '<div id="machine'+machine[i].fid+'" style="position:ABSOLUTE;width:75px;height:95px;padding-left:1030px;padding-top:60px;"><a href="td/goNextcurve?value='+machine[i].fid+'&valuename='+machine[i].fequipment_no+'&type='+machine[i].type+'&model='+machine[i].model+'"><img id="img'+machine[i].fid+'" src="resources/images/welder_0'+imgnum+'.png" style="height:100%;width:100%;"></a></div>';
+						$("#bodydiv").append(str);
+						$("#machine"+machine[i].fid).show();
+					}
+					else if(machine[i].fgather_no=="0001"){
+						var str = '<div id="machine'+machine[i].fid+'" style="position:ABSOLUTE;width:75px;height:95px;padding-left:1110px;padding-top:60px;"><a href="td/goNextcurve?value='+machine[i].fid+'&valuename='+machine[i].fequipment_no+'&type='+machine[i].type+'&model='+machine[i].model+'"><img id="img'+machine[i].fid+'" src="resources/images/welder_0'+imgnum+'.png" style="height:100%;width:100%;"></a></div>';
+						$("#bodydiv").append(str);
+						$("#machine"+machine[i].fid).show();
+					}
+					else if(machine[i].fgather_no=="0003"){
+						var str = '<div id="machine'+machine[i].fid+'" style="position:ABSOLUTE;width:75px;height:95px;padding-left:1190px;padding-top:60px;"><a href="td/goNextcurve?value='+machine[i].fid+'&valuename='+machine[i].fequipment_no+'&type='+machine[i].type+'&model='+machine[i].model+'"><img id="img'+machine[i].fid+'" src="resources/images/welder_0'+imgnum+'.png" style="height:100%;width:100%;"></a></div>';
+						$("#bodydiv").append(str);
+						$("#machine"+machine[i].fid).show();
+					}
+					else if(machine[i].fgather_no=="0018"){
+						var str = '<div id="machine'+machine[i].fid+'" style="position:ABSOLUTE;width:75px;height:95px;padding-left:45px;padding-top:230px;"><a href="td/goNextcurve?value='+machine[i].fid+'&valuename='+machine[i].fequipment_no+'&type='+machine[i].type+'&model='+machine[i].model+'"><img id="img'+machine[i].fid+'" src="resources/images/welder_0'+imgnum+'.png" style="height:100%;width:100%;"></a></div>';
+						$("#bodydiv").append(str);
+						$("#machine"+machine[i].fid).show();
+					}
+					else if(machine[i].fgather_no=="0020"){
+						var str = '<div id="machine'+machine[i].fid+'" style="position:ABSOLUTE;width:75px;height:95px;padding-left:200px;padding-top:230px;"><a href="td/goNextcurve?value='+machine[i].fid+'&valuename='+machine[i].fequipment_no+'&type='+machine[i].type+'&model='+machine[i].model+'"><img id="img'+machine[i].fid+'" src="resources/images/welder_0'+imgnum+'.png" style="height:100%;width:100%;"></a></div>';
+						$("#bodydiv").append(str);
+						$("#machine"+machine[i].fid).show();
+					}
+					else if(machine[i].fgather_no=="0007"){
+						var str = '<div id="machine'+machine[i].fid+'" style="position:ABSOLUTE;width:75px;height:95px;padding-left:630px;padding-top:230px;"><a href="td/goNextcurve?value='+machine[i].fid+'&valuename='+machine[i].fequipment_no+'&type='+machine[i].type+'&model='+machine[i].model+'"><img id="img'+machine[i].fid+'" src="resources/images/welder_0'+imgnum+'.png" style="height:100%;width:100%;"></a></div>';
+						$("#bodydiv").append(str);
+						$("#machine"+machine[i].fid).show();
+					}
+					else if(machine[i].fgather_no=="0013"){
+						var str = '<div id="machine'+machine[i].fid+'" style="position:ABSOLUTE;width:75px;height:95px;padding-left:710px;padding-top:250px;"><a href="td/goNextcurve?value='+machine[i].fid+'&valuename='+machine[i].fequipment_no+'&type='+machine[i].type+'&model='+machine[i].model+'"><img id="img'+machine[i].fid+'" src="resources/images/welder_0'+imgnum+'.png" style="height:100%;width:100%;"></a></div>';
+						$("#bodydiv").append(str);
+						$("#machine"+machine[i].fid).show();
+					}
+					else if(machine[i].fgather_no=="0006"){
+						var str = '<div id="machine'+machine[i].fid+'" style="position:ABSOLUTE;width:75px;height:95px;padding-left:990px;padding-top:230px;"><a href="td/goNextcurve?value='+machine[i].fid+'&valuename='+machine[i].fequipment_no+'&type='+machine[i].type+'&model='+machine[i].model+'"><img id="img'+machine[i].fid+'" src="resources/images/welder_0'+imgnum+'.png" style="height:100%;width:100%;"></a></div>';
+						$("#bodydiv").append(str);
+						$("#machine"+machine[i].fid).show();
+					}
+					else if(machine[i].fgather_no=="0005"){
+						var str = '<div id="machine'+machine[i].fid+'" style="position:ABSOLUTE;width:75px;height:95px;padding-left:1250px;padding-top:250px;"><a href="td/goNextcurve?value='+machine[i].fid+'&valuename='+machine[i].fequipment_no+'&type='+machine[i].type+'&model='+machine[i].model+'"><img id="img'+machine[i].fid+'" src="resources/images/welder_0'+imgnum+'.png" style="height:100%;width:100%;"></a></div>';
+						$("#bodydiv").append(str);
+						$("#machine"+machine[i].fid).show();
+					}
+					else if(machine[i].fgather_no=="0010"){
+						var str = '<div id="machine'+machine[i].fid+'" style="position:ABSOLUTE;width:75px;height:95px;padding-left:50px;padding-top:460px;"><a href="td/goNextcurve?value='+machine[i].fid+'&valuename='+machine[i].fequipment_no+'&type='+machine[i].type+'&model='+machine[i].model+'"><img id="img'+machine[i].fid+'" src="resources/images/welder_0'+imgnum+'.png" style="height:100%;width:100%;"></a></div>';
+						$("#bodydiv").append(str);
+						$("#machine"+machine[i].fid).show();
+					}
+					else if(machine[i].fgather_no=="0004"){
+						var str = '<div id="machine'+machine[i].fid+'" style="position:ABSOLUTE;width:75px;height:95px;padding-left:250px;padding-top:460px;"><a href="td/goNextcurve?value='+machine[i].fid+'&valuename='+machine[i].fequipment_no+'&type='+machine[i].type+'&model='+machine[i].model+'"><img id="img'+machine[i].fid+'" src="resources/images/welder_0'+imgnum+'.png" style="height:100%;width:100%;"></a></div>';
+						$("#bodydiv").append(str);
+						$("#machine"+machine[i].fid).show();
+					}
+					else if(machine[i].fgather_no=="0025"){
+						var str = '<div id="machine'+machine[i].fid+'" style="position:ABSOLUTE;width:75px;height:95px;padding-left:1008px;padding-top:620px;"><a href="td/goNextcurve?value='+machine[i].fid+'&valuename='+machine[i].fequipment_no+'&type='+machine[i].type+'&model='+machine[i].model+'"><img id="img'+machine[i].fid+'" src="resources/images/welder_0'+imgnum+'.png" style="height:100%;width:100%;"></a></div>';
+						$("#bodydiv").append(str);
+						$("#machine"+machine[i].fid).show();
+					}
+					else if(machine[i].fgather_no=="0026"){
+						var str = '<div id="machine'+machine[i].fid+'" style="position:ABSOLUTE;width:75px;height:95px;padding-left:1230px;padding-top:620px;"><a href="td/goNextcurve?value='+machine[i].fid+'&valuename='+machine[i].fequipment_no+'&type='+machine[i].type+'&model='+machine[i].model+'"><img id="img'+machine[i].fid+'" src="resources/images/welder_0'+imgnum+'.png" style="height:100%;width:100%;"></a></div>';
+						$("#bodydiv").append(str);
+						$("#machine"+machine[i].fid).show();
+					}
 				}
 				showflag=1;
 				$("#off").html(off.length);

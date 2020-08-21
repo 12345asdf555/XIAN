@@ -9,16 +9,16 @@
 <mapper namespace="com.spring.dao.ResourceMapper">
 	
 	<insert id="save" parameterType="Resources">
-		insert into tb_resources(resources_name,resources_type,resources_address,resources_desc,status) values(#{resourceName},#{resourceType},#{resourceAddress},#{resourceDesc},#{status});
+		insert into tb_resources(resources_name,resources_type,resources_address,resources_desc,status) values(#{resourceName},#{resourceType},#{resourceAddress},#{resourceDesc},#{status})
 <!-- 		insert into tb_users_roles(users_name,roles_name) values(#{userName},#{roleName}) -->
 	</insert>
 	
 	<update id="update" parameterType="Resources">
-		update tb_resources set resources_name=#{resourceName},resources_type=#{resourceType},resources_address=#{resourceAddress},resources_desc=#{resourceDesc},status=#{status} where id=#{id};
+		update tb_resources set resources_name=#{resourceName},resources_type=#{resourceType},resources_address=#{resourceAddress},resources_desc=#{resourceDesc},status=#{status} where id=#{id}
 	</update>
 	
 	<delete id="delete" parameterType="int">
-		delete from tb_resources where id=#{id};
+		delete from tb_resources where id=#{id}
 	</delete>
 	
 	 <!-- mybsits_config中配置的alias类别名,也可直接配置resultType为类路劲 -->  
